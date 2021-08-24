@@ -8,10 +8,12 @@ public class PlayerControls : MonoBehaviour
     [SerializeField]
     private float playerSpeed;
     private Vector3 change;
+    private Animator anim;
     // Start is called before the first frame update
     void Awake()
     {
         rb = gameObject.GetComponent<Rigidbody2D>();
+        _ = TryGetComponent<Animator>(out anim);
     }
 
     // Update is called once per frame
@@ -23,6 +25,13 @@ public class PlayerControls : MonoBehaviour
         if (change != Vector3.zero)
         {
             MoveCharacter(transform.position);
+            //anim.SetFloat("moveX", change.x);
+            //anim.SetFloat("moveY", change.y);
+            //anim.SetBool("moving", true);
+        }
+        else
+        {
+           //anim.SetBool("moving", false);
         }
     }
 

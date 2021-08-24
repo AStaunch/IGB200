@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum Properties
 {
-    Heavy, Light, Flamable, Fireproof, 
+    Heavy, Light, Flamable, Fireproof, Metal, Insulated,
 }
 public class EntityManager : MonoBehaviour
 {
@@ -21,7 +21,7 @@ public class EntityManager : MonoBehaviour
     private float maxHealth;
 
     //[SerializeField]
-    private float entitySpeed;
+    protected float entitySpeed;
     [SerializeField]
     private Sprite[] EntitySpriteSheet;
 
@@ -82,7 +82,7 @@ public class EntityManager : MonoBehaviour
     {
         Vector3 position = transform.position;
         rb.MovePosition(position + difference);
-        ChangeSprite(difference);
+        //ChangeSprite(difference);
     }
     private void EntityDeath()
     {
