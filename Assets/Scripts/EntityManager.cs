@@ -24,7 +24,7 @@ public class EntityManager : MonoBehaviour
     protected float entitySpeed;
     [SerializeField]
     private Sprite[] EntitySpriteSheet;
-
+    public int EntityFacing { set => EntityFacing = value; get => EntityFacing; }
 
     // Start is called before the first frame update
     void Awake()
@@ -42,30 +42,29 @@ public class EntityManager : MonoBehaviour
 
     public void ChangeSprite(Vector3 movement)
     {
-        int currentSpriteIndex;
         if (Mathf.Abs(movement.x) < Mathf.Abs(movement.y))
         {
             if (movement.y > 0)
             {
-                currentSpriteIndex = 0;
+                EntityFacing = 0;
             }
             else
             {
-                currentSpriteIndex = 1;
+                EntityFacing = 2;
             }
         }
         else
         {
             if (movement.x > 0)
             {
-                currentSpriteIndex = 3;
+                EntityFacing = 1;
             }
             else
             {
-                currentSpriteIndex = 2;
+                EntityFacing = 3;
             }
         }
-        GetComponent<SpriteRenderer>().sprite = EntitySpriteSheet[currentSpriteIndex];
+        GetComponent<SpriteRenderer>().sprite = EntitySpriteSheet[EntityFacing];
     }
 
     public void TakeDamage(float damage)
@@ -82,7 +81,7 @@ public class EntityManager : MonoBehaviour
     {
         Vector3 position = transform.position;
         rb.MovePosition(position + difference);
-        //ChangeSprite(difference);
+        ChangeSprite(difference);
     }
     private void EntityDeath()
     {
