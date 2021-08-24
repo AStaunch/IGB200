@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public enum Properties
 {
@@ -9,12 +10,19 @@ public enum Properties
 public class EntityManager : MonoBehaviour
 {
     [System.Serializable]
+    public enum Properties
+    {
+        Heavy, Light, Flamable, Fireproof, Metal, Insulated,
+    }
+    public Properties[] entityProperties;
+
+    [System.Serializable]
     public enum EntityType
     {
         Object,
         Creature
     }
-    public EntityType TypeOfEntity;
+    public EntityType entityType;
 
     private Rigidbody2D rb;
     private float health = 10;
@@ -85,6 +93,52 @@ public class EntityManager : MonoBehaviour
     }
     private void EntityDeath()
     {
+        // TODO: Impliment Colour change
+        GetComponent<SpriteRenderer>().color.g = 0;
+        GetComponent<SpriteRenderer>().color.b = 0;
         Destroy(this.gameObject, Time.deltaTime);
+    }
+
+    private void RaycastFireMock(ParameterClass parameter)
+    {
+        float baseDmg = 10f;
+        //Get Raycast
+        /////   Create the Beam
+
+        //Get Distance (d)
+        //Length of Sections (B, M, E)
+        //Get No of Tiles in Distance
+        /* Palette Swap Colours of Ray.
+         * Get First Tile; set to start
+         * Get Last Tile; set to end
+         * For everyother tile; set to middle
+         * 
+         */
+        
+
+        /////   Effect What It Hits
+        //Get The Game object it hits
+        //Check EntityType Enum
+        //Check EntityProp Enum for Flamable/Fireproof
+        GameObject other = hit.gameObject;
+
+
+        //Property.Behave(GameObject other, Float baseDmg)
+       
+        if (other.TryGetComponent<EntityManager>(out EntityManager otherEntity))
+        {
+            if (otherEntity.entityProperties.Contains(Properties.Flamable))
+            {
+                otherEntity.TakeDamage(baseDmg*2f);
+            }
+            else if (otherEntity.entityProperties.Contains(Properties.Fireproof))
+            {
+                otherEntity.TakeDamage(0f);
+            }
+            else
+            {
+                otherEntity.TakeDamage(baseDmg);
+            }
+        }
     }
 }
