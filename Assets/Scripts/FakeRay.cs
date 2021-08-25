@@ -76,27 +76,6 @@ public class FakeRay : MonoBehaviour
              * For everyother tile; set to middle
              */
 
-            float distance = Vector2.Distance(hit.point, new Vector2(transform.position.x, transform.position.y));
-
-
-            Vector2 direction = hit.point - new Vector2(transform.position.x, transform.position.y);
-            float angle = Vector2.Angle(new Vector2(transform.position.x, transform.position.y), hit.point);
-            for (float i = 0; i < distance; i += 1)
-            {
-                if (i == 0)
-                {
-
-                }
-                else if (i == distance - 1)
-                {
-
-                }
-            }
-
-
-
-
-
             /////   Effect What It Hits
             //Get The Game object it hits
             //Check EntityType Enum
@@ -106,6 +85,7 @@ public class FakeRay : MonoBehaviour
 
             //Property.Behave(GameObject other, Float baseDmg)
 
+            //Fire Properties
             if (other.TryGetComponent<EntityManager>(out EntityManager otherEntity))
             {
                 if (otherEntity.entityProperties.Contains(Properties.Flamable))
@@ -121,6 +101,25 @@ public class FakeRay : MonoBehaviour
                     otherEntity.TakeDamage(baseDmg);
                 }
             }
+
+
+            float distance = Vector2.Distance(hit.point, new Vector2(transform.position.x, transform.position.y));
+
+
+            Vector2 direction = hit.point - new Vector2(transform.position.x, transform.position.y);
+            float angle = Vector2.Angle(new Vector2(transform.position.x, transform.position.y), hit.point);
+            for (float i = 0; i < distance; i += 1) {
+                if (i == 0) {
+
+                } else if (i == distance - 1) {
+
+                }
+            }
+
+
+
+
+
         }
     }
 }

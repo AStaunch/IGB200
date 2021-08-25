@@ -14,7 +14,8 @@ class Register : MonoBehaviour
     {
         DontDestroyOnLoad(this.gameObject);
         #region Register game spells and effect first
-        //fuck valve
+        //fuck valve - Agreed
+        //Ray Template
         SpellRegistrySing.Instance.Registry.AddItemToregistry(new SpellTemplate("Ray", null, new Action<SpellEffector>((effector) =>
         {
             Debug.Log("This would be a Raycast");
@@ -27,34 +28,38 @@ class Register : MonoBehaviour
                 gmeobj.transform.position = hit.point;
 
                 effector.FireEffect.Invoke(gmeobj);//The null in this function would be the game object required
-
             }
         })));
 
+        //Orb Template
         SpellRegistrySing.Instance.Registry.AddItemToregistry(new SpellTemplate("Orb", null, new Action<SpellEffector>((effector) =>
         {
             Console.WriteLine("This would be a Orb");
             effector.FireEffect.Invoke(null);//The null in this function would be the game object required
             })));
 
+        //Arc Template
         SpellRegistrySing.Instance.Registry.AddItemToregistry(new SpellTemplate("Arc", null, new Action<SpellEffector>((effector) =>
         {
             Console.WriteLine("This would be a Arc");
             effector.FireEffect.Invoke(null);//The null in this function would be the game object required
             })));
 
+        //Cone Template
         SpellRegistrySing.Instance.Registry.AddItemToregistry(new SpellTemplate("Cone", null, new Action<SpellEffector>((effector) =>
         {
             Console.WriteLine("This would be a Cone");
             effector.FireEffect.Invoke(null);//The null in this function would be the game object required
             })));
 
+        //Shield Template
         SpellRegistrySing.Instance.Registry.AddItemToregistry(new SpellTemplate("Shield", null, new Action<SpellEffector>((effector) =>
         {
             Console.WriteLine("This would be a Shield");
             effector.FireEffect.Invoke(null);//The null in this function would be the game object required
             })));
 
+        //Runner Template
         SpellRegistrySing.Instance.Registry.AddItemToregistry(new SpellTemplate("Runner", null, new Action<SpellEffector>((effector) =>
         {
             Console.WriteLine("This would be a Runner");
@@ -66,28 +71,28 @@ class Register : MonoBehaviour
 
         //This should become its own singleton for global access, or be wrapped in a static class
         List<SpellEffector> Effectors = new List<SpellEffector>
+        {
+            #region Fire
+            new SpellEffector()
             {
-                #region Fire
-                new SpellEffector()
+                Name = "Fire",
+                DesiredId = SpellRegistrySing.Instance.Registry.QueryForSid("Ray"),
+                FireEffect = new Action<GameObject>((gmeobj) =>
                 {
-                    Name = "Fire",
-                    DesiredId = SpellRegistrySing.Instance.Registry.QueryForSid("Ray"),
-                    FireEffect = new Action<GameObject>((gmeobj) =>
-                    {
                         
-                    })
-                },
-                new SpellEffector()
+                })
+            },
+            new SpellEffector()
+            {
+                Name = "Fire",
+                DesiredId = SpellRegistrySing.Instance.Registry.QueryForSid("Orb"),
+                FireEffect = new Action<GameObject>((gmeobj) =>
                 {
-                    Name = "Fire",
-                    DesiredId = SpellRegistrySing.Instance.Registry.QueryForSid("Orb"),
-                    FireEffect = new Action<GameObject>((gmeobj) =>
-                    {
-                        Console.WriteLine("This is the effector + Orb spell");
-                    })
-                }
-                #endregion
-            };
+                    Console.WriteLine("This is the effector + Orb spell");
+                })
+            }
+            #endregion
+        };
 
         #endregion
 
