@@ -1,20 +1,22 @@
-﻿using System;
+﻿//using System;
 
-public static class ParameterClass
-{
-    private string name;
-    Color[] palette;
-    Action<> action;
+//public class ParameterClass
+//{
+//    private string name;
+//    Color[] palette;
+//    Action<> action;
 
-    public ParameterClass(string Name, Color[] Palette, Action<> Action)
-	{
-        name = Name;
-        palette = Palette;
-        action = Action;
-	}
+//    public ParameterClass(string Name, Color[] Palette, Action<> Action)
+//	{
+//        name = Name;
+//        palette = Palette;
+//        this.Action = Action;
+//	}
 
-    public Behave(GameObject other, float strength)
-    {
-        action(strength);
-    }
-}
+//    public Action<T> Action { get => action; set => action = value; }
+
+//    public void Behave(UnityEngine.GameObject other, float strength)
+//    {
+//        //action(strength);
+//    }
+//}
