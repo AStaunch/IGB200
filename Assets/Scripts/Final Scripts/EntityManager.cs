@@ -21,6 +21,7 @@ public class EntityManager : MonoBehaviour
     public EntityType entityType;
 
     private Rigidbody2D rb;
+    [SerializeField]
     private float health = 10;
     private float maxHealth;
 
@@ -38,6 +39,7 @@ public class EntityManager : MonoBehaviour
             rb = gameObject.AddComponent<Rigidbody2D>();
         }
         rb.gravityScale = 0;
+        rb.freezeRotation =
         maxHealth = health;
 
     }
