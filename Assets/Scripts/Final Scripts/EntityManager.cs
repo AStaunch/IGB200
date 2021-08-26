@@ -39,7 +39,7 @@ public class EntityManager : MonoBehaviour
             rb = gameObject.AddComponent<Rigidbody2D>();
         }
         rb.gravityScale = 0;
-        rb.freezeRotation =
+        rb.freezeRotation = true;
         maxHealth = health;
 
     }
