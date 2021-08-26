@@ -20,14 +20,14 @@ class Register : MonoBehaviour
         {
             Debug.Log("This would be a Raycast");
 
-            RaycastHit2D hit = Physics2D.Raycast(GameObject.FindGameObjectWithTag("Player").transform.position, GameObject.FindGameObjectWithTag("Player").transform.localEulerAngles);
-            Debug.DrawRay(GameObject.FindGameObjectWithTag("Player").transform.position, GameObject.FindGameObjectWithTag("Player").transform.right,Color.red,100000);
+            RaycastHit2D hit = Physics2D.Raycast(GameObject.FindGameObjectWithTag("Player").transform.position, GameObject.FindGameObjectWithTag("Player").transform.right);
+            Debug.DrawRay(GameObject.FindGameObjectWithTag("Player").transform.position, GameObject.FindGameObjectWithTag("Player").transform.right);
             if (hit.collider != null)
             {
                 GameObject gmeobj = new GameObject();
                 gmeobj.transform.position = hit.point;
 
-                effector.FireEffect.Invoke(gmeobj);//The null in this function would be the game object required
+                effector.FireEffect.Invoke(gmeobj);//This gmeobj is destroyed by the effector 
             }
         })));
 
