@@ -10,24 +10,32 @@ using UnityEngine;
 
 class Register : MonoBehaviour
 {
+    private Dictionary<EntityManager.Directions, Vector2> Converter_ = new Dictionary<EntityManager.Directions, Vector2>() 
+    {
+        { EntityManager.Directions.Up, new Vector2(0,1) },
+        { EntityManager.Directions.Down, new Vector2(0,-1) },
+        { EntityManager.Directions.Left, new Vector2(-1,0) },
+        { EntityManager.Directions.Right, new Vector2(1,0) },
+    };
     void Awake()
     {
         DontDestroyOnLoad(this.gameObject);
+
         #region Register game spells and effect first
-        //fuck valve - Agreed
+        //fuck valve - Agreed - Doubled
         //Ray Template
         SpellRegistrySing.Instance.Registry.AddItemToregistry(new SpellTemplate("Ray", null, new Action<SpellEffector>((effector) =>
         {
             Debug.Log("This would be a Raycast");
 
-            RaycastHit2D hit = Physics2D.Raycast(GameObject.FindGameObjectWithTag("Player").transform.position, GameObject.FindGameObjectWithTag("Player").transform.right);
-            Debug.DrawRay(GameObject.FindGameObjectWithTag("Player").transform.position, GameObject.FindGameObjectWithTag("Player").transform.right);
+            RaycastHit2D hit = Physics2D.Raycast(GameObject.FindGameObjectWithTag("Player").transform.position, Converter_[(EntityManager.Directions)GameObject.FindGameObjectWithTag("Player").GetComponent<EntityManager>().GetEntityFacing()]);
+            Debug.DrawRay(GameObject.FindGameObjectWithTag("Player").transform.position, Converter_[(EntityManager.Directions)GameObject.FindGameObjectWithTag("Player").GetComponent<EntityManager>().GetEntityFacing()]);
             if (hit.collider != null)
             {
                 GameObject gmeobj = new GameObject();
                 gmeobj.transform.position = hit.point;
 
-                effector.FireEffect.Invoke(gmeobj);//This gmeobj is destroyed by the effector 
+                effector.FireEffect.Invoke(gmeobj);//This gmeobj is destroyed by the effector since this is just passing on hit pos for now
             }
         })));
 

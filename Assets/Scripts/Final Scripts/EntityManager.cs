@@ -5,6 +5,14 @@ using System.Linq;
 
 public class EntityManager : MonoBehaviour
 {
+    public enum Directions
+    {
+        Up,
+        Right,
+        Down,
+        Left
+    }
+
     [System.Serializable]
     public enum Properties
     {
@@ -45,7 +53,7 @@ public class EntityManager : MonoBehaviour
     }
 
     public void ChangeSprite(Vector3 movement)
-    { 
+    {   //Up ; left; Down; right
         if (Mathf.Abs(movement.x) < Mathf.Abs(movement.y)) {
             if (movement.y > 0) {
                 EntityFacing = 0;

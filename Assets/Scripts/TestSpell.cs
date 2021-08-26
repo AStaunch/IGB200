@@ -13,12 +13,18 @@ public class TestSpell : MonoBehaviour
 
             //Fire Properties
             //float baseDmg = 10f;
-            //if (gmeobj.TryGetComponent<EntityManager>(out EntityManager otherEntity)) {
-            //    if (otherEntity.entityProperties.Contains(Properties.Flamable)) {
+            //if (gmeobj.TryGetComponent<EntityManager>(out EntityManager otherEntity))
+            //{
+            //    if (otherEntity.entityProperties.Contains(Properties.Flamable))
+            //    {
             //        otherEntity.TakeDamage(baseDmg * 2f);
-            //    } else if (otherEntity.entityProperties.Contains(Properties.Fireproof)) {
+            //    }
+            //    else if (otherEntity.entityProperties.Contains(Properties.Fireproof))
+            //    {
             //        otherEntity.TakeDamage(0f);
-            //    } else {
+            //    }
+            //    else
+            //    {
             //        otherEntity.TakeDamage(baseDmg);
             //    }
             //}
