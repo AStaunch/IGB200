@@ -7,7 +7,6 @@ using static EntityManager;
 public class FakeRay : MonoBehaviour
 {
     [SerializeField]
-    private Sprite[] sprites;
     private Color[] paletteColors;
     private Vector2[] facings;
     private float baseDmg = 10f;
@@ -18,9 +17,9 @@ public class FakeRay : MonoBehaviour
     {
         facings = new Vector2[4];
         facings[0] = Vector2.up;
-        facings[1] = Vector2.left;
+        facings[1] = Vector2.right;
         facings[2] = Vector2.down;
-        facings[3] = Vector2.right;
+        facings[3] = Vector2.left;
         lineRenderer = gameObject.AddComponent<LineRenderer>();
     }
 
@@ -36,10 +35,15 @@ public class FakeRay : MonoBehaviour
     void ShootRay()
     {
         int directionIndex = GetComponent<EntityManager>().GetEntityFacing();
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, facings[directionIndex]);
+        Transform origin = GameObject.FindGameObjectWithTag("Player").transform;
+        RaycastHit2D hit = Physics2D.Raycast(origin.position, facings[directionIndex]);
         if (hit.collider != null)
         {
             DrawRay(transform.position,hit.point);
+            Debug.Log("Hit at " + hit.point + "!");
+            GetComponent<LaserScript>().CreateRaySprites(origin.transform, hit, facings[directionIndex]);
+        } else {
+            Debug.Log("Miss!");
         }
     }
 
