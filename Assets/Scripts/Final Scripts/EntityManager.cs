@@ -99,4 +99,13 @@ public class EntityManager : MonoBehaviour
     {
         return EntityFacing;
     }
+
+    public Vector2 GetEntityDirection() {
+        Vector2[] facings = new Vector2[4];
+        facings[0] = Vector2.up;
+        facings[1] = Vector2.right;
+        facings[2] = Vector2.down;
+        facings[3] = Vector2.left;
+        return facings[EntityFacing];
+    }
 }

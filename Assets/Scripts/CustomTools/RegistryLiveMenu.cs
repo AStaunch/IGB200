@@ -34,7 +34,7 @@ public class RegistryLiveMenu : EditorWindow
                 SpellRegistrySing.Instance.Registry.QueryRegistry(uIContent[selected].text).RunFunction(new SpellEffector()
                 {
                     Name = "TestFire",
-                    FireEffect = new Action<GameObject>((gmeobj) =>
+                    Effector = new Action<GameObject>((gmeobj) =>
                     {
                         Debug.Log($"--Test fire invoked--");
                     })

@@ -12,8 +12,8 @@ public class SpellEffector
 {
     public string Name { get; set; }
     public long DesiredId { get; set; }
-    public Color[] colors { get; set; }
-    public Action<GameObject> FireEffect;
+    public Color[] Colors { get; set; }
+    public Action<GameObject> Effector;
 }
 
 public class SpellTemplate

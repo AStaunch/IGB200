@@ -9,8 +9,8 @@ public class RayDraw : MonoBehaviour
     public GameObject[] laserPieces;
     public Material palette;
 
-
-    public void CreateRaySprites(Transform origin, RaycastHit2D other, int DirectionIndex, Color[] colors) {
+    //TODO: Make RayDraw Static
+    public void CreateRaySprites(Transform origin, RaycastHit2D other, Color[] colors) {
         GameObject start = null;
         GameObject middle = null;
         GameObject end = null;
@@ -19,15 +19,9 @@ public class RayDraw : MonoBehaviour
         GameObject rayMaster = Instantiate(new GameObject("Ray Master"), origin.position, origin.rotation);
         rayMaster.transform.parent = origin;
 
-        Vector3[] Directions = new Vector3[4];
-        Directions[0] = Vector3.up;
-        Directions[1] = Vector3.right;
-        Directions[2] = Vector3.down;
-        Directions[3] = Vector3.left;
-
-       
-        int rotationIndex = (DirectionIndex) % 4;
-        float rotationAmount = 90 * rotationIndex * -1^(rotationIndex);
+        Vector3 Direction = origin.transform.GetComponent<EntityManager>().GetEntityDirection();
+        int DirectionIndex = origin.transform.GetComponent<EntityManager>().GetEntityFacing();
+        float rotationAmount = 90 * DirectionIndex * -1^(DirectionIndex);
         ChangeColours(colors);
 
         // Create the laser start from the prefab
@@ -79,11 +73,11 @@ public class RayDraw : MonoBehaviour
 
         // -- the middle is after start and, as it has a center pivot, have a size of half the laser (minus start and end)
         middle.transform.localScale = new Vector3(middle.transform.localScale.x, (currentLaserSize - startSpriteWidth), middle.transform.localScale.z);
-        middle.transform.localPosition = Directions[DirectionIndex] * (currentLaserSize / 2f);
+        middle.transform.localPosition = Direction * (currentLaserSize / 2f);
 
         // End?
         if (end != null) {
-            end.transform.localPosition = Directions[DirectionIndex] * currentLaserSize;
+            end.transform.localPosition = Direction * currentLaserSize;
         }
 
 
@@ -102,9 +96,5 @@ public class RayDraw : MonoBehaviour
             material.SetColor("_AccentColour2", colors[3]);
             piece.GetComponent<Renderer>().material = material;
         }
-    }
-
-    private Vector2 ToVector2 (Vector3 vect3) {
-        return new Vector2(vect3.x, vect3.y);
     }
 }
