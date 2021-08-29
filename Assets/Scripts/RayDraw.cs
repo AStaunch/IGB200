@@ -7,14 +7,15 @@ public class RayDraw : MonoBehaviour
 {
     [Header("Laser pieces")]
     public GameObject[] laserPieces;
-
-    private GameObject start;
-    private GameObject middle;
-    private GameObject end;
     public Material palette;
-    public Color[] colors;
 
-    public void CreateRaySprites(Transform origin, RaycastHit2D other, int DirectionIndex) {
+
+    public void CreateRaySprites(Transform origin, RaycastHit2D other, int DirectionIndex, Color[] colors) {
+        GameObject start = null;
+        GameObject middle = null;
+        GameObject end = null;
+
+
         GameObject rayMaster = Instantiate(new GameObject("Ray Master"), origin.position, origin.rotation);
         rayMaster.transform.parent = origin;
 
@@ -27,7 +28,7 @@ public class RayDraw : MonoBehaviour
        
         int rotationIndex = (DirectionIndex) % 4;
         float rotationAmount = 90 * rotationIndex * -1^(rotationIndex);
-        ChangeColours();
+        ChangeColours(colors);
 
         // Create the laser start from the prefab
         if (start == null) {
@@ -92,7 +93,7 @@ public class RayDraw : MonoBehaviour
         end.AddComponent<DestroyThis>();
     }
 
-    private void ChangeColours() {
+    private void ChangeColours(Color[] colors) {
         foreach (GameObject piece in laserPieces) {
             Material material = palette;
             material.SetColor("_PrimaryColour", colors[0]);

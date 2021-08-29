@@ -38,9 +38,8 @@ public class FakeRay : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(origin.position, facings[directionIndex]);
         if (hit.collider != null)
         {
-            DrawRay(transform.position,hit.point);
             Debug.Log("Hit at " + hit.point + "!");
-            GetComponent<RayDraw>().CreateRaySprites(origin.transform, hit, directionIndex);
+            GetComponent<RayDraw>().CreateRaySprites(origin.transform, hit, directionIndex, paletteColors);
 
             if (hit.transform.gameObject.TryGetComponent<EntityManager>(out EntityManager otherEntity)) {
                 if (otherEntity.entityProperties.Contains(Properties.Flamable)) {
@@ -50,22 +49,6 @@ public class FakeRay : MonoBehaviour
                 } else {
                     otherEntity.TakeDamage(baseDmg);
                 }
-            }
-        }
-    }
-
-    void DrawRay(Vector2 start, Vector2 end)
-    {
-        float tileWidth = GetComponent<Collider2D>().bounds.size.x;
-        float distance = Vector2.Distance(start, end);
-        float tileDistance = distance / tileWidth;
-        float remainder = (tileDistance % 1);
-        lineRenderer.SetPosition(0, start);
-        lineRenderer.SetPosition(1, end);
-        for(float i = 0; i < tileDistance; i += 1) {
-            if(i < remainder) {
-
-                i = remainder;
             }
         }
     }

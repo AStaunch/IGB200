@@ -6,11 +6,13 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using Color = UnityEngine.Color;
 
 public class SpellEffector
 {
     public string Name { get; set; }
     public long DesiredId { get; set; }
+    public Color[] colors { get; set; }
     public Action<GameObject> FireEffect;
 }
 
