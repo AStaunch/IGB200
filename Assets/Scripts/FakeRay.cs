@@ -20,7 +20,6 @@ public class FakeRay : MonoBehaviour
         facings[1] = Vector2.right;
         facings[2] = Vector2.down;
         facings[3] = Vector2.left;
-        lineRenderer = gameObject.AddComponent<LineRenderer>();
     }
 
     // Update is called once per frame
@@ -41,9 +40,17 @@ public class FakeRay : MonoBehaviour
         {
             DrawRay(transform.position,hit.point);
             Debug.Log("Hit at " + hit.point + "!");
-            GetComponent<LaserScript>().CreateRaySprites(origin.transform, hit, facings[directionIndex]);
-        } else {
-            Debug.Log("Miss!");
+            GetComponent<RayDraw>().CreateRaySprites(origin.transform, hit, directionIndex);
+
+            if (hit.transform.gameObject.TryGetComponent<EntityManager>(out EntityManager otherEntity)) {
+                if (otherEntity.entityProperties.Contains(Properties.Flamable)) {
+                    otherEntity.TakeDamage(baseDmg * 2f);
+                } else if (otherEntity.entityProperties.Contains(Properties.Fireproof)) {
+                    otherEntity.TakeDamage(0f);
+                } else {
+                    otherEntity.TakeDamage(baseDmg);
+                }
+            }
         }
     }
 
@@ -60,70 +67,6 @@ public class FakeRay : MonoBehaviour
 
                 i = remainder;
             }
-        }
-    }
-
-    void Scraps()
-    {
-        int directionIndex = GetComponent<EntityManager>().GetEntityFacing();
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, facings[directionIndex]);
-        if (hit.collider != null)
-        {
-            GameObject other = hit.transform.gameObject;
-            /////   Create the Beam
-            //Get Distance (d)
-            //Length of Sections (B, M, E)
-            //Get No of Tiles in Distance
-            /* Palette Swap Colours of Ray.
-             * Get First Tile; set to start
-             * Get Last Tile; set to end
-             * For everyother tile; set to middle
-             */
-
-            /////   Effect What It Hits
-            //Get The Game object it hits
-            //Check EntityType Enum
-            //Check EntityProp Enum for Flamable/Fireproof
-
-
-
-            //Property.Behave(GameObject other, Float baseDmg)
-
-            //Fire Properties
-            if (other.TryGetComponent<EntityManager>(out EntityManager otherEntity))
-            {
-                if (otherEntity.entityProperties.Contains(Properties.Flamable))
-                {
-                    otherEntity.TakeDamage(baseDmg * 2f);
-                }
-                else if (otherEntity.entityProperties.Contains(Properties.Fireproof))
-                {
-                    otherEntity.TakeDamage(0f);
-                }
-                else
-                {
-                    otherEntity.TakeDamage(baseDmg);
-                }
-            }
-
-
-            float distance = Vector2.Distance(hit.point, new Vector2(transform.position.x, transform.position.y));
-
-
-            Vector2 direction = hit.point - new Vector2(transform.position.x, transform.position.y);
-            float angle = Vector2.Angle(new Vector2(transform.position.x, transform.position.y), hit.point);
-            for (float i = 0; i < distance; i += 1) {
-                if (i == 0) {
-
-                } else if (i == distance - 1) {
-
-                }
-            }
-
-
-
-
-
         }
     }
 }
