@@ -27,15 +27,18 @@ class Register : MonoBehaviour
         SpellRegistrySing.Instance.Registry.AddItemToregistry(new SpellTemplate("Ray", null, new Action<SpellEffector>((effector) =>
         {
             Debug.Log("This would be a Raycast");
-
-            RaycastHit2D hit = Physics2D.Raycast(GameObject.FindGameObjectWithTag("Player").transform.position, Converter_[(EntityManager.Directions)GameObject.FindGameObjectWithTag("Player").GetComponent<EntityManager>().GetEntityFacing()]);
-            Debug.DrawRay(GameObject.FindGameObjectWithTag("Player").transform.position, Converter_[(EntityManager.Directions)GameObject.FindGameObjectWithTag("Player").GetComponent<EntityManager>().GetEntityFacing()]);
+            Vector2 facing = Converter_[(EntityManager.Directions)GameObject.FindGameObjectWithTag("Player").GetComponent<EntityManager>().GetEntityFacing()];
+            RaycastHit2D hit = Physics2D.Raycast(GameObject.FindGameObjectWithTag("Player").transform.position, facing);
+            Debug.DrawRay(GameObject.FindGameObjectWithTag("Player").transform.position, facing);
+            
             if (hit.collider != null)
             {
-                GameObject gmeobj = new GameObject();
-                gmeobj.transform.position = hit.point;
-
-                effector.FireEffect.Invoke(gmeobj);//This gmeobj is destroyed by the effector since this is just passing on hit pos for now
+                //Suggestion: Pass in the Object that goes to the SpellEffector
+                //GameObject gmeobj = new GameObject();
+                //gmeobj.transform.position = hit.point;
+                effector.Effector.Invoke(hit.transform.gameObject); //This gmeobj is destroyed by the effector since this is just passing on hit pos for now
+                //Create The Ray Sprites TODO: Make RayDraw Static
+                GameObject.FindGameObjectWithTag("Player").transform.GetComponent<RayDraw>().CreateRaySprites(GameObject.FindGameObjectWithTag("Player").transform, hit, effector.Colors);
             }
         })));
 
@@ -43,35 +46,35 @@ class Register : MonoBehaviour
         SpellRegistrySing.Instance.Registry.AddItemToregistry(new SpellTemplate("Orb", null, new Action<SpellEffector>((effector) =>
         {
             Console.WriteLine("This would be a Orb");
-            effector.FireEffect.Invoke(null);//The null in this function would be the game object required
+            effector.Effector.Invoke(null);//The null in this function would be the game object required
             })));
 
         //Arc Template
         SpellRegistrySing.Instance.Registry.AddItemToregistry(new SpellTemplate("Arc", null, new Action<SpellEffector>((effector) =>
         {
             Console.WriteLine("This would be a Arc");
-            effector.FireEffect.Invoke(null);//The null in this function would be the game object required
+            effector.Effector.Invoke(null);//The null in this function would be the game object required
             })));
 
         //Cone Template
         SpellRegistrySing.Instance.Registry.AddItemToregistry(new SpellTemplate("Cone", null, new Action<SpellEffector>((effector) =>
         {
             Console.WriteLine("This would be a Cone");
-            effector.FireEffect.Invoke(null);//The null in this function would be the game object required
+            effector.Effector.Invoke(null);//The null in this function would be the game object required
             })));
 
         //Shield Template
         SpellRegistrySing.Instance.Registry.AddItemToregistry(new SpellTemplate("Shield", null, new Action<SpellEffector>((effector) =>
         {
             Console.WriteLine("This would be a Shield");
-            effector.FireEffect.Invoke(null);//The null in this function would be the game object required
+            effector.Effector.Invoke(null);//The null in this function would be the game object required
             })));
 
         //Runner Template
         SpellRegistrySing.Instance.Registry.AddItemToregistry(new SpellTemplate("Runner", null, new Action<SpellEffector>((effector) =>
         {
             Console.WriteLine("This would be a Runner");
-            effector.FireEffect.Invoke(null);//The null in this function would be the game object required
+            effector.Effector.Invoke(null);//The null in this function would be the game object required
             })));
 
 
@@ -85,7 +88,7 @@ class Register : MonoBehaviour
             {
                 Name = "Fire",
                 DesiredId = SpellRegistrySing.Instance.Registry.QueryForSid("Ray"),
-                FireEffect = new Action<GameObject>((gmeobj) =>
+                Effector = new Action<GameObject>((gmeobj) =>
                 {
                         
                 })
@@ -94,7 +97,7 @@ class Register : MonoBehaviour
             {
                 Name = "Fire",
                 DesiredId = SpellRegistrySing.Instance.Registry.QueryForSid("Orb"),
-                FireEffect = new Action<GameObject>((gmeobj) =>
+                Effector = new Action<GameObject>((gmeobj) =>
                 {
                     Console.WriteLine("This is the effector + Orb spell");
                 })
