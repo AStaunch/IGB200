@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 842074883213001423}
   - component: {fileID: 1868838532075417885}
   - component: {fileID: 4073203407806277582}
-  - component: {fileID: 8154871821107399398}
   m_Layer: 0
   m_Name: BurnableDoor
   m_TagString: Untagged
@@ -97,19 +96,3 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.09, y: 2.25, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8154871821107399398
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 626067229213237980}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd5c5bb3537bd354db9c5bd4a3dfc6a9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  entityProperties: 02000000
-  entityType: 0
-  health: 10
-  EntitySpriteSheet: []

@@ -8,7 +8,19 @@ public class FakeRay : MonoBehaviour
 {
     [SerializeField]
     private Color[] paletteColors;
+    private Vector2[] facings;
     private float baseDmg = 10f;
+
+    public LineRenderer lineRenderer;
+    // Start is called before the first frame update
+    void Awake()
+    {
+        facings = new Vector2[4];
+        facings[0] = Vector2.up;
+        facings[1] = Vector2.right;
+        facings[2] = Vector2.down;
+        facings[3] = Vector2.left;
+    }
 
     // Update is called once per frame
     void Update()
@@ -21,13 +33,13 @@ public class FakeRay : MonoBehaviour
 
     void ShootRay()
     {
-        Vector2 facing = GameObject.FindGameObjectWithTag("Player").transform.GetComponent<EntityManager>().GetEntityDirection();
+        int directionIndex = GetComponent<EntityManager>().GetEntityFacing();
         Transform origin = GameObject.FindGameObjectWithTag("Player").transform;
-        RaycastHit2D hit = Physics2D.Raycast(origin.position, facing);
+        RaycastHit2D hit = Physics2D.Raycast(origin.position, facings[directionIndex]);
         if (hit.collider != null)
         {
             Debug.Log("Hit at " + hit.point + "!");
-            GetComponent<RayDraw>().CreateRaySprites(origin.transform, hit, paletteColors);
+            GetComponent<RayDraw>().CreateRaySprites(origin.transform, hit, directionIndex, paletteColors);
 
             if (hit.transform.gameObject.TryGetComponent<EntityManager>(out EntityManager otherEntity)) {
                 if (otherEntity.entityProperties.Contains(Properties.Flamable)) {
