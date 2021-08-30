@@ -13,7 +13,7 @@ public class SpellEffector
     public string Name { get; set; }
     public long DesiredId { get; set; }
     public Color[] Colors { get; set; }
-    public Action<GameObject> Effector;
+    public Action<EffectorData> Effector;
 }
 
 public class SpellTemplate
@@ -135,3 +135,22 @@ public interface ExternalSpell
 {
     void Initialize();
 }
+
+
+
+
+#region Data formats
+
+public interface EffectorData { }
+
+public class RayData : EffectorData
+{
+    public RaycastHit2D Data { get; set; }
+}
+
+public class GeneralData : EffectorData
+{
+    GameObject Target { get; set; }
+}
+
+#endregion

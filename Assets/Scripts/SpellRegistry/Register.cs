@@ -12,11 +12,12 @@ class Register : MonoBehaviour
 {
     private Dictionary<EntityManager.Directions, Vector2> Converter_ = new Dictionary<EntityManager.Directions, Vector2>() 
     {
-        { EntityManager.Directions.Up, new Vector2(0,1) },
-        { EntityManager.Directions.Down, new Vector2(0,-1) },
-        { EntityManager.Directions.Left, new Vector2(-1,0) },
-        { EntityManager.Directions.Right, new Vector2(1,0) },
+        { EntityManager.Directions.Up,      new Vector2(0, 1) },
+        { EntityManager.Directions.Down,    new Vector2(0,-1) },
+        { EntityManager.Directions.Left,    new Vector2(-1,0) },
+        { EntityManager.Directions.Right,   new Vector2(1, 0) },
     };
+
     void Awake()
     {
         DontDestroyOnLoad(this.gameObject);
@@ -27,18 +28,19 @@ class Register : MonoBehaviour
         SpellRegistrySing.Instance.Registry.AddItemToregistry(new SpellTemplate("Ray", null, new Action<SpellEffector>((effector) =>
         {
             Debug.Log("This would be a Raycast");
-            Vector2 facing = Converter_[(EntityManager.Directions)GameObject.FindGameObjectWithTag("Player").GetComponent<EntityManager>().GetEntityFacing()];
-            RaycastHit2D hit = Physics2D.Raycast(GameObject.FindGameObjectWithTag("Player").transform.position, facing);
-            Debug.DrawRay(GameObject.FindGameObjectWithTag("Player").transform.position, facing);
+            RaycastHit2D hit = Physics2D.Raycast(GameObject.FindGameObjectWithTag("Player").transform.position, Converter_[(EntityManager.Directions)GameObject.FindGameObjectWithTag("Player").GetComponent<EntityManager>().GetEntityFacing()]);
+            //There is no point using a facing variable, when this debug function will be removed soon
+            Debug.DrawRay(GameObject.FindGameObjectWithTag("Player").transform.position, Converter_[(EntityManager.Directions)GameObject.FindGameObjectWithTag("Player").GetComponent<EntityManager>().GetEntityFacing()]);
             
             if (hit.collider != null)
             {
-                //Suggestion: Pass in the Object that goes to the SpellEffector
-                //GameObject gmeobj = new GameObject();
-                //gmeobj.transform.position = hit.point;
-                effector.Effector.Invoke(hit.transform.gameObject); //This gmeobj is destroyed by the effector since this is just passing on hit pos for now
+                //Since its clearly difficult for you to work within the bounds of the function, i've updated them to be easier. please dont fuck with this anymore, im tired
+                RayData ryd = new RayData() { Data = hit };
+                effector.Effector.Invoke(ryd);
                 //Create The Ray Sprites TODO: Make RayDraw Static
                 GameObject.FindGameObjectWithTag("Player").transform.GetComponent<RayDraw>().CreateRaySprites(GameObject.FindGameObjectWithTag("Player").transform, hit, effector.Colors);
+            
+                
             }
         })));
 
@@ -88,18 +90,19 @@ class Register : MonoBehaviour
             {
                 Name = "Fire",
                 DesiredId = SpellRegistrySing.Instance.Registry.QueryForSid("Ray"),
-                Effector = new Action<GameObject>((gmeobj) =>
+                Effector = new Action<EffectorData>((EffectorData) =>
                 {
-                        
+                    RayData data = (RayData)EffectorData;
+                    
                 })
             },
             new SpellEffector()
             {
                 Name = "Fire",
                 DesiredId = SpellRegistrySing.Instance.Registry.QueryForSid("Orb"),
-                Effector = new Action<GameObject>((gmeobj) =>
+                Effector = new Action<EffectorData>((EffectorData) =>
                 {
-                    Console.WriteLine("This is the effector + Orb spell");
+                    
                 })
             }
             #endregion
@@ -129,10 +132,6 @@ class Register : MonoBehaviour
                 {
                     Console.WriteLine($"{e.Source} - {e.Message}");
                 }
-
-                //type of interface
-                //select all of the types of the loaded assembly
-                //where the type = the interface we want
             }
         }
 
