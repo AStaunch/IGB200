@@ -30,6 +30,8 @@ public class DoorScript : MonoBehaviour
             ExitDoor.ExitDoor = this;
         }
         ExitDoor.isOpen = isOpen;
+
+        //GetComponent<Collider2D>().bounds.size = Vector2()
     }
 
     private void Start() {
@@ -68,4 +70,5 @@ public class DoorScript : MonoBehaviour
             GetComponent<SpriteRenderer>().sprite = DoorSprites[FacingIndex*2];
         }
     }
+
 }

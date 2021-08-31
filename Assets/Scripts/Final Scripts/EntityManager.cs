@@ -5,6 +5,7 @@ using System.Linq;
 
 public class EntityManager : MonoBehaviour
 {
+    #region Define Enums
     public enum Directions
     {
         Up,
@@ -16,7 +17,7 @@ public class EntityManager : MonoBehaviour
     [System.Serializable]
     public enum Properties
     {
-        Heavy, Light, Flamable, Fireproof, Metal, Insulated,
+        Heavy, Light, Flamable, Fireproof, Metal, Insulated, Door
     }
     public Properties[] entityProperties;
 
@@ -27,7 +28,7 @@ public class EntityManager : MonoBehaviour
         Creature
     }
     public EntityType entityType;
-
+    #endregion
     private Rigidbody2D rb;
     [SerializeField]
     private float health = 10;
@@ -40,41 +41,37 @@ public class EntityManager : MonoBehaviour
     private int EntityFacing;
 
     // Start is called before the first frame update
-    void Awake()
-    {
-        if(!TryGetComponent<Rigidbody2D>(out rb))
-        {
+    void Awake() {
+        if (!TryGetComponent<Rigidbody2D>(out rb) && entityType.Equals(EntityType.Creature)) {
             rb = gameObject.AddComponent<Rigidbody2D>();
         }
-        rb.gravityScale = 0;
-        rb.freezeRotation = true;
+        if(rb != null){
+            rb.gravityScale = 0;
+            rb.freezeRotation = true;
+            rb.drag = 1f;
+        }
         maxHealth = health;
 
     }
 
-    public void ChangeSprite(Vector3 movement)
-    {   //Up ; left; Down; right
+    public void ChangeSprite(Vector3 movement) {   //Up ; left; Down; right
         if (Mathf.Abs(movement.x) < Mathf.Abs(movement.y)) {
             if (movement.y > 0) {
                 EntityFacing = 0;
-            }
-            else {
+            } else {
                 EntityFacing = 2;
             }
-        }
-        else {
+        } else {
             if (movement.x > 0) {
                 EntityFacing = 1;
-            }
-            else {
+            } else {
                 EntityFacing = 3;
             }
         }
         GetComponent<SpriteRenderer>().sprite = EntitySpriteSheet[EntityFacing];
     }
 
-    public void TakeDamage(float damage)
-    {
+    public void TakeDamage(float damage) {
         health -= damage;
         health = Mathf.Clamp(health, 0f, maxHealth);
         if (0 >= health) {
@@ -82,21 +79,26 @@ public class EntityManager : MonoBehaviour
         }
     }
 
-    public void MoveEntity(Vector3 difference)
-    {
+    public void MoveEntity(Vector3 difference) {
         Vector3 position = transform.position;
         rb.MovePosition(position + difference);
         ChangeSprite(difference);
     }
-    private void EntityDeath()
-    {
+    private void EntityDeath() {
+
+        if (entityType == EntityType.Object) {
+            if (entityProperties.Contains(Properties.Door) && TryGetComponent(out DoorScript portal)) {
+                portal.SetDoor(true);
+            }
+        } else {
+            Destroy(this.gameObject, Time.deltaTime);
+        }
         // TODO: Impliment Colour change
         // SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
-        Destroy(this.gameObject, Time.deltaTime);
+
     }
 
-    public int GetEntityFacing()
-    {
+    public int GetEntityFacing() {
         return EntityFacing;
     }
 
