@@ -34,13 +34,13 @@ class Register : MonoBehaviour
             
             if (hit.collider != null)
             {
-                //Since its clearly difficult for you to work within the bounds of the function, i've updated them to be easier. please dont fuck with this anymore, im tired
+                //Passes Hit data to the Effector
                 RayData ryd = new RayData() { Data = hit };
                 effector.Effector.Invoke(ryd);
-                //Create The Ray Sprites TODO: Make RayDraw Static
-                GameObject.FindGameObjectWithTag("Player").transform.GetComponent<RayDraw>().CreateRaySprites(GameObject.FindGameObjectWithTag("Player").transform, hit, effector.Colors);
-            
-                
+
+                //Create the Sprites for the Ray Spell 
+                SpellRenderer rayDrawer = FindObjectOfType<SpellRenderer>();
+                rayDrawer.CreateRaySprites(GameObject.FindGameObjectWithTag("Player").transform, hit, effector.Colors);
             }
         })));
 

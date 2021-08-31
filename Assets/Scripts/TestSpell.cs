@@ -14,7 +14,9 @@ public class TestSpell : MonoBehaviour
             RayData Ray_ = (RayData)EffectorData_;
             Debug.Log($"Test Spell Fire recieved: {Ray_.Data.point.x} - {Ray_.Data.point.y}");
 
-            //Fire Properties
+            /*Fire Properties
+             * Damage to enemies is based on their properties. this code could be recycled for other pieces, changing base damage among other things.
+             * */
             float baseDmg = 10f;
             if (Ray_.Data.collider.gameObject.TryGetComponent<EntityManager>(out EntityManager otherEntity)) {
                 if (otherEntity.entityProperties.Contains(Properties.Flamable)) {
