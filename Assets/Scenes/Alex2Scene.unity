@@ -384,7 +384,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 842074883213001423, guid: 248bf7a06f7b0e14285af032933f80d5, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 842074883213001423, guid: 248bf7a06f7b0e14285af032933f80d5, type: 3}
       propertyPath: m_LocalPosition.x
@@ -563,7 +563,7 @@ Transform:
   m_Children:
   - {fileID: 519420032}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &143055359
 MonoBehaviour:
@@ -677,8 +677,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfd0cc1ce76d700498cc1d7001d9647e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Exit: {fileID: 519870704}
+  ExitDoor: {fileID: 0}
   delayTimer: 0
+  isOpen: 0
+  FacingIndex: 0
+  DoorSprites: []
 --- !u!61 &166882207
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3018,8 +3021,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfd0cc1ce76d700498cc1d7001d9647e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Exit: {fileID: 166882205}
+  ExitDoor: {fileID: 0}
   delayTimer: 0
+  isOpen: 0
+  FacingIndex: 0
+  DoorSprites: []
 --- !u!4 &519870707
 Transform:
   m_ObjectHideFlags: 0

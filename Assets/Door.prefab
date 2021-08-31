@@ -11,8 +11,10 @@ GameObject:
   - component: {fileID: 842074883213001423}
   - component: {fileID: 1868838532075417885}
   - component: {fileID: 4073203407806277582}
+  - component: {fileID: 7524599666175078581}
+  - component: {fileID: 6282569630009761576}
   m_Layer: 0
-  m_Name: BurnableDoor
+  m_Name: Door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -71,7 +73,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 4
   m_Sprite: {fileID: 6688593573428802373, guid: 2601c7ec817b61f43a09fb4af0c0e749, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -96,3 +98,44 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.09, y: 2.25, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7524599666175078581
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 626067229213237980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfd0cc1ce76d700498cc1d7001d9647e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ExitDoor: {fileID: 0}
+  delayTimer: 0
+  isOpen: 1
+  FacingIndex: 1
+  DoorSprites:
+  - {fileID: 1767371873970925592, guid: 041f1d5810e41bd49afd55ac1899cddf, type: 3}
+  - {fileID: -1244826266528968393, guid: 041f1d5810e41bd49afd55ac1899cddf, type: 3}
+  - {fileID: 4272184890422156511, guid: 041f1d5810e41bd49afd55ac1899cddf, type: 3}
+  - {fileID: -7479781390151944694, guid: 041f1d5810e41bd49afd55ac1899cddf, type: 3}
+  - {fileID: 8693329000027944824, guid: 041f1d5810e41bd49afd55ac1899cddf, type: 3}
+  - {fileID: -3401324574763296666, guid: 041f1d5810e41bd49afd55ac1899cddf, type: 3}
+  - {fileID: -2962531703935522114, guid: 041f1d5810e41bd49afd55ac1899cddf, type: 3}
+  - {fileID: 8281078814672244406, guid: 041f1d5810e41bd49afd55ac1899cddf, type: 3}
+--- !u!114 &6282569630009761576
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 626067229213237980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd5c5bb3537bd354db9c5bd4a3dfc6a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entityProperties: 02000000
+  entityType: 0
+  health: 10
+  EntitySpriteSheet: []
