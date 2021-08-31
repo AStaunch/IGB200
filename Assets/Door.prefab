@@ -104,12 +104,12 @@ MonoBehaviour:
   DoorSprites:
   - {fileID: 1767371873970925592, guid: 041f1d5810e41bd49afd55ac1899cddf, type: 3}
   - {fileID: -1244826266528968393, guid: 041f1d5810e41bd49afd55ac1899cddf, type: 3}
-  - {fileID: 4272184890422156511, guid: 041f1d5810e41bd49afd55ac1899cddf, type: 3}
-  - {fileID: -7479781390151944694, guid: 041f1d5810e41bd49afd55ac1899cddf, type: 3}
+  - {fileID: -2962531703935522114, guid: 041f1d5810e41bd49afd55ac1899cddf, type: 3}
+  - {fileID: -4960734469189484717, guid: 041f1d5810e41bd49afd55ac1899cddf, type: 3}
   - {fileID: 8693329000027944824, guid: 041f1d5810e41bd49afd55ac1899cddf, type: 3}
   - {fileID: -3401324574763296666, guid: 041f1d5810e41bd49afd55ac1899cddf, type: 3}
-  - {fileID: -2962531703935522114, guid: 041f1d5810e41bd49afd55ac1899cddf, type: 3}
-  - {fileID: 8281078814672244406, guid: 041f1d5810e41bd49afd55ac1899cddf, type: 3}
+  - {fileID: -6941524184028459231, guid: 041f1d5810e41bd49afd55ac1899cddf, type: 3}
+  - {fileID: -7479781390151944694, guid: 041f1d5810e41bd49afd55ac1899cddf, type: 3}
 --- !u!114 &6282569630009761576
 MonoBehaviour:
   m_ObjectHideFlags: 0
