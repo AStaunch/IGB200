@@ -30,80 +30,16 @@ public class TestSpell : MonoBehaviour
             }
         }),
         Colors = new Color[]{
-            Color.red,
-            Color.red,
-            Color.red,
-            Color.yellow
+                new Color(0.5411f,0.1216f,0.07451f,1f),
+                new Color(0.9176f,0.07451f,0.0039f,1f),
+                new Color(1f,0.3843f,0f,1f),
+                new Color(0.9686f,0.6824f,0.1765f,1f)
         }
     };
-
-    //SpellEffector Pull = new SpellEffector() {
-    //    DesiredId = SpellRegistrySing.Instance.Registry.QueryForSid("Ray"),
-    //    Name = "Pull",
-    //    Effector = new Action<GameObject>((gmeobj) => {
-    //        Debug.Log($"Test Spell Pull recieved: {gmeobj.transform.position.x} - {gmeobj.transform.position.y}");
-
-    //        //Pull Properties
-    //        float baseDmg = 10f;
-    //        float commonFactor = 10f;
-    //        float force = baseDmg * commonFactor;
-    //        Vector2 facing = GameObject.FindGameObjectWithTag("Player").transform.GetComponent<EntityManager>().GetEntityDirection();
-
-    //        if (gmeobj.TryGetComponent<EntityManager>(out EntityManager otherEntity)) {
-    //            if (otherEntity.entityProperties.Contains(Properties.Light)) {
-    //                gmeobj.GetComponent<Rigidbody2D>().AddForce(1.5f * force * facing);
-    //            } else if (otherEntity.entityProperties.Contains(Properties.Heavy)) {
-    //                gmeobj.GetComponent<Rigidbody2D>().AddForce(0.2f * force * facing);
-    //            } else {
-    //                gmeobj.GetComponent<Rigidbody2D>().AddForce(facing * force);
-    //            }
-    //        }
-    //    }),
-    //    Colors = new Color[]{
-    //        Color.magenta,
-    //        Color.magenta,
-    //        Color.magenta,
-    //        Color.yellow
-    //    }
-    //};
-
-    //SpellEffector Push = new SpellEffector() {
-    //    DesiredId = SpellRegistrySing.Instance.Registry.QueryForSid("Ray"),
-    //    Name = "Push",
-    //    Effector = new Action<GameObject>((gmeobj) => {
-    //        Debug.Log($"Test Spell Effector recieved: {gmeobj.transform.position.x} - {gmeobj.transform.position.y}");
-
-    //        //Push Properties
-    //        float baseDmg = 10f;
-    //        float commonFactor = 10f;
-    //        float force = -baseDmg * commonFactor;
-    //        Vector2 facing = GameObject.FindGameObjectWithTag("Player").transform.GetComponent<EntityManager>().GetEntityDirection();
-
-    //        if (gmeobj.TryGetComponent<EntityManager>(out EntityManager otherEntity)) {
-    //            if (otherEntity.entityProperties.Contains(Properties.Light)) {
-    //                gmeobj.GetComponent<Rigidbody2D>().AddForce(1.5f * force * facing);
-    //            } else if (otherEntity.entityProperties.Contains(Properties.Heavy)) {
-    //                gmeobj.GetComponent<Rigidbody2D>().AddForce(0.2f * force * facing);
-    //            } else {
-    //                gmeobj.GetComponent<Rigidbody2D>().AddForce(facing * force);
-    //            }
-    //        }
-    //    }),
-    //    Colors = new Color[]{
-    //        Color.yellow,
-    //        Color.yellow,
-    //        Color.yellow,
-    //        Color.magenta
-    //    }
-    //};
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
             SpellRegistrySing.Instance.Registry.QueryRegistry("Ray").RunFunction(Fire);
-        //if (Input.GetKeyDown(KeyCode.Alpha2))
-        //    SpellRegistrySing.Instance.Registry.QueryRegistry("Ray").RunFunction(Pull);
-        //if (Input.GetKeyDown(KeyCode.Alpha3))
-        //    SpellRegistrySing.Instance.Registry.QueryRegistry("Ray").RunFunction(Push);
     }
 }
