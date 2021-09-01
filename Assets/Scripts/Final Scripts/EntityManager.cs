@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
+
+
 public class EntityManager : MonoBehaviour
 {
-    #region Define Enums
+    #region Define Enums And Dictionaries
     public enum Directions
     {
         Up,
@@ -17,7 +19,7 @@ public class EntityManager : MonoBehaviour
     [System.Serializable]
     public enum Properties
     {
-        Heavy, Light, Flamable, Fireproof, Metal, Insulated, Door
+        Heavy, Light, Flamable, Fireproof, Metal, Insulated, Door, Indestructable, Immovable
     }
     public Properties[] entityProperties;
 
@@ -28,62 +30,100 @@ public class EntityManager : MonoBehaviour
         Creature
     }
     public EntityType entityType;
+
+    public static Dictionary<EntityManager.Directions, Vector2> VectorDict = new Dictionary<EntityManager.Directions, Vector2>()
+    {
+        { EntityManager.Directions.Up,      new Vector2(0, 1) },
+        { EntityManager.Directions.Down,    new Vector2(0,-1) },
+        { EntityManager.Directions.Left,    new Vector2(-1,0) },
+        { EntityManager.Directions.Right,   new Vector2(1, 0) },
+    };
+
+    public static Dictionary<EntityManager.Directions, int> IntDict = new Dictionary<EntityManager.Directions, int>()
+    {
+        { EntityManager.Directions.Up,      0},
+        { EntityManager.Directions.Down,    2},
+        { EntityManager.Directions.Left,    3 },
+        { EntityManager.Directions.Right,   1 },
+    };
+    Directions CurrentDirection = Directions.Down;
     #endregion
+
     private Rigidbody2D rb;
     [SerializeField]
     private float health = 10;
     private float maxHealth;
 
     //[SerializeField]
-    protected float entitySpeed;
+    public float entitySpeed;
     [SerializeField]
     private Sprite[] EntitySpriteSheet;
-    private int EntityFacing;
 
+    private Animator anim;
     // Start is called before the first frame update
     void Awake() {
-        if (!TryGetComponent<Rigidbody2D>(out rb) && entityType.Equals(EntityType.Creature)) {
+        if (!gameObject.TryGetComponent(out rb) && entityType.Equals(EntityType.Creature)) {
             rb = gameObject.AddComponent<Rigidbody2D>();
         }
         if(rb != null){
             rb.gravityScale = 0;
             rb.freezeRotation = true;
-            rb.drag = 1f;
+            if(rb.drag == 0)
+                rb.drag = 1f;
         }
         maxHealth = health;
-
-    }
-
-    public void ChangeSprite(Vector3 movement) {   //Up ; left; Down; right
-        if (Mathf.Abs(movement.x) < Mathf.Abs(movement.y)) {
-            if (movement.y > 0) {
-                EntityFacing = 0;
-            } else {
-                EntityFacing = 2;
-            }
-        } else {
-            if (movement.x > 0) {
-                EntityFacing = 1;
-            } else {
-                EntityFacing = 3;
-            }
+        if(gameObject.TryGetComponent(out anim)){
+            
         }
-        GetComponent<SpriteRenderer>().sprite = EntitySpriteSheet[EntityFacing];
     }
 
     public void TakeDamage(float damage) {
+        if (entityProperties.Contains(Properties.Indestructable)){
+            damage = 0f; 
+        }
         health -= damage;
         health = Mathf.Clamp(health, 0f, maxHealth);
         if (0 >= health) {
             EntityDeath();
         }
     }
-
-    public void MoveEntity(Vector3 difference) {
-        Vector3 position = transform.position;
-        rb.MovePosition(position + difference);
-        ChangeSprite(difference);
+    public void UpdatePosition(Vector3 change) {
+        if (change != Vector3.zero) {
+            UpdateDirection(change);
+        }
+        change = entitySpeed * change.normalized;
+        rb.velocity = (change);
     }
+
+    public void UpdateAnimation(Vector3 change) {
+        if (change != Vector3.zero) {
+            anim.SetFloat("moveX", change.x);
+            anim.SetFloat("moveY", change.y);
+            anim.SetBool("moving", true);
+        } else {
+            anim.SetBool("moving", false);
+        }
+    }
+
+    public void UpdateDirection(Vector3 change) {   //Up ; Right; Down; Left
+        if (change != Vector3.zero) {
+
+            if (Mathf.Abs(change.x) < Mathf.Abs(change.y)) {
+                if (change.y > 0) {
+                    CurrentDirection = Directions.Up;
+                } else {
+                    CurrentDirection = Directions.Down;
+                }
+            } else {
+                if (change.x > 0) {
+                    CurrentDirection = Directions.Right;
+                } else {
+                    CurrentDirection = Directions.Left;
+                }
+            }
+        }
+    }
+
     private void EntityDeath() {
 
         if (entityType == EntityType.Object) {
@@ -98,16 +138,14 @@ public class EntityManager : MonoBehaviour
 
     }
 
+    public Directions GetEntityDirectionEnum() {
+        return CurrentDirection;
+    }
     public int GetEntityFacing() {
-        return EntityFacing;
+        return IntDict[CurrentDirection];
     }
 
     public Vector2 GetEntityDirection() {
-        Vector2[] facings = new Vector2[4];
-        facings[0] = Vector2.up;
-        facings[1] = Vector2.right;
-        facings[2] = Vector2.down;
-        facings[3] = Vector2.left;
-        return facings[EntityFacing];
+        return VectorDict[CurrentDirection];
     }
 }

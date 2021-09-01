@@ -2,12 +2,16 @@ using UnityEngine;
 using System.Collections;
 using static EntityManager;
 using System;
+using System.Collections.Generic;
 
 public class SpellRenderer : MonoBehaviour
 {
+    #region Singleton Things
+
     private static SpellRenderer _instance;
 
     public static SpellRenderer Instance { get { return _instance; } }
+    
 
 
     private void Awake() {
@@ -17,7 +21,7 @@ public class SpellRenderer : MonoBehaviour
             _instance = this;
         }
     }
-
+    #endregion
     public Shader shader;
     #region Ray Drawer
 
@@ -37,6 +41,8 @@ public class SpellRenderer : MonoBehaviour
 
         Vector3 Direction = origin.GetComponent<EntityManager>().GetEntityDirection();
         int rotationIndex = origin.GetComponent<EntityManager>().GetEntityFacing();
+
+       
         float rotationAmount = 90 * rotationIndex * -1^(rotationIndex);
 
         //Set Sprite Colours
