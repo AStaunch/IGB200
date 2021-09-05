@@ -10,27 +10,19 @@ using UnityEngine;
 
 class Register : MonoBehaviour
 {
-    private Dictionary<EntityManager.Directions, Vector2> Converter_ = new Dictionary<EntityManager.Directions, Vector2>() 
-    {
-        { EntityManager.Directions.Up,      new Vector2(0, 1) },
-        { EntityManager.Directions.Down,    new Vector2(0,-1) },
-        { EntityManager.Directions.Left,    new Vector2(-1,0) },
-        { EntityManager.Directions.Right,   new Vector2(1, 0) },
-    };
-
     void Awake()
     {
         DontDestroyOnLoad(this.gameObject);
 
         #region Register game spells and effect first
-        //fuck valve - Agreed - Doubled
+        //fuck valve - Agreed - Doubled - Thirded
         //Ray Template
         SpellRegistrySing.Instance.Registry.AddItemToregistry(new SpellTemplate("Ray", null, new Action<SpellEffector>((effector) =>
         {
             Debug.Log("This would be a Raycast");
-            RaycastHit2D hit = Physics2D.Raycast(GameObject.FindGameObjectWithTag("Player").transform.position, Converter_[(EntityManager.Directions)GameObject.FindGameObjectWithTag("Player").GetComponent<EntityManager>().GetEntityFacing()]);
+            RaycastHit2D hit = Physics2D.Raycast(GameObject.FindGameObjectWithTag("Player").transform.position, GameObject.FindGameObjectWithTag("Player").GetComponent<EntityManager>().GetEntityDirection());
             //There is no point using a facing variable, when this debug function will be removed soon
-            Debug.DrawRay(GameObject.FindGameObjectWithTag("Player").transform.position, Converter_[(EntityManager.Directions)GameObject.FindGameObjectWithTag("Player").GetComponent<EntityManager>().GetEntityFacing()]);
+            Debug.DrawRay(GameObject.FindGameObjectWithTag("Player").transform.position, GameObject.FindGameObjectWithTag("Player").GetComponent<EntityManager>().GetEntityDirection());
             
             if (hit.collider != null)
             {

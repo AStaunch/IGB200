@@ -1,37 +1,45 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using static EntityManager;
+using static EnumsAndDictionaries;
 
 public class DoorScript : MonoBehaviour  
 {
     public DoorScript ExitDoor;
-    protected Transform ExitPoint;
 
     [HideInInspector]
     public float delayTimer;
     public bool isOpen = false;
+    public bool isFireproof = false;
     public Directions exitDirection;
-    public Sprite[] DoorSprites; // 0 - Closed, 1 - Open
-
-    private int FacingIndex;
-    private Vector2 FacingVector;
-
-
+    public Sprite[] OpenDoorSprites;
+    public Sprite[] WoodenDoorSprites;
+    public Sprite[] FireproofDoorSprites;
+    public int sceneIndex = -1;
     // Start is called before the first frame update
 
     void Awake() {
-        ExitPoint = GetComponentInChildren<Transform>();
-        //Just Redunant Code to make Level Devs life easier
-        if (ExitDoor.ExitDoor == null) {
-            ExitDoor.ExitDoor = this;
+        EntityManager em = gameObject.AddComponent<EntityManager>();
+        em.entityType = EntityType.Object;
+        
+        //em.AddProperty(Properties.Door);
+        //em.AddProperty(Properties.Immovable);
+
+        if (isFireproof) {
+            ExitDoor.isFireproof = isFireproof;
+            em.entityProperties = new Properties[] { Properties.Door, Properties.Immovable, Properties.Fireproof};
+            //em.AddProperty(Properties.Fireproof);
+        } else {
+            em.entityProperties = new Properties[] { Properties.Door, Properties.Immovable, Properties.Flamable};
+            //em.AddProperty(Properties.Flamable);
         }
-        ExitDoor.isOpen = isOpen;
 
-        FacingIndex = IntDict[exitDirection];
-        FacingVector = VectorDict[exitDirection];
-
+        if(isOpen){
+            ExitDoor.isOpen = isOpen;
+        }
         //GetComponent<Collider2D>().bounds.size = Vector2()
     }
 
@@ -41,15 +49,19 @@ public class DoorScript : MonoBehaviour
         //Initialises Door Timer
         delayTimer = Time.timeSinceLevelLoad;
     }
-
+    
     private void OnTriggerEnter2D(Collider2D collision) {
         Debug.Log(collision.transform.name + " entered");
         if (collision.gameObject.TryGetComponent(out EntityManager _) && isOpen) {
-            if (delayTimer < Time.timeSinceLevelLoad) {
-                Vector3 offset = FacingVector;
-                collision.gameObject.transform.position = ExitDoor.transform.position + offset;
-                delayTimer = Time.timeSinceLevelLoad + 1f;
-                ExitDoor.GetComponent<DoorScript>().delayTimer = this.delayTimer;
+            if(sceneIndex < 0){
+                if (delayTimer < Time.timeSinceLevelLoad) {
+                    Vector3 offset = VectorDict[exitDirection];
+                    collision.gameObject.transform.position = ExitDoor.transform.position + offset;
+                    delayTimer = Time.timeSinceLevelLoad + 1f;
+                    ExitDoor.GetComponent<DoorScript>().delayTimer = this.delayTimer;
+                }
+            } else {
+                UnityEngine.SceneManagement.SceneManager.LoadScene(sceneIndex);
             }
         }
     }
@@ -65,10 +77,14 @@ public class DoorScript : MonoBehaviour
 
     public void UpdateSprite() {
         if (isOpen) {
-            GetComponent<SpriteRenderer>().sprite = DoorSprites[FacingIndex*2 + 1];
+            GetComponent<SpriteRenderer>().sprite = OpenDoorSprites[IntDict[exitDirection]];
         } else {
-            GetComponent<SpriteRenderer>().sprite = DoorSprites[FacingIndex*2];
+            if (isFireproof) {
+                GetComponent<SpriteRenderer>().sprite = FireproofDoorSprites[IntDict[exitDirection]];
+            } else {
+                GetComponent<SpriteRenderer>().sprite = WoodenDoorSprites[IntDict[exitDirection]];
+            }
+
         }
     }
-
 }

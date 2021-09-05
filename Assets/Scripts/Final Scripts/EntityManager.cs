@@ -2,52 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-
-
+using System;
+using static EnumsAndDictionaries;
 
 public class EntityManager : MonoBehaviour
 {
-    #region Define Enums And Dictionaries
-    public enum Directions
-    {
-        Up,
-        Right,
-        Down,
-        Left
-    }
-
-    [System.Serializable]
-    public enum Properties
-    {
-        Heavy, Light, Flamable, Fireproof, Metal, Insulated, Door, Indestructable, Immovable
-    }
     public Properties[] entityProperties;
 
-    [System.Serializable]
-    public enum EntityType
-    {
-        Object,
-        Creature
-    }
     public EntityType entityType;
 
-    public static Dictionary<EntityManager.Directions, Vector2> VectorDict = new Dictionary<EntityManager.Directions, Vector2>()
-    {
-        { EntityManager.Directions.Up,      new Vector2(0, 1) },
-        { EntityManager.Directions.Down,    new Vector2(0,-1) },
-        { EntityManager.Directions.Left,    new Vector2(-1,0) },
-        { EntityManager.Directions.Right,   new Vector2(1, 0) },
-    };
-
-    public static Dictionary<EntityManager.Directions, int> IntDict = new Dictionary<EntityManager.Directions, int>()
-    {
-        { EntityManager.Directions.Up,      0},
-        { EntityManager.Directions.Down,    2},
-        { EntityManager.Directions.Left,    3 },
-        { EntityManager.Directions.Right,   1 },
-    };
     Directions CurrentDirection = Directions.Down;
-    #endregion
 
     private Rigidbody2D rb;
     [SerializeField]
@@ -58,8 +22,9 @@ public class EntityManager : MonoBehaviour
     public float entitySpeed;
     [SerializeField]
     private Sprite[] EntitySpriteSheet;
-
     private Animator anim;
+    private Vector2 previousVelocity;
+
     // Start is called before the first frame update
     void Awake() {
         if (!gameObject.TryGetComponent(out rb) && entityType.Equals(EntityType.Creature)) {
@@ -72,8 +37,21 @@ public class EntityManager : MonoBehaviour
                 rb.drag = 1f;
         }
         maxHealth = health;
-        if(gameObject.TryGetComponent(out anim)){
-            
+        gameObject.TryGetComponent(out anim);
+    }
+
+    private void Update() {
+        if(rb){
+            if (entityType == EntityType.Creature && previousVelocity.magnitude > rb.velocity.magnitude) {
+                rb.velocity *= 0.5f;
+            }
+            if (rb.velocity.magnitude < 0.01f){
+                rb.velocity *= 0f;
+            }
+            previousVelocity = rb.velocity;
+            if(anim && rb.velocity == Vector2.zero) {
+                UpdateAnimation(rb.velocity);
+            }
         }
     }
 
@@ -131,11 +109,52 @@ public class EntityManager : MonoBehaviour
                 portal.SetDoor(true);
             }
         } else {
+            if (transform.CompareTag("Player")) {
+                UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
+            }
             Destroy(this.gameObject, Time.deltaTime);
         }
         // TODO: Impliment Colour change
         // SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
 
+    }
+
+    public void AddProperty(Properties property) {
+        if (!entityProperties.Contains(property)) {
+            //Add Property
+            Array.Resize(ref entityProperties, entityProperties.Length + 1);
+            entityProperties[entityProperties.Length - 1] = property;
+        }
+    }
+
+    public void AddProperty(Properties property, float duration) {
+        if (!entityProperties.Contains(property)) {
+            //Add Property
+            Array.Resize(ref entityProperties, entityProperties.Length + 1);
+            entityProperties[entityProperties.Length - 1] = property;
+
+            //WaitForSeconds
+            IEnumerator coroutine = Wait(duration);
+            StartCoroutine(coroutine);
+
+            //Remove Property
+            Array.Resize(ref entityProperties, entityProperties.Length - 1);
+        }
+    }
+
+    float timer = 0;
+    private void OnTriggerStay2D(Collider2D collision) {
+        if (collision.transform.TryGetComponent(out BlockScript _) || collision.transform.CompareTag("Ground")) {
+            timer = 0;
+        } else if (collision.transform.CompareTag("Void")) {
+            timer += Time.deltaTime;
+        }
+        if (timer > 1f) {
+            EntityDeath();
+        }
+    }
+IEnumerator Wait(float time) {
+        yield return new WaitForSeconds(time);
     }
 
     public Directions GetEntityDirectionEnum() {
@@ -144,7 +163,6 @@ public class EntityManager : MonoBehaviour
     public int GetEntityFacing() {
         return IntDict[CurrentDirection];
     }
-
     public Vector2 GetEntityDirection() {
         return VectorDict[CurrentDirection];
     }

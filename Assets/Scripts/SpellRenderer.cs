@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections;
-using static EntityManager;
+using static EnumsAndDictionaries;
 using System;
 using System.Collections.Generic;
 
@@ -39,11 +39,9 @@ public class SpellRenderer : MonoBehaviour
         spellMaster.transform.position = origin.position;
         spellMaster.transform.parent = origin;
 
-        Vector3 Direction = origin.GetComponent<EntityManager>().GetEntityDirection();
-        int rotationIndex = origin.GetComponent<EntityManager>().GetEntityFacing();
-
-       
-        float rotationAmount = 90 * rotationIndex * -1^(rotationIndex);
+        Directions Direction = origin.GetComponent<EntityManager>().GetEntityDirectionEnum();
+        Vector3 DirectionVect = VectorDict[Direction];
+        float rotationAmount = RotationDict[Direction];
 
         //Set Sprite Colours
         Material material = createMaterial(colors);
@@ -92,11 +90,11 @@ public class SpellRenderer : MonoBehaviour
 
         // -- the middle is after start and, as it has a center pivot, have a size of half the laser (minus start and end)
         middle.transform.localScale = new Vector3(middle.transform.localScale.x, (currentLaserSize - startSpriteWidth), middle.transform.localScale.z);
-        middle.transform.localPosition = Direction * (currentLaserSize / 2f);
+        middle.transform.localPosition = DirectionVect * (currentLaserSize / 2f);
 
         // End?
         if (end != null) {
-            end.transform.localPosition = Direction * currentLaserSize;
+            end.transform.localPosition = DirectionVect * currentLaserSize;
         }
 
 

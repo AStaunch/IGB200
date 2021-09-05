@@ -4,77 +4,37 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using static EntityManager;
+using static EnumsAndDictionaries;
 
 public class AlexTestSpells : MonoBehaviour
 {
-    public enum Elements
-    {
-        Fire, Ice, Earth, Lightning, Pull, Push, Life, Death
-    }
-    static readonly Dictionary<Elements, Color[]> ColourDict = new Dictionary<Elements, Color[]>() {
-        {Elements.Fire, new Color[]
-            {
-            new Color32(138,31,19,255),
-            new Color32(234,19,1,255),
-            new Color32(255,98,0,255),
-            new Color32(247,174,45,255)
+    SpellEffector Fire = new SpellEffector() {
+        DesiredId = SpellRegistrySing.Instance.Registry.QueryForSid("Ray"),
+        Name = "Fire",
+        Effector = new Action<EffectorData>((EffectorData_) => {
+            RayData Ray_ = (RayData)EffectorData_;
+            Debug.Log($"Test Spell Fire recieved: {Ray_.Data.point.x} - {Ray_.Data.point.y}");
+
+            /*Fire Properties
+             * Damage to enemies is based on their properties. this code could be recycled for other pieces, changing base damage among other things.
+             * */
+            float baseDmg = 10f;
+            Debug.Log(Ray_.Data.collider.transform.name + " was hit.");
+            if (Ray_.Data.collider.gameObject.TryGetComponent<EntityManager>(out EntityManager otherEntity)) {
+                if (otherEntity.entityProperties.Contains(Properties.Flamable)) {
+                    otherEntity.TakeDamage(baseDmg * 2f);
+                } else if (otherEntity.entityProperties.Contains(Properties.Fireproof)) {
+                    otherEntity.TakeDamage(0f);
+                } else {
+                    otherEntity.TakeDamage(baseDmg);
+                }
             }
-        },
-        {Elements.Ice, new Color[]
-            {
-            new Color32(39,92,68,255),
-            new Color32(64,137,73,255),
-            new Color32(100,199,77,255),
-            new Color32(255,255,255,255)
-            }
-        },
-        {Elements.Pull, new Color[]
-            {
-            new Color32(36,46,71,255),
-            new Color32(104,56,108,255),
-            new Color32(181,80,136,255),
-            new Color32(246,117,122,255)
-            }
-        },
-        {Elements.Push, new Color[]
-            {
-            new Color32(36,46,71,255),
-            new Color32(181,80,136,255),
-            new Color32(137,143,250,255),
-            new Color32(104,56,108,255)
-            }
-        },
-        {Elements.Life, new Color[]
-            {
-            new Color32(39,92,68,255),
-            new Color32(64,137,73,255),
-            new Color32(100,199,77,255),
-            new Color32(255,255,255,255)
-            }
-        },
-        {Elements.Death, new Color[]
-            {
-            new Color32(25,20,38,255),
-            new Color32(40,43,68,255),
-            new Color32(59,68,104,255),
-            new Color32(90,104,136,255)
-            }
-        },
-        {Elements.Earth, new Color[]
-            {
-            new Color32(26,59,62,255),
-            new Color32(64,39,51,255),
-            new Color32(117,62,57,255),
-            new Color32(185,111,81,255)
-            }
-        },
-        {Elements.Lightning, new Color[]
-            {
-            new Color32(248,118,35,255),
-            new Color32(255,173,52,255),
-            new Color32(254,230,98,255),
-            new Color32(255,255,255,255)
-            }
+        }),
+        Colors = new Color[]{
+                new Color(0.5411f,0.1216f,0.07451f,1f),
+                new Color(0.9176f,0.07451f,0.0039f,1f),
+                new Color(1f,0.3843f,0f,1f),
+                new Color(0.9686f,0.6824f,0.1765f,1f)
         }
     };
 
@@ -148,34 +108,60 @@ public class AlexTestSpells : MonoBehaviour
         }),
         Colors = ColourDict[Elements.Push]
     };
+    private float timer;
 
     static void ForceObject(GameObject obj, float baseDmg) {
-        float commonFactor = 20f;
+        float commonFactor = 40f;
         float force = baseDmg * commonFactor;
         Vector2 facing = GameObject.FindGameObjectWithTag("Player").transform.GetComponent<EntityManager>().GetEntityDirection();
         Debug.Log(obj.transform.name + " was hit.");
-        if (obj.TryGetComponent<EntityManager>(out EntityManager otherEntity)) {
-            Rigidbody2D rb = obj.GetComponent<Rigidbody2D>();
+        if (obj.TryGetComponent(out EntityManager otherEntity) && obj.TryGetComponent(out Rigidbody2D rb)) {
             if (otherEntity.entityProperties.Contains(Properties.Light)) {
-                rb.AddForce(1.5f * force * facing);
+                rb.velocity = (1.5f * force * facing);
             } else if (otherEntity.entityProperties.Contains(Properties.Heavy)) {
-                rb.AddForce(0.4f * force * facing);
+                rb.velocity = (0.4f * force * facing);
             } else if (!otherEntity.entityProperties.Contains(Properties.Immovable)) {
                 rb.AddForce(force * facing);
+            } else {
+                rb.velocity = force * facing;
             }
         }
+    }
+    private void Awake() {
+        timer = Time.timeSinceLevelLoad;
     }
 
     void Update() {
 
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-            SpellRegistrySing.Instance.Registry.QueryRegistry("Ray").RunFunction(Pull);
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-            SpellRegistrySing.Instance.Registry.QueryRegistry("Ray").RunFunction(Push);
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-            SpellRegistrySing.Instance.Registry.QueryRegistry("Ray").RunFunction(PullPlayer);
-        if (Input.GetKeyDown(KeyCode.Alpha5))
-            SpellRegistrySing.Instance.Registry.QueryRegistry("Ray").RunFunction(PushPlayer);
+        if (timer < Time.timeSinceLevelLoad){
+            if ( Input.GetKeyDown(KeyCode.Alpha1)){
+                UpdateTimer();
+                SpellRegistrySing.Instance.Registry.QueryRegistry("Ray").RunFunction(Fire);
+            }
+            if ( Input.GetKeyDown(KeyCode.Alpha2)){
+                UpdateTimer();
+                SpellRegistrySing.Instance.Registry.QueryRegistry("Ray").RunFunction(Pull);
+            }
+            if ( Input.GetKeyDown(KeyCode.Alpha3)){
+                UpdateTimer();
+                SpellRegistrySing.Instance.Registry.QueryRegistry("Ray").RunFunction(Push);
+            }
+            //if ( Input.GetKeyDown(KeyCode.Alpha4)){
+            //    UpdateTimer();
+            //    SpellRegistrySing.Instance.Registry.QueryRegistry("Ray").RunFunction(PullPlayer);
+            //}
+            //if ( Input.GetKeyDown(KeyCode.Alpha5)) {
+            //    UpdateTimer();
+            //    SpellRegistrySing.Instance.Registry.QueryRegistry("Ray").RunFunction(PushPlayer);
+            //}
+        }
+        if (Input.GetKeyDown(KeyCode.R)) {
+            UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
+        }
+    }
+
+    void UpdateTimer() {
+        timer = Time.timeSinceLevelLoad + 1f;
     }
 }
 
