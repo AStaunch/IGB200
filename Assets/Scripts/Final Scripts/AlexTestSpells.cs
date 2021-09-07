@@ -117,13 +117,11 @@ public class AlexTestSpells : MonoBehaviour
         Debug.Log(obj.transform.name + " was hit.");
         if (obj.TryGetComponent(out EntityManager otherEntity) && obj.TryGetComponent(out Rigidbody2D rb)) {
             if (otherEntity.entityProperties.Contains(Properties.Light)) {
-                rb.velocity = (1.5f * force * facing);
+                rb.AddForce(1.5f * force * facing);
             } else if (otherEntity.entityProperties.Contains(Properties.Heavy)) {
-                rb.velocity = (0.4f * force * facing);
+                rb.AddForce(0.4f * force * facing);
             } else if (!otherEntity.entityProperties.Contains(Properties.Immovable)) {
                 rb.AddForce(force * facing);
-            } else {
-                rb.velocity = force * facing;
             }
         }
     }
@@ -146,14 +144,14 @@ public class AlexTestSpells : MonoBehaviour
                 UpdateTimer();
                 SpellRegistrySing.Instance.Registry.QueryRegistry("Ray").RunFunction(Push);
             }
-            //if ( Input.GetKeyDown(KeyCode.Alpha4)){
-            //    UpdateTimer();
-            //    SpellRegistrySing.Instance.Registry.QueryRegistry("Ray").RunFunction(PullPlayer);
-            //}
-            //if ( Input.GetKeyDown(KeyCode.Alpha5)) {
-            //    UpdateTimer();
-            //    SpellRegistrySing.Instance.Registry.QueryRegistry("Ray").RunFunction(PushPlayer);
-            //}
+            if (Input.GetKeyDown(KeyCode.Alpha4)) {
+                UpdateTimer();
+                SpellRegistrySing.Instance.Registry.QueryRegistry("Ray").RunFunction(PullPlayer);
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha5)) {
+                UpdateTimer();
+                SpellRegistrySing.Instance.Registry.QueryRegistry("Ray").RunFunction(PushPlayer);
+            }
         }
         if (Input.GetKeyDown(KeyCode.R)) {
             UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);

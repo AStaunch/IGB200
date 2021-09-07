@@ -13,16 +13,16 @@ public class EntityManager : MonoBehaviour
 
     Directions CurrentDirection = Directions.Down;
 
-    private Rigidbody2D rb;
+    protected Rigidbody2D rb;
     [SerializeField]
-    private float health = 10;
-    private float maxHealth;
+    protected float health = 10;
+    protected float maxHealth;
 
     //[SerializeField]
     public float entitySpeed;
     [SerializeField]
     private Sprite[] EntitySpriteSheet;
-    private Animator anim;
+    protected Animator anim;
     private Vector2 previousVelocity;
 
     // Start is called before the first frame update
@@ -35,23 +35,29 @@ public class EntityManager : MonoBehaviour
             rb.freezeRotation = true;
             if(rb.drag == 0)
                 rb.drag = 1f;
+            //rb.bodyType = RigidbodyType2D.Kinematic;
+            rb.mass = 1f;
         }
         maxHealth = health;
         gameObject.TryGetComponent(out anim);
     }
 
     private void Update() {
-        if(rb){
-            if (entityType == EntityType.Creature && previousVelocity.magnitude > rb.velocity.magnitude) {
-                rb.velocity *= 0.5f;
-            }
-            if (rb.velocity.magnitude < 0.01f){
-                rb.velocity *= 0f;
-            }
-            previousVelocity = rb.velocity;
-            if(anim && rb.velocity == Vector2.zero) {
-                UpdateAnimation(rb.velocity);
-            }
+        if (rb) {
+            Decelerate();
+        }
+
+    }
+    private void Decelerate() {
+        if (entityType == EntityType.Creature && previousVelocity.magnitude >= rb.velocity.magnitude) {
+            rb.velocity *= 0.5f;
+        }
+        if (rb.velocity.magnitude < 0.01f) {
+            rb.velocity *= 0f;
+        }
+        previousVelocity = rb.velocity;
+        if (anim && rb.velocity == Vector2.zero) {
+            UpdateAnimation(rb.velocity);
         }
     }
 

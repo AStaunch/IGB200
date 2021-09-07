@@ -118,4 +118,9 @@ public static class EnumsAndDictionaries
     {
         Fire, Ice, Earth, Lightning, Pull, Push, Life, Death
     }
+    [System.Serializable]
+    public enum SpellTemplates
+    {
+        Ray, Orb, Arc, Cone, Shield, Runner
+    }
 }
