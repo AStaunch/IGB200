@@ -28,4 +28,20 @@ public class BlockScript : EntityManager
     //    Instantiate(platform, transform.position, transform.rotation);
     //    Destroy(this.gameObject);
     //}
+
+    /*
+    using System.Collections;
+    using System.Collections.Generic;
+    using UnityEngine;
+
+    public class BlockScript : MonoBehaviour
+        {
+        public Vector2 instantVelocity = Vector2.zero;
+        private void FixedUpdate() {
+            GetComponent<Rigidbody2D>().MovePosition(instantVelocity);
+            instantVelocity *= 1 - Time.deltaTime;
+        }
+    }
+
+    */
 }

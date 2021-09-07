@@ -25,6 +25,5 @@ public class PlayerControls : MonoBehaviour
             em.UpdatePosition(change);
             em.UpdateAnimation(change);
         }
-
     }
 }
