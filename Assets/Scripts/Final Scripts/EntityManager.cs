@@ -31,12 +31,12 @@ public class EntityManager : MonoBehaviour
             rb = gameObject.AddComponent<Rigidbody2D>();
         }
         if(rb != null){
-            rb.gravityScale = 0;
-            rb.freezeRotation = true;
-            //rb.bodyType = RigidbodyType2D.Kinematic;
-            rb.mass = 1f;
-            if (rb.drag == 0)
-                rb.drag = 1f;
+            //rb.gravityScale = 0;
+            //rb.freezeRotation = true;
+            ////rb.bodyType = RigidbodyType2D.Kinematic;
+            //rb.mass = 1f;
+            //if (rb.drag == 0)
+            //    rb.drag = 1f;
         }
         maxHealth = health;
         gameObject.TryGetComponent(out anim);
@@ -44,7 +44,7 @@ public class EntityManager : MonoBehaviour
 
     private void Update() {
         if (rb) {
-            Decelerate();
+            //Decelerate();
         }
 
     }
