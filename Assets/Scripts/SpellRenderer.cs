@@ -23,18 +23,15 @@ public class SpellRenderer : MonoBehaviour
     }
     #endregion
     public Shader shader;
+    private Vector3 offset;
     #region Ray Drawer
-
     public Sprite[] rayPieces;
-
-
     GameObject spellMaster;
+
     public void CreateRaySprites(Transform origin, RaycastHit2D other, Color[] colors) {
         GameObject start = null;
         GameObject middle = null;
         GameObject end = null;
-
-
         spellMaster = new GameObject("Ray Master");
         spellMaster.transform.position = origin.position;
         spellMaster.transform.parent = origin;
@@ -42,6 +39,7 @@ public class SpellRenderer : MonoBehaviour
         Directions Direction = origin.GetComponent<EntityManager>().GetEntityDirectionEnum();
         Vector3 DirectionVect = VectorDict[Direction];
         float rotationAmount = RotationDict[Direction];
+        offset = Vector3.Scale(origin.GetComponent<SpriteRenderer>().bounds.size, DirectionVect) * 0.5f;
 
         //Set Sprite Colours
         Material material = createMaterial(colors);
@@ -131,10 +129,10 @@ public class SpellRenderer : MonoBehaviour
     private GameObject createObject(Sprite sprite, Material material) {
         GameObject obj = new GameObject();
         obj.AddComponent<SpriteRenderer>().sprite = sprite;
-        obj.GetComponent<SpriteRenderer>().sortingOrder = 1;
+        obj.GetComponent<SpriteRenderer>().sortingLayerName = "VFX";
         obj.GetComponent<Renderer>().material = material;
         obj.transform.parent = spellMaster.transform;
-        obj.transform.localPosition = Vector2.zero;
+        obj.transform.localPosition = Vector2.zero + new Vector2(offset.x, offset.y);
         return obj;
     }
 

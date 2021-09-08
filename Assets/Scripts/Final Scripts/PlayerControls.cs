@@ -8,6 +8,8 @@ public class PlayerControls : MonoBehaviour
     private float playerSpeed;
     private Vector3 change;
     private EntityManager em;
+    
+   public bool isCasting;
     // Start is called before the first frame update
     void Awake()
     {
@@ -24,6 +26,22 @@ public class PlayerControls : MonoBehaviour
         if(change != Vector3.zero) {
             em.UpdatePosition(change);
             em.UpdateAnimation(change);
+        }
+
+
+        if (Input.GetKeyDown(KeyCode.Space)){
+            CastSpell();
+        }
+    }
+
+    public void CastSpell() {
+        Animator anim = GetComponent<Animator>();
+        Vector2 facing = em.GetEntityDirection();
+        anim.SetFloat("moveX", facing.x);
+        anim.SetFloat("moveY", facing.y);
+        anim.SetBool("casting", true);
+        while (anim.GetBool("casting")) {
+            anim.SetBool("casting", isCasting);
         }
     }
 }

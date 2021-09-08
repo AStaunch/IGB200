@@ -33,10 +33,10 @@ public class EntityManager : MonoBehaviour
         if(rb != null){
             rb.gravityScale = 0;
             rb.freezeRotation = true;
-            if(rb.drag == 0)
-                rb.drag = 1f;
             //rb.bodyType = RigidbodyType2D.Kinematic;
             rb.mass = 1f;
+            if (rb.drag == 0)
+                rb.drag = 1f;
         }
         maxHealth = health;
         gameObject.TryGetComponent(out anim);
@@ -50,7 +50,7 @@ public class EntityManager : MonoBehaviour
     }
     private void Decelerate() {
         if (entityType == EntityType.Creature && previousVelocity.magnitude >= rb.velocity.magnitude) {
-            rb.velocity *= 0.5f;
+            rb.velocity *= 0.5f * Time.deltaTime;
         }
         if (rb.velocity.magnitude < 0.01f) {
             rb.velocity *= 0f;
@@ -72,9 +72,7 @@ public class EntityManager : MonoBehaviour
         }
     }
     public void UpdatePosition(Vector3 change) {
-        if (change != Vector3.zero) {
-            UpdateDirection(change);
-        }
+        UpdateDirection(change);
         change = entitySpeed * change.normalized;
         rb.velocity = (change);
     }
@@ -149,17 +147,8 @@ public class EntityManager : MonoBehaviour
     }
 
     float timer = 0;
-    private void OnTriggerStay2D(Collider2D collision) {
-        if (collision.transform.TryGetComponent(out BlockScript _) || collision.transform.CompareTag("Ground")) {
-            timer = 0;
-        } else if (collision.transform.CompareTag("Void")) {
-            timer += Time.deltaTime;
-        }
-        if (timer > 1f) {
-            EntityDeath();
-        }
-    }
-IEnumerator Wait(float time) {
+
+    IEnumerator Wait(float time) {
         yield return new WaitForSeconds(time);
     }
 

@@ -86,7 +86,7 @@ public class AlexTestSpells : MonoBehaviour
              * */
             float baseDmg = 10f;
             GameObject obj = GameObject.FindGameObjectWithTag("Player");
-            ForceObject(obj, baseDmg);
+            ForcePlayerRay(obj, baseDmg);
         }),
         Colors = ColourDict[Elements.Pull]
     };
@@ -103,7 +103,7 @@ public class AlexTestSpells : MonoBehaviour
              * */
             float baseDmg = 10f;
             GameObject obj = GameObject.FindGameObjectWithTag("Player");
-            ForceObject(obj, -baseDmg);
+            ForcePlayerRay(obj, -baseDmg);
 
         }),
         Colors = ColourDict[Elements.Push]
@@ -111,7 +111,7 @@ public class AlexTestSpells : MonoBehaviour
     private float timer;
 
     static void ForceObject(GameObject obj, float baseDmg) {
-        float commonFactor = 40f;
+        float commonFactor = 10f;
         float force = baseDmg * commonFactor;
         Vector2 facing = GameObject.FindGameObjectWithTag("Player").transform.GetComponent<EntityManager>().GetEntityDirection();
         Debug.Log(obj.transform.name + " was hit.");
@@ -123,6 +123,29 @@ public class AlexTestSpells : MonoBehaviour
             } else if (!otherEntity.entityProperties.Contains(Properties.Immovable)) {
                 rb.AddForce(force * facing);
             }
+        }
+    }
+
+    static void ForcePlayerRay(GameObject obj, float baseDmg) {
+        float commonFactor = 10f;
+        float force = baseDmg * commonFactor;
+        Vector2 facing = obj.GetComponent<EntityManager>().GetEntityDirection();
+        Debug.Log(obj.transform.name + " was hit.");
+        obj.TryGetComponent(out Rigidbody2D rb);
+        if (rb){
+            if (obj.TryGetComponent(out EntityManager otherEntity)) {
+                if (otherEntity.entityProperties.Contains(Properties.Light)) {
+                    rb.AddForce(1.5f * force * facing);
+                } else if (otherEntity.entityProperties.Contains(Properties.Heavy)) {
+                    rb.AddForce(0.4f * force * facing);
+                } else if (!otherEntity.entityProperties.Contains(Properties.Immovable)) {
+                    rb.AddForce(force * facing);
+                }
+            }
+            while (rb.velocity.magnitude > 1f) {
+                obj.layer =  6;
+            }
+            obj.layer = 7;
         }
     }
     private void Awake() {
