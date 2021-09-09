@@ -8,29 +8,22 @@ public class AStar_test : MonoBehaviour
     public GameObject host;
     public GameObject PathTo;
     public LineRenderer LineRenderer;
+    public AStar.EntityState EnemyMovement;
 
     public void Update()
     {
         if (Test)
         {
-            
-            AStar.Node Me = host.GetComponent<AStar>().ClosestNode(gameObject.transform.position);
-            AStar.Node Target = host.GetComponent<AStar>().ClosestNode(PathTo.transform.position);
+            AStar.Node Me = AStar.ClosestNode(gameObject.transform.position);
+            AStar.Node Target = AStar.ClosestNode(PathTo.transform.position);
 
-            //host.GetComponent<AStar>().RequestPath(Me, Target);
+            AStar.Node[] NodePath = AStar.ReversePath(Me, AStar.RequestPath(Me, Target, EnemyMovement));
 
-            AStar.Node CurrentNode = host.GetComponent<AStar>().RequestPath(Me, Target);
+
             List<Vector3> path = new List<Vector3>();
-            while (CurrentNode != Me)
+            foreach(AStar.Node n in NodePath)
             {
-                path.Add(CurrentNode.Position);
-                //Debug.Log($"{CurrentNode.Position.x} | {CurrentNode.Position.y}");
-                CurrentNode = CurrentNode.Parent;
-            }
-            if (CurrentNode == Me)
-            {
-                path.Add(CurrentNode.Position);
-                //Debug.Log($"{CurrentNode.Position.x} | {CurrentNode.Position.y} - Start");
+                path.Add(n.Position);
             }
             LineRenderer.positionCount = path.Count;
             LineRenderer.SetPositions(path.ToArray());
