@@ -23,10 +23,10 @@ public class PlayerControls : MonoBehaviour
         change = Vector3.zero;
         change.x = Input.GetAxisRaw("Horizontal");
         change.y = Input.GetAxisRaw("Vertical");
-        if(change != Vector3.zero) {
+        //if(change != Vector3.zero) {
             em.UpdatePosition(change);
             em.UpdateAnimation(change);
-        }
+        //}
 
 
         if (Input.GetKeyDown(KeyCode.Space)){

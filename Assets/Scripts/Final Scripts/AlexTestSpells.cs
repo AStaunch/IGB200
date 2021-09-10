@@ -9,7 +9,7 @@ using static EnumsAndDictionaries;
 public class AlexTestSpells : MonoBehaviour
 {
     SpellEffector Fire = new SpellEffector() {
-        DesiredId = SpellRegistrySing.Instance.Registry.QueryForSid("Ray"),
+        //DesiredId = SpellRegistrySing.Instance.Registry.QueryForSid("Ray"),
         Name = "Fire",
         Effector = new Action<EffectorData>((EffectorData_) => {
             RayData Ray_ = (RayData)EffectorData_;
@@ -39,7 +39,7 @@ public class AlexTestSpells : MonoBehaviour
     };
 
     SpellEffector Pull = new SpellEffector() {
-        DesiredId = SpellRegistrySing.Instance.Registry.QueryForSid("Ray"),
+        //DesiredId = SpellRegistrySing.Instance.Registry.QueryForSid("Ray"),
         Name = "Pull",
         Effector = new Action<EffectorData>((EffectorData_) => {
             RayData Ray_ = (RayData)EffectorData_;
@@ -57,7 +57,7 @@ public class AlexTestSpells : MonoBehaviour
     };
 
     SpellEffector Push = new SpellEffector() {
-        DesiredId = SpellRegistrySing.Instance.Registry.QueryForSid("Ray"),
+        //DesiredId = SpellRegistrySing.Instance.Registry.QueryForSid("Ray"),
         Name = "Push",
         Effector = new Action<EffectorData>((EffectorData_) => {
             RayData Ray_ = (RayData)EffectorData_;
@@ -75,7 +75,7 @@ public class AlexTestSpells : MonoBehaviour
 
 
     SpellEffector PullPlayer = new SpellEffector() {
-        DesiredId = SpellRegistrySing.Instance.Registry.QueryForSid("Ray"),
+        //DesiredId = SpellRegistrySing.Instance.Registry.QueryForSid("Ray"),
         Name = "Pull",
         Effector = new Action<EffectorData>((EffectorData_) => {
             RayData Ray_ = (RayData)EffectorData_;
@@ -92,7 +92,7 @@ public class AlexTestSpells : MonoBehaviour
     };
 
     SpellEffector PushPlayer = new SpellEffector() {
-        DesiredId = SpellRegistrySing.Instance.Registry.QueryForSid("Ray"),
+        //DesiredId = SpellRegistrySing.Instance.Registry.QueryForSid("Ray"),
         Name = "Push",
         Effector = new Action<EffectorData>((EffectorData_) => {
             RayData Ray_ = (RayData)EffectorData_;
