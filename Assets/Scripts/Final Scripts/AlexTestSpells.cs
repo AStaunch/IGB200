@@ -142,10 +142,15 @@ public class AlexTestSpells : MonoBehaviour
                     rb.AddForce(force * facing);
                 }
             }
-            while (rb.velocity.magnitude > 1f) {
-                obj.layer =  6;
+            RaycastHit2D hit = Physics2D.Raycast(obj.transform.position, facing);
+            if(hit.distance > 1f){
+                ForcePlayerRay(obj, baseDmg);
+                if (rb.velocity.magnitude > 1f) {
+                    obj.layer =  6;   
+                }
+            } else {
+                obj.layer = 7;
             }
-            obj.layer = 7;
         }
     }
     private void Awake() {
@@ -167,14 +172,14 @@ public class AlexTestSpells : MonoBehaviour
                 UpdateTimer();
                 SpellRegistrySing.Instance.Registry.QueryRegistry("Ray").RunFunction(Push);
             }
-            if (Input.GetKeyDown(KeyCode.Alpha4)) {
-                UpdateTimer();
-                SpellRegistrySing.Instance.Registry.QueryRegistry("Ray").RunFunction(PullPlayer);
-            }
-            if (Input.GetKeyDown(KeyCode.Alpha5)) {
-                UpdateTimer();
-                SpellRegistrySing.Instance.Registry.QueryRegistry("Ray").RunFunction(PushPlayer);
-            }
+            //if (Input.GetKeyDown(KeyCode.Alpha4)) {
+            //    UpdateTimer();
+            //    SpellRegistrySing.Instance.Registry.QueryRegistry("Ray").RunFunction(PullPlayer);
+            //}
+            //if (Input.GetKeyDown(KeyCode.Alpha5)) {
+            //    UpdateTimer();
+            //    SpellRegistrySing.Instance.Registry.QueryRegistry("Ray").RunFunction(PushPlayer);
+            //}
         }
         if (Input.GetKeyDown(KeyCode.R)) {
             UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
