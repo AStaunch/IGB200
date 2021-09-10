@@ -31,8 +31,8 @@ public class EntityManager : MonoBehaviour
             rb = gameObject.AddComponent<Rigidbody2D>();
         }
         if(rb != null){
-            //rb.gravityScale = 0;
-            //rb.freezeRotation = true;
+            rb.gravityScale = 0;
+           rb.freezeRotation = true;
             ////rb.bodyType = RigidbodyType2D.Kinematic;
             //rb.mass = 1f;
             //if (rb.drag == 0)
@@ -44,13 +44,13 @@ public class EntityManager : MonoBehaviour
 
     private void Update() {
         if (rb) {
-            //Decelerate();
+            Decelerate();
         }
 
     }
     private void Decelerate() {
         if (entityType == EntityType.Creature && previousVelocity.magnitude >= rb.velocity.magnitude) {
-            rb.velocity *= 0.5f * Time.deltaTime;
+            rb.velocity *= 1 - (0.2f + Time.deltaTime);
         }
         if (rb.velocity.magnitude < 0.01f) {
             rb.velocity *= 0f;
