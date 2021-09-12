@@ -57399,6 +57399,39 @@ MonoBehaviour:
   - {fileID: -6896016907692476293, guid: 08719681da426644b91edfd89609a11f, type: 3}
   - {fileID: -2930296756788958139, guid: 08719681da426644b91edfd89609a11f, type: 3}
   - {fileID: 3723770373199202995, guid: 08719681da426644b91edfd89609a11f, type: 3}
+  arcCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 4.26366
+      outSlope: 4.26366
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.047571853
+    - serializedVersion: 3
+      time: 0.5
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -4.9860725
+      outSlope: -4.9860725
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.04162538
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!4 &1726630936 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2251036742175158139, guid: f25cce759d134064aaa60f8028081316, type: 3}
@@ -64021,17 +64054,21 @@ PrefabInstance:
       propertyPath: playerSpeed
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 3497795528780355777, guid: 3c4dfc9bdcfea024881407ef0cb68d04, type: 3}
+      propertyPath: Deceleration
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 3497795528780355779, guid: 3c4dfc9bdcfea024881407ef0cb68d04, type: 3}
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3497795528780355779, guid: 3c4dfc9bdcfea024881407ef0cb68d04, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -35.6
+      value: -35.53
       objectReference: {fileID: 0}
     - target: {fileID: 3497795528780355779, guid: 3c4dfc9bdcfea024881407ef0cb68d04, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 34
+      value: 32.51
       objectReference: {fileID: 0}
     - target: {fileID: 3497795528780355779, guid: 3c4dfc9bdcfea024881407ef0cb68d04, type: 3}
       propertyPath: m_LocalPosition.z
@@ -64067,7 +64104,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3497795528780355780, guid: 3c4dfc9bdcfea024881407ef0cb68d04, type: 3}
       propertyPath: m_BodyType
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3497795528780355780, guid: 3c4dfc9bdcfea024881407ef0cb68d04, type: 3}
       propertyPath: m_Simulated
@@ -64130,6 +64167,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8834701}
     m_Modifications:
+    - target: {fileID: 661459189193685480, guid: 81f22513d9f952246b948ba089dcad36, type: 3}
+      propertyPath: m_Mass
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8165484905437384338, guid: 81f22513d9f952246b948ba089dcad36, type: 3}
       propertyPath: m_RootOrder
       value: 0

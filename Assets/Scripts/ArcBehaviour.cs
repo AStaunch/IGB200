@@ -20,6 +20,7 @@ public class ArcBehaviour : MonoBehaviour
 
         rb = gameObject.AddComponent<Rigidbody2D>();
         rb.gravityScale = 0;
+        rb.isKinematic = true;
         rb.freezeRotation = true;
         gameObject.AddComponent<SpriteRenderer>();
         gameObject.AddComponent<CircleCollider2D>();
@@ -50,5 +51,15 @@ public class ArcBehaviour : MonoBehaviour
 
         spellMaster.AddComponent<DestroyThis>();
         gameObject.AddComponent<DestroyThis>();
+    }
+
+    public void KillThis() {
+
+    }
+    public EntityManager em = null;
+    private void OnCollisionEnter2D(Collision2D collision) {
+        if(collision.transform.TryGetComponent(out  em)) {
+            
+        }
     }
 }
