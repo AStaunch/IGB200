@@ -98,9 +98,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entityProperties: 
   entityType: 1
-  health: 7.98
-  entitySpeed: 0
-  EntitySpriteSheet: []
+  health: 8
+  entitySpeed: 1
 --- !u!61 &4772899388582369722
 BoxCollider2D:
   m_ObjectHideFlags: 0

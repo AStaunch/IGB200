@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 3497795528780355779}
   - component: {fileID: 3497795528780355776}
   - component: {fileID: 3497795528780355777}
-  - component: {fileID: 3497795528780355782}
   - component: {fileID: 3497795528780355780}
   - component: {fileID: 648354610095155818}
   - component: {fileID: 2864884778628645812}
@@ -76,7 +75,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 676232457
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 2
   m_Sprite: {fileID: 4141560478706699254, guid: c71056b456785ce4f96b83c990033a1b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -101,28 +100,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f37fe37fd3d37a24691a41fef0985b55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerSpeed: 5
---- !u!114 &3497795528780355782
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3497795528780355786}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd5c5bb3537bd354db9c5bd4a3dfc6a9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   entityProperties: 
-  entityType: 1
+  entityType: 0
   health: 10
-  entitySpeed: 0
-  EntitySpriteSheet:
-  - {fileID: -1410163375985073761, guid: c71056b456785ce4f96b83c990033a1b, type: 3}
-  - {fileID: -2338228917321944555, guid: c71056b456785ce4f96b83c990033a1b, type: 3}
-  - {fileID: 4141560478706699254, guid: c71056b456785ce4f96b83c990033a1b, type: 3}
-  - {fileID: -9109787565581802862, guid: c71056b456785ce4f96b83c990033a1b, type: 3}
+  entitySpeed: 1
+  isCasting: 0
 --- !u!50 &3497795528780355780
 Rigidbody2D:
   serializedVersion: 4

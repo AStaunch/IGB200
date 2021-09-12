@@ -19,11 +19,9 @@ public class EntityManager : MonoBehaviour
     protected float maxHealth;
 
     //[SerializeField]
-    public float entitySpeed;
-    [SerializeField]
-    private Sprite[] EntitySpriteSheet;
+    public float entitySpeed = 1f;
     protected Animator anim;
-    private Vector2 previousVelocity;
+    public float Deceleration = 5f;
 
     // Start is called before the first frame update
     void Awake() {
@@ -32,49 +30,38 @@ public class EntityManager : MonoBehaviour
         }
         if(rb != null){
             rb.gravityScale = 0;
-           rb.freezeRotation = true;
-            ////rb.bodyType = RigidbodyType2D.Kinematic;
-            //rb.mass = 1f;
-            //if (rb.drag == 0)
-            //    rb.drag = 1f;
+            rb.freezeRotation = true;
+            
         }
         maxHealth = health;
         gameObject.TryGetComponent(out anim);
     }
 
-    private void Update() {
+    private void FixedUpdate() {
         if (rb) {
-            Decelerate();
+            rb.velocity = Decelerate(rb.velocity);
         }
+        GetComponent<SpriteRenderer>().sortingOrder = Mathf.RoundToInt(-transform.position.y);
+    }
+    private Vector2 Decelerate(Vector2 velocity) {
+        //Debug.Log(vector2);
+        if(velocity == Vector2.zero) {
+            return velocity;
+        }
+        velocity -= Deceleration * entitySpeed * Time.deltaTime * velocity;
 
-    }
-    private void Decelerate() {
-        if (entityType == EntityType.Creature && previousVelocity.magnitude >= rb.velocity.magnitude) {
-            rb.velocity *= 1 - (0.2f + Time.deltaTime);
+        if (velocity.magnitude < 0.25f) {
+            velocity *= 0f;
         }
-        if (rb.velocity.magnitude < 0.01f) {
-            rb.velocity *= 0f;
+        if (anim && velocity == Vector2.zero) {
+            UpdateAnimation(velocity);
         }
-        previousVelocity = rb.velocity;
-        if (anim && rb.velocity == Vector2.zero) {
-            UpdateAnimation(rb.velocity);
-        }
+        return velocity;
     }
 
-    public void TakeDamage(float damage) {
-        if (entityProperties.Contains(Properties.Indestructable)){
-            damage = 0f; 
-        }
-        health -= damage;
-        health = Mathf.Clamp(health, 0f, maxHealth);
-        if (0 >= health) {
-            EntityDeath();
-        }
-    }
-    public void UpdatePosition(Vector3 change) {
+    public void UpdateVelocity(Vector3 change) {
         UpdateDirection(change);
-        change = entitySpeed * change.normalized;
-        rb.velocity = (change);
+        rb.velocity = change;
     }
 
     public void UpdateAnimation(Vector3 change) {
@@ -106,6 +93,18 @@ public class EntityManager : MonoBehaviour
         }
     }
 
+    #region Entity Health and Death
+    public void TakeDamage(float damage) {
+        if (entityProperties.Contains(Properties.Indestructable)) {
+            damage = 0f;
+        }
+        health -= damage;
+        health = Mathf.Clamp(health, 0f, maxHealth);
+        if (0 >= health) {
+            EntityDeath();
+        }
+    }
+
     private void EntityDeath() {
 
         if (entityType == EntityType.Object) {
@@ -119,10 +118,11 @@ public class EntityManager : MonoBehaviour
             Destroy(this.gameObject, Time.deltaTime);
         }
         // TODO: Impliment Colour change
-        // SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
 
     }
+    #endregion
 
+    #region Property Management
     public void AddProperty(Properties property) {
         if (!entityProperties.Contains(property)) {
             //Add Property
@@ -146,12 +146,12 @@ public class EntityManager : MonoBehaviour
         }
     }
 
-    float timer = 0;
-
     IEnumerator Wait(float time) {
         yield return new WaitForSeconds(time);
     }
+    #endregion
 
+    #region Facing Getters
     public Directions GetEntityDirectionEnum() {
         return CurrentDirection;
     }
@@ -161,4 +161,5 @@ public class EntityManager : MonoBehaviour
     public Vector2 GetEntityDirection() {
         return VectorDict[CurrentDirection];
     }
+    #endregion
 }

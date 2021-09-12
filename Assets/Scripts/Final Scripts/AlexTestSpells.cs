@@ -12,22 +12,36 @@ public class AlexTestSpells : MonoBehaviour
         //DesiredId = SpellRegistrySing.Instance.Registry.QueryForSid("Ray"),
         Name = "Fire",
         Effector = new Action<EffectorData>((EffectorData_) => {
-            RayData Ray_ = (RayData)EffectorData_;
-            Debug.Log($"Test Spell Fire recieved: {Ray_.Data.point.x} - {Ray_.Data.point.y}");
+            switch (EffectorData_.Calling_template.Name) {
+                case "Ray":
+                    RayData Ray_ = (RayData)EffectorData_;
+                    //Debug.Log($"Test Spell Fire recieved: {Ray_.Data.point.x} - {Ray_.Data.point.y}");
 
-            /*Fire Properties
-             * Damage to enemies is based on their properties. this code could be recycled for other pieces, changing base damage among other things.
-             * */
-            float baseDmg = 10f;
-            Debug.Log(Ray_.Data.collider.transform.name + " was hit.");
-            if (Ray_.Data.collider.gameObject.TryGetComponent<EntityManager>(out EntityManager otherEntity)) {
-                if (otherEntity.entityProperties.Contains(Properties.Flamable)) {
-                    otherEntity.TakeDamage(baseDmg * 2f);
-                } else if (otherEntity.entityProperties.Contains(Properties.Fireproof)) {
-                    otherEntity.TakeDamage(0f);
-                } else {
-                    otherEntity.TakeDamage(baseDmg);
-                }
+                    /*Fire Properties
+                     * Damage to enemies is based on their properties. this code could be recycled for other pieces, changing base damage among other things.
+                     * */
+                    float baseDmg = 10f;
+                    //Debug.Log(Ray_.Data.collider.transform.name + " was hit.");
+                    if (Ray_.Data.collider.gameObject.TryGetComponent<EntityManager>(out EntityManager otherEntity)) {
+                        if (otherEntity.entityProperties.Contains(Properties.Flamable)) {
+                            otherEntity.TakeDamage(baseDmg * 2f);
+                        } else if (otherEntity.entityProperties.Contains(Properties.Fireproof)) {
+                            otherEntity.TakeDamage(0f);
+                        } else {
+                            otherEntity.TakeDamage(baseDmg);
+                        }
+                    }
+                    break;
+
+                case "Arc":
+                    ArcData Arc_ = (ArcData)EffectorData_;
+
+                    
+                    break;
+                default:
+                    Debug.Log($"{EffectorData_.Calling_template.Name} is not yet defined for Fire");
+                    break;
+
             }
         }),
         Colors = new Color[]{
@@ -42,15 +56,22 @@ public class AlexTestSpells : MonoBehaviour
         //DesiredId = SpellRegistrySing.Instance.Registry.QueryForSid("Ray"),
         Name = "Pull",
         Effector = new Action<EffectorData>((EffectorData_) => {
-            RayData Ray_ = (RayData)EffectorData_;
-            Debug.Log($"Test Spell Pull Ray recieved: {Ray_.Data.point.x} - {Ray_.Data.point.y}");
+            switch (EffectorData_.Calling_template.Name) {
+                case "Ray":
+                    RayData Ray_ = (RayData)EffectorData_;
+                //Debug.Log($"Test Spell Pull Ray recieved: {Ray_.Data.point.x} - {Ray_.Data.point.y}");
 
-            /*Fire Properties
-             * Damage to enemies is based on their properties. this code could be recycled for other pieces, changing base damage among other things.
-             * */
-            float baseDmg = 10f;
-            GameObject obj = Ray_.Data.collider.gameObject;
-            ForceObject(obj, baseDmg);
+                /*Fire Properties
+                 * Damage to enemies is based on their properties. this code could be recycled for other pieces, changing base damage among other things.
+                 * */
+                float baseDmg = 10f;
+                GameObject obj = Ray_.Data.collider.gameObject;
+                ForceObject(obj, baseDmg);
+                    break;
+                default:
+                    Debug.Log($"{EffectorData_.Calling_template.Name} is not yet defined for Pull");
+                    break;
+                }
         }),
         Colors = ColourDict[Elements.Pull]
 
@@ -60,15 +81,21 @@ public class AlexTestSpells : MonoBehaviour
         //DesiredId = SpellRegistrySing.Instance.Registry.QueryForSid("Ray"),
         Name = "Push",
         Effector = new Action<EffectorData>((EffectorData_) => {
-            RayData Ray_ = (RayData)EffectorData_;
-            Debug.Log($"Test Spell Push Ray recieved: {Ray_.Data.point.x} - {Ray_.Data.point.y}");
-
-            /*Fire Properties
-             * Damage to enemies is based on their properties. this code could be recycled for other pieces, changing base damage among other things.
-             * */
-            float baseDmg = 10f;
-            GameObject obj = Ray_.Data.collider.gameObject;
-            ForceObject(obj, -baseDmg);
+            switch (EffectorData_.Calling_template.Name) {
+                case "Ray":
+                    RayData Ray_ = (RayData)EffectorData_;
+                //Debug.Log($"Test Spell Push Ray recieved: {Ray_.Data.point.x} - {Ray_.Data.point.y}");
+                /*Fire Properties
+                    * Damage to enemies is based on their properties. this code could be recycled for other pieces, changing base damage among other things.
+                    * */
+                float baseDmg = 10f;
+                GameObject obj = Ray_.Data.collider.gameObject;
+                ForceObject(obj, -baseDmg);
+                    break;
+                default:
+                    Debug.Log($"{EffectorData_.Calling_template.Name} is not yet defined for Pull");
+                    break;
+            }
         }),
         Colors = ColourDict[Elements.Push]
     };
@@ -79,8 +106,7 @@ public class AlexTestSpells : MonoBehaviour
         Name = "Pull",
         Effector = new Action<EffectorData>((EffectorData_) => {
             RayData Ray_ = (RayData)EffectorData_;
-            Debug.Log($"Test Spell Pull Ray recieved: {Ray_.Data.point.x} - {Ray_.Data.point.y}");
-
+            //Debug.Log($"Test Spell Pull Ray recieved: {Ray_.Data.point.x} - {Ray_.Data.point.y}");
             /*Fire Properties
              * Damage to enemies is based on their properties. this code could be recycled for other pieces, changing base damage among other things.
              * */
@@ -95,63 +121,73 @@ public class AlexTestSpells : MonoBehaviour
         //DesiredId = SpellRegistrySing.Instance.Registry.QueryForSid("Ray"),
         Name = "Push",
         Effector = new Action<EffectorData>((EffectorData_) => {
-            RayData Ray_ = (RayData)EffectorData_;
-            Debug.Log($"Test Spell Push Ray recieved: {Ray_.Data.point.x} - {Ray_.Data.point.y}");
+            switch (EffectorData_.Calling_template.Name) {
+                case "Ray":
+                        RayData Ray_ = (RayData)EffectorData_;
+                    Debug.Log($"Test Spell Push Ray recieved: {Ray_.Data.point.x} - {Ray_.Data.point.y}");
 
-            /*Fire Properties
-             * Damage to enemies is based on their properties. this code could be recycled for other pieces, changing base damage among other things.
-             * */
-            float baseDmg = 10f;
-            GameObject obj = GameObject.FindGameObjectWithTag("Player");
-            ForcePlayerRay(obj, -baseDmg);
+                    /*Fire Properties
+                     * Damage to enemies is based on their properties. this code could be recycled for other pieces, changing base damage among other things.
+                     * */
+                    float baseDmg = 10f;
+                    GameObject obj = GameObject.FindGameObjectWithTag("Player");
+                    ForcePlayerRay(obj, -baseDmg);
+                    break;
 
+                default:
+                    Debug.Log($"{EffectorData_.Calling_template.Name} is not yet defined for PushPlayer");
+                    break;
+            }
         }),
         Colors = ColourDict[Elements.Push]
     };
     private float timer;
 
+
+
     static void ForceObject(GameObject obj, float baseDmg) {
-        float commonFactor = 10f;
+        float commonFactor = 0.25f;
         float force = baseDmg * commonFactor;
         Vector2 facing = GameObject.FindGameObjectWithTag("Player").transform.GetComponent<EntityManager>().GetEntityDirection();
-        Debug.Log(obj.transform.name + " was hit.");
-        if (obj.TryGetComponent(out EntityManager otherEntity) && obj.TryGetComponent(out Rigidbody2D rb)) {
-            if (otherEntity.entityProperties.Contains(Properties.Light)) {
-                rb.AddForce(1.5f * force * facing);
-            } else if (otherEntity.entityProperties.Contains(Properties.Heavy)) {
-                rb.AddForce(0.4f * force * facing);
-            } else if (!otherEntity.entityProperties.Contains(Properties.Immovable)) {
-                rb.AddForce(force * facing);
+        if (obj.TryGetComponent(out EntityManager em)) {
+            Vector2 forceVector = force * facing;
+            if (em.entityProperties.Contains(Properties.Light)) {
+                forceVector *= 1.5f;
+            } else if (em.entityProperties.Contains(Properties.Heavy)) {
+                forceVector *= 0.5f;
+            } else if (em.entityProperties.Contains(Properties.Immovable)) {
+                forceVector *= 0f;
             }
+            em.UpdateVelocity(forceVector);
         }
     }
 
     static void ForcePlayerRay(GameObject obj, float baseDmg) {
-        float commonFactor = 10f;
+        float commonFactor = 1f;
         float force = baseDmg * commonFactor;
         Vector2 facing = obj.GetComponent<EntityManager>().GetEntityDirection();
         Debug.Log(obj.transform.name + " was hit.");
-        obj.TryGetComponent(out Rigidbody2D rb);
-        if (rb){
-            if (obj.TryGetComponent(out EntityManager otherEntity)) {
-                if (otherEntity.entityProperties.Contains(Properties.Light)) {
-                    rb.AddForce(1.5f * force * facing);
-                } else if (otherEntity.entityProperties.Contains(Properties.Heavy)) {
-                    rb.AddForce(0.4f * force * facing);
-                } else if (!otherEntity.entityProperties.Contains(Properties.Immovable)) {
-                    rb.AddForce(force * facing);
-                }
+        if (obj.TryGetComponent(out EntityManager em)) {
+            Vector2 forceVector = force * facing;
+            if (em.entityProperties.Contains(Properties.Light)) {
+                forceVector *= 1.5f;
+            } else if (em.entityProperties.Contains(Properties.Heavy)) {
+                forceVector *= 0.5f;
+            } else if (em.entityProperties.Contains(Properties.Immovable)) {
+                forceVector *= 0f;
             }
-            RaycastHit2D hit = Physics2D.Raycast(obj.transform.position, facing);
-            if(hit.distance > 1f){
-                ForcePlayerRay(obj, baseDmg);
-                if (rb.velocity.magnitude > 1f) {
-                    obj.layer =  6;   
-                }
-            } else {
-                obj.layer = 7;
-            }
+            em.UpdateVelocity(forceVector);
         }
+        //    RaycastHit2D hit = Physics2D.Raycast(obj.transform.position, facing);
+        //    if(hit.distance > 1f){
+        //        ForcePlayerRay(obj, baseDmg);
+        //        if (rb.velocity.magnitude > 1f) {
+        //            obj.layer =  6;   
+        //        }
+        //    } else {
+        //        obj.layer = 7;
+        //    }
+
     }
     private void Awake() {
         timer = Time.timeSinceLevelLoad;
@@ -171,6 +207,10 @@ public class AlexTestSpells : MonoBehaviour
             if ( Input.GetKeyDown(KeyCode.Alpha3)){
                 UpdateTimer();
                 SpellRegistrySing.Instance.Registry.QueryRegistry("Ray").RunFunction(Push);
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha4)) {
+                UpdateTimer();
+                SpellRegistrySing.Instance.Registry.QueryRegistry("Arc").RunFunction(Fire);
             }
             //if (Input.GetKeyDown(KeyCode.Alpha4)) {
             //    UpdateTimer();
