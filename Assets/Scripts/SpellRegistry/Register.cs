@@ -12,13 +12,13 @@ class Register : MonoBehaviour
 {
     void Start()
     {
-        DontDestroyOnLoad(this.gameObject);
-
-        #region Register game spells and effect first
-        //fuck valve - Agreed - Doubled - Thirded - Fourthd
-        //Ray Template
+        
+        
         if(GameObject.FindGameObjectWithTag("SpellReg") == null)
         {
+            #region Register game spells and effect first
+            //fuck valve - Agreed - Doubled - Thirded - Fourthd - Fifth'd
+            //Ray Template
             SpellRegistrySing.Instance.Registry.AddItemToregistry(new SpellTemplate("Ray", null, new Action<SpellEffector>((effector) =>
             {
                 Debug.Log("This would be a Raycast");
