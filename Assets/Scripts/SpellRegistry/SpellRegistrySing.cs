@@ -162,6 +162,12 @@ public class RayData : EffectorData
     public RaycastHit2D Data { get; set; }
 }
 
+public class ArcData : EffectorData
+{
+    public SpellTemplate Calling_template { get; set; }
+    public GameObject Data { get; set; }
+}
+
 public class GeneralData : EffectorData
 {
     public SpellTemplate Calling_template { get; set; }

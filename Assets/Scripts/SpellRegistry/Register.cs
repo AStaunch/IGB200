@@ -32,7 +32,7 @@ class Register : MonoBehaviour
 
                 //Create the Sprites for the Ray Spell 
                 SpellRenderer rayDrawer = FindObjectOfType<SpellRenderer>();
-                rayDrawer.CreateRaySprites(GameObject.FindGameObjectWithTag("Player").transform, hit, effector.Colors);
+                rayDrawer.drawRaySprite(GameObject.FindGameObjectWithTag("Player").transform, hit, effector.Colors);
             }
         })));
 
@@ -47,6 +47,11 @@ class Register : MonoBehaviour
         SpellRegistrySing.Instance.Registry.AddItemToregistry(new SpellTemplate("Arc", null, new Action<SpellEffector>((effector) =>
         {
             Console.WriteLine("This would be a Arc");
+
+            SpellRenderer arcDrawer = FindObjectOfType<SpellRenderer>();
+
+            ArcData acd = new ArcData() { Data = arcDrawer.CreateArcBall(GameObject.FindGameObjectWithTag("Player").transform, effector.Colors),
+                                            Calling_template = SpellRegistrySing.Instance.Registry.QueryRegistry("Arc") };
             effector.Effector.Invoke(null);//The null in this function would be the game object required
         })));
 
