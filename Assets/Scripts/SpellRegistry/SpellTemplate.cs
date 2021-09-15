@@ -11,7 +11,6 @@ using Color = UnityEngine.Color;
 public class SpellEffector
 {
     public string Name { get; set; }
-    public long DesiredId { get; set; }
     public Color[] Colors { get; set; }
     public Action<EffectorData> Effector;
 }
@@ -141,15 +140,26 @@ public interface ExternalSpell
 
 #region Data formats
 
-public interface EffectorData { }
+public interface EffectorData 
+{
+    SpellTemplate Calling_template { get; set; }
+}
 
 public class RayData : EffectorData
 {
+    public SpellTemplate Calling_template { get; set; }
     public RaycastHit2D Data { get; set; }
+}
+
+public class ArcData : EffectorData
+{
+    public SpellTemplate Calling_template { get; set; }
+    public GameObject Data { get; set; }
 }
 
 public class GeneralData : EffectorData
 {
+    public SpellTemplate Calling_template { get; set; }
     GameObject Target { get; set; }
 }
 

@@ -5,8 +5,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using System.Linq;
 
-[ExecuteInEditMode]
-public class AStar : MonoBehaviour
+public static class AStar
 {
     public enum TileStates
     {
@@ -27,31 +26,33 @@ public class AStar : MonoBehaviour
         public TileStates state;
     }
 
-    public bool DebugVisuals = false;
-
-    [Header("Required")]
-    public Tilemap Ground;
-    public List<Tiles> TileInfo = new List<Tiles>();
-    public float ObstacleOffset;
+    #region Required shit
+    public static Tilemap Ground;
+    public static List<Tiles> TileInfo = new List<Tiles>();
+    public static float ObstacleOffset;
 
     #region Navmesh items
-    public int PerUnitFreq = 2;
-    private static float PerUnitDist;
+    public static int PerUnitFreq = 2;
+    private static float PerUnitDist_;
+    public static float PerUnitDist { get { return PerUnitDist_; } }
     public static readonly List<Node> NodeMap = new List<Node>();
 
     #region Heaps
-    public static List<Node> OpenNodes = new List<Node>();
-    public static List<Node> ClosedNodes = new List<Node>();
+    //these need to be reviewed, array heaps have the worst runtime of available A* heaps. Try sorted or fibonacci
+    private static List<Node> OpenNodes = new List<Node>();
+    private static List<Node> ClosedNodes = new List<Node>();
+    #endregion
     #endregion
     #endregion
 
     #region Navmesh debug visuals
-    private static float DisplayDist;
-    private static float DisplayGap = 0.05f;
+    private static float DisplayDist_;
+    public static float DisplayDist { get { return DisplayDist_; } }
+    public readonly static float DisplayGap = 0.05f;
     #endregion
 
 
-    
+
 
     public class Node
     {
@@ -82,10 +83,10 @@ public class AStar : MonoBehaviour
 
         public void ChildrenUpdate()
         {
-            //THIS NEEDS TO BE REVIEWED
-            //THIS NEEDS REWRITING, FINDING NODES BY POSITION IN THIS WAY IS UNRELIABLE
             //--------------------------------------------------------------------------
-
+            //THIS NEEDS TO BE REVIEWED
+            //THIS NEEDS REWRITING, FINDING NODES BY POSITION IN THIS WAY IS UNRELIABLE but it do kinda work doe
+            //--------------------------------------------------------------------------
             List<Node> ch = new List<Node>();
             for (int c_x = -1; c_x <= 1; c_x++)
             {
@@ -97,7 +98,7 @@ public class AStar : MonoBehaviour
                     if (tmp == Position)
                         continue;
                     //skip over the current node, cause its not a child of itself
-                    Node tmpn = NodeMap.Find((n) => { return n.Position == tmp;  });
+                    Node tmpn = NodeMap.Find((n) => { return n.Position == tmp; });
                     if (tmpn != null)
                         ch.Add(tmpn);
                 }
@@ -105,22 +106,15 @@ public class AStar : MonoBehaviour
             Children = ch;
         }
     }
-
-
-    private void Awake()
-    {
-        Setup();
-    }
-
-
-    private void Setup()
+    
+    public static void Setup()
     {
         NodeMap.Clear();
-        PerUnitDist = 1 / (float)PerUnitFreq;//this should be obvious, 1 unit = 1 tile in our case
+        PerUnitDist_ = 1 / (float)PerUnitFreq;//this should be obvious, 1 unit = 1 tile in our case
 
-        
+
         // 1 - the display gap * per unit + 1 / per unit = the width and height of the cell
-        DisplayDist = (1 - (DisplayGap * (PerUnitFreq + 1)))/PerUnitFreq;
+        DisplayDist_ = (1 - (DisplayGap * (PerUnitFreq + 1))) / PerUnitFreq;
 
 
 
@@ -149,7 +143,7 @@ public class AStar : MonoBehaviour
                             //get the upper right corner, then remove half the size. basically, make a square, and set the position to the center of that square, thats our node pos
                             nodepos = new Vector2(TilePos.x + nodepos.x, TilePos.y - nodepos.y);
 
-                            if (!Physics2D.OverlapCircle(nodepos, ObstacleOffset, LayerMask.GetMask("COLLISION")))
+                            if (!Physics2D.OverlapCircle(nodepos, ObstacleOffset, LayerMask.GetMask("WALL")))
                             {
                                 NodeMap.Add(new Node(nodepos) { state = TileInfo.Find((t) => { return t.sprite == ((Tile)Ground.GetTile(TilePos_raw)).sprite; }).state });
                             }
@@ -160,100 +154,68 @@ public class AStar : MonoBehaviour
         }
     }
 
-    public bool RunSetup = false;
 
-    public bool RenderPath = false;
-    public Node PathRender = null;
-    private Node StartNode = null;
+    #region moved to startup obj
+    //private void OnDrawGizmos()
+    //{
+    //    if (RunSetup)
+    //    {
+    //        Setup();
+    //    }
 
-    private void OnDrawGizmos()
+    //    if (DebugVisuals)
+    //    {
+    //        foreach (Node n in NodeMap)
+    //        {
+    //            Gizmos.DrawCube(n.Position, new Vector3(DisplayDist, DisplayDist, 0.0001f));
+    //            Gizmos.color = Color.white;
+    //        }
+
+    //        //float DispPos_X = (DisplayGap * w) + (DisplayDist * w) - (DisplayDist / 2);
+    //        //float DispPos_Y = (DisplayGap * h) + (DisplayDist * h) - (DisplayDist / 2);
+    //        //if (!Physics2D.OverlapCircle(new Vector2(TilePos.x + DispPos_X, TilePos.y - DispPos_Y), ObstacleOffset))
+    //        //    Gizmos.DrawCube(new Vector2(TilePos.x + DispPos_X, TilePos.y - DispPos_Y), new Vector3(DisplayDist, DisplayDist, 0.0001f));
+
+    //    }
+    //}
+    #endregion
+
+    public static Node ClosestNode(Vector2 pos)
     {
-        if (RunSetup)
-        {
-            Setup();
-        }
-
-        if (DebugVisuals)
-        {
-            foreach(Node n in NodeMap)
-            {
-                int x_, y_;
-                x_ = n.Position.x < 0 ? (int)(Math.Ceiling(n.Position.x)) : (int)(Math.Floor(n.Position.x));
-                y_ = n.Position.y < 0 ? (int)(Math.Ceiling(n.Position.y)) : (int)(Math.Floor(n.Position.y));
-
-                if (RenderPath)
-                {
-                    Node CurrentNode = PathRender;
-                    while (CurrentNode != StartNode)
-                    {
-                        Gizmos.color = Color.blue;
-                        Gizmos.DrawCube(CurrentNode.Position, new Vector3(DisplayDist, DisplayDist, 0.0001f));
-                        CurrentNode = CurrentNode.Parent;
-                    }
-                    if(CurrentNode == StartNode)
-                    {
-                        Gizmos.color = Color.blue;
-                        Gizmos.DrawCube(n.Position, new Vector3(DisplayDist, DisplayDist, 0.0001f));
-                    }
-                    Gizmos.color = Color.white;
-                }
-                else
-                {
-                    Gizmos.DrawCube(n.Position, new Vector3(DisplayDist, DisplayDist, 0.0001f));
-                    Gizmos.color = Color.white;
-                }
-            }
-
-            //float DispPos_X = (DisplayGap * w) + (DisplayDist * w) - (DisplayDist / 2);
-            //float DispPos_Y = (DisplayGap * h) + (DisplayDist * h) - (DisplayDist / 2);
-            //if (!Physics2D.OverlapCircle(new Vector2(TilePos.x + DispPos_X, TilePos.y - DispPos_Y), ObstacleOffset))
-            //    Gizmos.DrawCube(new Vector2(TilePos.x + DispPos_X, TilePos.y - DispPos_Y), new Vector3(DisplayDist, DisplayDist, 0.0001f));
-
-        }
-    }
-
-    public Node ClosestNode(Vector2 pos)
-    {
-        pos = new Vector2((Mathf.Round(pos.x / PerUnitDist))*PerUnitDist, (Mathf.Round(pos.y / PerUnitDist)) * PerUnitDist);
+        pos = new Vector2((Mathf.Round(pos.x / PerUnitDist)) * PerUnitDist, (Mathf.Round(pos.y / PerUnitDist)) * PerUnitDist);
         float dist = Mathf.Infinity;
         Node Lowest = new Node(new Vector2());
-        for(int i = 0; i < NodeMap.Count; i++)
+        for (int i = 0; i < NodeMap.Count; i++)
         {
             if (Vector2.Distance(NodeMap[i].Position, pos) < dist)
             {
                 dist = Vector2.Distance(NodeMap[i].Position, pos);
                 Lowest = NodeMap[i];
-            } 
+            }
         }
-        return Lowest;//NodeMap.Find((n) => { return n.Position == pos; });
+        return Lowest;
     }
-     
-    public Node RequestPath(Node Start, Node Target)
+
+    public static Node RequestPath(Node Start, Node Target, EntityState Enemytype)
     {
         OpenNodes.Clear();
         ClosedNodes.Clear();
         OpenNodes.Add(Start);
-        StartNode = Start;
-        bool PathFound = false;
         while (OpenNodes.Count > 0)
         {
             Node CurrentNode = OpenNodes[0];
-            for(int i = 0; i< OpenNodes.Count; i++)
+            for (int i = 0; i < OpenNodes.Count; i++)
             {
-                if(OpenNodes[i].F <= CurrentNode.F)
-                    if(OpenNodes[i].H < CurrentNode.H)
+                if (OpenNodes[i].F <= CurrentNode.F)
+                    if (OpenNodes[i].H < CurrentNode.H)
                         CurrentNode = OpenNodes[i];
             }
-
-            //OpenNodes.OrderBy((f) => f.F).FirstOrDefault((n) => { return true; });
-            //Debug.Log(CurrentNode.Position.ToString());
 
             OpenNodes.Remove(CurrentNode);
             ClosedNodes.Add(CurrentNode);
 
             if (CurrentNode == Target)
             {
-                PathFound = true;
                 return CurrentNode;
             }
             else
@@ -261,13 +223,19 @@ public class AStar : MonoBehaviour
                 CurrentNode.ChildrenUpdate();
                 foreach (Node node in CurrentNode.Children)
                 {
-                    if (node.state == TileStates.OBSTACLE || ClosedNodes.Contains(node))
+                    if (Enemytype == EntityState.WALK)
+                    {
+                        if (node.state == TileStates.OBSTACLE || node.state == TileStates.FLYABLE || ClosedNodes.Contains(node))
+                        {
+                            continue;
+                        }
+                    }
+                    else if (node.state == TileStates.OBSTACLE || ClosedNodes.Contains(node))
                         continue;
 
-                    //distance from current to neighbour is 1 for now
-                    if (CurrentNode.G + 1 < node.G || !OpenNodes.Contains(node))
+                    if (CurrentNode.G + Vector2.Distance(CurrentNode.Position, node.Position) < node.G || !OpenNodes.Contains(node))
                     {
-                        node.G = CurrentNode.G + 1;
+                        node.G = CurrentNode.G + Vector2.Distance(CurrentNode.Position, node.Position);
                         node.UpdateNode(Target.Position);
                         node.Parent = CurrentNode;
 
@@ -280,6 +248,24 @@ public class AStar : MonoBehaviour
         return new Node(new Vector2(Mathf.Infinity, Mathf.Infinity));
     }
 
+    public static Node[] ReversePath(Node Start, Node Path)
+    {
+        if (Path.Position == new Vector2(Mathf.Infinity, Mathf.Infinity))
+            return new Node[0];
 
+        List<Node> paths_nodes = new List<Node>();
+        Node CurrentNode = Path;
+        while (CurrentNode != Start)
+        {
+            paths_nodes.Add(CurrentNode);
+            CurrentNode = CurrentNode.Parent;
+        }
+        if (CurrentNode == Start)
+        {
+            paths_nodes.Add(CurrentNode);
+            paths_nodes.Reverse();
+        }
+        return paths_nodes.ToArray();
+    }
 }
 

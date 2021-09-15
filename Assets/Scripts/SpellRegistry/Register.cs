@@ -10,7 +10,7 @@ using UnityEngine;
 
 class Register : MonoBehaviour
 {
-    void Awake()
+    void Start()
     {
         DontDestroyOnLoad(this.gameObject);
 
@@ -23,11 +23,11 @@ class Register : MonoBehaviour
             RaycastHit2D hit = Physics2D.Raycast(GameObject.FindGameObjectWithTag("Player").transform.position, GameObject.FindGameObjectWithTag("Player").GetComponent<EntityManager>().GetEntityDirection());
             //There is no point using a facing variable, when this debug function will be removed soon
             Debug.DrawRay(GameObject.FindGameObjectWithTag("Player").transform.position, GameObject.FindGameObjectWithTag("Player").GetComponent<EntityManager>().GetEntityDirection());
-            
+
             if (hit.collider != null)
             {
                 //Passes Hit data to the Effector
-                RayData ryd = new RayData() { Data = hit };
+                RayData ryd = new RayData() { Data = hit, Calling_template = SpellRegistrySing.Instance.Registry.QueryRegistry("Ray") };
                 effector.Effector.Invoke(ryd);
 
                 //Create the Sprites for the Ray Spell 
@@ -41,64 +41,43 @@ class Register : MonoBehaviour
         {
             Console.WriteLine("This would be a Orb");
             effector.Effector.Invoke(null);//The null in this function would be the game object required
-            })));
+        })));
 
         //Arc Template
         SpellRegistrySing.Instance.Registry.AddItemToregistry(new SpellTemplate("Arc", null, new Action<SpellEffector>((effector) =>
         {
             Console.WriteLine("This would be a Arc");
+
+            SpellRenderer arcDrawer = FindObjectOfType<SpellRenderer>();
+
+            ArcData acd = new ArcData() { Data = arcDrawer.CreateArcBall(GameObject.FindGameObjectWithTag("Player").transform, effector.Colors),
+                                            Calling_template = SpellRegistrySing.Instance.Registry.QueryRegistry("Arc") };
             effector.Effector.Invoke(null);//The null in this function would be the game object required
-            })));
+        })));
 
         //Cone Template
         SpellRegistrySing.Instance.Registry.AddItemToregistry(new SpellTemplate("Cone", null, new Action<SpellEffector>((effector) =>
         {
+            
+
             Console.WriteLine("This would be a Cone");
             effector.Effector.Invoke(null);//The null in this function would be the game object required
-            })));
+        })));
 
         //Shield Template
         SpellRegistrySing.Instance.Registry.AddItemToregistry(new SpellTemplate("Shield", null, new Action<SpellEffector>((effector) =>
         {
             Console.WriteLine("This would be a Shield");
             effector.Effector.Invoke(null);//The null in this function would be the game object required
-            })));
+        })));
 
         //Runner Template
         SpellRegistrySing.Instance.Registry.AddItemToregistry(new SpellTemplate("Runner", null, new Action<SpellEffector>((effector) =>
         {
             Console.WriteLine("This would be a Runner");
             effector.Effector.Invoke(null);//The null in this function would be the game object required
-            })));
-
-
-
-
-        //This should become its own singleton for global access, or be wrapped in a static class
-        List<SpellEffector> Effectors = new List<SpellEffector>
-        {
-            #region Fire
-            new SpellEffector()
-            {
-                Name = "Fire",
-                DesiredId = SpellRegistrySing.Instance.Registry.QueryForSid("Ray"),
-                Effector = new Action<EffectorData>((EffectorData) =>
-                {
-                    RayData data = (RayData)EffectorData;
-                    
-                })
-            },
-            new SpellEffector()
-            {
-                Name = "Fire",
-                DesiredId = SpellRegistrySing.Instance.Registry.QueryForSid("Orb"),
-                Effector = new Action<EffectorData>((EffectorData) =>
-                {
-                    
-                })
-            }
-            #endregion
-        };
+        })));
+    
 
         #endregion
 

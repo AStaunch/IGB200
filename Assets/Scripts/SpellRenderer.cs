@@ -46,8 +46,7 @@ public class SpellRenderer : MonoBehaviour
 
         // Create the laser start from the prefab
         if (start == null) {
-            start = createObject(rayPieces[0],material);
-            
+            start = createObject(rayPieces[0], material);
             start.transform.Rotate(Vector3.forward * rotationAmount);            
         }
 
@@ -94,19 +93,31 @@ public class SpellRenderer : MonoBehaviour
         if (end != null) {
             end.transform.localPosition = DirectionVect * currentLaserSize;
         }
-
-
         spellMaster.AddComponent<DestroyThis>();
         start.AddComponent<DestroyThis>();
         middle.AddComponent<DestroyThis>();
         end.AddComponent<DestroyThis>();
     }
 
-   
+
+
+
     #endregion
-
+    public AnimationCurve arcCurve;
     #region Arc Drawer
+    public GameObject CreateArcBall(Transform origin, Color[] colors) {
+        spellMaster = new GameObject("Arc Master");
+        spellMaster.transform.position = origin.position;
+        spellMaster.transform.parent = origin;
 
+        Material material = createMaterial(colors);
+        GameObject arcBall = createObject(rayPieces[0], material);
+        Directions direction = origin.GetComponent<EntityManager>().GetEntityDirectionEnum();
+        
+        arcBall.AddComponent<ArcBehaviour>().StartArc(direction, spellMaster);
+        arcBall.transform.position = origin.position;
+        return arcBall;
+    }
     #endregion
 
     #region Orb Drawer
