@@ -32,7 +32,7 @@ class Register : MonoBehaviour
 
                 //Create the Sprites for the Ray Spell 
                 SpellRenderer rayDrawer = FindObjectOfType<SpellRenderer>();
-                rayDrawer.CreateRaySprites(GameObject.FindGameObjectWithTag("Player").transform, hit, effector.Colors);
+                rayDrawer.drawRaySprite(GameObject.FindGameObjectWithTag("Player").transform, hit, effector.Colors);
             }
         })));
 
