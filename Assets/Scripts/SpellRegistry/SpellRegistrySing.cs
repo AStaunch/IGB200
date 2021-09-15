@@ -31,13 +31,23 @@ public class SpellTemplate
     }
 }
 
-public sealed class SpellRegistrySing
+public sealed class SpellRegistrySing : MonoBehaviour
 {
+    private void Awake()
+    {
+        DontDestroyOnLoad(this);    
+    }
+
     public static SpellRegistrySing Instance { get; private set; }
     private SpellRegistry _registry;
     public SpellRegistry Registry { get { return _registry; } }
     private SpellRegistrySing() { _registry = new SpellRegistry(); }
-    static SpellRegistrySing() { Instance = new SpellRegistrySing(); }
+    static SpellRegistrySing() { 
+        //Instance = new SpellRegistrySing(); 
+        GameObject gme = new GameObject();
+        gme.AddComponent(typeof(SpellRegistrySing));
+        Instance = gme.GetComponent<SpellRegistrySing>();
+    }
 }
 
 public class SpellRegistry
@@ -55,6 +65,7 @@ public class SpellRegistry
     public void AddItemToregistry(SpellTemplate template)
     {
         template.CastingId = iDGenerator.GetId(template, out _);
+        
         S_Registry.Add(template.Name, template);
         if(onAdd != null) 
             onAdd.Invoke();
