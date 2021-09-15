@@ -189,12 +189,11 @@ public class AlexTestSpells : MonoBehaviour
         //    }
 
     }
-    private void Awake() {
+    private void Start() {
         timer = Time.timeSinceLevelLoad;
     }
 
     void Update() {
-
         if (timer < Time.timeSinceLevelLoad){
             if ( Input.GetKeyDown(KeyCode.Alpha1)){
                 UpdateTimer();
