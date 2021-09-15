@@ -8,7 +8,15 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Color = UnityEngine.Color;
 
-public class SpellEffector
+
+public interface SpellEffector_in
+{
+
+}
+
+
+[Serializable]
+public class SpellEffector : SpellEffector_in
 {
     public string Name { get; set; }
     public Color[] Colors { get; set; }
@@ -31,13 +39,24 @@ public class SpellTemplate
     }
 }
 
-public sealed class SpellRegistrySing
+public sealed class SpellRegistrySing : MonoBehaviour
 {
+    private void Awake()
+    {
+        DontDestroyOnLoad(this);
+    }
+
     public static SpellRegistrySing Instance { get; private set; }
     private SpellRegistry _registry;
     public SpellRegistry Registry { get { return _registry; } }
     private SpellRegistrySing() { _registry = new SpellRegistry(); }
-    static SpellRegistrySing() { Instance = new SpellRegistrySing(); }
+    static SpellRegistrySing() { 
+        //Instance = new SpellRegistrySing(); 
+        GameObject gme = new GameObject() { name="SpellRegistrySing" };
+        gme.AddComponent(typeof(SpellRegistrySing));
+        Instance = gme.GetComponent<SpellRegistrySing>();
+        gme.tag = "SpellReg";
+    }
 }
 
 public class SpellRegistry
@@ -55,9 +74,12 @@ public class SpellRegistry
     public void AddItemToregistry(SpellTemplate template)
     {
         template.CastingId = iDGenerator.GetId(template, out _);
-        S_Registry.Add(template.Name, template);
-        if(onAdd != null) 
-            onAdd.Invoke();
+        if (!S_Registry.Values.Contains(template))
+        {
+            S_Registry.Add(template.Name, template);
+            if (onAdd != null)
+                onAdd.Invoke();
+        }
     }
 
     public void RemoveItemToregistry(SpellTemplate template)
