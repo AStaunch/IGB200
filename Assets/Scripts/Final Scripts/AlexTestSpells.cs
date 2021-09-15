@@ -100,19 +100,22 @@ public class AlexTestSpells : MonoBehaviour
         Colors = ColourDict[Elements.Push]
     };
 
+    
+
 
     SpellEffector PullPlayer = new SpellEffector() {
         //DesiredId = SpellRegistrySing.Instance.Registry.QueryForSid("Ray"),
         Name = "Pull",
         Effector = new Action<EffectorData>((EffectorData_) => {
-            RayData Ray_ = (RayData)EffectorData_;
-            //Debug.Log($"Test Spell Pull Ray recieved: {Ray_.Data.point.x} - {Ray_.Data.point.y}");
-            /*Fire Properties
-             * Damage to enemies is based on their properties. this code could be recycled for other pieces, changing base damage among other things.
-             * */
-            float baseDmg = 10f;
-            GameObject obj = GameObject.FindGameObjectWithTag("Player");
-            ForcePlayerRay(obj, baseDmg);
+        RayData Ray_ = (RayData)EffectorData_;
+        //Debug.Log($"Test Spell Pull Ray recieved: {Ray_.Data.point.x} - {Ray_.Data.point.y}");
+        /*Fire Properties
+         * Damage to enemies is based on their properties. this code could be recycled for other pieces, changing base damage among other things.
+         * */
+        float baseDmg = 10f;
+        GameObject obj = GameObject.FindGameObjectWithTag("Player");
+        MonoBehaviour mono = obj.GetComponent<MonoBehaviour>();
+        mono.StartCoroutine(LerpObject(obj, Ray_.Data.point, 1f));
         }),
         Colors = ColourDict[Elements.Pull]
     };
@@ -162,32 +165,28 @@ public class AlexTestSpells : MonoBehaviour
         }
     }
 
-    static void ForcePlayerRay(GameObject obj, float baseDmg) {
-        float commonFactor = 1f;
-        float force = baseDmg * commonFactor;
-        Vector2 facing = obj.GetComponent<EntityManager>().GetEntityDirection();
-        Debug.Log(obj.transform.name + " was hit.");
-        if (obj.TryGetComponent(out EntityManager em)) {
-            Vector2 forceVector = force * facing;
-            if (em.entityProperties.Contains(Properties.Light)) {
-                forceVector *= 1.5f;
-            } else if (em.entityProperties.Contains(Properties.Heavy)) {
-                forceVector *= 0.5f;
-            } else if (em.entityProperties.Contains(Properties.Immovable)) {
-                forceVector *= 0f;
-            }
-            em.UpdateVelocity(forceVector);
-        }
-        //    RaycastHit2D hit = Physics2D.Raycast(obj.transform.position, facing);
-        //    if(hit.distance > 1f){
-        //        ForcePlayerRay(obj, baseDmg);
-        //        if (rb.velocity.magnitude > 1f) {
-        //            obj.layer =  6;   
-        //        }
-        //    } else {
-        //        obj.layer = 7;
-        //    }
+    static void ForcePlayerBack(GameObject obj, Vector2 direction, float baseDmg) {
 
+    }
+
+
+    static IEnumerator LerpObject(GameObject gameObject, Vector2 targetPosition, float duration) {
+        EntityManager em = gameObject.GetComponent<EntityManager>();
+        Rigidbody2D rb = gameObject.transform.GetComponent<Rigidbody2D>();
+
+        float time = 0;
+        Vector2 startPosition = gameObject.transform.position;
+        targetPosition -= 0.6f * gameObject.GetComponent<SpriteRenderer>().bounds.size * em.GetEntityDirection();
+        while (time < duration) {
+            float t = time / duration;
+            t = t * t * (3f - 2f * t);
+            rb.MovePosition(Vector2.Lerp(startPosition, targetPosition, t));
+            time += Time.deltaTime;
+            gameObject.layer = 6;
+            yield return null;
+        }
+        rb.MovePosition(targetPosition);
+        gameObject.layer = 7;
     }
     private void Awake() {
         timer = Time.timeSinceLevelLoad;
@@ -212,14 +211,14 @@ public class AlexTestSpells : MonoBehaviour
                 UpdateTimer();
                 SpellRegistrySing.Instance.Registry.QueryRegistry("Arc").RunFunction(Fire);
             }
-            //if (Input.GetKeyDown(KeyCode.Alpha4)) {
-            //    UpdateTimer();
-            //    SpellRegistrySing.Instance.Registry.QueryRegistry("Ray").RunFunction(PullPlayer);
-            //}
-            //if (Input.GetKeyDown(KeyCode.Alpha5)) {
-            //    UpdateTimer();
-            //    SpellRegistrySing.Instance.Registry.QueryRegistry("Ray").RunFunction(PushPlayer);
-            //}
+            if (Input.GetKeyDown(KeyCode.Alpha5)) {
+               UpdateTimer();
+               SpellRegistrySing.Instance.Registry.QueryRegistry("Ray").RunFunction(PullPlayer);
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha6)) {
+               UpdateTimer();
+               SpellRegistrySing.Instance.Registry.QueryRegistry("Ray").RunFunction(PushPlayer);
+            }
         }
         if (Input.GetKeyDown(KeyCode.R)) {
             UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);

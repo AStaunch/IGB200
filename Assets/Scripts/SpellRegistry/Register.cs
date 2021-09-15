@@ -15,12 +15,17 @@ class Register : MonoBehaviour
         DontDestroyOnLoad(this.gameObject);
 
         #region Register game spells and effect first
-        //fuck valve - Agreed - Doubled - Thirded
+        //fuck valve - Agreed - Doubled - Thirded - Fourthd
         //Ray Template
         SpellRegistrySing.Instance.Registry.AddItemToregistry(new SpellTemplate("Ray", null, new Action<SpellEffector>((effector) =>
         {
             Debug.Log("This would be a Raycast");
-            RaycastHit2D hit = Physics2D.Raycast(GameObject.FindGameObjectWithTag("Player").transform.position, GameObject.FindGameObjectWithTag("Player").GetComponent<EntityManager>().GetEntityDirection());
+
+            Vector2 RayDirection = GameObject.FindGameObjectWithTag("Player").GetComponent<EntityManager>().GetEntityDirection();
+            Vector2 RayOrigin = GameObject.FindGameObjectWithTag("Player").transform.position;
+            RayOrigin += 0.5f * GameObject.FindGameObjectWithTag("Player").GetComponent<SpriteRenderer>().bounds.size * RayDirection;
+            float maxDistance = 10f;
+            RaycastHit2D hit = Physics2D.Raycast(RayOrigin , RayDirection, maxDistance);
             //There is no point using a facing variable, when this debug function will be removed soon
             Debug.DrawRay(GameObject.FindGameObjectWithTag("Player").transform.position, GameObject.FindGameObjectWithTag("Player").GetComponent<EntityManager>().GetEntityDirection());
 
@@ -29,11 +34,11 @@ class Register : MonoBehaviour
                 //Passes Hit data to the Effector
                 RayData ryd = new RayData() { Data = hit, Calling_template = SpellRegistrySing.Instance.Registry.QueryRegistry("Ray") };
                 effector.Effector.Invoke(ryd);
-
-                //Create the Sprites for the Ray Spell 
-                SpellRenderer rayDrawer = FindObjectOfType<SpellRenderer>();
-                rayDrawer.drawRaySprite(GameObject.FindGameObjectWithTag("Player").transform, hit, effector.Colors);
             }
+
+            //Create the Sprites for the Ray Spell 
+            SpellRenderer rayDrawer = FindObjectOfType<SpellRenderer>();
+            rayDrawer.drawRaySprite(GameObject.FindGameObjectWithTag("Player").transform, hit, effector.Colors);
         })));
 
         //Orb Template

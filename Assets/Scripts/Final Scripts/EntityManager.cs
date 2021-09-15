@@ -43,6 +43,7 @@ public class EntityManager : MonoBehaviour
         }
         GetComponent<SpriteRenderer>().sortingOrder = Mathf.RoundToInt(-transform.position.y);
     }
+
     private Vector2 Decelerate(Vector2 velocity) {
         //Debug.Log(vector2);
         if(velocity == Vector2.zero) {
@@ -60,7 +61,6 @@ public class EntityManager : MonoBehaviour
     }
 
     public void UpdateVelocity(Vector3 change) {
-        UpdateDirection(change);
         rb.velocity = change;
     }
 

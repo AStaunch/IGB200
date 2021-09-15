@@ -37,7 +37,7 @@ public class SpellRenderer : MonoBehaviour
         spellMaster.transform.parent = origin;
 
         Directions Direction = origin.GetComponent<EntityManager>().GetEntityDirectionEnum();
-        Vector3 DirectionVect = VectorDict[Direction];
+        Vector2 DirectionVect = VectorDict[Direction];
         float rotationAmount = RotationDict[Direction];
         offset = Vector3.Scale(origin.GetComponent<SpriteRenderer>().bounds.size, DirectionVect) * 0.5f;
 
@@ -47,6 +47,8 @@ public class SpellRenderer : MonoBehaviour
         // Create the laser start from the prefab
         if (start == null) {
             start = createObject(rayPieces[0], material);
+            Vector3 startOffset = 0.5f * GameObject.FindGameObjectWithTag("Player").GetComponent<SpriteRenderer>().bounds.size * DirectionVect;
+            start.transform.position += startOffset;
             start.transform.Rotate(Vector3.forward * rotationAmount);            
         }
 

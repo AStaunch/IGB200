@@ -19,6 +19,7 @@ public class PlayerControls : EntityManager
 
             UpdateVelocity(change);
             UpdateAnimation(change);
+            UpdateDirection(change);
         }
         if (Input.GetKeyDown(KeyCode.Space)){
             CastSpell();
