@@ -28,7 +28,7 @@ public class SpellRenderer : MonoBehaviour
     public Sprite[] rayPieces;
     GameObject spellMaster;
 
-    public void CreateRaySprites(Transform origin, RaycastHit2D other, Color[] colors) {
+    public void drawRaySprite(Transform origin, RaycastHit2D other, Color[] colors) {
         GameObject start = null;
         GameObject middle = null;
         GameObject end = null;
@@ -114,7 +114,22 @@ public class SpellRenderer : MonoBehaviour
     #endregion
 
     #region Cone Drawer
+    public void drawConeSprite(Transform origin, RaycastHit2D[] points, Color[] colors) {
+        int noRays = 10;
+        float coneAngle = 60f;
+        float maxDistance = 5f;
+        Vector2 direction = maxDistance * origin.GetComponent<EntityManager>().GetEntityDirection();
 
+        RaycastHit2D[] rays = new RaycastHit2D[noRays];
+        Vector3[] positions = new Vector3[noRays + 1];
+        
+        for (int i = 0; i < rays.Length; i++) {
+            float angle = coneAngle * (i/noRays);
+            Vector2 direction2 = maxDistance * new Vector2(Mathf.Sin(angle), Mathf.Cos(angle));
+            rays[i] = Physics2D.Raycast(origin.position, direction, maxDistance);
+            positions[i] = rays[i].point;
+        }
+    }
     #endregion
 
     #region Shield Drawer
