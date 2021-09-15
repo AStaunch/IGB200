@@ -49,7 +49,7 @@ public class EntityManager : MonoBehaviour
         if(velocity == Vector2.zero) {
             return velocity;
         }
-        velocity -= Deceleration * entitySpeed * Time.deltaTime * velocity;
+        velocity -= Deceleration * Time.deltaTime * velocity;
 
         if (velocity.magnitude < 0.25f) {
             velocity *= 0f;
@@ -61,7 +61,9 @@ public class EntityManager : MonoBehaviour
     }
 
     public void UpdateVelocity(Vector3 change) {
-        rb.velocity = change;
+        if(rb){
+            rb.velocity = change;
+        }
     }
 
     public void UpdateAnimation(Vector3 change) {

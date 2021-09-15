@@ -134,7 +134,7 @@ public class AlexTestSpells : MonoBehaviour
                      * */
                     float baseDmg = 10f;
                     GameObject obj = GameObject.FindGameObjectWithTag("Player");
-                    ForcePlayerRay(obj, -baseDmg);
+                    ForceObject(obj, -baseDmg);
                     break;
 
                 default:
