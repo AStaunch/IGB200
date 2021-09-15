@@ -17,13 +17,8 @@ class Register : MonoBehaviour
         #region Register game spells and effect first
         //fuck valve - Agreed - Doubled - Thirded - Fourthd
         //Ray Template
-        SpellRegistrySing.Instance.Registry.AddItemToregistry(new SpellTemplate("Ray", null, new Action<SpellEffector>((effector) =>
-        {
         if(GameObject.FindGameObjectWithTag("SpellReg") == null)
         {
-            #region Register game spells and effect first
-            //fuck valve - Agreed - Doubled - Thirded
-            //Ray Template
             SpellRegistrySing.Instance.Registry.AddItemToregistry(new SpellTemplate("Ray", null, new Action<SpellEffector>((effector) =>
             {
                 Debug.Log("This would be a Raycast");
@@ -31,6 +26,7 @@ class Register : MonoBehaviour
                 Vector2 RayOrigin = GameObject.FindGameObjectWithTag("Player").transform.position;
                 RayOrigin += 0.5f * GameObject.FindGameObjectWithTag("Player").GetComponent<SpriteRenderer>().bounds.size * RayDirection;
                 float maxDistance = 10f;
+
                 RaycastHit2D hit = Physics2D.Raycast(RayOrigin , RayDirection, maxDistance);
                 //There is no point using a facing variable, when this debug function will be removed soon
                 Debug.DrawRay(GameObject.FindGameObjectWithTag("Player").transform.position, GameObject.FindGameObjectWithTag("Player").GetComponent<EntityManager>().GetEntityDirection());
