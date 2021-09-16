@@ -14,7 +14,7 @@ public class PressurePlate : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision) {
         if (PressOnce && collision.transform.CompareTag("Player")) {
-            if (Target.TryGetComponent(out DoorScript ds)) {
+            if (Target.TryGetComponent(out DoorEntity ds)) {
                 State = true;
                 UpdateSprite();
                 ds.SetDoor(true);
@@ -25,7 +25,7 @@ public class PressurePlate : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision) {
         if (!PressOnce && collision.transform.TryGetComponent<EntityManager>(out _)) {
-            if (Target.TryGetComponent(out DoorScript ds)) {
+            if (Target.TryGetComponent(out DoorEntity ds)) {
                 State = true;
                 UpdateSprite();
                 ds.SetDoor(true);
@@ -35,7 +35,7 @@ public class PressurePlate : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision) {
         if (!PressOnce && collision.transform.TryGetComponent<EntityManager>(out _)) {
-            if (Target.TryGetComponent(out DoorScript ds)) {
+            if (Target.TryGetComponent(out DoorEntity ds)) {
                 State = false;
                 UpdateSprite();
                 ds.SetDoor(true);

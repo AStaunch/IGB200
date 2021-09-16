@@ -11,9 +11,7 @@ using UnityEngine;
 class Register : MonoBehaviour
 {
     void Start()
-    {
-        
-        
+    {  
         if(GameObject.FindGameObjectWithTag("SpellReg") == null)
         {
             #region Register game spells and effect first

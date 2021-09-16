@@ -45,17 +45,19 @@ public class SpellRenderer : MonoBehaviour
         Material material = createMaterial(colors);
 
         // Create the laser start from the prefab
+        Vector3 startOffset = 0.5f * origin.GetComponent<SpriteRenderer>().bounds.size * DirectionVect;
         if (start == null) {
-            start = createObject(rayPieces[0], material);
-            Vector3 startOffset = 0.5f * GameObject.FindGameObjectWithTag("Player").GetComponent<SpriteRenderer>().bounds.size * DirectionVect;
+            start = createObject(rayPieces[0], material);  
             start.transform.position += startOffset;
-            start.transform.Rotate(Vector3.forward * rotationAmount);            
+            start.transform.Rotate(Vector3.forward * rotationAmount);
+            start.GetComponent<SpriteRenderer>().sortingOrder = origin.GetComponent<SpriteRenderer>().sortingOrder;
         }
 
         // Laser middle
         if (middle == null) {
             middle = createObject(rayPieces[1], material);
-            middle.transform.Rotate(Vector3.forward * rotationAmount);            
+            middle.transform.Rotate(Vector3.forward * rotationAmount);
+            middle.GetComponent<SpriteRenderer>().sortingOrder = start.GetComponent<SpriteRenderer>().sortingOrder - 1;
         }
 
         // Define an "infinite" size, not too big but enough to go off screen
@@ -73,6 +75,7 @@ public class SpellRenderer : MonoBehaviour
             if (end == null) {
                 end = createObject(rayPieces[2], material);
                 end.transform.Rotate(Vector3.forward * rotationAmount);
+                end.GetComponent<SpriteRenderer>().sortingOrder = start.GetComponent<SpriteRenderer>().sortingOrder - 2;
             }
         } else {
             // Nothing hit
@@ -90,6 +93,7 @@ public class SpellRenderer : MonoBehaviour
         // -- the middle is after start and, as it has a center pivot, have a size of half the laser (minus start and end)
         middle.transform.localScale = new Vector3(middle.transform.localScale.x, (currentLaserSize - startSpriteWidth), middle.transform.localScale.z);
         middle.transform.localPosition = DirectionVect * (currentLaserSize / 2f);
+        middle.transform.localPosition += 0.5f * startOffset;
 
         // End?
         if (end != null) {
@@ -100,10 +104,6 @@ public class SpellRenderer : MonoBehaviour
         middle.AddComponent<DestroyThis>();
         end.AddComponent<DestroyThis>();
     }
-
-
-
-
     #endregion
     public AnimationCurve arcCurve;
     #region Arc Drawer
