@@ -183,6 +183,7 @@ public static class AStar
     public static Node ClosestNode(Vector2 pos)
     {
         pos = new Vector2((Mathf.Round(pos.x / PerUnitDist)) * PerUnitDist, (Mathf.Round(pos.y / PerUnitDist)) * PerUnitDist);
+        //return NodeMap.Find((n) => { return n.Position == pos; });
         float dist = Mathf.Infinity;
         Node Lowest = new Node(new Vector2());
         for (int i = 0; i < NodeMap.Count; i++)
