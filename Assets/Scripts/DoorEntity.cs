@@ -6,41 +6,30 @@ using UnityEngine;
 using static EntityManager;
 using static EnumsAndDictionaries;
 
-public class DoorScript : MonoBehaviour  
-{
-    public DoorScript ExitDoor;
 
-    [HideInInspector]
-    public float delayTimer;
+
+[ExecuteInEditMode]
+public class DoorEntity : EntityManager
+{
+    public DoorEntity ExitDoor;
+
+    protected float delayTimer;
     public bool isOpen = false;
     public bool isFireproof = false;
+    [Range(-1,10)]
+    public int sceneIndex = -1;
+
+    [HideInInspector]
     public Directions exitDirection;
     public Sprite[] OpenDoorSprites;
     public Sprite[] WoodenDoorSprites;
     public Sprite[] FireproofDoorSprites;
-    public int sceneIndex = -1;
     // Start is called before the first frame update
 
     void Awake() {
-        EntityManager em = gameObject.AddComponent<EntityManager>();
-        em.entityType = EntityType.Object;
-        
-        //em.AddProperty(Properties.Door);
-        //em.AddProperty(Properties.Immovable);
-
-        if (isFireproof) {
-            ExitDoor.isFireproof = isFireproof;
-            em.entityProperties = new Properties[] { Properties.Door, Properties.Immovable, Properties.Fireproof};
-            //em.AddProperty(Properties.Fireproof);
-        } else {
-            em.entityProperties = new Properties[] { Properties.Door, Properties.Immovable, Properties.Flamable};
-            //em.AddProperty(Properties.Flamable);
-        }
-
         if(isOpen){
             ExitDoor.isOpen = isOpen;
         }
-        //GetComponent<Collider2D>().bounds.size = Vector2()
     }
 
     private void Start() {
@@ -58,12 +47,16 @@ public class DoorScript : MonoBehaviour
                     Vector3 offset = VectorDict[exitDirection];
                     collision.gameObject.transform.position = ExitDoor.transform.position + offset;
                     delayTimer = Time.timeSinceLevelLoad + 1f;
-                    ExitDoor.GetComponent<DoorScript>().delayTimer = this.delayTimer;
+                    ExitDoor.GetComponent<DoorEntity>().delayTimer = this.delayTimer;
                 }
             } else {
                 UnityEngine.SceneManagement.SceneManager.LoadScene(sceneIndex);
             }
         }
+    }
+
+    public void ToggleDoor() {
+        isOpen = !isOpen;
     }
 
     public void SetDoor(bool state) {
@@ -72,6 +65,22 @@ public class DoorScript : MonoBehaviour
         GetComponent<Collider2D>().isTrigger = state;
         ExitDoor.GetComponent<Collider2D>().isTrigger = state;
         UpdateSprite();
+        ExitDoor.UpdateSprite();
+    }
+
+    public void SetDoor() {
+        entityType = EntityType.Object;
+        if (isFireproof) {
+            entityProperties = new Properties[] { Properties.Door, Properties.Immovable, Properties.Fireproof };
+        } else {
+            entityProperties = new Properties[] { Properties.Door, Properties.Immovable, Properties.Flamable };
+        }
+    }
+
+    public void SyncDoor() {
+        ExitDoor.isOpen = isOpen;
+        ExitDoor.isFireproof = isFireproof;
+        ExitDoor.entityProperties = entityProperties;
         ExitDoor.UpdateSprite();
     }
 
@@ -84,7 +93,14 @@ public class DoorScript : MonoBehaviour
             } else {
                 GetComponent<SpriteRenderer>().sprite = WoodenDoorSprites[IntDict[exitDirection]];
             }
-
         }
+    }
+
+    public void OnValidate() {
+        SetDoor();
+        if (ExitDoor) {
+            SyncDoor();
+        }
+        UpdateSprite();
     }
 }

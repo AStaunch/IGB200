@@ -37,18 +37,25 @@ public class EntityManager : MonoBehaviour
         gameObject.TryGetComponent(out anim);
     }
 
+    Vector2 previousVelocity;
     private void FixedUpdate() {
         if (rb) {
-            rb.velocity = Decelerate(rb.velocity);
+            if(rb.velocity.magnitude <= previousVelocity.magnitude) {
+                rb.velocity = Decelerate(rb.velocity);
+            }
+            previousVelocity = rb.velocity;
         }
+        //Update 
         GetComponent<SpriteRenderer>().sortingOrder = Mathf.RoundToInt(-transform.position.y);
     }
+
     private Vector2 Decelerate(Vector2 velocity) {
         //Debug.Log(vector2);
         if(velocity == Vector2.zero) {
             return velocity;
         }
-        velocity -= Deceleration * entitySpeed * Time.deltaTime * velocity;
+
+        velocity -= Deceleration * Time.deltaTime * velocity;
 
         if (velocity.magnitude < 0.25f) {
             velocity *= 0f;
@@ -59,9 +66,11 @@ public class EntityManager : MonoBehaviour
         return velocity;
     }
 
+    #region Update Variables Externally
     public void UpdateVelocity(Vector3 change) {
-        UpdateDirection(change);
-        rb.velocity = change;
+        if(rb){
+            rb.velocity = change;
+        }
     }
 
     public void UpdateAnimation(Vector3 change) {
@@ -92,6 +101,7 @@ public class EntityManager : MonoBehaviour
             }
         }
     }
+#endregion
 
     #region Entity Health and Death
     public void TakeDamage(float damage) {
@@ -108,7 +118,7 @@ public class EntityManager : MonoBehaviour
     private void EntityDeath() {
 
         if (entityType == EntityType.Object) {
-            if (entityProperties.Contains(Properties.Door) && TryGetComponent(out DoorScript portal)) {
+            if (entityProperties.Contains(Properties.Door) && TryGetComponent(out DoorEntity portal)) {
                 portal.SetDoor(true);
             }
         } else {

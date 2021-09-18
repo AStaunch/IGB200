@@ -28,7 +28,7 @@ public class SpellRenderer : MonoBehaviour
     public Sprite[] rayPieces;
     GameObject spellMaster;
 
-    public void CreateRaySprites(Transform origin, RaycastHit2D other, Color[] colors) {
+    public void drawRaySprite(Transform origin, RaycastHit2D other, Color[] colors) {
         GameObject start = null;
         GameObject middle = null;
         GameObject end = null;
@@ -37,7 +37,7 @@ public class SpellRenderer : MonoBehaviour
         spellMaster.transform.parent = origin;
 
         Directions Direction = origin.GetComponent<EntityManager>().GetEntityDirectionEnum();
-        Vector3 DirectionVect = VectorDict[Direction];
+        Vector2 DirectionVect = VectorDict[Direction];
         float rotationAmount = RotationDict[Direction];
         offset = Vector3.Scale(origin.GetComponent<SpriteRenderer>().bounds.size, DirectionVect) * 0.5f;
 
@@ -45,15 +45,19 @@ public class SpellRenderer : MonoBehaviour
         Material material = createMaterial(colors);
 
         // Create the laser start from the prefab
+        Vector3 startOffset = 0.5f * origin.GetComponent<SpriteRenderer>().bounds.size * DirectionVect;
         if (start == null) {
-            start = createObject(rayPieces[0], material);
-            start.transform.Rotate(Vector3.forward * rotationAmount);            
+            start = createObject(rayPieces[0], material);  
+            start.transform.position += startOffset;
+            start.transform.Rotate(Vector3.forward * rotationAmount);
+            start.GetComponent<SpriteRenderer>().sortingOrder = origin.GetComponent<SpriteRenderer>().sortingOrder;
         }
 
         // Laser middle
         if (middle == null) {
             middle = createObject(rayPieces[1], material);
-            middle.transform.Rotate(Vector3.forward * rotationAmount);            
+            middle.transform.Rotate(Vector3.forward * rotationAmount);
+            middle.GetComponent<SpriteRenderer>().sortingOrder = start.GetComponent<SpriteRenderer>().sortingOrder - 1;
         }
 
         // Define an "infinite" size, not too big but enough to go off screen
@@ -71,6 +75,7 @@ public class SpellRenderer : MonoBehaviour
             if (end == null) {
                 end = createObject(rayPieces[2], material);
                 end.transform.Rotate(Vector3.forward * rotationAmount);
+                end.GetComponent<SpriteRenderer>().sortingOrder = start.GetComponent<SpriteRenderer>().sortingOrder - 2;
             }
         } else {
             // Nothing hit
@@ -88,6 +93,7 @@ public class SpellRenderer : MonoBehaviour
         // -- the middle is after start and, as it has a center pivot, have a size of half the laser (minus start and end)
         middle.transform.localScale = new Vector3(middle.transform.localScale.x, (currentLaserSize - startSpriteWidth), middle.transform.localScale.z);
         middle.transform.localPosition = DirectionVect * (currentLaserSize / 2f);
+        middle.transform.localPosition += 0.5f * startOffset;
 
         // End?
         if (end != null) {
@@ -98,10 +104,6 @@ public class SpellRenderer : MonoBehaviour
         middle.AddComponent<DestroyThis>();
         end.AddComponent<DestroyThis>();
     }
-
-
-
-
     #endregion
     public AnimationCurve arcCurve;
     #region Arc Drawer
@@ -125,7 +127,22 @@ public class SpellRenderer : MonoBehaviour
     #endregion
 
     #region Cone Drawer
+    public void drawConeSprite(Transform origin, RaycastHit2D[] points, Color[] colors) {
+        int noRays = 10;
+        float coneAngle = 60f;
+        float maxDistance = 5f;
+        Vector2 direction = maxDistance * origin.GetComponent<EntityManager>().GetEntityDirection();
 
+        RaycastHit2D[] rays = new RaycastHit2D[noRays];
+        Vector3[] positions = new Vector3[noRays + 1];
+        
+        for (int i = 0; i < rays.Length; i++) {
+            float angle = coneAngle * (i/noRays);
+            Vector2 direction2 = maxDistance * new Vector2(Mathf.Sin(angle), Mathf.Cos(angle));
+            rays[i] = Physics2D.Raycast(origin.position, direction, maxDistance);
+            positions[i] = rays[i].point;
+        }
+    }
     #endregion
 
     #region Shield Drawer

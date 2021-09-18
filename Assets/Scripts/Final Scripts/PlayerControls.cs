@@ -19,6 +19,7 @@ public class PlayerControls : EntityManager
 
             UpdateVelocity(change);
             UpdateAnimation(change);
+            UpdateDirection(change);
         }
         if (Input.GetKeyDown(KeyCode.Space)){
             CastSpell();
@@ -27,13 +28,7 @@ public class PlayerControls : EntityManager
 
     public void CastSpell() {
         Animator anim = GetComponent<Animator>();
-        Vector2 facing = GetEntityDirection();
-        anim.SetFloat("moveX", facing.x);
-        anim.SetFloat("moveY", facing.y);
-        anim.SetBool("casting", true);
-        while (anim.GetBool("casting")) {
-            anim.SetBool("casting", isCasting);
-        }
+        anim.SetTrigger("attack");
     }
 
     private Vector2 Decelerate(Vector2 velocity) {
