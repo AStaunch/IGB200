@@ -19,56 +19,64 @@ public class DoorEntity : EntityManager
     [Range(-1,10)]
     public int sceneIndex = -1;
 
-    [HideInInspector]
     public Directions exitDirection;
     public Sprite[] OpenDoorSprites;
     public Sprite[] WoodenDoorSprites;
     public Sprite[] FireproofDoorSprites;
-    // Start is called before the first frame update
 
+    private static readonly Dictionary<Directions, Directions> directionOpposites = new Dictionary<Directions, Directions> {
+        { Directions.Up,      Directions.Down},
+        { Directions.Down,    Directions.Up},
+        { Directions.Left,    Directions.Right },
+        { Directions.Right,   Directions.Left },
+    };
+
+    // Start is called before the first frame update
     void Awake() {
-        if(isOpen){
-            ExitDoor.isOpen = isOpen;
-        }
+
     }
 
     private void Start() {
+        if(isOpen || isFireproof) {
+            OnValidate();
+        }
         //Sets Initial Sprite
         UpdateSprite();
         //Initialises Door Timer
         delayTimer = Time.timeSinceLevelLoad;
     }
+
+    public override void  EntityDeath() {
+        SetDoorState(true);
+    }
     
     private void OnTriggerEnter2D(Collider2D collision) {
         Debug.Log(collision.transform.name + " entered");
-        if (collision.gameObject.TryGetComponent(out EntityManager _) && isOpen) {
-            if(sceneIndex < 0){
-                if (delayTimer < Time.timeSinceLevelLoad) {
-                    Vector3 offset = VectorDict[exitDirection];
-                    collision.gameObject.transform.position = ExitDoor.transform.position + offset;
-                    delayTimer = Time.timeSinceLevelLoad + 1f;
-                    ExitDoor.GetComponent<DoorEntity>().delayTimer = this.delayTimer;
+        if (collision.gameObject.TryGetComponent(out EntityManager em) && isOpen) {
+            if(em.GetEntityDirectionEnum() == exitDirection) {
+                if (sceneIndex < 0) {
+                    if (delayTimer < Time.timeSinceLevelLoad) {
+                        Vector3 offset = VectorDict[exitDirection];
+                        collision.gameObject.transform.position = ExitDoor.transform.position + offset;
+                        delayTimer = Time.timeSinceLevelLoad + 1f;
+                        ExitDoor.GetComponent<DoorEntity>().delayTimer = this.delayTimer;
+                    }
+                } else {
+                    UnityEngine.SceneManagement.SceneManager.LoadScene(sceneIndex);
                 }
-            } else {
-                UnityEngine.SceneManagement.SceneManager.LoadScene(sceneIndex);
             }
+            
         }
     }
 
-    public void ToggleDoor() {
-        isOpen = !isOpen;
-    }
-
-    public void SetDoor(bool state) {
+    public void SetDoorState(bool state) {
         isOpen = state;
-        ExitDoor.isOpen = state;
         GetComponent<Collider2D>().isTrigger = state;
-        ExitDoor.GetComponent<Collider2D>().isTrigger = state;
         UpdateSprite();
-        ExitDoor.UpdateSprite();
+        SyncExitDoor();
     }
 
-    public void SetDoor() {
+    public void SetDoorProperties() {
         entityType = EntityType.Object;
         if (isFireproof) {
             entityProperties = new Properties[] { Properties.Door, Properties.Immovable, Properties.Fireproof };
@@ -77,10 +85,13 @@ public class DoorEntity : EntityManager
         }
     }
 
-    public void SyncDoor() {
+    public void SyncExitDoor() {
+        if (!ExitDoor)
+            return;
         ExitDoor.isOpen = isOpen;
         ExitDoor.isFireproof = isFireproof;
         ExitDoor.entityProperties = entityProperties;
+        ExitDoor.GetComponent<Collider2D>().isTrigger = GetComponent<Collider2D>().isTrigger;
         ExitDoor.UpdateSprite();
     }
 
@@ -97,10 +108,9 @@ public class DoorEntity : EntityManager
     }
 
     public void OnValidate() {
-        SetDoor();
-        if (ExitDoor) {
-            SyncDoor();
-        }
+        SetDoorState(isOpen);
+        SetDoorProperties();
+        SyncExitDoor();
         UpdateSprite();
     }
 }

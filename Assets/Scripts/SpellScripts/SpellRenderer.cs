@@ -34,7 +34,6 @@ public class SpellRenderer : MonoBehaviour
         GameObject end = null;
         spellMaster = new GameObject("Ray Master");
         spellMaster.transform.position = origin.position;
-        spellMaster.transform.parent = origin;
 
         Directions Direction = origin.GetComponent<EntityManager>().GetEntityDirectionEnum();
         Vector2 DirectionVect = VectorDict[Direction];
@@ -87,7 +86,7 @@ public class SpellRenderer : MonoBehaviour
         // -- Gather some data
         Renderer renderer1 = start.GetComponent<Renderer>();
         float startSpriteWidth = renderer1.bounds.size.x;
-        float endSpriteWidth = 0f;
+        float endSpriteWidth;
         if (end != null) endSpriteWidth = end.GetComponent<Renderer>().bounds.size.x;
 
         // -- the middle is after start and, as it has a center pivot, have a size of half the laser (minus start and end)
@@ -108,15 +107,11 @@ public class SpellRenderer : MonoBehaviour
     public AnimationCurve arcCurve;
     #region Arc Drawer
     public GameObject CreateArcBall(Transform origin, Color[] colors) {
-        spellMaster = new GameObject("Arc Master");
-        spellMaster.transform.position = origin.position;
-        spellMaster.transform.parent = origin;
-
         Material material = createMaterial(colors);
         GameObject arcBall = createObject(rayPieces[0], material);
         Directions direction = origin.GetComponent<EntityManager>().GetEntityDirectionEnum();
         
-        arcBall.AddComponent<ArcBehaviour>().StartArc(direction, spellMaster);
+        arcBall.AddComponent<ArcBehaviour>().StartArc(direction);
         arcBall.transform.position = origin.position;
         return arcBall;
     }

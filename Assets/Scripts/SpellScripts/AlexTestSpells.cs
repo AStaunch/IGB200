@@ -8,35 +8,53 @@ using static EnumsAndDictionaries;
 
 public class AlexTestSpells : MonoBehaviour
 {
+    private static Dictionary<Elements, Properties[]> ElementPropertyPairs = new Dictionary<Elements, Properties[]> {
+        {Elements.Fire, new Properties[] {Properties.Flamable, Properties.Fireproof} },
+        {Elements.Pull, new Properties[] {Properties.Light, Properties.Heavy} },
+        {Elements.Push, new Properties[] {Properties.Light, Properties.Heavy} },
+    };
+
+    private static Dictionary<Elements, float[]> ElementValuePairs = new Dictionary<Elements, float[]> {
+        {Elements.Fire, new float[] {2f, 0f} },
+        {Elements.Ice, new float[]  {2f, 0f} },
+        {Elements.Pull, new float[] {1.5f, 0.5f} },
+        {Elements.Push, new float[] {1.5f, 0.5f} },
+    };
+
+    static float ComputeOutPutValue(Elements element, EntityManager otherEntity, float inputValue) {
+
+        if (otherEntity.entityProperties.Contains(ElementPropertyPairs[element][0])) {
+            inputValue *= ElementValuePairs[element][0];
+        } else if (otherEntity.entityProperties.Contains(ElementPropertyPairs[element][1])) {
+            inputValue *= ElementValuePairs[element][1];
+        }
+
+        if (otherEntity.entityProperties.Contains(Properties.Immovable) && (element == Elements.Pull || element == Elements.Push)) {
+            inputValue = 0f;
+        }
+        return inputValue;
+    }
     SpellEffector Fire = new SpellEffector() {
-        //DesiredId = SpellRegistrySing.Instance.Registry.QueryForSid("Ray"),
         Name = "Fire",
         Effector = new Action<EffectorData>((EffectorData_) => {
+            float baseStrength = EffectorData_.baseStrength;
             switch (EffectorData_.Calling_template.Name) {
                 case "Ray":
                     RayData Ray_ = (RayData)EffectorData_;
-                    //Debug.Log($"Test Spell Fire recieved: {Ray_.Data.point.x} - {Ray_.Data.point.y}");
-
                     /*Fire Properties
                      * Damage to enemies is based on their properties. this code could be recycled for other pieces, changing base damage among other things.
                      * */
-                    float baseDmg = 10f;
                     //Debug.Log(Ray_.Data.collider.transform.name + " was hit.");
-                    if (Ray_.Data.collider.gameObject.TryGetComponent<EntityManager>(out EntityManager otherEntity)) {
-                        if (otherEntity.entityProperties.Contains(Properties.Flamable)) {
-                            otherEntity.TakeDamage(baseDmg * 2f);
-                        } else if (otherEntity.entityProperties.Contains(Properties.Fireproof)) {
-                            otherEntity.TakeDamage(0f);
-                        } else {
-                            otherEntity.TakeDamage(baseDmg);
-                        }
+                    if (Ray_.Data.collider.gameObject.TryGetComponent(out EntityManager otherEntity)) {
+                        float Strength = ComputeOutPutValue(Elements.Fire, otherEntity, baseStrength);
+                        otherEntity.TakeDamage(Strength);
                     }
                     break;
 
                 case "Arc":
                     ArcData Arc_ = (ArcData)EffectorData_;
 
-                    
+
                     break;
                 default:
                     Debug.Log($"{EffectorData_.Calling_template.Name} is not yet defined for Fire");
@@ -44,53 +62,53 @@ public class AlexTestSpells : MonoBehaviour
 
             }
         }),
-        Colors = new Color[]{
-                new Color(0.5411f,0.1216f,0.07451f,1f),
-                new Color(0.9176f,0.07451f,0.0039f,1f),
-                new Color(1f,0.3843f,0f,1f),
-                new Color(0.9686f,0.6824f,0.1765f,1f)
-        }
+        Colors = ColourDict[Elements.Fire]
     };
 
     SpellEffector Pull = new SpellEffector() {
-        //DesiredId = SpellRegistrySing.Instance.Registry.QueryForSid("Ray"),
         Name = "Pull",
         Effector = new Action<EffectorData>((EffectorData_) => {
+            float baseStrength = EffectorData_.baseStrength;
             switch (EffectorData_.Calling_template.Name) {
                 case "Ray":
                     RayData Ray_ = (RayData)EffectorData_;
-                //Debug.Log($"Test Spell Pull Ray recieved: {Ray_.Data.point.x} - {Ray_.Data.point.y}");
+                    //Debug.Log($"Test Spell Pull Ray recieved: {Ray_.Data.point.x} - {Ray_.Data.point.y}");
 
-                /*Fire Properties
-                 * Damage to enemies is based on their properties. this code could be recycled for other pieces, changing base damage among other things.
-                 * */
-                float baseDmg = 10f;
-                GameObject obj = Ray_.Data.collider.gameObject;
-                ForceObject(obj, baseDmg);
+                    /*Fire Properties
+                        * Damage to enemies is based on their properties. this code could be recycled for other pieces, changing base damage among other things.
+                        * */
+                    GameObject obj = Ray_.Data.collider.gameObject;
+                    Vector2 direction = GameObject.FindGameObjectWithTag("Player").transform.GetComponent<EntityManager>().GetEntityDirection();
+                    ForceObject(obj, direction, baseStrength);
                     break;
+
+                case "Arc":
+                    ArcData Arc_ = (ArcData)EffectorData_;
+                    GameObject ArcObject = Arc_.Data;
+                    break;
+
                 default:
                     Debug.Log($"{EffectorData_.Calling_template.Name} is not yet defined for Pull");
                     break;
                 }
         }),
         Colors = ColourDict[Elements.Pull]
-
     };
 
     SpellEffector Push = new SpellEffector() {
-        //DesiredId = SpellRegistrySing.Instance.Registry.QueryForSid("Ray"),
         Name = "Push",
         Effector = new Action<EffectorData>((EffectorData_) => {
+            float baseStrength = EffectorData_.baseStrength;
             switch (EffectorData_.Calling_template.Name) {
                 case "Ray":
                     RayData Ray_ = (RayData)EffectorData_;
-                //Debug.Log($"Test Spell Push Ray recieved: {Ray_.Data.point.x} - {Ray_.Data.point.y}");
-                /*Fire Properties
+                
+                    /*Fire Properties
                     * Damage to enemies is based on their properties. this code could be recycled for other pieces, changing base damage among other things.
                     * */
-                float baseDmg = 10f;
-                GameObject obj = Ray_.Data.collider.gameObject;
-                ForceObject(obj, -baseDmg);
+                    GameObject obj = Ray_.Data.collider.gameObject;
+                    Vector2 direction = GameObject.FindGameObjectWithTag("Player").transform.GetComponent<EntityManager>().GetEntityDirection();
+                    ForceObject(obj, direction, -baseStrength);
                     break;
                 default:
                     Debug.Log($"{EffectorData_.Calling_template.Name} is not yet defined for Pull");
@@ -104,37 +122,34 @@ public class AlexTestSpells : MonoBehaviour
 
 
     SpellEffector PullPlayer = new SpellEffector() {
-        //DesiredId = SpellRegistrySing.Instance.Registry.QueryForSid("Ray"),
         Name = "Pull",
         Effector = new Action<EffectorData>((EffectorData_) => {
-        RayData Ray_ = (RayData)EffectorData_;
-        //Debug.Log($"Test Spell Pull Ray recieved: {Ray_.Data.point.x} - {Ray_.Data.point.y}");
-        /*Fire Properties
-         * Damage to enemies is based on their properties. this code could be recycled for other pieces, changing base damage among other things.
-         * */
-        float baseDmg = 10f;
-        GameObject obj = GameObject.FindGameObjectWithTag("Player");
-        MonoBehaviour mono = obj.GetComponent<MonoBehaviour>();
-        mono.StartCoroutine(LerpObject(obj, Ray_.Data.point, 1f));
+
+            RayData Ray_ = (RayData)EffectorData_;
+
+            GameObject obj = GameObject.FindGameObjectWithTag("Player");
+            MonoBehaviour mono = obj.GetComponent<MonoBehaviour>();
+            mono.StartCoroutine(LerpObject(obj, Ray_.Data.point, 1f));
         }),
         Colors = ColourDict[Elements.Pull]
     };
 
     SpellEffector PushPlayer = new SpellEffector() {
-        //DesiredId = SpellRegistrySing.Instance.Registry.QueryForSid("Ray"),
         Name = "Push",
         Effector = new Action<EffectorData>((EffectorData_) => {
+            float baseStrength = EffectorData_.baseStrength;
             switch (EffectorData_.Calling_template.Name) {
                 case "Ray":
-                        RayData Ray_ = (RayData)EffectorData_;
-                    Debug.Log($"Test Spell Push Ray recieved: {Ray_.Data.point.x} - {Ray_.Data.point.y}");
 
                     /*Fire Properties
                      * Damage to enemies is based on their properties. this code could be recycled for other pieces, changing base damage among other things.
                      * */
-                    float baseDmg = 10f;
-                    GameObject obj = GameObject.FindGameObjectWithTag("Player");
-                    ForceObject(obj, -baseDmg);
+                    GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+                    Vector2 direction = playerObj.transform.GetComponent<EntityManager>().GetEntityDirection();
+                    baseStrength *= playerObj.transform.GetComponent<EntityManager>().Deceleration;
+                    ForceObject(playerObj, direction, -baseStrength);
+                    MonoBehaviour mono = playerObj.GetComponent<MonoBehaviour>();
+                    mono.StartCoroutine(CheckVelocityCanBridgeGaps(playerObj));
                     break;
 
                 default:
@@ -148,27 +163,25 @@ public class AlexTestSpells : MonoBehaviour
 
 
 
-    static void ForceObject(GameObject obj, float baseDmg) {
+    static void ForceObject(GameObject obj, Vector2 direction, float baseStrength) {
         float commonFactor = 0.25f;
-        float force = baseDmg * commonFactor;
-        Vector2 facing = GameObject.FindGameObjectWithTag("Player").transform.GetComponent<EntityManager>().GetEntityDirection();
         if (obj.TryGetComponent(out EntityManager em)) {
-            Vector2 forceVector = force * facing;
-            if (em.entityProperties.Contains(Properties.Light)) {
-                forceVector *= 1.5f;
-            } else if (em.entityProperties.Contains(Properties.Heavy)) {
-                forceVector *= 0.5f;
-            } else if (em.entityProperties.Contains(Properties.Immovable)) {
-                forceVector *= 0f;
-            }
+            baseStrength = ComputeOutPutValue(Elements.Push, em, baseStrength);
+            float force = baseStrength * commonFactor;
+            Vector2 forceVector = force * direction;
             em.UpdateVelocity(forceVector);
         }
     }
 
-    static void ForcePlayerBack(GameObject obj, Vector2 direction, float baseDmg) {
+    static IEnumerator CheckVelocityCanBridgeGaps(GameObject gameObject) {
+        Rigidbody2D rb = gameObject.transform.GetComponent<Rigidbody2D>();
 
+        while (rb.velocity.magnitude > 1f) {
+            gameObject.layer = 6;
+            yield return null;
+        }
+        gameObject.layer = 7;
     }
-
 
     static IEnumerator LerpObject(GameObject gameObject, Vector2 targetPosition, float duration) {
         EntityManager em = gameObject.GetComponent<EntityManager>();

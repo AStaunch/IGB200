@@ -19,7 +19,6 @@ class Register : MonoBehaviour
             //Ray Template
             SpellRegistrySing.Instance.Registry.AddItemToregistry(new SpellTemplate("Ray", null, new Action<SpellEffector>((effector) =>
             {
-                Debug.Log("This would be a Raycast");
                 Vector2 RayDirection = GameObject.FindGameObjectWithTag("Player").GetComponent<EntityManager>().GetEntityDirection();
                 Vector2 RayOrigin = GameObject.FindGameObjectWithTag("Player").transform.position;
                 RayOrigin += 0.5f * GameObject.FindGameObjectWithTag("Player").GetComponent<SpriteRenderer>().bounds.size * RayDirection;

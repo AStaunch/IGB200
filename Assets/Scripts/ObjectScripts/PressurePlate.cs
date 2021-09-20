@@ -17,7 +17,7 @@ public class PressurePlate : MonoBehaviour
             if (Target.TryGetComponent(out DoorEntity ds)) {
                 State = true;
                 UpdateSprite();
-                ds.SetDoor(true);
+                ds.SetDoorState(true);
             }
         }
         UpdateSprite();
@@ -28,7 +28,7 @@ public class PressurePlate : MonoBehaviour
             if (Target.TryGetComponent(out DoorEntity ds)) {
                 State = true;
                 UpdateSprite();
-                ds.SetDoor(true);
+                ds.SetDoorState(true);
             }
         }
     }
@@ -38,7 +38,7 @@ public class PressurePlate : MonoBehaviour
             if (Target.TryGetComponent(out DoorEntity ds)) {
                 State = false;
                 UpdateSprite();
-                ds.SetDoor(true);
+                ds.SetDoorState(true);
             }
         }
     }

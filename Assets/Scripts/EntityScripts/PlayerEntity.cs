@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static EnumsAndDictionaries;
 
-public class PlayerControls : EntityManager
+public class PlayerEntity : EntityManager
 {    
    public bool isCasting;
     // Start is called before the first frame update
@@ -16,34 +17,29 @@ public class PlayerControls : EntityManager
         change.y = Input.GetAxisRaw("Vertical");
         if (change != Vector3.zero) {
             change = entitySpeed * change.normalized;
-
-            UpdateVelocity(change);
-            UpdateAnimation(change);
+            if(VectorToDirection(change) == GetEntityDirectionEnum()) {
+                UpdateVelocity(change);
+            }
             UpdateDirection(change);
+            UpdateAnimation(rb.velocity);
+        } else {
+
+            UpdateAnimation(rb.velocity);
         }
+
         if (Input.GetKeyDown(KeyCode.Space)){
             CastSpell();
         }
     }
 
     public void CastSpell() {
+        rb.velocity = Vector2.zero;
         Animator anim = GetComponent<Animator>();
         anim.SetTrigger("attack");
     }
 
-    private Vector2 Decelerate(Vector2 velocity) {
-        //Debug.Log(vector2);
-        if (velocity == Vector2.zero) {
-            return velocity;
-        }
-        velocity -= Deceleration * Time.deltaTime * velocity;
-        if (velocity.magnitude < 0.01f) {
-            velocity *= 0f;
-        }
-        if (anim && velocity == Vector2.zero) {
-            UpdateAnimation(velocity);
-        }
-        return velocity;
+    public override void EntityDeath() {
+        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
     }
 
     List<Rigidbody2D> collidedObjects = new List<Rigidbody2D>();

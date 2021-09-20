@@ -123,4 +123,40 @@ public static class EnumsAndDictionaries
     {
         Ray, Orb, Arc, Cone, Shield, Runner
     }
+
+    public static Directions VectorToDirection(Vector3 vector) {
+        Directions direction;
+        if (Mathf.Abs(vector.x) < Mathf.Abs(vector.y)) {
+            if (vector.y > 0) {
+                direction = Directions.Up;
+            } else {
+                direction = Directions.Down;
+            }
+        } else {
+            if (vector.x > 0) {
+                direction = Directions.Right;
+            } else {
+                direction = Directions.Left;
+            }
+        }
+        return direction;
+    }
+
+    public static Directions VectorToDirection(Vector2 vector) {
+        Directions direction;
+        if (Mathf.Abs(vector.x) < Mathf.Abs(vector.y)) {
+            if (vector.y > 0) {
+                direction = Directions.Up;
+            } else {
+                direction = Directions.Down;
+            }
+        } else {
+            if (vector.x > 0) {
+                direction = Directions.Right;
+            } else {
+                direction = Directions.Left;
+            }
+        }
+        return direction;
+    }
 }

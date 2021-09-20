@@ -2,8 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VoidScript : MonoBehaviour
+public class EmptySpaceScript : MonoBehaviour
 {
+    [System.Serializable]
+    private enum TypeOfTile
+    {
+        Water, Void
+    }
+    [SerializeField]
+    private TypeOfTile emptySpaceType;
     public Sprite Filled;
     SpriteRenderer sr;
     BoxCollider2D bc;

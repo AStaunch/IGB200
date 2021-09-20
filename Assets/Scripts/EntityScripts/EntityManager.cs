@@ -86,21 +86,11 @@ public class EntityManager : MonoBehaviour
     public void UpdateDirection(Vector3 change) {   //Up ; Right; Down; Left
         if (change != Vector3.zero) {
 
-            if (Mathf.Abs(change.x) < Mathf.Abs(change.y)) {
-                if (change.y > 0) {
-                    CurrentDirection = Directions.Up;
-                } else {
-                    CurrentDirection = Directions.Down;
-                }
-            } else {
-                if (change.x > 0) {
-                    CurrentDirection = Directions.Right;
-                } else {
-                    CurrentDirection = Directions.Left;
-                }
-            }
+            CurrentDirection = VectorToDirection(change);
         }
     }
+
+
 #endregion
 
     #region Entity Health and Death
@@ -115,18 +105,8 @@ public class EntityManager : MonoBehaviour
         }
     }
 
-    private void EntityDeath() {
-
-        if (entityType == EntityType.Object) {
-            if (entityProperties.Contains(Properties.Door) && TryGetComponent(out DoorEntity portal)) {
-                portal.SetDoor(true);
-            }
-        } else {
-            if (transform.CompareTag("Player")) {
-                UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
-            }
-            Destroy(this.gameObject, Time.deltaTime);
-        }
+    public virtual void EntityDeath() {
+        Destroy(this.gameObject, Time.deltaTime);
         // TODO: Impliment Colour change
 
     }
@@ -141,23 +121,33 @@ public class EntityManager : MonoBehaviour
         }
     }
 
-    public void AddProperty(Properties property, float duration) {
-        if (!entityProperties.Contains(property)) {
-            //Add Property
-            Array.Resize(ref entityProperties, entityProperties.Length + 1);
-            entityProperties[entityProperties.Length - 1] = property;
-
-            //WaitForSeconds
-            IEnumerator coroutine = Wait(duration);
-            StartCoroutine(coroutine);
-
-            //Remove Property
+    public void RemovePropery(Properties property) {
+        if (entityProperties.Contains(property)) {
+            int index = Array.FindIndex(entityProperties, 0, entityProperties.Length, entityProperties.Contains);
+            for( ; index < entityProperties.Length - 1; index++) {
+                entityProperties[index] = entityProperties[index + 1];
+            }
             Array.Resize(ref entityProperties, entityProperties.Length - 1);
         }
     }
 
-    IEnumerator Wait(float time) {
-        yield return new WaitForSeconds(time);
+    public void AddProperty(Properties property, float duration) {
+        if (!entityProperties.Contains(property)) {
+            StartCoroutine(AddPropertyForDuration(property, duration));
+        }
+    }
+
+    private IEnumerator AddPropertyForDuration(Properties property, float duration) {
+        float t = 0;
+        Array.Resize(ref entityProperties, entityProperties.Length + 1);
+        entityProperties[entityProperties.Length - 1] = property;
+
+        while (t < duration) {
+            t += Time.deltaTime;
+            yield return null;
+        }
+        Array.Resize(ref entityProperties, entityProperties.Length - 1);
+
     }
     #endregion
 

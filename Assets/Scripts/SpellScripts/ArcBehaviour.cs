@@ -11,12 +11,10 @@ public class ArcBehaviour : MonoBehaviour
     private void Start() {
        
     }
-    public void StartArc(Directions direction, GameObject spellMaster) {
+    public void StartArc(Directions direction) {
         //initialise Variables
         float distance = 10f;
         float time = 3f;
-        float maxTime = 3f * time;
-        AnimationCurve arcCurve = FindObjectOfType<SpellRenderer>().arcCurve;
 
         rb = gameObject.AddComponent<Rigidbody2D>();
         rb.gravityScale = 0;
@@ -25,32 +23,36 @@ public class ArcBehaviour : MonoBehaviour
         gameObject.AddComponent<SpriteRenderer>();
         gameObject.AddComponent<CircleCollider2D>();
         startPosition = transform.position;
+        StartCoroutine(moveArc(VectorDict[direction], time, distance));
 
-        Vector2 VectorDirection = VectorDict[direction];
+    }
+
+    IEnumerator moveArc(Vector2 VectorDirection, float arcTime, float distance) {
         Vector2 SwappedDirection = new Vector2(VectorDirection.y, VectorDirection.x);
         float i = 0;
-        while (i < maxTime) {
-            if(i <= time){
-                    float iNormalised = i / time;
-                    Vector2 arcOffsetX = distance * iNormalised * VectorDirection;
-                    Vector2 arcOffsetY = distance * arcCurve.Evaluate(iNormalised) * SwappedDirection;
-                    Vector2 arcOffsetXY = arcOffsetX + arcOffsetY;
-                    rb.MovePosition(startPosition + arcOffsetXY);
-                    
-                    //DebugCode - TODO Get Rid of
-                    float intervalDebug = i / 0.5f;
-                    intervalDebug = intervalDebug % 1;
-                    if (intervalDebug < 0.01f) {
-                        Debug.Log(arcOffsetXY);
-                    }
-            } else {
 
+        AnimationCurve arcCurve = FindObjectOfType<SpellRenderer>().arcCurve;
+        float maxTime = 3f * arcTime;
+        while (i < maxTime) {
+            if (i <= arcTime) {
+                float iNormalised = i / arcTime;
+                Vector2 arcOffsetX = distance * iNormalised * VectorDirection;
+                Vector2 arcOffsetY = distance * arcCurve.Evaluate(iNormalised) * SwappedDirection;
+                Vector2 arcOffsetXY = arcOffsetX + arcOffsetY;
+                rb.MovePosition(startPosition + arcOffsetXY);
+
+                //DebugCode - TODO Get Rid of
+                float intervalDebug = i / 0.5f;
+                intervalDebug %= 1;
+                if (intervalDebug < 0.01f) {
+                    Debug.Log(arcOffsetXY);
+                }
+            } else {
             }
             i += Time.deltaTime;
+            yield return null;
         }
-
-        spellMaster.AddComponent<DestroyThis>();
-        gameObject.AddComponent<DestroyThis>();
+        KillThis();
     }
 
     public void KillThis() {

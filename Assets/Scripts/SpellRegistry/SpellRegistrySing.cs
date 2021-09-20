@@ -165,24 +165,31 @@ public interface ExternalSpell
 public interface EffectorData 
 {
     SpellTemplate Calling_template { get; set; }
+
+    //The Base Strength of a Spell; this is used for determining damage or force
+    public float baseStrength { get;}
 }
 
 public class RayData : EffectorData
 {
     public SpellTemplate Calling_template { get; set; }
     public RaycastHit2D Data { get; set; }
+    public float baseStrength { get => 10f;}
 }
 
 public class ArcData : EffectorData
 {
     public SpellTemplate Calling_template { get; set; }
     public GameObject Data { get; set; }
+
+    public float baseStrength { get => 14f; }
 }
 
 public class GeneralData : EffectorData
 {
     public SpellTemplate Calling_template { get; set; }
-    GameObject Target { get; set; }
+    public GameObject Target { get; set; }
+    public float baseStrength { get; }
 }
 
 #endregion
