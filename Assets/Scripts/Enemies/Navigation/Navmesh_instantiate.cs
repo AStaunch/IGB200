@@ -33,8 +33,8 @@ public class Navmesh_instantiate : MonoBehaviour
             for(int i = 0; i < AStar.NodeMap.Count;i++)
             {
                 AStar.Node n = AStar.NodeMap[i];
-                Gizmos.DrawCube(n.Position, new Vector3(AStar.DisplayDist, AStar.DisplayDist, 0.0001f));
-                Gizmos.color = Color.white;
+                //Gizmos.DrawCube(n.Position, new Vector3(AStar.DisplayDist, AStar.DisplayDist, 0.0001f));
+                Gizmos.DrawSphere(n.Position, 0.025f);
             }
         }
     }

@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using System.Linq;
+using System.Diagnostics;
+using Debug = UnityEngine.Debug;
 
 public static class AStar
 {
@@ -70,6 +72,7 @@ public static class AStar
         public Vector2 Position;
         public Node Parent;
         public List<Node> Children;
+        public Node ActiveChild;
 
         public Node(Vector2 pos)
         {
@@ -180,25 +183,26 @@ public static class AStar
     //}
     #endregion
 
+    static Stopwatch watch = new Stopwatch();
+
+
     public static Node ClosestNode(Vector2 pos)
     {
-        pos = new Vector2((Mathf.Round(pos.x / PerUnitDist)) * PerUnitDist, (Mathf.Round(pos.y / PerUnitDist)) * PerUnitDist);
-        //return NodeMap.Find((n) => { return n.Position == pos; });
-        float dist = Mathf.Infinity;
-        Node Lowest = new Node(new Vector2());
-        for (int i = 0; i < NodeMap.Count; i++)
+        watch.Start();
+        List<Node> nos = NodeMap.FindAll((n) => { return Mathf.Floor(n.Position.x) == Mathf.Floor(pos.x) && (float)Math.Ceiling(n.Position.x) == (float)Math.Ceiling(pos.x); });
+        Node no =  new Node(new Vector2(Mathf.Infinity, Mathf.Infinity));
+        foreach(Node tmp in nos)
         {
-            if (Vector2.Distance(NodeMap[i].Position, pos) < dist)
-            {
-                dist = Vector2.Distance(NodeMap[i].Position, pos);
-                Lowest = NodeMap[i];
-            }
+            no = Vector2.Distance(tmp.Position, pos) < Vector2.Distance(no.Position, pos) ? tmp : no;
         }
-        return Lowest;
+        Debug.Log($"Closest Node: {watch.ElapsedMilliseconds}");
+        watch.Stop();
+        return no;
     }
 
     public static Node RequestPath(Node Start, Node Target, EntityState Enemytype)
     {
+        //watch.Start();
         OpenNodes.Clear();
         ClosedNodes.Clear();
         OpenNodes.Add(Start);
@@ -227,9 +231,7 @@ public static class AStar
                     if (Enemytype == EntityState.WALK)
                     {
                         if (node.state == TileStates.OBSTACLE || node.state == TileStates.FLYABLE || ClosedNodes.Contains(node))
-                        {
                             continue;
-                        }
                     }
                     else if (node.state == TileStates.OBSTACLE || ClosedNodes.Contains(node))
                         continue;
@@ -239,6 +241,7 @@ public static class AStar
                         node.G = CurrentNode.G + Vector2.Distance(CurrentNode.Position, node.Position);
                         node.UpdateNode(Target.Position);
                         node.Parent = CurrentNode;
+                        CurrentNode.ActiveChild = node;
 
                         if (!OpenNodes.Contains(node))
                             OpenNodes.Add(node);

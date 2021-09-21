@@ -45,7 +45,7 @@ public class Bat_AI : MonoBehaviour
         PlayerRef = GameObject.FindGameObjectWithTag("Player");
         Active_State = Idle();
         StartCoroutine("Idle");
-        LastKnown_State = Idle();
+        LastKnown_State = Active_State;
     }
 
     void FixedUpdate()
@@ -71,6 +71,7 @@ public class Bat_AI : MonoBehaviour
         }
     }
 
+    bool tmp = true;
     public IEnumerator Tracking_Chasing(Vector2 SeenPos, float variation)
     {
         while (true)
@@ -81,13 +82,21 @@ public class Bat_AI : MonoBehaviour
             }
             else
             {
-                BatNode = AStar.ClosestNode(gameObject.transform.position);
-                AStar.Node[] nodes = AStar.ReversePath(BatNode, AStar.RequestPath(BatNode, AStar.ClosestNode(SeenPos), BatState));
                 
-                foreach(AStar.Node node_ in nodes)
+                if (tmp)
                 {
-                    Handles.DrawWireDisc(node_.Position, Vector3.forward, 0.05f);
+                    BatNode = AStar.ClosestNode(gameObject.transform.position);
+                    AStar.Node Path = AStar.RequestPath(BatNode, AStar.ClosestNode(SeenPos), BatState);
+                    tmp = false;
                 }
+
+
+                //AStar.Node[] nodes = AStar.ReversePath(BatNode, AStar.RequestPath(BatNode, AStar.ClosestNode(SeenPos), BatState));
+                //Debug.Log($"Bat World Pos: {BatNode.Position} - Next Node: {nodes[0]}");
+                //foreach(AStar.Node node_ in nodes)
+                //{
+                //    Handles.DrawWireDisc(node_.Position, Vector3.forward, 0.05f);
+                //}
 
                 //gameObject.GetComponent<Rigidbody2D>().MovePosition(nodes[0].Position);
                 //gameObject.transform.position += (((Vector3)nodes[0].Position - gameObject.transform.position) * Time.deltaTime * MoveSpeed);
@@ -95,7 +104,7 @@ public class Bat_AI : MonoBehaviour
             }
 
 
-            yield return new WaitForEndOfFrame();
+            yield return new WaitForSecondsRealtime(5);
         }
     }
 
