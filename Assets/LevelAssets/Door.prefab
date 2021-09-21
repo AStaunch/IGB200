@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 842074883213001423}
   - component: {fileID: 1868838532075417885}
-  - component: {fileID: 7524599666175078581}
   - component: {fileID: 314077590242775558}
+  - component: {fileID: 7524599666175078581}
   m_Layer: 0
   m_Name: Door
   m_TagString: Untagged
@@ -73,7 +73,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 4
-  m_Sprite: {fileID: -4960734469189484717, guid: 041f1d5810e41bd49afd55ac1899cddf, type: 3}
+  m_Sprite: {fileID: 1767371873970925592, guid: 041f1d5810e41bd49afd55ac1899cddf, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -84,38 +84,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &7524599666175078581
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 626067229213237980}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cfd0cc1ce76d700498cc1d7001d9647e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ExitDoor: {fileID: 0}
-  delayTimer: 0
-  isOpen: 1
-  isFireproof: 0
-  exitDirection: 0
-  OpenDoorSprites:
-  - {fileID: -1244826266528968393, guid: 041f1d5810e41bd49afd55ac1899cddf, type: 3}
-  - {fileID: -4960734469189484717, guid: 041f1d5810e41bd49afd55ac1899cddf, type: 3}
-  - {fileID: -3401324574763296666, guid: 041f1d5810e41bd49afd55ac1899cddf, type: 3}
-  - {fileID: -7479781390151944694, guid: 041f1d5810e41bd49afd55ac1899cddf, type: 3}
-  WoodenDoorSprites:
-  - {fileID: 1767371873970925592, guid: 041f1d5810e41bd49afd55ac1899cddf, type: 3}
-  - {fileID: -2962531703935522114, guid: 041f1d5810e41bd49afd55ac1899cddf, type: 3}
-  - {fileID: 8693329000027944824, guid: 041f1d5810e41bd49afd55ac1899cddf, type: 3}
-  - {fileID: -6941524184028459231, guid: 041f1d5810e41bd49afd55ac1899cddf, type: 3}
-  FireproofDoorSprites:
-  - {fileID: -3708064732922258302, guid: 2601c7ec817b61f43a09fb4af0c0e749, type: 3}
-  - {fileID: 6576249790921849821, guid: 2601c7ec817b61f43a09fb4af0c0e749, type: 3}
-  - {fileID: 6807087307343196428, guid: 2601c7ec817b61f43a09fb4af0c0e749, type: 3}
-  - {fileID: -7411026656216122260, guid: 2601c7ec817b61f43a09fb4af0c0e749, type: 3}
 --- !u!61 &314077590242775558
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -133,7 +101,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 2.25}
+    oldSize: {x: 1.625, y: 1.5}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -142,3 +110,41 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.1, y: 2.25}
   m_EdgeRadius: 0
+--- !u!114 &7524599666175078581
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 626067229213237980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfd0cc1ce76d700498cc1d7001d9647e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entityProperties: 060000000800000002000000
+  entityType: 0
+  health: 10
+  entitySpeed: 1
+  Deceleration: 5
+  ExitDoor: {fileID: 0}
+  delayTimer: 4.655035
+  isOpen: 0
+  isFireproof: 0
+  exitDirection: 0
+  OpenDoorSprites:
+  - {fileID: -1244826266528968393, guid: 041f1d5810e41bd49afd55ac1899cddf, type: 3}
+  - {fileID: -4960734469189484717, guid: 041f1d5810e41bd49afd55ac1899cddf, type: 3}
+  - {fileID: -3401324574763296666, guid: 041f1d5810e41bd49afd55ac1899cddf, type: 3}
+  - {fileID: -7479781390151944694, guid: 041f1d5810e41bd49afd55ac1899cddf, type: 3}
+  WoodenDoorSprites:
+  - {fileID: 1767371873970925592, guid: 041f1d5810e41bd49afd55ac1899cddf, type: 3}
+  - {fileID: -2962531703935522114, guid: 041f1d5810e41bd49afd55ac1899cddf, type: 3}
+  - {fileID: 8693329000027944824, guid: 041f1d5810e41bd49afd55ac1899cddf, type: 3}
+  - {fileID: -6941524184028459231, guid: 041f1d5810e41bd49afd55ac1899cddf, type: 3}
+  FireproofDoorSprites:
+  - {fileID: -3708064732922258302, guid: 2601c7ec817b61f43a09fb4af0c0e749, type: 3}
+  - {fileID: 6576249790921849821, guid: 2601c7ec817b61f43a09fb4af0c0e749, type: 3}
+  - {fileID: 6807087307343196428, guid: 2601c7ec817b61f43a09fb4af0c0e749, type: 3}
+  - {fileID: -7411026656216122260, guid: 2601c7ec817b61f43a09fb4af0c0e749, type: 3}
+  sceneIndex: -1
