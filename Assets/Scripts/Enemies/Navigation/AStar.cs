@@ -29,21 +29,23 @@ public static class AStar
     }
 
     #region Required shit
+    #region basics
     public static Tilemap Ground;
     public static List<Tiles> TileInfo = new List<Tiles>();
     public static float ObstacleOffset;
-
+    #endregion
     #region Navmesh items
     public static int PerUnitFreq = 2;
     private static float PerUnitDist_;
     public static float PerUnitDist { get { return PerUnitDist_; } }
     public static readonly List<Node> NodeMap = new List<Node>();
-
+    #endregion
     #region Heaps
     //these need to be reviewed, array heaps have the worst runtime of available A* heaps. Try sorted or fibonacci
-    private static List<Node> OpenNodes = new List<Node>();
-    private static List<Node> ClosedNodes = new List<Node>();
-    #endregion
+    //private static List<Node> OpenNodes = new List<Node>();
+    //private static List<Node> ClosedNodes = new List<Node>();
+    private static FibonnaciHeap Open_FHeap = new FibonnaciHeap();
+    private static FibonnaciHeap Closed_FHeap = new FibonnaciHeap();
     #endregion
     #endregion
 
@@ -183,41 +185,89 @@ public static class AStar
     //}
     #endregion
 
-    static Stopwatch watch = new Stopwatch();
-
 
     public static Node ClosestNode(Vector2 pos)
     {
-        watch.Start();
-        List<Node> nos = NodeMap.FindAll((n) => { return Mathf.Floor(n.Position.x) == Mathf.Floor(pos.x) && (float)Math.Ceiling(n.Position.x) == (float)Math.Ceiling(pos.x); });
+        //watch.Start();
+        List<Node> nos = NodeMap.FindAll((n) => { return Mathf.Floor(n.Position.x) == Mathf.Floor(pos.x) && (float)Math.Ceiling(n.Position.y) == (float)Math.Ceiling(pos.y); });
         Node no =  new Node(new Vector2(Mathf.Infinity, Mathf.Infinity));
         foreach(Node tmp in nos)
         {
             no = Vector2.Distance(tmp.Position, pos) < Vector2.Distance(no.Position, pos) ? tmp : no;
         }
-        Debug.Log($"Closest Node: {watch.ElapsedMilliseconds}");
-        watch.Stop();
+        //Debug.Log($"Closest Node: {watch.ElapsedMilliseconds}");
+        //watch.Stop();
         return no;
     }
 
     public static Node RequestPath(Node Start, Node Target, EntityState Enemytype)
     {
         //watch.Start();
-        OpenNodes.Clear();
-        ClosedNodes.Clear();
-        OpenNodes.Add(Start);
-        while (OpenNodes.Count > 0)
-        {
-            Node CurrentNode = OpenNodes[0];
-            for (int i = 0; i < OpenNodes.Count; i++)
-            {
-                if (OpenNodes[i].F <= CurrentNode.F)
-                    if (OpenNodes[i].H < CurrentNode.H)
-                        CurrentNode = OpenNodes[i];
-            }
+        #region Original
+        //OpenNodes.Clear();
+        //ClosedNodes.Clear();
+        //OpenNodes.Add(Start);
+        //while (OpenNodes.Count > 0)
+        //{
+        //    Node CurrentNode = OpenNodes[0];
+        //    for (int i = 0; i < OpenNodes.Count; i++)
+        //    {
+        //        if (OpenNodes[i].F <= CurrentNode.F)
+        //            if (OpenNodes[i].H < CurrentNode.H)
+        //                CurrentNode = OpenNodes[i];
+        //    }
 
-            OpenNodes.Remove(CurrentNode);
-            ClosedNodes.Add(CurrentNode);
+        //    OpenNodes.Remove(CurrentNode);
+        //    ClosedNodes.Add(CurrentNode);
+
+        //    if (CurrentNode == Target)
+        //    {
+        //        return CurrentNode;
+        //    }
+        //    else
+        //    {
+        //        CurrentNode.ChildrenUpdate();
+        //        foreach (Node node in CurrentNode.Children)
+        //        {
+        //            if (Enemytype == EntityState.WALK)
+        //            {
+        //                if (node.state == TileStates.OBSTACLE || node.state == TileStates.FLYABLE || ClosedNodes.Contains(node))
+        //                    continue;
+        //            }
+        //            else if (node.state == TileStates.OBSTACLE || ClosedNodes.Contains(node))
+        //                continue;
+
+        //            if (CurrentNode.G + Vector2.Distance(CurrentNode.Position, node.Position) < node.G || !OpenNodes.Contains(node))
+        //            {
+        //                node.G = CurrentNode.G + Vector2.Distance(CurrentNode.Position, node.Position);
+        //                node.UpdateNode(Target.Position);
+        //                node.Parent = CurrentNode;
+        //                CurrentNode.ActiveChild = node;
+
+        //                if (!OpenNodes.Contains(node))
+        //                    OpenNodes.Add(node);
+        //            }
+        //        }
+        //    }
+        //}
+        //return new Node(new Vector2(Mathf.Infinity, Mathf.Infinity));
+        #endregion
+
+        Open_FHeap.WipeHeap();
+        Closed_FHeap.WipeHeap();
+        Open_FHeap.insert(new FibHeapNode(Start));
+
+
+        while (Open_FHeap.Count > 0)
+        {
+            //pop min does a 2 for one. gets the lowest, and pulls it
+            //ince the min is always the root, this is O(1)
+            //and reduces the code by 8 lines
+            FibHeapNode CurrentNode_fib = Open_FHeap.PopMin();
+            Node CurrentNode = CurrentNode_fib.Value;
+
+            Closed_FHeap.insert(CurrentNode_fib);
+
 
             if (CurrentNode == Target)
             {
@@ -230,26 +280,28 @@ public static class AStar
                 {
                     if (Enemytype == EntityState.WALK)
                     {
-                        if (node.state == TileStates.OBSTACLE || node.state == TileStates.FLYABLE || ClosedNodes.Contains(node))
+                        if (node.state == TileStates.OBSTACLE || node.state == TileStates.FLYABLE || Closed_FHeap.Contains(node))
                             continue;
                     }
-                    else if (node.state == TileStates.OBSTACLE || ClosedNodes.Contains(node))
+                    else if (node.state == TileStates.OBSTACLE || Closed_FHeap.Contains(node))
                         continue;
 
-                    if (CurrentNode.G + Vector2.Distance(CurrentNode.Position, node.Position) < node.G || !OpenNodes.Contains(node))
+                    if (CurrentNode.G + Vector2.Distance(CurrentNode.Position, node.Position) < node.G || !Open_FHeap.Contains(node))
                     {
                         node.G = CurrentNode.G + Vector2.Distance(CurrentNode.Position, node.Position);
                         node.UpdateNode(Target.Position);
                         node.Parent = CurrentNode;
-                        CurrentNode.ActiveChild = node;
+                        //CurrentNode.ActiveChild = node;
 
-                        if (!OpenNodes.Contains(node))
-                            OpenNodes.Add(node);
+                        if (!Open_FHeap.Contains(node))
+                            Open_FHeap.insert(new FibHeapNode(node));
                     }
                 }
             }
         }
         return new Node(new Vector2(Mathf.Infinity, Mathf.Infinity));
+
+
     }
 
     public static Node[] ReversePath(Node Start, Node Path)

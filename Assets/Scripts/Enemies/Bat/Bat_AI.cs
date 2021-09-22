@@ -1,8 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEditor;
 using UnityEngine;
 
+using Debug = UnityEngine.Debug;
+
+
+[RequireComponent(typeof(Rigidbody2D))]
 public class Bat_AI : MonoBehaviour
 {
     #region Notes
@@ -27,8 +32,19 @@ public class Bat_AI : MonoBehaviour
 
     AStar.EntityState BatState = AStar.EntityState.FLY;
 
-    IEnumerator Active_State;
-    IEnumerator LastKnown_State;
+    Rigidbody2D rb2d;
+
+    enum ValidStates
+    {
+        Idle,
+        Targeting
+    }
+
+    ValidStates NextState;
+    ValidStates CurrentState;
+
+    Coroutine ActiveFunction;
+
 
     public float DetectionRange;
     public float Min_distance_from_target;
@@ -40,15 +56,18 @@ public class Bat_AI : MonoBehaviour
 
     public float MoveSpeed;
 
+
     void Start()
     {
+        rb2d = GetComponent<Rigidbody2D>();
         PlayerRef = GameObject.FindGameObjectWithTag("Player");
-        Active_State = Idle();
-        StartCoroutine("Idle");
-        LastKnown_State = Active_State;
+        NextState = ValidStates.Idle;
     }
 
-    void FixedUpdate()
+
+
+    Vector2 LastViewedPos;
+    void Update()
     {
         if (Vector2.Distance(PlayerRef.transform.position, gameObject.transform.position) <= DetectionRange)
         {
@@ -56,42 +75,61 @@ public class Bat_AI : MonoBehaviour
             Debug.DrawRay(gameObject.transform.position, PlayerRef.transform.position - gameObject.transform.position);
             if(hit2d.collider != null && hit2d.collider.gameObject == PlayerRef)
             {
-                Active_State = Tracking_Chasing(hit2d.point, Random.Range(0, Min_distance_from_target_variation));
+                if (CurrentState != ValidStates.Targeting)
+                {
+                    NextState = ValidStates.Targeting;
+                }
+                LastViewedPos = hit2d.collider.gameObject.transform.position;
+                //Tracking_Chasing(hit2d.point, Random.Range(0, Min_distance_from_target_variation));
+                //Debug.Log("insight");
             }
         }
 
 
 
 
-        if(LastKnown_State != Active_State)
+        if(CurrentState != NextState)
         {
-            StopCoroutine(LastKnown_State);
-            LastKnown_State = Active_State;
-            StartCoroutine(LastKnown_State);
+            CurrentState = NextState;
+            if(ActiveFunction != null)//null by defualt so
+                StopCoroutine(ActiveFunction);
+
+            if (CurrentState == ValidStates.Idle)
+                ActiveFunction = StartCoroutine(Idle());
+            if (CurrentState == ValidStates.Targeting)
+                ActiveFunction = StartCoroutine(Tracking_Chasing(Random.Range(0, Min_distance_from_target_variation)));
         }
+
     }
 
-    bool tmp = true;
-    public IEnumerator Tracking_Chasing(Vector2 SeenPos, float variation)
+    Stopwatch stopwatch= new Stopwatch();
+    public IEnumerator Tracking_Chasing(float variation)
     {
         while (true)
         {
-            if (Vector2.Distance(gameObject.transform.position, SeenPos) <= Min_distance_from_target - variation)
+            
+
+            if (Vector2.Distance(gameObject.transform.position, LastViewedPos) <= Min_distance_from_target - variation || Vector2.Distance(gameObject.transform.position, LastViewedPos) > DetectionRange)
             {
-                Active_State = Idle();
+                NextState = ValidStates.Idle;
             }
             else
             {
-                
-                if (tmp)
-                {
-                    BatNode = AStar.ClosestNode(gameObject.transform.position);
-                    AStar.Node Path = AStar.RequestPath(BatNode, AStar.ClosestNode(SeenPos), BatState);
-                    tmp = false;
-                }
+                #region Had pathfinding
+                //BatNode = AStar.ClosestNode(gameObject.transform.position);
+                //stopwatch.Reset();
+                //stopwatch.Start();
 
-
+                //AStar.Node Path = AStar.RequestPath(BatNode, AStar.ClosestNode(LastViewedPos), BatState);
+                //AStar.Node[] nodes = AStar.ReversePath(BatNode, AStar.RequestPath(BatNode, AStar.ClosestNode(LastViewedPos), BatState));
+                //pos.transform.position = nodes[1].Position;
+                //gameObject.transform.position += ((Vector3)nodes[1].Position - gameObject.transform.position) * MoveSpeed * Time.deltaTime;
+                //Debug.Log($"{stopwatch.ElapsedMilliseconds}");
+                //stopwatch.Stop();
+                //Handles.DrawLine(Path.Position, Path.Parent.Position);
+                //Handles.DrawWireDisc(Path.Position, Vector3.forward, 0.02f);
                 //AStar.Node[] nodes = AStar.ReversePath(BatNode, AStar.RequestPath(BatNode, AStar.ClosestNode(SeenPos), BatState));
+
                 //Debug.Log($"Bat World Pos: {BatNode.Position} - Next Node: {nodes[0]}");
                 //foreach(AStar.Node node_ in nodes)
                 //{
@@ -100,12 +138,16 @@ public class Bat_AI : MonoBehaviour
 
                 //gameObject.GetComponent<Rigidbody2D>().MovePosition(nodes[0].Position);
                 //gameObject.transform.position += (((Vector3)nodes[0].Position - gameObject.transform.position) * Time.deltaTime * MoveSpeed);
-
+                #endregion
+                #region no pathfinding - just chase
+                gameObject.transform.position += ((Vector3)LastViewedPos - gameObject.transform.position) * MoveSpeed * Time.deltaTime;
+                #endregion
             }
 
 
-            yield return new WaitForSecondsRealtime(5);
+            yield return null;
         }
+        //Tracking_Chasing(SeenPos, variation);
     }
 
     public IEnumerator Idle()
@@ -124,8 +166,7 @@ public class Bat_AI : MonoBehaviour
             Handles.DrawWireDisc(gameObject.transform.position, Vector3.forward, Min_distance_from_target);
             Handles.color = Color.white;
 
-            if(Active_State != null)
-                Handles.Label(gameObject.transform.position + new Vector3(-1.5f, 1, 0), Active_State.ToString());
+            Handles.Label(gameObject.transform.position + new Vector3(-0.25f, 1, 0), CurrentState.ToString());
         }
     }
 
