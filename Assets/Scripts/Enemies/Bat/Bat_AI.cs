@@ -1,11 +1,13 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
 using UnityEditor;
 using UnityEngine;
 
 using Debug = UnityEngine.Debug;
-
+using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class Bat_AI : MonoBehaviour
@@ -30,7 +32,7 @@ public class Bat_AI : MonoBehaviour
     #endregion
 
 
-    AStar.EntityState BatState = AStar.EntityState.FLY;
+    //AStar.EntityState BatState = AStar.EntityState.FLY;
 
     Rigidbody2D rb2d;
 
@@ -50,7 +52,7 @@ public class Bat_AI : MonoBehaviour
     public float Min_distance_from_target;
     public float Min_distance_from_target_variation;
 
-    AStar.Node BatNode;
+    //AStar.Node BatNode;
 
     private GameObject PlayerRef;
 
@@ -80,8 +82,13 @@ public class Bat_AI : MonoBehaviour
                     NextState = ValidStates.Targeting;
                 }
                 LastViewedPos = hit2d.collider.gameObject.transform.position;
-                //Tracking_Chasing(hit2d.point, Random.Range(0, Min_distance_from_target_variation));
-                //Debug.Log("insight");
+            }
+        }
+        else
+        {
+            if (CurrentState != ValidStates.Idle && Vector2.Distance(LastViewedPos, gameObject.transform.position) <= Min_distance_from_target)
+            {
+                NextState = ValidStates.Idle;
             }
         }
 
@@ -91,7 +98,7 @@ public class Bat_AI : MonoBehaviour
         if(CurrentState != NextState)
         {
             CurrentState = NextState;
-            if(ActiveFunction != null)//null by defualt so
+            if (ActiveFunction != null)//null by defualt so
                 StopCoroutine(ActiveFunction);
 
             if (CurrentState == ValidStates.Idle)
@@ -102,13 +109,12 @@ public class Bat_AI : MonoBehaviour
 
     }
 
-    Stopwatch stopwatch= new Stopwatch();
+    //Stopwatch stopwatch= new Stopwatch();
+
     public IEnumerator Tracking_Chasing(float variation)
     {
         while (true)
         {
-            
-
             if (Vector2.Distance(gameObject.transform.position, LastViewedPos) <= Min_distance_from_target - variation || Vector2.Distance(gameObject.transform.position, LastViewedPos) > DetectionRange)
             {
                 NextState = ValidStates.Idle;
@@ -121,9 +127,10 @@ public class Bat_AI : MonoBehaviour
                 //stopwatch.Start();
 
                 //AStar.Node Path = AStar.RequestPath(BatNode, AStar.ClosestNode(LastViewedPos), BatState);
-                //AStar.Node[] nodes = AStar.ReversePath(BatNode, AStar.RequestPath(BatNode, AStar.ClosestNode(LastViewedPos), BatState));
-                //pos.transform.position = nodes[1].Position;
+                //AStar.Node[] nodes = AStar.ReversePath(BatNode, Path);
                 //gameObject.transform.position += ((Vector3)nodes[1].Position - gameObject.transform.position) * MoveSpeed * Time.deltaTime;
+
+                //pos.transform.position = nodes[1].Position;
                 //Debug.Log($"{stopwatch.ElapsedMilliseconds}");
                 //stopwatch.Stop();
                 //Handles.DrawLine(Path.Position, Path.Parent.Position);
@@ -145,10 +152,12 @@ public class Bat_AI : MonoBehaviour
             }
 
 
-            yield return null;
+            yield return new WaitForFixedUpdate();
         }
         //Tracking_Chasing(SeenPos, variation);
     }
+
+    
 
     public IEnumerator Idle()
     {

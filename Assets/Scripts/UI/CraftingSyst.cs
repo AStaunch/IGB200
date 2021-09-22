@@ -6,18 +6,7 @@ using UnityEngine.UI;
 
 public class CraftingSyst : MonoBehaviour
 {
-
-    HotbarItem[] Hotbar = new HotbarItem[5];
-    public class HotbarItem
-    {
-        public SpellEffector effector;
-        public SpellTemplate template;
-        public void run()
-        {
-            template.RunFunction(effector);
-        }
-    }
-
+    public HotbarHandler hotbarscript;
 
     public bool Self_Populate_Events = false;
 
@@ -70,22 +59,12 @@ public class CraftingSyst : MonoBehaviour
 
 
 
-
-
     public void BuildSpell()
     {
-        if(effect == null || template == null)
-        {
+        if (effect == null || template == null)
             Debug.Log($"Spell Build Failed: effect present: {effect != null}, template present: {template != null}");
-        }
         else
-        {
-            Hotbar[0] = new HotbarItem() { effector = effect, template = template };
-
-            effect = null;
-            template = null;
-            ResetUI();
-        }
+            StartCoroutine("BuildSet");
     }
 
     public void ResetUI()
@@ -94,5 +73,62 @@ public class CraftingSyst : MonoBehaviour
         UI_EffectorDisplay.color = Color.clear;
         UI_TemplateDisplay.sprite = null;
         UI_TemplateDisplay.color = Color.clear;
+    }
+
+    IEnumerator BuildSet()
+    {
+        Debug.Log("Select Hotbar slot to place spell");
+        bool KeyChosen = false;
+        while (!KeyChosen)
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                hotbarscript.AssignSpell(new HotbarHandler.HotbarItem() { effector = effect, template = template }, 0);
+                effect = null;
+                template = null;
+                ResetUI();
+                KeyChosen = true;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                hotbarscript.AssignSpell(new HotbarHandler.HotbarItem() { effector = effect, template = template }, 1);
+                effect = null;
+                template = null;
+                ResetUI();
+                KeyChosen = true;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha3))
+            {
+                hotbarscript.AssignSpell(new HotbarHandler.HotbarItem() { effector = effect, template = template }, 2);
+                effect = null;
+                template = null;
+                ResetUI();
+                KeyChosen = true;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha4))
+            {
+                hotbarscript.AssignSpell(new HotbarHandler.HotbarItem() { effector = effect, template = template }, 3);
+                effect = null;
+                template = null;
+                ResetUI();
+                KeyChosen = true;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha5))
+            {
+                hotbarscript.AssignSpell(new HotbarHandler.HotbarItem() { effector = effect, template = template }, 4);
+                effect = null;
+                template = null;
+                ResetUI();
+                KeyChosen = true;
+            }
+
+            yield return null;
+        }
+        StopCoroutine("BuildSet");
+        yield return null;
     }
 }

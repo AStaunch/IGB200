@@ -29,8 +29,6 @@ public class FibonnaciHeap
         CleanRoot();
     }
 
-    int CleanFreq = 1;
-    int CleanFreq_c = 0;
     public FibHeapNode PopMin()
     {
         if (MinimumNode_ != null)
@@ -44,19 +42,8 @@ public class FibonnaciHeap
             FibHeapNode retValue = MinimumNode_;
             ContentList.Remove(retValue.Value);
 
-            //this handles merging nodes into tree's 
-            if(CleanFreq_c >= CleanFreq)
-            {
-                CleanRoot();
-                CleanFreq_c = 0;
-            }
-            CleanFreq_c++;
+            CleanRoot();
             
-
-
-
-
-
             //nodecount_--;
             return retValue;
         }
@@ -189,11 +176,11 @@ public class FibonnaciHeap
         #endregion
 
         //List<FibHeapNode> fibHeapNodes = new List<FibHeapNode>(nodecount_);
-        int iterative = nodecount_;
+        int iterative = nodecount_ - 1;
 
         while (iterative > 0)
         {
-            int iter2 = iterative - 1;
+            int iter2 = iterative;
             //from the lazy, find a root of the same degree
             FibHeapNode heapNode = LazyList_.Find((nde) =>
             {
@@ -223,7 +210,7 @@ public class FibonnaciHeap
             }
             iterative--;
         }
-        if(nodecount_ > 0)
+        if (nodecount_ > 0)
         {
             float compare = float.PositiveInfinity;
             FibHeapNode compareNode = LazyList_[0];
