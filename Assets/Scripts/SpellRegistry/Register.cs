@@ -10,6 +10,12 @@ using UnityEngine;
 
 class Register : MonoBehaviour
 {
+    public Sprite RaySprite;
+    private Sprite RaySprite_ { get { return RaySprite != null ? RaySprite : null; } }
+
+    //public Sprite RaySprite;
+    //private Sprite RaySprite_ { get { return RaySprite != null ? RaySprite : null; } }
+
     void Start()
     {  
         if(GameObject.FindGameObjectWithTag("SpellReg") == null)
@@ -17,7 +23,7 @@ class Register : MonoBehaviour
             #region Register game spells and effect first
             //fuck valve - Agreed - Doubled - Thirded - Fourthd - Fifth'd
             //Ray Template
-            SpellRegistrySing.Instance.Registry.AddItemToregistry(new SpellTemplate("Ray", null, new Action<SpellEffector>((effector) =>
+            SpellRegistrySing.Instance.Registry.AddItemToregistry(new SpellTemplate("Ray", RaySprite_, new Action<SpellEffector>((effector) =>
             {
                 Vector2 RayDirection = GameObject.FindGameObjectWithTag("Player").GetComponent<EntityManager>().GetEntityDirection();
                 Vector2 RayOrigin = GameObject.FindGameObjectWithTag("Player").transform.position;
