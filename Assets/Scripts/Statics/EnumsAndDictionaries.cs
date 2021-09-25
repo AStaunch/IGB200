@@ -97,7 +97,11 @@ public static class EnumsAndDictionaries
     [System.Serializable]
     public enum Properties
     {
-        Heavy, Light, Flamable, Fireproof, Metal, Insulated, Door, Indestructable, Immovable
+        Heavy, Light, Flamable, Fireproof, Metal, Insulated, Door, Indestructable, Immovable,
+        Undead,
+        Freezable,
+        Unfreezable,
+        Frozen
     }
     [System.Serializable]
     public enum EntityType

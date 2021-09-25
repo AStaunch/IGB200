@@ -167,5 +167,14 @@ public class SpellRenderer : MonoBehaviour
         material.SetColor("_AccentColour2", colors[3]);
         return material;
     }
+
+    public static Material createMaterial(Color[] colors, Shader shader) {
+        Material material = new Material(shader);
+        material.SetColor("_PrimaryColour", colors[0]);
+        material.SetColor("_SecondaryColour", colors[1]);
+        material.SetColor("_AccentColour1", colors[2]);
+        material.SetColor("_AccentColour2", colors[3]);
+        return material;
+    }
     #endregion
 }

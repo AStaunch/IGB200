@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static SpellRenderer;
 
 public class HotbarHandler : MonoBehaviour
 {
     public GameObject Crafting_Menu;
+    public Shader PalleteShader;
     public bool Crafting_Menu_Active { get { return Crafting_Menu.activeSelf; } set { Crafting_Menu.SetActive(value); } }
 
     public Image[] Slots = new Image[5];
@@ -75,6 +77,7 @@ public class HotbarHandler : MonoBehaviour
             {
                 Slots[i].color = new Color32(255, 255, 255, 255);
                 Slots[i].sprite = Hotbar[i].template.icon;
+                Slots[i].material = createMaterial(Hotbar[i].effector.Colors, PalleteShader);
             }
         }
     }

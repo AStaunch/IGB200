@@ -13,6 +13,15 @@ class Register : MonoBehaviour
     public Sprite RaySprite;
     private Sprite RaySprite_ { get { return RaySprite != null ? RaySprite : null; } }
 
+    public Sprite ArcSprite;
+    private Sprite ArcSprite_ { get { return RaySprite != null ? RaySprite : null; } }
+
+    public Sprite OrbSprite;
+    private Sprite OrbSprite_ { get { return RaySprite != null ? RaySprite : null; } }
+
+    public Sprite ConeSprite;
+    private Sprite ConeSprite_ { get { return RaySprite != null ? RaySprite : null; } }
+
     //public Sprite RaySprite;
     //private Sprite RaySprite_ { get { return RaySprite != null ? RaySprite : null; } }
 
@@ -54,7 +63,7 @@ class Register : MonoBehaviour
             })));
 
             //Arc Template
-            SpellRegistrySing.Instance.Registry.AddItemToregistry(new SpellTemplate("Arc", null, new Action<SpellEffector>((effector) =>
+            SpellRegistrySing.Instance.Registry.AddItemToregistry(new SpellTemplate("Arc", ArcSprite_, new Action<SpellEffector>((effector) =>
             {
                 Console.WriteLine("This would be a Arc");
 

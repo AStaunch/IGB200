@@ -57,11 +57,11 @@ public static class Effectors
                         RayData Ray_ = (RayData)EffectorData_;
                         GameObject obj = Ray_.Data.collider.gameObject;
                         Vector2 direction = GameObject.FindGameObjectWithTag("Player").transform.GetComponent<EntityManager>().GetEntityDirection();
-                        if (obj.transform.GetComponent<EntityManager>().entityProperties.Contains(Properties.Immovable)){
-                            baseStrength = 0f;
+
+                        if (Ray_.Data.collider.gameObject.TryGetComponent(out EntityManager otherEntity)) {
+                            float Strength = ComputeOutPutValue(Elements.Pull, otherEntity, baseStrength);
+                            ForceObject(obj, direction, -Strength);
                         }
-                        ForceObject(obj, direction, baseStrength);
-                        obj.GetComponent<MonoBehaviour>().StartCoroutine(LerpObject(obj, Ray_.Data.point, 1f));
                         break;
 
                     case "Arc":
@@ -76,9 +76,6 @@ public static class Effectors
             }),
             Colors = ColourDict[Elements.Pull]
         },
-
-
-
         new SpellEffector() {
             Name = "PullPlayer",
             Effector = new Action<EffectorData>((EffectorData_) => {
@@ -86,9 +83,9 @@ public static class Effectors
                 switch (EffectorData_.Calling_template.Name) {
                     case "Ray":
                         RayData Ray_ = (RayData)EffectorData_;
-
                         GameObject obj = GameObject.FindGameObjectWithTag("Player");
                         MonoBehaviour mono = obj.GetComponent<MonoBehaviour>();
+
                         mono.StartCoroutine(LerpObject(obj, Ray_.Data.point, 1f));
                         break;
 
@@ -100,23 +97,21 @@ public static class Effectors
             Colors = ColourDict[Elements.Pull]
     },
         #endregion
-#region Push
+        #region Push
         new SpellEffector() {
             Name = "Push",
             Effector = new Action<EffectorData>((EffectorData_) => {
                 float baseStrength = EffectorData_.baseStrength;
                 switch (EffectorData_.Calling_template.Name) {
                     case "Ray":
+                        RayData Ray_ = (RayData)EffectorData_;
+                        GameObject obj = Ray_.Data.collider.gameObject;
+                        Vector2 direction = GameObject.FindGameObjectWithTag("Player").transform.GetComponent<EntityManager>().GetEntityDirection();
 
-                        /*Fire Properties
-                         * Damage to enemies is based on their properties. this code could be recycled for other pieces, changing base damage among other things.
-                         * */
-                        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
-                        Vector2 direction = playerObj.transform.GetComponent<EntityManager>().GetEntityDirection();
-                        baseStrength *= playerObj.transform.GetComponent<EntityManager>().Deceleration;
-                        ForceObject(playerObj, direction, -baseStrength);
-                        MonoBehaviour mono = playerObj.GetComponent<MonoBehaviour>();
-                        mono.StartCoroutine(CheckVelocityCanBridgeGaps(playerObj));
+                        if (Ray_.Data.collider.gameObject.TryGetComponent(out EntityManager otherEntity)) {
+                            float Strength = ComputeOutPutValue(Elements.Push, otherEntity, baseStrength);
+                            ForceObject(obj, direction, Strength);                            
+                        }
                         break;
 
                     default:
@@ -133,12 +128,10 @@ public static class Effectors
                 float baseStrength = EffectorData_.baseStrength;
                 switch (EffectorData_.Calling_template.Name) {
                     case "Ray":
-                        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
-                        Vector2 direction = playerObj.transform.GetComponent<EntityManager>().GetEntityDirection();
-                        baseStrength *= playerObj.transform.GetComponent<EntityManager>().Deceleration;
-                        ForceObject(playerObj, direction, -baseStrength);
-                        MonoBehaviour mono = playerObj.GetComponent<MonoBehaviour>();
-                        mono.StartCoroutine(CheckVelocityCanBridgeGaps(playerObj));
+                        GameObject obj = GameObject.FindGameObjectWithTag("Player");
+                        Vector2 direction = obj.transform.GetComponent<EntityManager>().GetEntityDirection();
+                        baseStrength *= obj.transform.GetComponent<EntityManager>().Deceleration;
+                        ForceObject(obj, direction, -baseStrength * 2);
                         break;
 
                     default:
@@ -177,7 +170,7 @@ public static class Effectors
 
                 }
             }),
-            Colors = ColourDict[Elements.Fire]
+            Colors = ColourDict[Elements.Ice]
         },
 #endregion
     };
