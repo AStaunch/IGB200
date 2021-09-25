@@ -5,18 +5,18 @@ using UnityEngine;
 public class EmptySpaceScript : MonoBehaviour
 {
     [System.Serializable]
-    private enum TypeOfTile
+    public enum TypeOfTile
     {
         Water, Void
     }
-    [SerializeField]
-    private TypeOfTile emptySpaceType;
+    public TypeOfTile emptySpaceType;
     public Sprite Filled;
     SpriteRenderer sr;
     BoxCollider2D bc;
     private Rigidbody2D rb;
 
     private void Awake() {
+        gameObject.layer = 2;
         if (!TryGetComponent(out rb)) {
             rb = gameObject.AddComponent<Rigidbody2D>();
         }
@@ -36,11 +36,17 @@ public class EmptySpaceScript : MonoBehaviour
     }
 
     private void OnCollisionEnter2D(Collision2D collision) {
-        if (collision.transform.TryGetComponent(out BlockScript bs)){
-            sr.sprite = Filled;
-            Destroy(collision.gameObject);
-            Destroy(bc);
-            Destroy(rb);
+        if (collision.transform.TryGetComponent(out BlockScript _)){
+            if (emptySpaceType == TypeOfTile.Water) {
+                sr.sprite = Filled;
+                Destroy(collision.gameObject);
+                Destroy(bc);
+                Destroy(rb);
+            } else if (emptySpaceType == TypeOfTile.Void) {
+                Destroy(collision.gameObject);
+            }
         }
     }
+
+    
 }
