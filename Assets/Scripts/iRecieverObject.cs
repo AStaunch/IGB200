@@ -4,11 +4,10 @@ using UnityEngine;
 
     public interface iRecieverObject
     {
-        public Dictionary<iRecieverObject, bool> Switches { get; set; }
-        public bool checkRecievedSignals();
-    }
+    //public Dictionary<iSenderObjects, bool> Switches { get; set; }
+}
 
-    public interface iSenderObjects
+public interface iSenderObjects
     {
 
         public iSenderObjects[] switchTriggers { get; set; }

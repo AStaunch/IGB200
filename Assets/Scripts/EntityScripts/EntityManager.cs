@@ -14,9 +14,9 @@ public class EntityManager : MonoBehaviour
     Directions CurrentDirection = Directions.Down;
 
     protected Rigidbody2D rb;
-    [SerializeField]
-    protected float health = 10;
-    protected float maxHealth;
+    [HideInInspector]
+    public int health;
+    public int maxHealth;
 
     //[SerializeField]
     public float entitySpeed = 1f;
@@ -33,7 +33,7 @@ public class EntityManager : MonoBehaviour
             rb.freezeRotation = true;
             
         }
-        maxHealth = health;
+        health = maxHealth;
         gameObject.TryGetComponent(out anim);
     }
 
@@ -96,10 +96,10 @@ public class EntityManager : MonoBehaviour
     #region Entity Health and Death
     public void TakeDamage(float damage) {
         if (entityProperties.Contains(Properties.Indestructable)) {
-            damage = 0f;
+            return;
         }
-        health -= damage;
-        health = Mathf.Clamp(health, 0f, maxHealth);
+        health -= Mathf.RoundToInt(damage);
+        health = Mathf.Clamp(health, 0, maxHealth);
         if (0 >= health) {
             EntityDeath();
         }

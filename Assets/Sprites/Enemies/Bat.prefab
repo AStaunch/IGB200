@@ -10,8 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 4918080545915271938}
   - component: {fileID: 3522925013571066448}
-  - component: {fileID: 469509072832619665}
   - component: {fileID: 4772899388582369722}
+  - component: {fileID: 8651394277904161146}
+  - component: {fileID: 4293402273768885058}
+  - component: {fileID: 2504601520329332686}
+  - component: {fileID: 3827091835647209982}
   m_Layer: 0
   m_Name: Bat
   m_TagString: Untagged
@@ -84,22 +87,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &469509072832619665
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5890072231826190281}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd5c5bb3537bd354db9c5bd4a3dfc6a9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  entityProperties: 
-  entityType: 1
-  health: 8
-  entitySpeed: 1
 --- !u!61 &4772899388582369722
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -126,3 +113,77 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.8, y: 1}
   m_EdgeRadius: 0
+--- !u!50 &8651394277904161146
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5890072231826190281}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
+--- !u!114 &4293402273768885058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5890072231826190281}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5b1083382a07f94984e238e7e99b620, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DetectionRange: 4
+  Min_distance_from_target: 1
+  Min_distance_from_target_variation: 0.25
+  MoveSpeed: 0.5
+--- !u!95 &2504601520329332686
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5890072231826190281}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 59e8996dec993274c96bd38d0ead4547, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 1
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &3827091835647209982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5890072231826190281}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5d253a2642842f459f94fbb2a4a5360, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entityProperties: 
+  entityType: 0
+  health: 0
+  maxHealth: 5
+  entitySpeed: 1
+  Deceleration: 5

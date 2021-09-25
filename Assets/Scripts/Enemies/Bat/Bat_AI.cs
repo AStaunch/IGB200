@@ -64,6 +64,7 @@ public class Bat_AI : MonoBehaviour
         rb2d = GetComponent<Rigidbody2D>();
         PlayerRef = GameObject.FindGameObjectWithTag("Player");
         NextState = ValidStates.Idle;
+        MoveSpeed = GetComponent<EntityManager>().entitySpeed;
     }
 
 
@@ -168,15 +169,14 @@ public class Bat_AI : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if(Selection.activeObject == transform.gameObject)
-        {
-            Handles.DrawWireDisc(gameObject.transform.position, Vector3.forward, DetectionRange);
-            Handles.color = Color.yellow;
-            Handles.DrawWireDisc(gameObject.transform.position, Vector3.forward, Min_distance_from_target);
-            Handles.color = Color.white;
+        //if (Selection.activeObject == transform.gameObject) {
+        //    Handles.DrawWireDisc(gameObject.transform.position, Vector3.forward, DetectionRange);
+        //    Handles.color = Color.yellow;
+        //    Handles.DrawWireDisc(gameObject.transform.position, Vector3.forward, Min_distance_from_target);
+        //    Handles.color = Color.white;
 
-            Handles.Label(gameObject.transform.position + new Vector3(-0.25f, 1, 0), CurrentState.ToString());
-        }
+        //    Handles.Label(gameObject.transform.position + new Vector3(-0.25f, 1, 0), CurrentState.ToString());
+        //}
     }
 
     

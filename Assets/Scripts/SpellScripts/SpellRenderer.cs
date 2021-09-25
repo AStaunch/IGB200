@@ -97,11 +97,12 @@ public class SpellRenderer : MonoBehaviour
         // End?
         if (end != null) {
             end.transform.localPosition = DirectionVect * currentLaserSize;
+
+            end.AddComponent<DestroyThis>();
         }
         spellMaster.AddComponent<DestroyThis>();
         start.AddComponent<DestroyThis>();
         middle.AddComponent<DestroyThis>();
-        end.AddComponent<DestroyThis>();
     }
     #endregion
     public AnimationCurve arcCurve;

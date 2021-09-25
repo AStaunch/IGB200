@@ -38,10 +38,10 @@ public static class EnumsAndDictionaries
         },
         {Elements.Ice, new Color[]
             {
-            new Color32(39,92,68,255),
-            new Color32(64,137,73,255),
-            new Color32(100,199,77,255),
-            new Color32(255,255,255,255)
+            new Color32(19, 78, 138, 255),
+            new Color32(1, 149, 234, 255),
+            new Color32(137, 142, 251, 255),
+            new Color32(45, 232, 247, 255)
             }
         },
         {Elements.Pull, new Color[]

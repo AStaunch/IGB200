@@ -16,7 +16,7 @@ public static class Effectors
             Colors = new Color[] { Color.white, Color.white, Color.white, Color.white },
             Effector = new Action<EffectorData>((edd) => { Debug.Log("works"); })
         },
-# region Fire
+        # region Fire
         new SpellEffector() {
             Name = "Fire",
             Effector = new Action<EffectorData>((EffectorData_) => {
@@ -89,7 +89,7 @@ public static class Effectors
                 }
             }),
             Colors = ColourDict[Elements.Pull]
-    },
+        },
         #endregion
         #region Push
         new SpellEffector() {
@@ -136,29 +136,36 @@ public static class Effectors
                 }
             }),
             Colors = ColourDict[Elements.Push]
-    },
+        },
         #endregion
         #region Ice
         new SpellEffector() {
             Name = "Ice",
             Effector = new Action<EffectorData>((EffectorData_) => {
+                float baseStrength = EffectorData_.baseStrength;
                 switch (EffectorData_.Calling_template.Name) {
                     case "Ray":
                         RayData Ray_ = (RayData)EffectorData_;
-
-                        GameObject obj = GameObject.FindGameObjectWithTag("Player");
-                        MonoBehaviour mono = obj.GetComponent<MonoBehaviour>();
-                        mono.StartCoroutine(LerpObject(obj, Ray_.Data.point, 1f));
+                        if (Ray_.Data.collider.gameObject.TryGetComponent(out EntityManager otherEntity)) {
+                            float Strength = ComputeOutPutValue(Elements.Ice, otherEntity, baseStrength);
+                            otherEntity.TakeDamage(Strength);
+                        }
                         break;
 
+                    case "Arc":
+                        ArcData Arc_ = (ArcData)EffectorData_;
+
+
+                        break;
                     default:
-                        Debug.Log($"{EffectorData_.Calling_template.Name} is not yet defined for PullPlayer");
-                        break;
+                        Debug.Log($"{EffectorData_.Calling_template.Name} is not yet defined for Fire");
+                        break;                
                 }
             }),
-            Colors = ColourDict[Elements.Pull]
-    },
-};
+            Colors = ColourDict[Elements.Ice]
+        },
+        #endregion
+    };
 
     public static SpellEffector Find(string name) {
         return SpellEffects.Find((e) => { return e.Name == name; });

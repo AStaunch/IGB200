@@ -30,4 +30,8 @@ public class BlockScript : EntityManager
             }
         }
     }
+
+    private void Start() {
+        AddProperty(EnumsAndDictionaries.Properties.Indestructable);
+    }
 }

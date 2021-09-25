@@ -7,22 +7,24 @@ using static SpriteManager;
 
 public class PuzzleDoor : DoorBase, iRecieverObject
 {
-    public Dictionary<iRecieverObject, bool> Switches { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-    public bool isOpen { get => checkRecievedSignals(); }
+    public Dictionary<iSenderObjects, bool> Switches = new Dictionary<iSenderObjects, bool>();
+    public bool opened { set { isOpen = value; opened = value; } get { return opened; } }
 
     void Awake() {
 
     }
-    public bool checkRecievedSignals() {
+    public void checkRecievedSignals() {
         if (Switches.ContainsValue(false)) {
-            return false;
+            opened = false;
+            return;
         }
-        return true;
+        opened = true;
     }
 
     public override void UpdateSprite() {
         Sprite currentSprite;
-        if (isOpen) {
+        checkRecievedSignals();
+        if (opened) {
             currentSprite = SpriteDict["OpenDoor"][IntDict[exitDirection]];
         } else {
             currentSprite = SpriteDict["MetalDoor"][IntDict[exitDirection]];

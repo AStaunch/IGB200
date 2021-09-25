@@ -174,7 +174,7 @@ public class RayData : EffectorData
 {
     public SpellTemplate Calling_template { get; set; }
     public RaycastHit2D Data { get; set; }
-    public float baseStrength { get => 10f;}
+    public float baseStrength { get => 3f;}
 }
 
 public class ArcData : EffectorData
@@ -182,7 +182,15 @@ public class ArcData : EffectorData
     public SpellTemplate Calling_template { get; set; }
     public GameObject Data { get; set; }
 
-    public float baseStrength { get => 14f; }
+    public float baseStrength { get => 4f; }
+}
+
+public class ConeData : EffectorData
+{
+    public SpellTemplate Calling_template { get; set; }
+    public GameObject[] Data { get; set; }
+
+    public float baseStrength { get => 1.5f; }
 }
 
 public class GeneralData : EffectorData

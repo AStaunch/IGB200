@@ -13,29 +13,38 @@ using static SpriteManager;
 [ExecuteInEditMode]
 public class NormalDoor : DoorBase
 {
-    private DoorBase normalExitDoor;
     public bool isFireproof = false;
 
     // Start is called before the first frame update
-    void Awake() {
-        normalExitDoor = ExitDoor;
-    }
 
     private void Start() {
-        OnValidate();
         //Sets Initial Sprite
         UpdateSprite();
         //Initialises Door Timer
         delayTimer = Time.timeSinceLevelLoad;
+
+        GameObject CP = new GameObject(transform.name + " Checkpoint");
+        CP.transform.parent = this.transform;
+        CP.AddComponent<CheckPoint>();
+        CP.transform.position = transform.position - convert2to3(VectorDict[exitDirection]);
+        BoxCollider2D box = CP.AddComponent<BoxCollider2D>();
+        box.isTrigger = true;
+        box.size = new Vector2(0.5f, 0.5f);
+    }
+
+    Vector3 convert2to3(Vector2 v) {
+
+        return new Vector3(v.x, v.y, 0.0f);
     }
 
     public override void  EntityDeath() {
         SetDoorState(true);
+        OnValidate();
     }
 
     public void SetDoorState(bool state) {
         isOpen = state;
-        GetComponent<Collider2D>().isTrigger = state;
+        GetComponent<Collider2D>().isTrigger = isOpen;
     }
 
     public void SetDoorProperties() {
@@ -48,18 +57,18 @@ public class NormalDoor : DoorBase
     }
 
     public void SyncExitDoor() {
-        if (!ExitDoor)
+        if (!base.ExitDoor)
             return;
         if (isOpen) {
-            normalExitDoor.isOpen = isOpen;
-            normalExitDoor.GetComponent<Collider2D>().isTrigger = GetComponent<Collider2D>().isTrigger;
+            ExitDoor.isOpen = isOpen;
+            ExitDoor.GetComponent<Collider2D>().isTrigger = GetComponent<Collider2D>().isTrigger;
         }
         if(isFireproof){
-            NormalDoor normalDoor = (NormalDoor) normalExitDoor;
+            NormalDoor normalDoor = (NormalDoor) ExitDoor;
             normalDoor.isFireproof = isFireproof;
-            normalExitDoor.entityProperties = entityProperties;
+            ExitDoor.entityProperties = entityProperties;
         }
-        normalExitDoor.UpdateSprite();
+        ExitDoor.UpdateSprite();
     }
     public override void UpdateSprite() {
         try{
@@ -71,12 +80,12 @@ public class NormalDoor : DoorBase
             currentSprite = SpriteDict["MetalDoor"][IntDict[exitDirection]];
         } 
         else {
-            currentSprite = SpriteDict["WoodenDoor"][IntDict[exitDirection]];
+            currentSprite = SpriteDict["WoodDoor"][IntDict[exitDirection]];
         }
         GetComponent<SpriteRenderer>().sprite = currentSprite;
         }
         catch (System.Exception ex) {
-            Debug.LogWarning(ex.Message);
+            //Debug.LogWarning(ex.Message);
         }
     }
 

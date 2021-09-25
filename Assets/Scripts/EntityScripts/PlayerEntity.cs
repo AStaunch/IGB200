@@ -6,9 +6,6 @@ using static EnumsAndDictionaries;
 public class PlayerEntity : EntityManager
 {    
    public bool isCasting;
-    // Start is called before the first frame update
-
-
     // Update is called once per frame
     void Update()
     {
@@ -30,6 +27,11 @@ public class PlayerEntity : EntityManager
         if (Input.GetKeyDown(KeyCode.Space)){
             CastSpell();
         }
+
+
+        if (Input.GetKeyDown(KeyCode.R)) {
+            transform.position = lastCheckpoint.transform.position;
+        }
     }
 
     public void CastSpell() {
@@ -39,10 +41,12 @@ public class PlayerEntity : EntityManager
     }
 
     public override void EntityDeath() {
+        anim.SetBool("isDead", true);
         UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
     }
 
-    List<Rigidbody2D> collidedObjects = new List<Rigidbody2D>();
+    GameObject lastCheckpoint;
+        List<Rigidbody2D> collidedObjects = new List<Rigidbody2D>();
     private void OnCollisionEnter2D(Collision2D collision) {
         bool b1 = collision.transform.TryGetComponent(out EntityManager _); 
         bool b2 = collision.transform.TryGetComponent(out Rigidbody2D rb);
@@ -52,6 +56,14 @@ public class PlayerEntity : EntityManager
             rb.useFullKinematicContacts = true;
             rb.velocity = Vector2.zero;
         }
+
+        
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision) {
+        if (collision.TryGetComponent(out CheckPoint cp)) {
+            lastCheckpoint = cp.gameObject;
+        }
     }
 
     private void OnCollisionExit2D(Collision2D collision) {
@@ -60,7 +72,6 @@ public class PlayerEntity : EntityManager
                 collidedObjects.Remove(rb);
                 rb.isKinematic = false;
             }
-        }
-        
+        }        
     }
 }

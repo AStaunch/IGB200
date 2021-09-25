@@ -47,6 +47,7 @@ class Register : MonoBehaviour
                 {
                     //Passes Hit data to the Effector
                     RayData ryd = new RayData() { Data = hit, Calling_template = SpellRegistrySing.Instance.Registry.QueryRegistry("Ray") };
+                    Debug.Log("Hit: " + hit.transform.name);
                     effector.Effector.Invoke(ryd);
 
                 }
