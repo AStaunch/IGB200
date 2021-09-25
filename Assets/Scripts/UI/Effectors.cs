@@ -24,9 +24,6 @@ public static class Effectors
                 switch (EffectorData_.Calling_template.Name) {
                     case "Ray":
                         RayData Ray_ = (RayData)EffectorData_;
-                        /*Fire Properties
-                         * Damage to enemies is based on their properties. this code could be recycled for other pieces, changing base damage among other things.
-                         * */
                         if (Ray_.Data.collider.gameObject.TryGetComponent(out EntityManager otherEntity)) {
                             float Strength = ComputeOutPutValue(Elements.Fire, otherEntity, baseStrength);
                             otherEntity.TakeDamage(Strength);
@@ -47,7 +44,7 @@ public static class Effectors
             Colors = ColourDict[Elements.Fire]
         },
         #endregion
-#region Pull
+        #region Pull
         new SpellEffector() {
             Name = "Pull",
             Effector = new Action<EffectorData>((EffectorData_) => {
@@ -57,7 +54,6 @@ public static class Effectors
                         RayData Ray_ = (RayData)EffectorData_;
                         GameObject obj = Ray_.Data.collider.gameObject;
                         Vector2 direction = GameObject.FindGameObjectWithTag("Player").transform.GetComponent<EntityManager>().GetEntityDirection();
-
                         if (Ray_.Data.collider.gameObject.TryGetComponent(out EntityManager otherEntity)) {
                             float Strength = ComputeOutPutValue(Elements.Pull, otherEntity, baseStrength);
                             ForceObject(obj, direction, -Strength);
@@ -84,9 +80,7 @@ public static class Effectors
                     case "Ray":
                         RayData Ray_ = (RayData)EffectorData_;
                         GameObject obj = GameObject.FindGameObjectWithTag("Player");
-                        MonoBehaviour mono = obj.GetComponent<MonoBehaviour>();
-
-                        mono.StartCoroutine(LerpObject(obj, Ray_.Data.point, 1f));
+                        obj.GetComponent<MonoBehaviour>().StartCoroutine(LerpObject(obj, Ray_.Data.point, 1f));
                         break;
 
                     default:
@@ -129,9 +123,11 @@ public static class Effectors
                 switch (EffectorData_.Calling_template.Name) {
                     case "Ray":
                         GameObject obj = GameObject.FindGameObjectWithTag("Player");
-                        Vector2 direction = obj.transform.GetComponent<EntityManager>().GetEntityDirection();
-                        baseStrength *= obj.transform.GetComponent<EntityManager>().Deceleration;
-                        ForceObject(obj, direction, -baseStrength * 2);
+                        EntityManager em =  obj.transform.GetComponent<EntityManager>();
+                        Vector2 direction = em.GetEntityDirection();
+                        float Strength = baseStrength * em.Deceleration  * 2;
+                        Strength = ComputeOutPutValue(Elements.Push, em, Strength);
+                        ForceObject(obj, direction, -Strength);
                         break;
 
                     default:
@@ -146,34 +142,23 @@ public static class Effectors
         new SpellEffector() {
             Name = "Ice",
             Effector = new Action<EffectorData>((EffectorData_) => {
-                float baseStrength = EffectorData_.baseStrength;
                 switch (EffectorData_.Calling_template.Name) {
                     case "Ray":
                         RayData Ray_ = (RayData)EffectorData_;
-                        /*Fire Properties
-                         * Damage to enemies is based on their properties. this code could be recycled for other pieces, changing base damage among other things.
-                         * */
-                        if (Ray_.Data.collider.gameObject.TryGetComponent(out EntityManager otherEntity)) {
-                            float Strength = ComputeOutPutValue(Elements.Ice, otherEntity, baseStrength);
-                            otherEntity.TakeDamage(Strength);
-                        }
+
+                        GameObject obj = GameObject.FindGameObjectWithTag("Player");
+                        MonoBehaviour mono = obj.GetComponent<MonoBehaviour>();
+                        mono.StartCoroutine(LerpObject(obj, Ray_.Data.point, 1f));
                         break;
 
-                    case "Arc":
-                        ArcData Arc_ = (ArcData)EffectorData_;
-
-
-                        break;
                     default:
-                        Debug.Log($"{EffectorData_.Calling_template.Name} is not yet defined for Fire");
+                        Debug.Log($"{EffectorData_.Calling_template.Name} is not yet defined for PullPlayer");
                         break;
-
                 }
             }),
-            Colors = ColourDict[Elements.Ice]
-        },
-#endregion
-    };
+            Colors = ColourDict[Elements.Pull]
+    },
+};
 
     public static SpellEffector Find(string name) {
         return SpellEffects.Find((e) => { return e.Name == name; });

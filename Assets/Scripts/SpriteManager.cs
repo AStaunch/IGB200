@@ -30,14 +30,17 @@ public class SpriteManager : MonoBehaviour
     private void StoreVariables() {
         SpriteDict = new Dictionary<string, Sprite[]>();
         foreach (SpriteCollection4Way collection in DirectionalSpriteCollections) {
-            SpriteDict.Add(collection.name, collection.Sprites);
+            if (!SpriteDict.ContainsKey(collection.name)){
+                SpriteDict.Add(collection.name, collection.Sprites);
+            }
         }
         foreach (SpriteCollection collection in SpriteCollections) {
-            SpriteDict.Add(collection.name, collection.Sprites);
+            if (!SpriteDict.ContainsKey(collection.name)) {
+                SpriteDict.Add(collection.name, collection.Sprites);
+            }
         }
     }
 }
-
 [System.Serializable]
 public struct SpriteCollection4Way
 {

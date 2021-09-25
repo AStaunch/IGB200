@@ -28,6 +28,7 @@ public static class SpellFunctionLibrary
         {Elements.Earth, new float[]        {5f, .5f} },
     };
 
+    
     public static float ComputeOutPutValue(Elements element, EntityManager otherEntity, float inputValue) {
 
         if (otherEntity.entityProperties.Contains(ElementPropertyPairs[element][0])) {
@@ -42,7 +43,7 @@ public static class SpellFunctionLibrary
     }
 
     public static void ForceObject(GameObject obj, Vector2 direction, float baseStrength) {
-        float commonFactor = 0.25f;        
+        float commonFactor = 0.25f;      
         if (obj.TryGetComponent(out EntityManager em)) {
             baseStrength = ComputeOutPutValue(Elements.Push, em, baseStrength);
             float force = baseStrength * commonFactor;
@@ -62,7 +63,6 @@ public static class SpellFunctionLibrary
         } else {
             yield return null;
         }
-        
     }
 
     public static IEnumerator LerpObject(GameObject gameObject, Vector2 targetPosition, float duration) {
