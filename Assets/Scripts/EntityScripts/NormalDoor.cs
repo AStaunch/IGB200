@@ -30,6 +30,7 @@ public class NormalDoor : DoorBase
         BoxCollider2D box = CP.AddComponent<BoxCollider2D>();
         box.isTrigger = true;
         box.size = new Vector2(0.5f, 0.5f);
+        CP.layer = 2;
     }
 
     Vector3 convert2to3(Vector2 v) {
