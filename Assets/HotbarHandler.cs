@@ -7,7 +7,6 @@ using static SpellRenderer;
 public class HotbarHandler : MonoBehaviour
 {
     public GameObject Crafting_Menu;
-    public Shader PalleteShader;
     public bool Crafting_Menu_Active { get { return Crafting_Menu.activeSelf; } set { Crafting_Menu.SetActive(value); } }
 
     public Image[] Slots = new Image[5];
@@ -21,6 +20,10 @@ public class HotbarHandler : MonoBehaviour
             template.RunFunction(effector);
         }
     }
+
+    public Shader PalleteShader;
+
+
 
     private void Awake()
     {

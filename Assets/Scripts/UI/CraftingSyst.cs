@@ -14,6 +14,8 @@ public class CraftingSyst : MonoBehaviour
     public Image UI_TemplateDisplay;
     public Image UI_EffectorDisplay;
 
+    public Text Hotbar_msg;
+
 
     private SpellEffector effect;
     private SpellTemplate template;
@@ -79,6 +81,7 @@ public class CraftingSyst : MonoBehaviour
     {
         Debug.Log("Select Hotbar slot to place spell");
         bool KeyChosen = false;
+        Hotbar_msg.gameObject.SetActive(true);
         while (!KeyChosen)
         {
             if (Input.GetKeyDown(KeyCode.Alpha1))
@@ -129,6 +132,7 @@ public class CraftingSyst : MonoBehaviour
             yield return null;
         }
         StopCoroutine("BuildSet");
+        Hotbar_msg.gameObject.SetActive(false);
         yield return null;
     }
 }
