@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 4293402273768885058}
   - component: {fileID: 2504601520329332686}
   - component: {fileID: 3827091835647209982}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -184,6 +184,6 @@ MonoBehaviour:
   entityProperties: 
   entityType: 0
   health: 0
-  maxHealth: 5
+  maxHealth: 2
   entitySpeed: 1
   Deceleration: 5

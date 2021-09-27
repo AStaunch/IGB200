@@ -8,9 +8,6 @@ using static EnumsAndDictionaries;
 
 using static SpriteManager;
 
-
-
-[ExecuteInEditMode]
 public class NormalDoor : DoorBase
 {
     public bool isFireproof = false;
@@ -23,10 +20,17 @@ public class NormalDoor : DoorBase
         //Initialises Door Timer
         delayTimer = Time.timeSinceLevelLoad;
 
+        //Delete Any other checkpoints
+        if(transform.childCount > 0) {
+            for(int i = 0; i < transform.childCount; i++) {
+                Destroy(transform.GetChild(i).gameObject);
+            }
+        }
+        //Add Checkpoint
         GameObject CP = new GameObject(transform.name + " Checkpoint");
+        CP.transform.position = transform.position - convert2to3(VectorDict[exitDirection]);
         CP.transform.parent = this.transform;
         CP.AddComponent<CheckPoint>();
-        CP.transform.position = transform.position - convert2to3(VectorDict[exitDirection]);
         BoxCollider2D box = CP.AddComponent<BoxCollider2D>();
         box.isTrigger = true;
         box.size = new Vector2(0.5f, 0.5f);

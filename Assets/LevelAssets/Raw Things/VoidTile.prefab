@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 522146841929071014}
   - component: {fileID: -8466864604603916058}
   - component: {fileID: 7987619568332457033}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: VoidTile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
