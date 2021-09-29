@@ -56,12 +56,18 @@ public class HotbarHandler : MonoBehaviour
                 if (Hotbar[activeslot] != null && CastTime <= Time.timeSinceLevelLoad)
                 {
                     Hotbar[activeslot].run();
-                    CastTime = 1;
+                    CastTime = Hotbar[activeslot].template.CastDelay;
                 }
             }
         }
         
         if (Input.GetKeyDown(KeyCode.E))
+        {
+            Crafting_Menu_Active = !Crafting_Menu_Active;
+            Time.timeScale = Crafting_Menu_Active ? 0 : 1;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape) && Crafting_Menu_Active)
         {
             Crafting_Menu_Active = !Crafting_Menu_Active;
             Time.timeScale = Crafting_Menu_Active ? 0 : 1;

@@ -30,12 +30,14 @@ public class SpellTemplate
     public Sprite icon;
     public string Name;
     public long CastingId;
+    public float CastDelay;
 
-    public SpellTemplate(string Name, Sprite sprite, Action<SpellEffector> onRun)
+    public SpellTemplate(string Name, Sprite sprite, Action<SpellEffector> onRun, float Delay)
     {
         this.Name = Name;
         RunFunction = onRun;
         icon = sprite;
+        CastDelay = Delay;
     }
 }
 
