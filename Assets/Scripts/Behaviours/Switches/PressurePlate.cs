@@ -6,7 +6,7 @@ public class PressurePlate : MonoBehaviour, iSenderObject
 {
     public bool PressOnce = true;
     public Sprite[] sprites;
-    public bool currentState;
+    private bool currentState;
     public bool currentState_ {
         get {
             return currentState;

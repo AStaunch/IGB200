@@ -14,8 +14,9 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
     public int MaxHealth;
     public abstract Elements[] DamageImmunities_ { get; set; }
 
-    public Properties[] EntityProperties;
+
     public Properties[] EntityProperties_ { get => EntityProperties; set => EntityProperties = value; }
+    public Properties[] EntityProperties;
     public EntityTypes EntityType_ { get => EntityType; set => EntityType = value; }
     private EntityTypes EntityType = EntityTypes.Creature;
     public float EntitySpeed_ { get => EntitySpeed; set => EntitySpeed = value; }
@@ -26,10 +27,8 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
 
 
     public Rigidbody2D RB_ { get => GetComponent<Rigidbody2D>();}
-    public float Deceleration_ { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-
-
-
+    public float Deceleration;
+    public float Deceleration_ { get => Deceleration; set => Deceleration = value; }
 
 
     public abstract void Decelerate();

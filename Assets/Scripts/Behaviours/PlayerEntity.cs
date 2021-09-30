@@ -7,6 +7,10 @@ public class PlayerEntity : AbstractCreature
 {    
    public bool isCasting;
     // Update is called once per frame
+
+    private void Start() {
+        
+    }
     void Update()
     {
         Vector3 change = Vector3.zero;
@@ -20,7 +24,6 @@ public class PlayerEntity : AbstractCreature
             UpdateDirection(change);
             UpdateAnimation(RB_.velocity);
         } else {
-
             UpdateAnimation(RB_.velocity);
         }
 
@@ -31,6 +34,11 @@ public class PlayerEntity : AbstractCreature
 
         if (Input.GetKeyDown(KeyCode.R)) {
             transform.position = lastCheckpoint.transform.position;
+        }
+    }
+    private void FixedUpdate() {
+        if(RB_.velocity != Vector2.zero) {
+            Decelerate();
         }
     }
 
@@ -46,11 +54,17 @@ public class PlayerEntity : AbstractCreature
     }
 
     public override void UpdateAnimation(Vector3 change) {
-        throw new System.NotImplementedException();
+        if (change != Vector3.zero) {
+            Anim_.SetFloat("moveX", change.x);
+            Anim_.SetFloat("moveY", change.y);
+            Anim_.SetBool("moving", true);
+        } else {
+            Anim_.SetBool("moving", false);
+        }
     }
 
     public override void UpdateVelocity(float magnitude, Vector3 direction) {
-        throw new System.NotImplementedException();
+            RB_.velocity = magnitude * direction;
     }
     public override void Decelerate() {
         throw new System.NotImplementedException();
@@ -60,8 +74,8 @@ public class PlayerEntity : AbstractCreature
     //Hacky Checkpoint Management
     GameObject lastCheckpoint;
     List<Rigidbody2D> collidedObjects = new List<Rigidbody2D>();
-
-    public override Elements[] DamageImmunities_ { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+    public override Elements[] DamageImmunities_ { get => DamageImmunities; set => DamageImmunities = value; }
+    private Elements[] DamageImmunities;
 
     private void OnCollisionEnter2D(Collision2D collision) {
         bool b1 = collision.transform.TryGetComponent(out iPropertyInterface _); 
