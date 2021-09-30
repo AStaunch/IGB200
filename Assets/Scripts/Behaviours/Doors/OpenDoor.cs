@@ -16,6 +16,6 @@ public class OpenDoor : AbstractDoor
         IsOpen = true;
         UpdateSprite();
         SetDoorProperties();
-        initExitDoor();
+        InitExitDoor();
     }
 }

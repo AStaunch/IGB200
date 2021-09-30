@@ -28,7 +28,7 @@ public class SpellRenderer : MonoBehaviour
     public Sprite[] rayPieces;
     GameObject spellMaster;
 
-    public void drawRaySprite(Transform origin, RaycastHit2D other, Color[] colors) {
+    public void DrawRaySprite(Transform origin, RaycastHit2D other, Color[] colors) {
         GameObject start = null;
         GameObject middle = null;
         GameObject end = null;
@@ -41,12 +41,12 @@ public class SpellRenderer : MonoBehaviour
         offset = Vector3.Scale(origin.GetComponent<SpriteRenderer>().bounds.size, DirectionVect) * 0.5f;
 
         //Set Sprite Colours
-        Material material = createMaterial(colors);
+        Material material = CreateMaterial(colors);
 
         // Create the laser start from the prefab
         Vector3 startOffset = 0.5f * origin.GetComponent<SpriteRenderer>().bounds.size * DirectionVect;
         if (start == null) {
-            start = createObject(rayPieces[0], material);  
+            start = CreateObject(rayPieces[0], material);  
             start.transform.position += startOffset;
             start.transform.Rotate(Vector3.forward * rotationAmount);
             start.GetComponent<SpriteRenderer>().sortingOrder = origin.GetComponent<SpriteRenderer>().sortingOrder;
@@ -54,7 +54,7 @@ public class SpellRenderer : MonoBehaviour
 
         // Laser middle
         if (middle == null) {
-            middle = createObject(rayPieces[1], material);
+            middle = CreateObject(rayPieces[1], material);
             middle.transform.Rotate(Vector3.forward * rotationAmount);
             middle.GetComponent<SpriteRenderer>().sortingOrder = start.GetComponent<SpriteRenderer>().sortingOrder - 1;
         }
@@ -72,7 +72,7 @@ public class SpellRenderer : MonoBehaviour
 
             // -- Create the end sprite
             if (end == null) {
-                end = createObject(rayPieces[2], material);
+                end = CreateObject(rayPieces[2], material);
                 end.transform.Rotate(Vector3.forward * rotationAmount);
                 end.GetComponent<SpriteRenderer>().sortingOrder = start.GetComponent<SpriteRenderer>().sortingOrder - 2;
             }
@@ -86,11 +86,13 @@ public class SpellRenderer : MonoBehaviour
         // -- Gather some data
         Renderer renderer1 = start.GetComponent<Renderer>();
         float startSpriteWidth = renderer1.bounds.size.x;
-        float endSpriteWidth;
-        if (end != null) endSpriteWidth = end.GetComponent<Renderer>().bounds.size.x;
+        float endSpriteWidth = 0;
+        if (end != null) {
+            endSpriteWidth = end.GetComponent<Renderer>().bounds.size.x; 
+        }
 
         // -- the middle is after start and, as it has a center pivot, have a size of half the laser (minus start and end)
-        middle.transform.localScale = new Vector3(middle.transform.localScale.x, (currentLaserSize - startSpriteWidth), middle.transform.localScale.z);
+        middle.transform.localScale = new Vector3(middle.transform.localScale.x, (currentLaserSize - (endSpriteWidth + startSpriteWidth)), middle.transform.localScale.z);
         middle.transform.localPosition = DirectionVect * (currentLaserSize / 2f);
         middle.transform.localPosition += 0.5f * startOffset;
 
@@ -108,8 +110,8 @@ public class SpellRenderer : MonoBehaviour
     public AnimationCurve arcCurve;
     #region Arc Drawer
     public GameObject CreateArcBall(Transform origin, Color[] colors) {
-        Material material = createMaterial(colors);
-        GameObject arcBall = createObject(rayPieces[0], material);
+        Material material = CreateMaterial(colors);
+        GameObject arcBall = CreateObject(rayPieces[0], material);
         Directions direction = origin.GetComponent<iCreatureInterface>().GetEntityDirectionEnum();
         
         arcBall.AddComponent<ArcBehaviour>().StartArc(direction);
@@ -123,22 +125,10 @@ public class SpellRenderer : MonoBehaviour
     #endregion
 
     #region Cone Drawer
-    public void drawConeSprite(Transform origin, RaycastHit2D[] points, Color[] colors) {
-        int noRays = 10;
-        float coneAngle = 60f;
-        float maxDistance = 5f;
-        Vector2 direction = maxDistance * origin.GetComponent<iCreatureInterface>().GetEntityDirection();
-
-        RaycastHit2D[] rays = new RaycastHit2D[noRays];
-        Vector3[] positions = new Vector3[noRays + 1];
-        
-        for (int i = 0; i < rays.Length; i++) {
-            float angle = coneAngle * (i/noRays);
-            Vector2 direction2 = maxDistance * new Vector2(Mathf.Sin(angle), Mathf.Cos(angle));
-            rays[i] = Physics2D.Raycast(origin.position, direction, maxDistance);
-            positions[i] = rays[i].point;
-        }
+    public void DrawConeSprite(Transform origin, RaycastHit2D[] points, Color[] colors) {
+        throw new NotImplementedException();
     }
+
     #endregion
 
     #region Shield Drawer
@@ -150,7 +140,7 @@ public class SpellRenderer : MonoBehaviour
     #endregion
 
     #region Recycled Code
-    private GameObject createObject(Sprite sprite, Material material) {
+    private GameObject CreateObject(Sprite sprite, Material material) {
         GameObject obj = new GameObject();
         obj.AddComponent<SpriteRenderer>().sprite = sprite;
         obj.GetComponent<SpriteRenderer>().sortingLayerName = "VFX";
@@ -160,11 +150,11 @@ public class SpellRenderer : MonoBehaviour
         return obj;
     }
 
-    private Material createMaterial(Color[] colors) {
-        return createMaterial(colors, shader);
+    private Material CreateMaterial(Color[] colors) {
+        return CreateMaterial(colors, shader);
     }
 
-    public static Material createMaterial(Color[] colors, Shader shader) {
+    public static Material CreateMaterial(Color[] colors, Shader shader) {
         Material material = new Material(shader);
         material.SetColor("_PrimaryColour", colors[0]);
         material.SetColor("_SecondaryColour", colors[1]);

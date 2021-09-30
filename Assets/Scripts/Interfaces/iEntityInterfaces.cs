@@ -5,7 +5,7 @@ using static EnumsAndDictionaries;
 
 public interface iPropertyInterface {    
     public Properties[] EntityProperties_ { get; set; }
-    public EntityTypes EntityType_ { get; set; }
+    public EntityTypes EntityType_ { get;}
 }
 public interface iHealthInterface : iPropertyInterface {
     public int Health_ { get; set; }

@@ -20,7 +20,8 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
     public EntityTypes EntityType_ { get => EntityType; set => EntityType = value; }
     private EntityTypes EntityType = EntityTypes.Creature;
     public float EntitySpeed_ { get => EntitySpeed; set => EntitySpeed = value; }
-    public float EntitySpeed;
+    [SerializeField]
+    private float EntitySpeed;
     public Animator Anim_ { get => GetComponent<Animator>();}
     public Directions CurrentDirection_ { get => CurrentDirection; set => CurrentDirection = value; }
     private Directions CurrentDirection;

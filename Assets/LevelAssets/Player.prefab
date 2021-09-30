@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 648354610095155818}
   - component: {fileID: 2864884778628645812}
   - component: {fileID: 2038885006380377406}
-  m_Layer: 2
+  m_Layer: 7
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -101,11 +101,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f37fe37fd3d37a24691a41fef0985b55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  entityProperties: 
-  entityType: 0
-  health: 10
-  maxHealth: 3
-  entitySpeed: 1
+  MaxHealth: 0
+  EntityProperties: 
+  EntitySpeed: 0
   Deceleration: 5
   isCasting: 0
 --- !u!50 &3497795528780355780

@@ -8,7 +8,7 @@ using static EnumsAndDictionaries;
 
 public class TestSpell : MonoBehaviour
 {
-    SpellEffector Fire = new SpellEffector() {
+    readonly SpellEffector Fire = new SpellEffector() {
         Name = "Test",
         Effector = new Action<EffectorData>((EffectorData_) => {
             RayData Ray_ = (RayData)EffectorData_;

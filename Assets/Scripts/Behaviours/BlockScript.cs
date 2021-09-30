@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static EnumsAndDictionaries;
 
 public class BlockScript : MonoBehaviour, iPhysicsInterface
 {
@@ -8,10 +9,9 @@ public class BlockScript : MonoBehaviour, iPhysicsInterface
     public float Deceleration;
     public float VelocityOfOnePush;
     public float Deceleration_ { get => Deceleration; set => Deceleration = value; }
-    private Rigidbody2D RB;
-    public Rigidbody2D RB_ { get => RB; set => RB = value; }
-    public EnumsAndDictionaries.Properties[] EntityProperties_ { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-    public EnumsAndDictionaries.EntityTypes EntityType_ { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+    public Rigidbody2D RB_ { get => GetComponent<Rigidbody2D>(); }
+    public Properties[] EntityProperties_ { get => new Properties[] { }; set => _ = value; }
+    public EntityTypes EntityType_ { get => throw new System.NotImplementedException();}
 
     public void Decelerate() {
         if (RB_.velocity == Vector2.zero) {

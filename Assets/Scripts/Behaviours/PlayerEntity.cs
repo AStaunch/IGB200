@@ -9,17 +9,18 @@ public class PlayerEntity : AbstractCreature
     // Update is called once per frame
 
     private void Start() {
-        
+        EntitySpeed_ = 5;
+        gameObject.layer = 7;
     }
+    private Vector3 change;
     void Update()
     {
-        Vector3 change = Vector3.zero;
+        change = Vector3.zero;
         change.x = Input.GetAxisRaw("Horizontal");
         change.y = Input.GetAxisRaw("Vertical");
         if (change != Vector3.zero) {
-            change = EntitySpeed_ * change.normalized;
             if(VectorToDirection(change) == GetEntityDirectionEnum()) {
-                UpdateVelocity(change.magnitude, change.normalized);
+                UpdateVelocity(EntitySpeed_, change.normalized);
             }
             UpdateDirection(change);
             UpdateAnimation(RB_.velocity);
@@ -37,7 +38,7 @@ public class PlayerEntity : AbstractCreature
         }
     }
     private void FixedUpdate() {
-        if(RB_.velocity != Vector2.zero) {
+        if(RB_.velocity != Vector2.zero && change == Vector3.zero && gameObject.layer == 7) {
             Decelerate();
         }
     }
@@ -67,7 +68,7 @@ public class PlayerEntity : AbstractCreature
             RB_.velocity = magnitude * direction;
     }
     public override void Decelerate() {
-        throw new System.NotImplementedException();
+        RB_.velocity *= 0.1f;
     }
 
 

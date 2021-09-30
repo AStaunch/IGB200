@@ -32,6 +32,6 @@ public class ProcedureDoor : AbstractLockedDoor
         isInvulnerable = true;
         UpdateSprite();
         SetDoorProperties();
-        initExitDoor();
+        InitExitDoor();
     }
 }

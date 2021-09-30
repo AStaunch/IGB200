@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 6461833659243923373}
   - component: {fileID: 2538750432066807455}
   - component: {fileID: 8238265604039801799}
-  - component: {fileID: 884998321525078089}
+  - component: {fileID: 4660940039665028970}
   m_Layer: 0
   m_Name: Skeleton
   m_TagString: Untagged
@@ -210,7 +210,7 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: -0.68}
   m_Size: {x: 0.8, y: 0.6}
   m_Direction: 0
---- !u!114 &884998321525078089
+--- !u!114 &4660940039665028970
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -219,12 +219,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 6461833659243923372}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd5c5bb3537bd354db9c5bd4a3dfc6a9, type: 3}
+  m_Script: {fileID: 11500000, guid: b5d253a2642842f459f94fbb2a4a5360, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  entityProperties: 09000000
-  entityType: 0
-  health: 0
-  maxHealth: 5
-  entitySpeed: 1
-  Deceleration: 5
+  MaxHealth: 3
+  EntityProperties: 
+  EntitySpeed: 0.5
+  Deceleration: 1
+  DamageImmunities: 07000000
+  EntityDamage: 1

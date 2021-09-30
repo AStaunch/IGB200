@@ -34,7 +34,7 @@ public class SwitchObject : MonoBehaviour, iSenderObject, iHealthInterface
         EntityProperties_ = new Properties[] { Properties.Immovable };
         currentState_ = false;
         shader = FindObjectOfType<SpellRenderer>().shader;
-        materials = new Material[] { createMaterial(ColourDict[Elements.NULL], shader), createMaterial(ColourDict[element], shader) };
+        materials = new Material[] { CreateMaterial(ColourDict[Elements.NULL], shader), CreateMaterial(ColourDict[element], shader) };
         UpdateSprite();    
     }
     private void UpdateSprite() {
@@ -79,7 +79,7 @@ public class SwitchObject : MonoBehaviour, iSenderObject, iHealthInterface
 
     private void OnValidate() {
         shader = FindObjectOfType<SpellRenderer>().shader;
-        materials = new Material[] { createMaterial(ColourDict[Elements.NULL], shader), createMaterial(ColourDict[element], shader) };
+        materials = new Material[] { CreateMaterial(ColourDict[Elements.NULL], shader), CreateMaterial(ColourDict[element], shader) };
         UpdateSprite();
     }
 }

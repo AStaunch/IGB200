@@ -45,7 +45,7 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
 
         }
     }
-    public void initExitDoor() {
+    public void InitExitDoor() {
         if (!ExitDoor)
             return;
         if (IsOpen) {
@@ -58,7 +58,7 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
         ExitDoor.UpdateSprite();
     }
 
-    public void syncExitDoor() {
+    public void SyncExitDoor() {
         if (!ExitDoor)
             return;
         ExitDoor.IsOpen = IsOpen;
@@ -71,7 +71,7 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
         IsOpen = newState;
         GetComponent<Collider2D>().isTrigger = newState;
         UpdateSprite();
-        syncExitDoor();
+        SyncExitDoor();
     }
 
     public void SetDoorProperties() {

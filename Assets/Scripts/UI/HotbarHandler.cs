@@ -86,7 +86,7 @@ public class HotbarHandler : MonoBehaviour
             {
                 Slots[i].color = new Color32(255, 255, 255, 255);
                 Slots[i].sprite = Hotbar[i].template.icon;
-                Slots[i].material = createMaterial(Hotbar[i].effector.Colors, PalleteShader);
+                Slots[i].material = CreateMaterial(Hotbar[i].effector.Colors, PalleteShader);
             }
         }
     }

@@ -31,6 +31,6 @@ public class SwitchDoor : AbstractLockedDoor
         isInvulnerable = true;
         UpdateSprite();
         SetDoorProperties();
-        initExitDoor();
+        InitExitDoor();
     }
 }

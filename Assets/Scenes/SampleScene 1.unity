@@ -7882,7 +7882,7 @@ PrefabInstance:
     - target: {fileID: 1868838532075417885, guid: 248bf7a06f7b0e14285af032933f80d5, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 1767371873970925592, guid: 041f1d5810e41bd49afd55ac1899cddf, type: 3}
+      objectReference: {fileID: -6941524184028459231, guid: 041f1d5810e41bd49afd55ac1899cddf, type: 3}
     - target: {fileID: 1868838532075417885, guid: 248bf7a06f7b0e14285af032933f80d5, type: 3}
       propertyPath: m_SortingLayer
       value: 2
@@ -7933,6 +7933,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7524599666175078581, guid: 248bf7a06f7b0e14285af032933f80d5, type: 3}
       propertyPath: entityProperties.Array.data[2]
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7677578251655430952, guid: 248bf7a06f7b0e14285af032933f80d5, type: 3}
+      propertyPath: ExitDoor
+      value: 
+      objectReference: {fileID: 626067229428520034}
+    - target: {fileID: 7677578251655430952, guid: 248bf7a06f7b0e14285af032933f80d5, type: 3}
+      propertyPath: exitDirection
       value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -12896,6 +12904,48 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2251036742175158139, guid: f25cce759d134064aaa60f8028081316, type: 3}
   m_PrefabInstance: {fileID: 1076083427}
   m_PrefabAsset: {fileID: 0}
+--- !u!21 &663612517
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Shader Graphs/PaletteSwapping
+  m_Shader: {fileID: -6465566751694194690, guid: 97840132b5feb054a8b527b4001e4547, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 08719681da426644b91edfd89609a11f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats: []
+    m_Colors:
+    - _AccentColour1: {r: 1, g: 0.38431373, b: 0, a: 1}
+    - _AccentColour2: {r: 0.96862745, g: 0.68235296, b: 0.1764706, a: 1}
+    - _PrimaryColour: {r: 0.5411765, g: 0.12156863, b: 0.07450981, a: 1}
+    - _SecondaryColour: {r: 0.91764706, g: 0.07450981, b: 0.003921569, a: 1}
+  m_BuildTextureStacks: []
 --- !u!1001 &664151730
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17050,7 +17100,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 1330549985}
+  - {fileID: 663612517}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -41059,48 +41109,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f25cce759d134064aaa60f8028081316, type: 3}
---- !u!21 &1330549985
-Material:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Shader Graphs/PaletteSwapping
-  m_Shader: {fileID: -6465566751694194690, guid: 97840132b5feb054a8b527b4001e4547, type: 3}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 08719681da426644b91edfd89609a11f, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - unity_Lightmaps:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - unity_LightmapsInd:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - unity_ShadowMasks:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Floats: []
-    m_Colors:
-    - _AccentColour1: {r: 1, g: 0.38431373, b: 0, a: 1}
-    - _AccentColour2: {r: 0.96862745, g: 0.68235296, b: 0.1764706, a: 1}
-    - _PrimaryColour: {r: 0.5411765, g: 0.12156863, b: 0.07450981, a: 1}
-    - _SecondaryColour: {r: 0.91764706, g: 0.07450981, b: 0.003921569, a: 1}
-  m_BuildTextureStacks: []
 --- !u!4 &1333075903 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2251036742175158139, guid: f25cce759d134064aaa60f8028081316, type: 3}
@@ -42917,7 +42925,7 @@ PrefabInstance:
     - target: {fileID: 1868838532075417885, guid: 248bf7a06f7b0e14285af032933f80d5, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 1767371873970925592, guid: 041f1d5810e41bd49afd55ac1899cddf, type: 3}
+      objectReference: {fileID: -2962531703935522114, guid: 041f1d5810e41bd49afd55ac1899cddf, type: 3}
     - target: {fileID: 1868838532075417885, guid: 248bf7a06f7b0e14285af032933f80d5, type: 3}
       propertyPath: m_SortingLayer
       value: 2
@@ -42973,6 +42981,10 @@ PrefabInstance:
     - target: {fileID: 7524599666175078581, guid: 248bf7a06f7b0e14285af032933f80d5, type: 3}
       propertyPath: entityProperties.Array.data[2]
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7677578251655430952, guid: 248bf7a06f7b0e14285af032933f80d5, type: 3}
+      propertyPath: exitDirection
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 248bf7a06f7b0e14285af032933f80d5, type: 3}
@@ -65743,6 +65755,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4350661799604629201, guid: 87d5b351e4fa945409c4afacdf8fac59, type: 3}
   m_PrefabInstance: {fileID: 3805712147561986736}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &626067229428520034 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 23421868136802426, guid: 87d5b351e4fa945409c4afacdf8fac59, type: 3}
+  m_PrefabInstance: {fileID: 3805712147561986736}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 626067229428520033}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e75408f69999514d9961e27a16f3086, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!61 &754890589756311153
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -65959,6 +65982,7 @@ MonoBehaviour:
   MaxHealth: 0
   EntityProperties: 
   EntitySpeed: 0
+  Deceleration: 0
   DamageImmunities: 
   EntityDamage: 0
 --- !u!1001 &3497795528431001405
@@ -65985,6 +66009,10 @@ PrefabInstance:
       value: 1771340957
       objectReference: {fileID: 0}
     - target: {fileID: 3497795528780355777, guid: 3c4dfc9bdcfea024881407ef0cb68d04, type: 3}
+      propertyPath: MaxHealth
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3497795528780355777, guid: 3c4dfc9bdcfea024881407ef0cb68d04, type: 3}
       propertyPath: maxHealth
       value: 3
       objectReference: {fileID: 0}
@@ -66006,11 +66034,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3497795528780355779, guid: 3c4dfc9bdcfea024881407ef0cb68d04, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -35.7
+      value: -17.15
       objectReference: {fileID: 0}
     - target: {fileID: 3497795528780355779, guid: 3c4dfc9bdcfea024881407ef0cb68d04, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 33.7
+      value: 3.95
       objectReference: {fileID: 0}
     - target: {fileID: 3497795528780355779, guid: 3c4dfc9bdcfea024881407ef0cb68d04, type: 3}
       propertyPath: m_LocalPosition.z
@@ -66378,7 +66406,8 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: -0.1000061
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6923693169936390292, guid: 87a41d78272610644903cf45da8834c8, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 87a41d78272610644903cf45da8834c8, type: 3}
 --- !u!1001 &8165484905044684843
 PrefabInstance:

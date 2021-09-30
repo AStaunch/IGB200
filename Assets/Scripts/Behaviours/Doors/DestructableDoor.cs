@@ -32,7 +32,7 @@ public class DestructableDoor : AbstractLockedDoor
         isInvulnerable = false;
         UpdateSprite();
         SetDoorProperties();
-        initExitDoor();
+        InitExitDoor();
     }
 
 
