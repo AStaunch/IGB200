@@ -14,13 +14,13 @@ class Register : MonoBehaviour
     private Sprite RaySprite_ { get { return RaySprite != null ? RaySprite : null; } }
 
     public Sprite ArcSprite;
-    private Sprite ArcSprite_ { get { return RaySprite != null ? RaySprite : null; } }
+    private Sprite ArcSprite_ { get { return ArcSprite != null ? ArcSprite : null; } }
 
     public Sprite OrbSprite;
-    private Sprite OrbSprite_ { get { return RaySprite != null ? RaySprite : null; } }
+    private Sprite OrbSprite_ { get { return OrbSprite != null ? OrbSprite : null; } }
 
     public Sprite ConeSprite;
-    private Sprite ConeSprite_ { get { return RaySprite != null ? RaySprite : null; } }
+    private Sprite ConeSprite_ { get { return ConeSprite != null ? ConeSprite : null; } }
 
     //public Sprite RaySprite;
     //private Sprite RaySprite_ { get { return RaySprite != null ? RaySprite : null; } }
@@ -54,14 +54,14 @@ class Register : MonoBehaviour
                 //Create the Sprites for the Ray Spell 
                 SpellRenderer rayDrawer = FindObjectOfType<SpellRenderer>();
                 rayDrawer.drawRaySprite(GameObject.FindGameObjectWithTag("Player").transform, hit, effector.Colors);
-            })));
+            }),1));
 
             //Orb Template
             SpellRegistrySing.Instance.Registry.AddItemToregistry(new SpellTemplate("Orb", null, new Action<SpellEffector>((effector) =>
             {
                 Console.WriteLine("This would be a Orb");
                 effector.Effector.Invoke(null);//The null in this function would be the game object required
-            })));
+            }),1));
 
             //Arc Template
             SpellRegistrySing.Instance.Registry.AddItemToregistry(new SpellTemplate("Arc", ArcSprite_, new Action<SpellEffector>((effector) =>
@@ -76,7 +76,7 @@ class Register : MonoBehaviour
                     Calling_template = SpellRegistrySing.Instance.Registry.QueryRegistry("Arc")
                 };
                 effector.Effector.Invoke(null);//The null in this function would be the game object required
-            })));
+            }),1));
 
             //Cone Template
             SpellRegistrySing.Instance.Registry.AddItemToregistry(new SpellTemplate("Cone", null, new Action<SpellEffector>((effector) =>
@@ -85,21 +85,21 @@ class Register : MonoBehaviour
 
                 Console.WriteLine("This would be a Cone");
                 effector.Effector.Invoke(null);//The null in this function would be the game object required
-            })));
+            }),1));
 
             //Shield Template
             SpellRegistrySing.Instance.Registry.AddItemToregistry(new SpellTemplate("Shield", null, new Action<SpellEffector>((effector) =>
             {
                 Console.WriteLine("This would be a Shield");
                 effector.Effector.Invoke(null);//The null in this function would be the game object required
-            })));
+            }),1));
 
             //Runner Template
             SpellRegistrySing.Instance.Registry.AddItemToregistry(new SpellTemplate("Runner", null, new Action<SpellEffector>((effector) =>
             {
                 Console.WriteLine("This would be a Runner");
                 effector.Effector.Invoke(null);//The null in this function would be the game object required
-            })));
+            }),1));
 
 
             #endregion

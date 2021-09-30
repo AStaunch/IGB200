@@ -103,9 +103,13 @@ public class Bat_AI : MonoBehaviour
                 StopCoroutine(ActiveFunction);
 
             if (CurrentState == ValidStates.Idle)
+            {
                 ActiveFunction = StartCoroutine(Idle());
+            }
             if (CurrentState == ValidStates.Targeting)
+            {
                 ActiveFunction = StartCoroutine(Tracking_Chasing(Random.Range(0, Min_distance_from_target_variation)));
+            }
         }
 
     }
