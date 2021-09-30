@@ -64,7 +64,7 @@ public class Bat_AI : MonoBehaviour
         rb2d = GetComponent<Rigidbody2D>();
         PlayerRef = GameObject.FindGameObjectWithTag("Player");
         NextState = ValidStates.Idle;
-        MoveSpeed = GetComponent<EntityManager>().entitySpeed;
+        MoveSpeed = GetComponent<iCreatureInterface>().EntitySpeed_;
     }
 
 

@@ -22,13 +22,13 @@ public class HealthBarScript : MonoBehaviour
 
     void UpdateHealthBar() {
         for (int i = 0; i < Hearts.Length; i++) {
-            if (i < target.GetComponent<PlayerEntity>().health) {
+            if (i < target.GetComponent<PlayerEntity>().Health_) {
                 Hearts[i].sprite = FullHeart;
             } else {
                 Hearts[i].sprite = EmptyHeart;
             }
 
-            if (i < target.GetComponent<PlayerEntity>().maxHealth) {
+            if (i < target.GetComponent<PlayerEntity>().MaxHealth_) {
                 Hearts[i].enabled = true;
             } else {
                 Hearts[i].enabled = false;

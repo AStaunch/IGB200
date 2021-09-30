@@ -58,7 +58,7 @@ public class ArcBehaviour : MonoBehaviour
     public void KillThis() {
 
     }
-    public EntityManager em = null;
+    public iPropertyInterface em = null;
     private void OnCollisionEnter2D(Collision2D collision) {
         if(collision.transform.TryGetComponent(out  em)) {
             

@@ -24,9 +24,9 @@ public static class Effectors
                 switch (EffectorData_.Calling_template.Name) {
                     case "Ray":
                         RayData Ray_ = (RayData)EffectorData_;
-                        if (Ray_.Data.collider.gameObject.TryGetComponent(out EntityManager otherEntity)) {
-                            float Strength = ComputeOutPutValue(Elements.Fire, otherEntity, baseStrength);
-                            otherEntity.TakeDamage(Strength);
+                        if (Ray_.Data.collider.gameObject.TryGetComponent(out iHealthInterface otherEntity)) {
+                            float Strength = ComputeOutPutValue(Elements.Fire, otherEntity.EntityProperties_, baseStrength);
+                            otherEntity.TakeDamage(Strength, Elements.Fire);
                         }
                         break;
 
@@ -53,10 +53,10 @@ public static class Effectors
                     case "Ray":
                         RayData Ray_ = (RayData)EffectorData_;
                         GameObject obj = Ray_.Data.collider.gameObject;
-                        Vector2 direction = GameObject.FindGameObjectWithTag("Player").transform.GetComponent<EntityManager>().GetEntityDirection();
-                        if (Ray_.Data.collider.gameObject.TryGetComponent(out EntityManager otherEntity)) {
-                            float Strength = ComputeOutPutValue(Elements.Pull, otherEntity, baseStrength);
-                            ForceObject(obj, direction, -Strength);
+                        Vector2 direction = GameObject.FindGameObjectWithTag("Player").transform.GetComponent<iCreatureInterface>().GetEntityDirection();
+                        if (Ray_.Data.collider.gameObject.TryGetComponent(out iPhysicsInterface otherEntity)) {
+                            float Strength = ComputeOutPutValue(Elements.Pull,otherEntity.EntityProperties_ , baseStrength);
+                            otherEntity.UpdateVelocity(-Strength, direction.normalized);
                         }
                         break;
 
@@ -79,8 +79,8 @@ public static class Effectors
                 switch (EffectorData_.Calling_template.Name) {
                     case "Ray":
                         RayData Ray_ = (RayData)EffectorData_;
-                        GameObject obj = GameObject.FindGameObjectWithTag("Player");
-                        obj.GetComponent<MonoBehaviour>().StartCoroutine(LerpObject(obj, Ray_.Data.point, 1f));
+                        GameObject player = GameObject.FindGameObjectWithTag("Player");
+                        player.GetComponent<MonoBehaviour>().StartCoroutine(LerpSelf(player, Ray_.Data.point, 1f));
                         break;
 
                     default:
@@ -100,11 +100,11 @@ public static class Effectors
                     case "Ray":
                         RayData Ray_ = (RayData)EffectorData_;
                         GameObject obj = Ray_.Data.collider.gameObject;
-                        Vector2 direction = GameObject.FindGameObjectWithTag("Player").transform.GetComponent<EntityManager>().GetEntityDirection();
+                        Vector2 direction = GameObject.FindGameObjectWithTag("Player").transform.GetComponent<iCreatureInterface>().GetEntityDirection();
 
-                        if (Ray_.Data.collider.gameObject.TryGetComponent(out EntityManager otherEntity)) {
-                            float Strength = ComputeOutPutValue(Elements.Push, otherEntity, baseStrength);
-                            ForceObject(obj, direction, Strength);                            
+                        if (Ray_.Data.collider.gameObject.TryGetComponent(out iPhysicsInterface otherEntity)) {
+                            float Strength = ComputeOutPutValue(Elements.Push, otherEntity.EntityProperties_, baseStrength);
+                            otherEntity.UpdateVelocity(Strength, direction);                            
                         }
                         break;
 
@@ -123,11 +123,11 @@ public static class Effectors
                 switch (EffectorData_.Calling_template.Name) {
                     case "Ray":
                         GameObject obj = GameObject.FindGameObjectWithTag("Player");
-                        EntityManager em =  obj.transform.GetComponent<EntityManager>();
-                        Vector2 direction = em.GetEntityDirection();
-                        float Strength = baseStrength * em.Deceleration  * 2;
-                        Strength = ComputeOutPutValue(Elements.Push, em, Strength);
-                        ForceObject(obj, direction, -Strength);
+                        
+                        Vector2 direction = obj.GetComponent<iCreatureInterface>().GetEntityDirection();
+                        float currentStrength = baseStrength * 2;
+                        currentStrength = ComputeOutPutValue(Elements.Push, obj.transform.GetComponent<iPhysicsInterface>().EntityProperties_ , currentStrength);
+                        obj.transform.GetComponent<iPhysicsInterface>().UpdateVelocity(-currentStrength,direction);
                         break;
 
                     default:
@@ -142,13 +142,14 @@ public static class Effectors
         new SpellEffector() {
             Name = "Ice",
             Effector = new Action<EffectorData>((EffectorData_) => {
+                Elements element = Elements.Ice;
                 float baseStrength = EffectorData_.baseStrength;
                 switch (EffectorData_.Calling_template.Name) {
                     case "Ray":
                         RayData Ray_ = (RayData)EffectorData_;
-                        if (Ray_.Data.collider.gameObject.TryGetComponent(out EntityManager otherEntity)) {
-                            float Strength = ComputeOutPutValue(Elements.Ice, otherEntity, baseStrength);
-                            otherEntity.TakeDamage(Strength);
+                        if (Ray_.Data.collider.gameObject.TryGetComponent(out iHealthInterface otherEntity)) {
+                            float Strength = ComputeOutPutValue(element, otherEntity.EntityProperties_, baseStrength);
+                            otherEntity.TakeDamage(0f, element);
                         }
                         break;
 
@@ -165,6 +166,63 @@ public static class Effectors
             Colors = ColourDict[Elements.Ice]
         },
         #endregion
+        #region Life
+        new SpellEffector() {
+            Name = "Life",
+            Effector = new Action<EffectorData>((EffectorData_) => {
+                Elements element = Elements.Life;
+                float baseStrength = EffectorData_.baseStrength;
+                switch (EffectorData_.Calling_template.Name) {
+                    case "Ray":
+                        RayData Ray_ = (RayData)EffectorData_;
+                        if (Ray_.Data.collider.gameObject.TryGetComponent(out iHealthInterface otherEntity)) {
+                            float Strength = ComputeOutPutValue(element, otherEntity.EntityProperties_, baseStrength);
+                            otherEntity.TakeDamage(0f, element);
+                        }
+                        break;
+
+                    case "Arc":
+                        ArcData Arc_ = (ArcData)EffectorData_;
+
+
+                        break;
+                    default:
+                        Debug.Log($"{EffectorData_.Calling_template.Name} is not yet defined for Fire");
+                        break;
+                }
+            }),
+            Colors = ColourDict[Elements.Ice]
+        },
+        #endregion
+        #region Electricity
+        new SpellEffector() {
+            Name = "Electricity",
+            Effector = new Action<EffectorData>((EffectorData_) => {
+                Elements element = Elements.Electricity;
+                float baseStrength = EffectorData_.baseStrength;
+                switch (EffectorData_.Calling_template.Name) {
+                    case "Ray":
+                        RayData Ray_ = (RayData)EffectorData_;
+                        if (Ray_.Data.collider.gameObject.TryGetComponent(out iHealthInterface otherEntity)) {
+                            float Strength = ComputeOutPutValue(element, otherEntity.EntityProperties_, baseStrength);
+                            otherEntity.TakeDamage(0f, element);
+                        }
+                        break;
+
+                    case "Arc":
+                        ArcData Arc_ = (ArcData)EffectorData_;
+
+
+                        break;
+                    default:
+                        Debug.Log($"{EffectorData_.Calling_template.Name} is not yet defined for Fire");
+                        break;
+                }
+            }),
+            Colors = ColourDict[Elements.Ice]
+        },
+        #endregion
+
     };
 
     public static SpellEffector Find(string name) {

@@ -34,14 +34,14 @@ class Register : MonoBehaviour
             //Ray Template
             SpellRegistrySing.Instance.Registry.AddItemToregistry(new SpellTemplate("Ray", RaySprite_, new Action<SpellEffector>((effector) =>
             {
-                Vector2 RayDirection = GameObject.FindGameObjectWithTag("Player").GetComponent<EntityManager>().GetEntityDirection();
+                Vector2 RayDirection = GameObject.FindGameObjectWithTag("Player").GetComponent<iCreatureInterface>().GetEntityDirection();
                 Vector2 RayOrigin = GameObject.FindGameObjectWithTag("Player").transform.position;
                 RayOrigin += 0.5f * GameObject.FindGameObjectWithTag("Player").GetComponent<SpriteRenderer>().bounds.size * RayDirection;
                 float maxDistance = 10f;
 
                 RaycastHit2D hit = Physics2D.Raycast(RayOrigin , RayDirection, maxDistance);
-                //There is no point using a facing variable, when this debug function will be removed soon
-                Debug.DrawRay(GameObject.FindGameObjectWithTag("Player").transform.position, GameObject.FindGameObjectWithTag("Player").GetComponent<EntityManager>().GetEntityDirection());
+                ////There is no point using a facing variable, when this debug function will be removed soon
+                //Debug.DrawRay(GameObject.FindGameObjectWithTag("Player").transform.position, RayDirection);
 
                 if (hit.collider != null)
                 {

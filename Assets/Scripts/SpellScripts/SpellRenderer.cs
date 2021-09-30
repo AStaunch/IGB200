@@ -35,7 +35,7 @@ public class SpellRenderer : MonoBehaviour
         spellMaster = new GameObject("Ray Master");
         spellMaster.transform.position = origin.position;
 
-        Directions Direction = origin.GetComponent<EntityManager>().GetEntityDirectionEnum();
+        Directions Direction = origin.GetComponent<iCreatureInterface>().GetEntityDirectionEnum();
         Vector2 DirectionVect = VectorDict[Direction];
         float rotationAmount = RotationDict[Direction];
         offset = Vector3.Scale(origin.GetComponent<SpriteRenderer>().bounds.size, DirectionVect) * 0.5f;
@@ -60,7 +60,7 @@ public class SpellRenderer : MonoBehaviour
         }
 
         // Define an "infinite" size, not too big but enough to go off screen
-        float maxLaserSize = 20f;
+        float maxLaserSize = Vector2.Distance(offset, other.transform.position);
         float currentLaserSize = maxLaserSize;
 
         // Raycast at the right as our sprite has been design for that
@@ -68,7 +68,7 @@ public class SpellRenderer : MonoBehaviour
             // We touched something!
 
             // -- Get the laser length
-            currentLaserSize = Vector2.Distance(other.point, origin.position);
+            currentLaserSize = Vector2.Distance(other.point, origin.position + offset);
 
             // -- Create the end sprite
             if (end == null) {
@@ -110,7 +110,7 @@ public class SpellRenderer : MonoBehaviour
     public GameObject CreateArcBall(Transform origin, Color[] colors) {
         Material material = createMaterial(colors);
         GameObject arcBall = createObject(rayPieces[0], material);
-        Directions direction = origin.GetComponent<EntityManager>().GetEntityDirectionEnum();
+        Directions direction = origin.GetComponent<iCreatureInterface>().GetEntityDirectionEnum();
         
         arcBall.AddComponent<ArcBehaviour>().StartArc(direction);
         arcBall.transform.position = origin.position;
@@ -127,7 +127,7 @@ public class SpellRenderer : MonoBehaviour
         int noRays = 10;
         float coneAngle = 60f;
         float maxDistance = 5f;
-        Vector2 direction = maxDistance * origin.GetComponent<EntityManager>().GetEntityDirection();
+        Vector2 direction = maxDistance * origin.GetComponent<iCreatureInterface>().GetEntityDirection();
 
         RaycastHit2D[] rays = new RaycastHit2D[noRays];
         Vector3[] positions = new Vector3[noRays + 1];
@@ -161,12 +161,7 @@ public class SpellRenderer : MonoBehaviour
     }
 
     private Material createMaterial(Color[] colors) {
-        Material material = new Material(shader);
-        material.SetColor("_PrimaryColour", colors[0]);
-        material.SetColor("_SecondaryColour", colors[1]);
-        material.SetColor("_AccentColour1", colors[2]);
-        material.SetColor("_AccentColour2", colors[3]);
-        return material;
+        return createMaterial(colors, shader);
     }
 
     public static Material createMaterial(Color[] colors, Shader shader) {
