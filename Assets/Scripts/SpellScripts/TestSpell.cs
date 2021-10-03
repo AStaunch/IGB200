@@ -9,7 +9,7 @@ using static SpellFunctionLibrary;
 
 public class TestSpell : MonoBehaviour
 {
-    readonly SpellEffector Fire = new SpellEffector() {
+    readonly SpellEffector FireRay = new SpellEffector() {
         Name = "Test",
         Effector = new Action<iEffectorData>((EffectorData_) => {
             RayData Ray_ = (RayData)EffectorData_;
@@ -41,7 +41,7 @@ public class TestSpell : MonoBehaviour
             ArcBehaviour ac = Arc_.Data.AddComponent<ArcBehaviour>();
             ac.direction = Arc_.CasterObject.GetComponent<iFacingInterface>().GetEntityDirectionEnum();
             ac.arcDirection = Arc_.ArcDirection;
-            Arc_.CasterObject.GetComponent<MonoBehaviour>().StartCoroutine(ArcHitDetection(ac, Arc_, Elements.Fire));
+            ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcHitDetection(ac, Arc_, Elements.Fire));
         }),
         Colors = ColourDict[Elements.Fire]
     };
@@ -53,15 +53,14 @@ public class TestSpell : MonoBehaviour
             ArcBehaviour ac = Arc_.Data.AddComponent<ArcBehaviour>();
             ac.direction = Arc_.CasterObject.GetComponent<iFacingInterface>().GetEntityDirectionEnum();
             ac.arcDirection = Arc_.ArcDirection;
-            Arc_.CasterObject.GetComponent<MonoBehaviour>().StartCoroutine(ArcHitDetection(ac, Arc_, Elements.Push));
+            ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcHitDetection(ac, Arc_, Elements.Push));
         }),
         Colors = ColourDict[Elements.Push]
     };
 
     public static IEnumerator ArcHitDetection(ArcBehaviour ac, ArcData Arc_, Elements element) {
         float Strength = Arc_.baseStrength;
-
-        while (ac.HitCollider == null || ac.HitCollision == null) {
+        while (ac.HitCollider == null && ac.HitCollision == null) {
             yield return null;
         }
         Collider2D ColHit  = null;
@@ -69,8 +68,6 @@ public class TestSpell : MonoBehaviour
             ColHit = ac.HitCollider;
         } else if (ac.HitCollision != null) {
             ColHit = ac.HitCollision.collider;
-        }else if(ColHit == null) {
-            yield return null;
         }
 
         Vector2 direction = ColHit.transform.position - ac.transform.position;
@@ -94,7 +91,7 @@ public class TestSpell : MonoBehaviour
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
-            SpellRegistrySing.Instance.Registry.QueryRegistry("Ray").RunFunction(Fire);
+            SpellRegistrySing.Instance.Registry.QueryRegistry("Ray").RunFunction(FireRay);
         if (Input.GetKeyDown(KeyCode.Alpha2))
             SpellRegistrySing.Instance.Registry.QueryRegistry("Arc").RunFunction(FireArc);
         if (Input.GetKeyDown(KeyCode.Alpha3))
