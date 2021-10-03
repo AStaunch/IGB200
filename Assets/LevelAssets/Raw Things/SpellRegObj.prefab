@@ -53,15 +53,6 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
-      inSlope: 4.26366
-      outSlope: 4.26366
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.047571853
-    - serializedVersion: 3
-      time: 0.5
       value: 1
       inSlope: 0
       outSlope: 0
@@ -70,14 +61,69 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: -4.9860725
-      outSlope: -4.9860725
+      time: 0.7
+      value: 1
+      inSlope: -0.016032333
+      outSlope: -0.016032333
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.04162538
+      inWeight: 0.33333334
+      outWeight: 0.11381993
+    - serializedVersion: 3
+      time: 0.8356438
+      value: 0.95578206
+      inSlope: -0.6933646
+      outSlope: -0.6933646
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
       outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.9315699
+      value: 0.7858418
+      inSlope: -3.133816
+      outSlope: -3.133816
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.26378626
+    - serializedVersion: 3
+      time: 0.97756547
+      value: 0.5604536
+      inSlope: -6.77976
+      outSlope: -6.77976
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.5768312
+    - serializedVersion: 3
+      time: 0.9921158
+      value: 0.40444127
+      inSlope: -16.591269
+      outSlope: -16.591269
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.9990855
+      value: 0.18089214
+      inSlope: -18.46377
+      outSlope: -18.46377
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 1
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -7.6330004
+      outSlope: -7.6330004
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.048784114
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  ArcSprite: {fileID: 0}

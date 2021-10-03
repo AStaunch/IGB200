@@ -414,6 +414,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4423776004440969253, guid: bc3557ba8288be84bbe229066332bcc0, type: 3}
+      propertyPath: ArcSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 2f43fea180f2c9346875c7cd59c05e4c, type: 3}
     m_RemovedComponents:
     - {fileID: 4423776004440969251, guid: bc3557ba8288be84bbe229066332bcc0, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: bc3557ba8288be84bbe229066332bcc0, type: 3}

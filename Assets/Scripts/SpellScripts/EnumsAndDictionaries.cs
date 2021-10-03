@@ -4,6 +4,15 @@ using UnityEngine;
 
 public static class EnumsAndDictionaries
 {
+    public enum ArcDirections
+    {
+        Left, Right
+    }
+    public static Dictionary<ArcDirections, int> ArcValueDict = new Dictionary<ArcDirections, int>() {
+        {ArcDirections.Left, 1 },
+        {ArcDirections.Right, -1 }
+    };
+
     public static Dictionary<Directions, Vector2> VectorDict = new Dictionary<Directions, Vector2>()
     {
         { Directions.Up,      new Vector2(0, 1) },

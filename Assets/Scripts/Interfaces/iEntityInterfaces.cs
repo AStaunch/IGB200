@@ -15,32 +15,33 @@ public interface iHealthInterface : iPropertyInterface {
     public void EntityDeath();
 }
 
-public interface iPhysicsInterface : iPropertyInterface
-{
+public interface iPhysicsInterface : iPropertyInterface {
     public Rigidbody2D RB_ { get;}
     public float Deceleration_ { get; set; }
     public void UpdateVelocity(float magnitude, Vector3 direction);
     public void Decelerate();
 }
 
-public interface iCreatureInterface {
+public interface iCreatureInterface : iFacingInterface {
     public float EntitySpeed_ { get; set; }
     Animator Anim_ { get;}
-    Directions CurrentDirection_ { get; set; }
+    
     public void UpdateAnimation(Vector3 change);
     public void UpdateDirection(Vector3 change);
+}
+
+public interface iFacingInterface {
+    Directions CurrentDirection_ { get; set; }
     public Directions GetEntityDirectionEnum();
     public int GetEntityFacing();
     public Vector2 GetEntityDirection();
 }
 
-public interface iEnemyInterface
-{
+public interface iEnemyInterface {
     public float EntityDamage_ { get; set; }
 }
 
-public interface iPropertyManager
-{
+public interface iPropertyManager {
     public void AddProperty(Properties property);
     public void RemovePropery(Properties property);
     public void AddProperty(Properties property, float duration);

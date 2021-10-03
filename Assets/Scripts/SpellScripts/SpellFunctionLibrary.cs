@@ -59,7 +59,7 @@ public static class SpellFunctionLibrary
         if (targetObject.TryGetComponent(out iPhysicsInterface iPhysics)) {
             float time = 0;
             Vector2 startPosition = targetObject.transform.position;
-            targetPosition -= 0.6f * targetObject.GetComponent<SpriteRenderer>().bounds.size * targetObject.GetComponent<iCreatureInterface>().GetEntityDirection();
+            targetPosition -= 0.6f * targetObject.GetComponent<SpriteRenderer>().bounds.size * targetObject.GetComponent<iFacingInterface>().GetEntityDirection();
             while (time < duration) {
                 float t = time / duration;
                 t = t * t * (3f - 2f * t);
@@ -73,12 +73,5 @@ public static class SpellFunctionLibrary
         }        
     }
 
-    public static IEnumerator WaitForArcHit(float duration) {
-        float time = 0;
-        while (time > duration) {
-
-            time += Time.deltaTime;
-            yield return null;
-        }
-    }
+    
 }

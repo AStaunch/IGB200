@@ -14,12 +14,12 @@ public static class Effectors
         {
             Name = "Test",
             Colors = new Color[] { Color.white, Color.white, Color.white, Color.white },
-            Effector = new Action<EffectorData>((edd) => { Debug.Log("works"); })
+            Effector = new Action<iEffectorData>((edd) => { Debug.Log("works"); })
         },
         # region Fire
         new SpellEffector() {
             Name = "Fire",
-            Effector = new Action<EffectorData>((EffectorData_) => {
+            Effector = new Action<iEffectorData>((EffectorData_) => {
                 float baseStrength = EffectorData_.baseStrength;
                 switch (EffectorData_.Calling_template.Name) {
                     case "Ray":
@@ -47,7 +47,7 @@ public static class Effectors
         #region Pull
         new SpellEffector() {
             Name = "Pull",
-            Effector = new Action<EffectorData>((EffectorData_) => {
+            Effector = new Action<iEffectorData>((EffectorData_) => {
                 float baseStrength = EffectorData_.baseStrength;
                 switch (EffectorData_.Calling_template.Name) {
                     case "Ray":
@@ -74,7 +74,7 @@ public static class Effectors
         },
         new SpellEffector() {
             Name = "PullPlayer",
-            Effector = new Action<EffectorData>((EffectorData_) => {
+            Effector = new Action<iEffectorData>((EffectorData_) => {
                 float baseStrength = EffectorData_.baseStrength;
                 switch (EffectorData_.Calling_template.Name) {
                     case "Ray":
@@ -94,7 +94,7 @@ public static class Effectors
         #region Push
         new SpellEffector() {
             Name = "Push",
-            Effector = new Action<EffectorData>((EffectorData_) => {
+            Effector = new Action<iEffectorData>((EffectorData_) => {
                 float baseStrength = EffectorData_.baseStrength;
                 switch (EffectorData_.Calling_template.Name) {
                     case "Ray":
@@ -118,7 +118,7 @@ public static class Effectors
 
         new SpellEffector() {
             Name = "PushPlayer",
-            Effector = new Action<EffectorData>((EffectorData_) => {
+            Effector = new Action<iEffectorData>((EffectorData_) => {
                 float baseStrength = EffectorData_.baseStrength;
                 switch (EffectorData_.Calling_template.Name) {
                     case "Ray":
@@ -141,7 +141,7 @@ public static class Effectors
         #region Ice
         new SpellEffector() {
             Name = "Ice",
-            Effector = new Action<EffectorData>((EffectorData_) => {
+            Effector = new Action<iEffectorData>((EffectorData_) => {
                 Elements element = Elements.Ice;
                 float baseStrength = EffectorData_.baseStrength;
                 switch (EffectorData_.Calling_template.Name) {
@@ -169,7 +169,7 @@ public static class Effectors
         #region Life
         new SpellEffector() {
             Name = "Life",
-            Effector = new Action<EffectorData>((EffectorData_) => {
+            Effector = new Action<iEffectorData>((EffectorData_) => {
                 Elements element = Elements.Life;
                 float baseStrength = EffectorData_.baseStrength;
                 switch (EffectorData_.Calling_template.Name) {
@@ -197,7 +197,7 @@ public static class Effectors
         #region Electricity
         new SpellEffector() {
             Name = "Electricity",
-            Effector = new Action<EffectorData>((EffectorData_) => {
+            Effector = new Action<iEffectorData>((EffectorData_) => {
                 Elements element = Elements.Electricity;
                 float baseStrength = EffectorData_.baseStrength;
                 switch (EffectorData_.Calling_template.Name) {
