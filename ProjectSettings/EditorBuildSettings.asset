@@ -8,10 +8,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: c8ce83bdfb54dbf45ae1ba236ba4b4af
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Overworld.unity
     guid: ba68ed13e94f3b34eaa41905bed2fc6f
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SampleScene 1.unity
     guid: 09542e8abff6f1b4b93b21990d415637
   - enabled: 0
