@@ -22,23 +22,27 @@ public class SpellRenderer : MonoBehaviour
         }
     }
     #endregion
+
+
     public Shader shader;
     private Vector3 offset;
+
     #region Ray Drawer
     public Sprite[] rayPieces;
     GameObject spellMaster;
-
-    public void DrawRaySprite(Transform origin, RaycastHit2D other, Color[] colors) {
+    public void DrawRaySprite(RayData Ray_, Color[] colors) {
+        Transform origin = Ray_.CasterObject.transform; 
+        RaycastHit2D other = Ray_.Data;
         GameObject start = null;
         GameObject middle = null;
         GameObject end = null;
         spellMaster = new GameObject("Ray Master");
         spellMaster.transform.position = origin.position;
 
-        Directions Direction = origin.GetComponent<iCreatureInterface>().GetEntityDirectionEnum();
+        Directions Direction = origin.GetComponent<iFacingInterface>().GetEntityDirectionEnum();
         Vector2 DirectionVect = VectorDict[Direction];
         float rotationAmount = RotationDict[Direction];
-        offset = Vector3.Scale(origin.GetComponent<SpriteRenderer>().bounds.size, DirectionVect) * 0.5f;
+        GenerateOffset(origin, DirectionVect);
 
         //Set Sprite Colours
         Material material = CreateMaterial(colors);
@@ -108,13 +112,13 @@ public class SpellRenderer : MonoBehaviour
     }
     #endregion
     public AnimationCurve arcCurve;
+    public Sprite ArcSprite;
     #region Arc Drawer
-    public GameObject CreateArcBall(Transform origin, Color[] colors) {
+    public GameObject CreateArcProjectile(Transform origin, Color[] colors, ArcDirections arcDirection) {
+        spellMaster = new GameObject("Ray Master");
+        spellMaster.transform.position = origin.position;
         Material material = CreateMaterial(colors);
-        GameObject arcBall = CreateObject(rayPieces[0], material);
-        Directions direction = origin.GetComponent<iCreatureInterface>().GetEntityDirectionEnum();
-        
-        arcBall.AddComponent<ArcBehaviour>().StartArc(direction);
+        GameObject arcBall = CreateObject(ArcSprite, material);
         arcBall.transform.position = origin.position;
         return arcBall;
     }
@@ -161,6 +165,10 @@ public class SpellRenderer : MonoBehaviour
         material.SetColor("_AccentColour1", colors[2]);
         material.SetColor("_AccentColour2", colors[3]);
         return material;
+    }
+
+    private void GenerateOffset(Transform Origin, Vector3 Direction) {
+        offset = Vector3.Scale(Origin.GetComponent<SpriteRenderer>().bounds.size, Direction) * 0.5f;
     }
     #endregion
 }

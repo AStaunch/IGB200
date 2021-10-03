@@ -20,7 +20,7 @@ public class SpellEffector : SpellEffector_in
 {
     public string Name { get; set; }
     public Color[] Colors { get; set; }
-    public Action<EffectorData> Effector;
+    public Action<iEffectorData> Effector;
 }
 
 public class SpellTemplate
@@ -164,39 +164,61 @@ public interface ExternalSpell
 
 #region Data formats
 
-public interface EffectorData 
+public interface iEffectorData 
 {
+    public GameObject CasterObject { get; set; }
     SpellTemplate Calling_template { get; set; }
 
     //The Base Strength of a Spell; this is used for determining damage or force
     public float baseStrength { get;}
 }
 
-public class RayData : EffectorData
+public class RayData : iEffectorData
 {
+    public GameObject CasterObject { get; set; }
     public SpellTemplate Calling_template { get; set; }
     public RaycastHit2D Data { get; set; }
     public float baseStrength { get => 3f;}
 }
 
-public class ArcData : EffectorData
+public class ArcData : iEffectorData
 {
+    public GameObject CasterObject { get; set; }
     public SpellTemplate Calling_template { get; set; }
     public GameObject Data { get; set; }
-
+    public EnumsAndDictionaries.ArcDirections ArcDirection { get; set; }
     public float baseStrength { get => 4f; }
 }
 
-public class ConeData : EffectorData
+public class ConeData : iEffectorData
 {
+    public GameObject CasterObject { get; set; }
     public SpellTemplate Calling_template { get; set; }
     public GameObject[] Data { get; set; }
 
     public float baseStrength { get => 1.5f; }
 }
 
-public class GeneralData : EffectorData
+public class OrbData : iEffectorData
 {
+    public GameObject CasterObject { get; set; }
+    public SpellTemplate Calling_template { get; set; }
+    public GameObject Data { get; set; }
+
+    public float baseStrength { get => 1.5f; }
+}
+
+public class Shield : iEffectorData
+{
+    public GameObject CasterObject { get; set; }
+    public SpellTemplate Calling_template { get; set; }
+    public GameObject Data { get => CasterObject; set => _ = value; }
+    public float baseStrength { get => 1.5f; }
+}
+
+public class GeneralData : iEffectorData
+{
+    public GameObject CasterObject { get; set; }
     public SpellTemplate Calling_template { get; set; }
     public GameObject Target { get; set; }
     public float baseStrength { get; }

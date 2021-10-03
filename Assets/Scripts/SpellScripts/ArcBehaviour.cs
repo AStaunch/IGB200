@@ -1,67 +1,183 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using static EnumsAndDictionaries;
 
 public class ArcBehaviour : MonoBehaviour
 {
-    private Rigidbody2D rb;
-    private Vector2 startPosition;
+    
+    public Directions direction;
+    public ArcDirections arcDirection;
 
-    private void Start() {
-       
-    }
-    public void StartArc(Directions direction) {
+    float duraScale = 1.5f;
+    private float ArcDistanceScale = 3f;
+    private float ArcWidthScale = 1.5f;
+    private AnimationCurve ac;
+    private int arcValue;
+    Rigidbody2D RB_;
+    float time;
+    float half;
+    Vector2 directionVector;
+    Vector2 invertedDirection;
+    public void Start() {
+        
+        RB_ = this.gameObject.AddComponent<Rigidbody2D>();
+        RB_.gravityScale = 0;
+        RB_.freezeRotation = true;
+        CircleCollider2D cc = this.gameObject.AddComponent<CircleCollider2D>();
+        cc.isTrigger = true;
+        cc.radius = 0.01f;
+
         //initialise Variables
-        float distance = 10f;
-        float time = 3f;
+        duration = 4f;
+        ac = FindObjectOfType<SpellRenderer>().arcCurve;
+        //Find Value for Direction of movement
+        arcValue = ArcValueDict[arcDirection];
+        //Find Value for Movement Direction
+        directionVector = VectorDict[direction];
+        invertedDirection = new Vector2(directionVector.y, directionVector.x);
+        //Find the Halfway time
+        half = duration / 2;
+        time = 0;
 
-        rb = gameObject.AddComponent<Rigidbody2D>();
-        rb.gravityScale = 0;
-        rb.isKinematic = true;
-        rb.freezeRotation = true;
-        gameObject.AddComponent<SpriteRenderer>();
-        gameObject.AddComponent<CircleCollider2D>();
-        startPosition = transform.position;
-        StartCoroutine(moveArc(VectorDict[direction], time, distance));
+        //Placeholder Variables
+        startPoint = transform.position;
+        oldpos = startPoint;
+        newPos = startPoint;
+        //StartCoroutine(ArcMove(time, direction, arcDirection));
+    }
+
+    Vector2 startPoint;
+    Vector2 oldpos;
+    Vector2 newPos;
+    float duration;
+    public void Update() {
+        if (time < duration * duraScale) {
+            //Declare the Position Vectors
+            Vector2 xPos;
+            Vector2 yPos;
+
+            //1st Half of path
+            if (time <= half) {
+                float x = time / half;
+                float y = ac.Evaluate(x);
+                xPos = directionVector * x;
+                yPos = (invertedDirection * y);
+            } 
+            //Straight After Path
+            else if (time > duration) {
+                float x = (duration - time) / half;
+                float y = -ac.Evaluate(0);
+                xPos = directionVector * x;
+                yPos = (invertedDirection * y);
+            }
+            //2nd Half of Path
+            else {
+                float x = (duration - time) / half;
+                float y = -ac.Evaluate(x);
+                xPos = directionVector * x;
+                yPos = invertedDirection * y;
+            }
+
+            newPos = startPoint + (ArcDistanceScale * xPos) + (ArcWidthScale * arcValue) * (yPos - invertedDirection);
+            Debug.DrawLine(oldpos, newPos, Color.green, 10000);
+            oldpos = newPos;
+            RB_.MovePosition(newPos);
+            time += Time.deltaTime;
+        } else {
+            Debug.LogWarning("Exited");
+            Destroy(this.gameObject);
+        }
 
     }
 
-    IEnumerator moveArc(Vector2 VectorDirection, float arcTime, float distance) {
-        Vector2 SwappedDirection = new Vector2(VectorDirection.y, VectorDirection.x);
-        float i = 0;
+    IEnumerator ArcMove(float duration, Directions direction, ArcDirections arcDirection) {
+        //Find Value for Direction of movement
+        int arcValue = ArcValueDict[arcDirection];
+        //Find Value for Movement Direction
+        Vector2 directionVector = VectorDict[direction];
+        Vector2 invertedDirection = new Vector2(directionVector.y, directionVector.x);
+        //Find the Halfway time
+        float half = duration / 2;
+        float time = 0;
+        //Placeholder Variables
+        Vector2 startPoint = transform.position;
+        Vector2 oldpos = startPoint;
+        Vector2 newPos = startPoint;
 
-        AnimationCurve arcCurve = FindObjectOfType<SpellRenderer>().arcCurve;
-        float maxTime = 3f * arcTime;
-        while (i < maxTime) {
-            if (i <= arcTime) {
-                float iNormalised = i / arcTime;
-                Vector2 arcOffsetX = distance * iNormalised * VectorDirection;
-                Vector2 arcOffsetY = distance * arcCurve.Evaluate(iNormalised) * SwappedDirection;
-                Vector2 arcOffsetXY = arcOffsetX + arcOffsetY;
-                rb.MovePosition(startPosition + arcOffsetXY);
+        RB_ = GetComponent<Rigidbody2D>();
 
-                //DebugCode - TODO Get Rid of
-                float intervalDebug = i / 0.5f;
-                intervalDebug %= 1;
-                if (intervalDebug < 0.01f) {
-                    Debug.Log(arcOffsetXY);
-                }
-            } else {
+        while (time < duration * duraScale) {
+            //Declare the Position Vectors
+            Vector2 xPos;
+            Vector2 yPos;
+
+            //1st Half of path
+            if (time <= half) {
+                float x = time / half;
+                float y = ac.Evaluate(x);
+                xPos = directionVector * x;
+                yPos = (invertedDirection * y);
             }
-            i += Time.deltaTime;
+            //Straight After Path
+            else if (time > duration) {
+                float x = (duration - time) / half;
+                float y = -ac.Evaluate(0);
+                xPos = directionVector * x;
+                yPos = (invertedDirection * y);
+            }
+            //2nd Half of Path
+            else {
+                float x = (duration - time) / half;
+                float y = -ac.Evaluate(x);
+                xPos = directionVector * x;
+                yPos = invertedDirection * y;
+            }
+
+            newPos = startPoint + (ArcDistanceScale * xPos) + (ArcWidthScale * arcValue) * (yPos - invertedDirection);
+            Debug.DrawLine(oldpos, newPos, Color.green, 10000);
+            oldpos = newPos;
+            Debug.Log(newPos);
+            RB_.MovePosition(newPos);
+            time += Time.deltaTime;
             yield return null;
         }
-        KillThis();
+        Debug.LogWarning("Exited");
+        Destroy(this.gameObject);
+    }
+    int[] LayerArray = new int[] {0, 6, 7, 8 };
+    public Collider2D HitCollider = null;
+    private void OnTriggerEnter2D(Collider2D collision) {
+        string msg = ("Touched: " + collision.transform.name);
+        bool b1 = !collision.transform.CompareTag("Player");
+        bool b2 = LayerArray.Contains(collision.gameObject.layer);
+        bool b3 = !collision.GetComponent<Collider2D>().isTrigger;
+        msg += b1 + " " + b2 + " ";//+ " " + b3;
+        if (b1 && b2) {
+            HitCollider = collision;
+            msg += 1.1f * collision.transform.position - transform.position;
+            Destroy(this.gameObject, 2 * Time.deltaTime);
+        } else {
+           
+        }
+        Debug.Log(msg);
     }
 
-    public void KillThis() {
-
-    }
-    public iPropertyInterface em = null;
+    public Collision2D HitCollision = null;
     private void OnCollisionEnter2D(Collision2D collision) {
-        if(collision.transform.TryGetComponent(out  em)) {
+        string msg = ("Touched: " + collision.transform.name);
+        bool b1 = !collision.transform.CompareTag("Player");
+        bool b2 = LayerArray.Contains(collision.gameObject.layer);
+        bool b3 = !collision.collider.isTrigger;
+        msg += " " + b1 + " " + b2 + " ";//+ " " + b3;
+        if (b1 && b2) {
+            HitCollision = collision;
+            msg += 1.1f * collision.transform.position - transform.position;
+            Destroy(this.gameObject, 2 * Time.deltaTime);
+        } else {
             
         }
+        Debug.Log(msg);
     }
 }

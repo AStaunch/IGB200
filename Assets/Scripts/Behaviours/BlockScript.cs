@@ -13,6 +13,10 @@ public class BlockScript : MonoBehaviour, iPhysicsInterface
     public Properties[] EntityProperties_ { get => new Properties[] { }; set => _ = value; }
     public EntityTypes EntityType_ { get => throw new System.NotImplementedException();}
 
+    private void FixedUpdate() {
+        Decelerate();
+    }
+
     public void Decelerate() {
         if (RB_.velocity == Vector2.zero) {
             return;
@@ -27,7 +31,8 @@ public class BlockScript : MonoBehaviour, iPhysicsInterface
 
     public void UpdateVelocity(float magnitude, Vector3 direction){
         magnitude = VelocityOfOnePush;
-        RB_.velocity = magnitude * direction;
+        RB_.velocity = magnitude * direction.normalized;
+        Debug.Log(magnitude+ " " + direction);
     }
 
     private void OnCollisionEnter2D(Collision2D collision) {
