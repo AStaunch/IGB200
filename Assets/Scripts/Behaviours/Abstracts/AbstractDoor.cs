@@ -84,20 +84,20 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
     }
 
     public void UpdateSprite() {
-        try {
-            Sprite currentSprite;
-            if (IsOpen) {
-                currentSprite = SpriteDict["OpenDoor"][IntDict[exitDirection]];
-            } else if (isInvulnerable) {
-                currentSprite = SpriteDict["MetalDoor"][IntDict[exitDirection]];
-            } else {
-                currentSprite = SpriteDict["WoodDoor"][IntDict[exitDirection]];
-            }
-            GetComponent<SpriteRenderer>().sprite = currentSprite;
-        }
-        catch (System.Exception) {
-            //Debug.LogWarning(ex.Message);
-        }
+        //try {
+        //    Sprite currentSprite;
+        //    if (IsOpen) {
+        //        currentSprite = SpriteDict["OpenDoor"][IntDict[exitDirection]];
+        //    } else if (isInvulnerable) {
+        //        currentSprite = SpriteDict["MetalDoor"][IntDict[exitDirection]];
+        //    } else {
+        //        currentSprite = SpriteDict["WoodDoor"][IntDict[exitDirection]];
+        //    }
+        //    GetComponent<SpriteRenderer>().sprite = currentSprite;
+        //}
+        //catch (System.Exception) {
+        //    //Debug.LogWarning(ex.Message);
+        //}
     }
 
     public void TakeDamage(float damage, Elements damageType) {
