@@ -15,6 +15,9 @@ public class EmptySpaceScript : MonoBehaviour
     BoxCollider2D bc;
     private Rigidbody2D rb;
 
+    public GameObject objectIntoWaterSound;
+    public GameObject objectIntoVoidSound;
+
     private void Awake() {
         gameObject.layer = 2;
         if (!TryGetComponent(out rb)) {
@@ -39,10 +42,12 @@ public class EmptySpaceScript : MonoBehaviour
         if (collision.transform.TryGetComponent(out BlockScript _)){
             if (emptySpaceType == TypeOfTile.Water) {
                 sr.sprite = Filled;
+                Instantiate(objectIntoWaterSound);
                 Destroy(collision.gameObject);
                 Destroy(bc);
                 Destroy(rb);
             } else if (emptySpaceType == TypeOfTile.Void) {
+                Instantiate(objectIntoVoidSound);
                 Destroy(collision.gameObject);
             }
         }

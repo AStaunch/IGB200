@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PressurePlate : MonoBehaviour, iSenderObject
 {
+    public GameObject buttonPressSound;
     public bool PressOnce = true;
     public Sprite[] sprites;
     private bool currentState;
@@ -29,6 +30,7 @@ public class PressurePlate : MonoBehaviour, iSenderObject
         UpdateSprite();
     }
     private void OnTriggerEnter2D(Collider2D collision) {
+        if (currentState_ == false) { Instantiate(buttonPressSound); }
         if (PressOnce && collision.transform.CompareTag("Player")) {
             currentState_ = true;
         }
