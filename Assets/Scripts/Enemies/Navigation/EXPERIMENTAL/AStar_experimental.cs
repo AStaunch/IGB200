@@ -3,12 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using System.Linq;
-using System.Diagnostics;
-using Debug = UnityEngine.Debug;
 using Unity.Jobs;
 using Unity.Collections;
-using Unity.Burst;
+using System.Runtime.InteropServices;
+using JobTask_syst;
 
 public static class AStar_experimental
 {
@@ -83,15 +81,11 @@ public static class AStar_experimental
 
         public void UpdateNode(Vector2 TargetPos)
         {
-            H = (TargetPos.x - Position.x) + (TargetPos.y - Position.y);//Manhattan distance ignores obstacles, since this is heuristic value, its important but not required to be accurate
+            H = (TargetPos.x - Position.x) + (TargetPos.y - Position.y);
         }
 
         public void ChildrenUpdate()
         {
-            //--------------------------------------------------------------------------
-            //THIS NEEDS TO BE REVIEWED
-            //THIS NEEDS REWRITING, FINDING NODES BY POSITION IN THIS WAY IS UNRELIABLE but it do kinda work doe
-            //--------------------------------------------------------------------------
             List<Node> ch = new List<Node>();
             for (int c_x = -1; c_x <= 1; c_x++)
             {
@@ -158,40 +152,44 @@ public static class AStar_experimental
         return no;
     }
 
-    public static Node Start_;
-    public static Node Target_;
-    public static EntityState Enemytype_;
     public static Node Result_;
 
-    struct PathJob : IJob
+
+    class PathJob : JobTask
     {
+        public PathWrap wraps;
+        public GCHandle resAllocation;
+        public PathResult pathResults { get { return (PathResult)resAllocation.Target; } set { resAllocation.Target = value; } }
+
         public void Execute()
         {
+            Node Start = wraps.Start;
+            Node Target = wraps.Target;
+
             Open_FHeap.WipeHeap();
             Closed_FHeap.WipeHeap();
-            Open_FHeap.insert(new FHeap_experimental.FibHeapNode(Start_));
+            Open_FHeap.insert(new FHeap_experimental.FibHeapNode(Start));
 
-            bool Found = false;
+            Node Result = new Node(new Vector2(Mathf.Infinity, Mathf.Infinity)); ;
 
-            while (Open_FHeap.Count > 0 && !Found)
+            while (Open_FHeap.count > 0)
             {
-                FHeap_experimental.FibHeapNode CurrentNode_fib = Open_FHeap.PopMin();
+                FHeap_experimental.FibHeapNode CurrentNode_fib = Open_FHeap.popmin();
                 Node CurrentNode = CurrentNode_fib.Value;
 
                 Closed_FHeap.insert(CurrentNode_fib);
 
-
-                if (CurrentNode == Target_)
+                if (CurrentNode == Target)
                 {
-                    Result_ = CurrentNode;
-                    Found = true;
+                    Result = CurrentNode;
+                    break;
                 }
                 else
                 {
                     CurrentNode.ChildrenUpdate();
                     foreach (Node node in CurrentNode.Children)
                     {
-                        if (Enemytype_ == EntityState.WALK)
+                        if (wraps.State == EntityState.WALK)
                         {
                             if (node.state == TileStates.OBSTACLE || node.state == TileStates.FLYABLE || Closed_FHeap.Contains(node))
                                 continue;
@@ -202,9 +200,8 @@ public static class AStar_experimental
                         if (CurrentNode.G + Vector2.Distance(CurrentNode.Position, node.Position) < node.G || !Open_FHeap.Contains(node))
                         {
                             node.G = CurrentNode.G + Vector2.Distance(CurrentNode.Position, node.Position);
-                            node.UpdateNode(Target_.Position);
+                            node.UpdateNode(Target.Position);
                             node.Parent = CurrentNode;
-                            //CurrentNode.ActiveChild = node;
 
                             if (!Open_FHeap.Contains(node))
                                 Open_FHeap.insert(new FHeap_experimental.FibHeapNode(node));
@@ -212,97 +209,62 @@ public static class AStar_experimental
                     }
                 }
             }
-            if(Result_ == null)
-            {
-                Debug.Log("emptied while");
-                Result_ = new Node(new Vector2(Mathf.Infinity, Mathf.Infinity));
-            }
+            pathResults = new PathResult() { Path = Result };
+        }
+
+        public NativeArray<PathResult> returnv()
+        {
+            NativeArray<PathResult> r = new NativeArray<PathResult>(1, Allocator.TempJob);
+            r[0] = pathResults;
+            return r;
         }
     }
 
-    //public static Node RequestPath(Node Start, Node Target, EntityState Enemytype)
-    //{
-    //    Start_ = Start;
-    //    Target_ = Target;
-    //    Enemytype_ = Enemytype;
-
-    //    var Path = new PathJob(); //{ Start = Start, Target = Target, Enemytype = Enemytype };
-    //    JobHandle job = Path.Schedule();
-    //    job.Complete();
-    //    return Result_;
-    //}
-
-    public static IEnumerator RequestPath(Node Start, Node Target, EntityState Enemytype)
+    struct PathWrap
     {
-        Start_ = Start;
-        Target_ = Target;
-        Enemytype_ = Enemytype;
+        public Node Start;
+        public Node Target;
+        public EntityState State;
+    }
 
-        var Path = new PathJob(); //{ Start = Start, Target = Target, Enemytype = Enemytype };
-        JobHandle job = Path.Schedule();
-        job.Complete();
-        
-        yield return new WaitUntil(new Func<bool>(()=> job.IsCompleted));
-        yield return true;
+    public struct PathResult
+    {
+        public Node Path;
     }
 
 
-    //public static Node RequestPath(Node Start, Node Target, EntityState Enemytype)
-    //{
+    public static IEnumerator RequestPath(Node Start, Node Target, EntityState Enemytype)
+    {
+        //Predefine an allocated section of memory for Garbage collection to ignore
+        GCHandle res = GCHandle.Alloc(new PathResult());
+
+        //Create a JobTask to wrap the existing job system for multi-threading
+        JobTask task = new PathJob() { wraps = new PathWrap() { Start = Start, State = Enemytype, Target = Target }, resAllocation = res };
+        //allocate memory for the JobTask
+        GCHandle gch = GCHandle.Alloc(task);
         
+        //schedule the JobWrap for a JobHandle so we schedule and complete off unity's main thread
+        JobHandle jbh = new JobWrap()
+        {
+            Handle = gch
+        }.Schedule();
+        jbh.Complete();
 
-    //    Open_FHeap.WipeHeap();
-    //    Closed_FHeap.WipeHeap();
-    //    Open_FHeap.insert(new FibHeapNode(Start));
+        yield return new WaitUntil(() => jbh.IsCompleted);
 
+        //this IEnumerator is running inside Corontine_wrap, so this allows us to return the result, which is still allocated in gc
+        yield return ((PathResult)res.Target).Path;
 
-    //    while (Open_FHeap.Count > 0)
-    //    {
-    //        FibHeapNode CurrentNode_fib = Open_FHeap.PopMin();
-    //        Node CurrentNode = CurrentNode_fib.Value;
-
-    //        Closed_FHeap.insert(CurrentNode_fib);
-
-
-    //        if (CurrentNode == Target)
-    //        {
-    //            return CurrentNode;
-    //        }
-    //        else
-    //        {
-    //            CurrentNode.ChildrenUpdate();
-    //            foreach (Node node in CurrentNode.Children)
-    //            {
-    //                if (Enemytype == EntityState.WALK)
-    //                {
-    //                    if (node.state == TileStates.OBSTACLE || node.state == TileStates.FLYABLE || Closed_FHeap.Contains(node))
-    //                        continue;
-    //                }
-    //                else if (node.state == TileStates.OBSTACLE || Closed_FHeap.Contains(node))
-    //                    continue;
-
-    //                if (CurrentNode.G + Vector2.Distance(CurrentNode.Position, node.Position) < node.G || !Open_FHeap.Contains(node))
-    //                {
-    //                    node.G = CurrentNode.G + Vector2.Distance(CurrentNode.Position, node.Position);
-    //                    node.UpdateNode(Target.Position);
-    //                    node.Parent = CurrentNode;
-    //                    //CurrentNode.ActiveChild = node;
-
-    //                    if (!Open_FHeap.Contains(node))
-    //                        Open_FHeap.insert(new FibHeapNode(node));
-    //                }
-    //            }
-    //        }
-    //    }
-    //    return new Node(new Vector2(Mathf.Infinity, Mathf.Infinity));
+        //obviously we need to release the memory. rather not bluescreen due to memory usage exceeding the rams cap
+        gch.Free();
+        res.Free();
+    }
 
 
-    //}
-
-    public static Node[] ReversePath(Node Start, Node Path)
+    public static IEnumerator ReversePath(Node Start, Node Path)
     {
         if (Path.Position == new Vector2(Mathf.Infinity, Mathf.Infinity))
-            return new Node[0];
+            yield return new Node[0];
 
         List<Node> paths_nodes = new List<Node>();
         Node CurrentNode = Path;
@@ -316,7 +278,7 @@ public static class AStar_experimental
             paths_nodes.Add(CurrentNode);
             paths_nodes.Reverse();
         }
-        return paths_nodes.ToArray();
+        yield return paths_nodes[0];
     }
 }
 

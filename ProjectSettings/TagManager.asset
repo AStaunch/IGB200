@@ -8,6 +8,7 @@ TagManager:
   - Ground
   - SpellReg
   - SpriteManager
+  - BGM
   layers:
   - Default
   - TransparentFX

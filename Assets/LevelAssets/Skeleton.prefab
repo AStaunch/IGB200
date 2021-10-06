@@ -226,5 +226,6 @@ MonoBehaviour:
   EntityProperties: 
   EntitySpeed: 0.5
   Deceleration: 1
+  enemDeathSound: {fileID: 207168208727640438, guid: 41483acde3a6b784b9d93cb0fabbb453, type: 3}
   DamageImmunities: 07000000
   EntityDamage: 1

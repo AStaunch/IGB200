@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EnemyEntity : AbstractCreature, iEnemyInterface
 {
+    public GameObject enemDeathSound;
     //TODO?
     public EnumsAndDictionaries.Elements[] DamageImmunities;
     public override EnumsAndDictionaries.Elements[] DamageImmunities_ { get => DamageImmunities; set => DamageImmunities = value; }
@@ -16,6 +17,7 @@ public class EnemyEntity : AbstractCreature, iEnemyInterface
 
     public override void EntityDeath() {
         Anim_.SetBool("isDead", true);
+        Instantiate(enemDeathSound);
         Destroy(this.gameObject);
     }
 

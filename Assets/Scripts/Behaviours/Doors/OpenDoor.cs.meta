@@ -3,7 +3,9 @@ guid: a0da11a3bb3b0714ca700d61d1465de2
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - walkThroughSoundEffect: {fileID: 6187046135797150018, guid: 3364cfdb60bd5ce4e88811a6f85ea207, type: 3}
+  - ExitDoor: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

@@ -7,6 +7,7 @@ using static SpriteManager;
 
 public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
 {
+    public GameObject walkThroughSoundEffect;
     public AbstractDoor ExitDoor;
     public Directions exitDirection;
     [Range(-1, 10)]
@@ -37,6 +38,7 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
                     if (delayTimer < Time.timeSinceLevelLoad) {
                         Vector3 offset = VectorDict[exitDirection];
                         collision.gameObject.transform.position = ExitDoor.transform.position + offset;
+                        Instantiate(walkThroughSoundEffect);
                     }
                 } else {
                     UnityEngine.SceneManagement.SceneManager.LoadScene(sceneIndex);

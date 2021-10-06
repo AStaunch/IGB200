@@ -124,3 +124,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   emptySpaceType: 1
   Filled: {fileID: -4343367186929615182, guid: a2620ff2aa17e94468eabe0c4f5898ce, type: 3}
+  objectIntoWaterSound: {fileID: 6798944413720866177, guid: b5157fa69721ed947906ef8a0b71383c, type: 3}
+  objectIntoVoidSound: {fileID: 8342393830420493300, guid: 54c74cdbb00c0304999d00f6ad5e3598, type: 3}

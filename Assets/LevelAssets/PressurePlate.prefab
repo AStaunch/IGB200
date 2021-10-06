@@ -122,8 +122,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afa2cbe0ac30427458284ae885eb8f30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buttonPressSound: {fileID: 5423415212410916101, guid: e2e8c4b1b63fb9740961af367f9d61ba, type: 3}
   PressOnce: 1
   sprites:
   - {fileID: 8631783639204818654, guid: a2620ff2aa17e94468eabe0c4f5898ce, type: 3}
   - {fileID: -3000007341581711518, guid: a2620ff2aa17e94468eabe0c4f5898ce, type: 3}
-  currentState: 0

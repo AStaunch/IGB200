@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,47 +15,31 @@ public class AStar_test_experimental : MonoBehaviour
     {
         if (Test)
         {
-            //AStar_experimental.Node Me = AStar_experimental.ClosestNode(gameObject.transform.position);
-            //AStar_experimental.Node Target = AStar_experimental.ClosestNode(PathTo.transform.position);
-
-            //AStar_experimental.Node[] NodePath = AStar_experimental.ReversePath(Me, AStar_experimental.RequestPath(Me, Target, EnemyMovement));
-
-
-            //List<Vector3> path = new List<Vector3>();
-            //foreach(AStar_experimental.Node n in NodePath)
-            //{
-            //    path.Add(n.Position);
-            //}
-            //LineRenderer.positionCount = path.Count;
-            //LineRenderer.SetPositions(path.ToArray());
-            ////host.GetComponent<AStar>().RenderPath = true;
-            ////Debug.Log($"{Me.Position.x} - {n.Position.y}");
-
-            StartCoroutine("Req");
+            StartCoroutine(MakeRequest());
             Test = false;
         }
     }
 
-    public IEnumerator Req()
+
+    public IEnumerator MakeRequest()//(AStar_experimental.Node start, AStar_experimental.Node targ)
     {
+        //would use a try catch here, but its not allowed to have a yield in it, so going to wrap the casts of the result in one since corontine_wrap doesn't give a fuck about response type
+        Corontine_wrap wrapped_Path;
         while (true)
         {
             AStar_experimental.Node Me = AStar_experimental.ClosestNode(gameObject.transform.position);
             AStar_experimental.Node Target = AStar_experimental.ClosestNode(PathTo.transform.position);
-
-            StartCoroutine(AStar_experimental.RequestPath(Me, Target, EnemyMovement));
-            yield return new WaitUntil(() => AStar_experimental.Result_ != null);
-            AStar_experimental.Node[] NodePath = AStar_experimental.ReversePath(Me, AStar_experimental.Result_);
-
-
-            List<Vector3> path = new List<Vector3>();
-            foreach (AStar_experimental.Node n in NodePath)
+            wrapped_Path = new Corontine_wrap(this, AStar_experimental.RequestPath(Target, Me, EnemyMovement));//this is reversed so we dont need ReversePath. This is also called a Reverse Astar
+            yield return new WaitUntil(() => wrapped_Path.IsDone);
+            CoroutineResult resu = wrapped_Path.Results;
+            AStar_experimental.Node PathNode = ((AStar_experimental.Node)resu.Result);
+            if (PathNode != Target)
             {
-                path.Add(n.Position);
+                transform.position += (((Vector3)PathNode.Parent.Position) - transform.position) * Time.deltaTime * 5;
             }
-            LineRenderer.positionCount = path.Count;
-            LineRenderer.SetPositions(path.ToArray());
-            yield return new WaitForEndOfFrame();
+                
+            yield return new WaitForSecondsRealtime(2.5f);
         }
+        
     }
 }
