@@ -28,7 +28,7 @@ public abstract class AbstractLockedDoor : AbstractDoor, iRecieverObject
         }
     }
 
-    public abstract void CheckSenders();
+    public abstract void CheckSenders(iSenderObject iSenderObject);
 
     public override void OnValidate() {
         throw new NotImplementedException();

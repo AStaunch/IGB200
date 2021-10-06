@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Reflection;
 using UnityEngine;
+using static SpellFunctionLibrary;
 
 class Register : MonoBehaviour
 {
@@ -41,12 +42,13 @@ class Register : MonoBehaviour
             SpellRegistrySing.Instance.Registry.AddItemToregistry(new SpellTemplate("Ray", RaySprite_, new Action<SpellEffector>((effector) =>
             {
                 GameObject CasterObject = GameObject.FindGameObjectWithTag("Player");
-                Vector2 RayDirection = CasterObject.GetComponent<iFacingInterface>().GetEntityDirection();
-                Vector2 RayOrigin = CasterObject.transform.position;
-                RayOrigin += 0.5f * CasterObject.GetComponent<SpriteRenderer>().bounds.size * RayDirection;
+                Vector2 Direction = CasterObject.GetComponent<iFacingInterface>().GetEntityDirection();
+                Vector2 Offset = 0.1f * CasterObject.GetComponent<SpriteRenderer>().bounds.size * Direction;
+                Vector2 position = CasterObject.transform.position;
+                Vector2 Origin = position + Offset;
                 float maxDistance = 10f;
 
-                RaycastHit2D hit = Physics2D.Raycast(RayOrigin , RayDirection, maxDistance);
+                RaycastHit2D hit = Physics2D.Raycast(Origin, Direction, maxDistance);
                 ////There is no point using a facing variable, when this debug function will be removed soon
                 //Debug.DrawRay(GameObject.FindGameObjectWithTag("Player").transform.position, RayDirection);
                 RayData ryd = new RayData() { CasterObject = CasterObject, Data = hit, Calling_template = SpellRegistrySing.Instance.Registry.QueryRegistry("Ray") };
@@ -78,7 +80,7 @@ class Register : MonoBehaviour
                 ArcData acd = new ArcData() {
                     CasterObject = CasterObject,
                     ArcDirection = EnumsAndDictionaries.ArcDirections.Left,
-                    Data = arcDrawer.CreateArcProjectile(GameObject.FindGameObjectWithTag("Player").transform, effector.Colors, EnumsAndDictionaries.ArcDirections.Left),
+                    Data = arcDrawer.CreateArcProjectile(GameObject.FindGameObjectWithTag("Player").transform, effector.Colors),
                     Calling_template = SpellRegistrySing.Instance.Registry.QueryRegistry("Arc")
                 };
                 effector.Effector.Invoke(acd);//The null in this function would be the game object required
@@ -87,10 +89,26 @@ class Register : MonoBehaviour
             //Cone Template
             SpellRegistrySing.Instance.Registry.AddItemToregistry(new SpellTemplate("Cone", ConeSprite_, new Action<SpellEffector>((effector) =>
             {
-
-
                 Console.WriteLine("This would be a Cone");
-                effector.Effector.Invoke(null);//The null in this function would be the game object required
+                GameObject CasterObject = GameObject.FindGameObjectWithTag("Player");
+                Vector2 Direction = CasterObject.GetComponent<iFacingInterface>().GetEntityDirection();
+                Vector2 Offset = 0.1f * CasterObject.GetComponent<SpriteRenderer>().bounds.size * Direction;
+                Vector2 position = CasterObject.transform.position;
+                Vector2 Origin = position + Offset;
+                float maxDistance = 10f;
+
+                ////There is no point using a facing variable, when this debug function will be removed soon
+                //Debug.DrawRay(GameObject.FindGameObjectWithTag("Player").transform.position, RayDirection);
+                ConeData cod = new ConeData() { 
+                    CasterObject = CasterObject, 
+                    Data = ConeCast(maxDistance, CasterObject, CasterObject.GetComponent<iFacingInterface>().GetEntityDirectionEnum()), 
+                    Calling_template = SpellRegistrySing.Instance.Registry.QueryRegistry("Cone") };
+                
+                effector.Effector.Invoke(cod);                
+                //Create the Sprites for the Ray Spell 
+                SpellRenderer coneDrawer = FindObjectOfType<SpellRenderer>();
+                coneDrawer.DrawConeSprite(cod, effector.Colors);
+                effector.Effector.Invoke(null); //The null in this function would be the game object required
             }),1));
 
             //Shield Template
@@ -139,4 +157,6 @@ class Register : MonoBehaviour
         }
         Destroy(this.transform.gameObject);
     }
+
+    
 }

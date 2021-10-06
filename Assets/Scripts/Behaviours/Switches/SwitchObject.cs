@@ -25,7 +25,7 @@ public class SwitchObject : MonoBehaviour, iSenderObject, iHealthInterface
     private void UpdateReciever() {
         UpdateSprite();
         foreach (iRecieverObject target in targetObjects_) {
-            target.CheckSenders();
+            target.CheckSenders(this);
         }
     }
     // Start is called before the first frame update

@@ -22,7 +22,7 @@ public static class SpellFunctionLibrary
         {Elements.Ice,          new float[] {2f, 0f} },
         {Elements.Electricity,  new float[] {2f, 0f} },
         {Elements.Life,         new float[] {-1f, -1f} },
-        {Elements.Pull,         new float[] {1.5f, 0.5f} },
+        {Elements.Pull,         new float[] {-1.5f,-0.5f} },
         {Elements.Push,         new float[] {1.5f, 0.5f} },
         {Elements.Death,        new float[] {0f, 0f} },
         {Elements.Earth,        new float[] {5f, .5f} },
@@ -73,5 +73,65 @@ public static class SpellFunctionLibrary
         }        
     }
 
-    
+    public static IEnumerator ArcHitDetection(ArcBehaviour ac, ArcData Arc_, Elements element) {
+        float Strength = Arc_.baseStrength;
+        while (ac.HitCollider == null && ac.HitCollision == null) {
+            yield return null;
+        }
+        Collider2D ColHit = null;
+        if (ac.HitCollider) {
+            ColHit = ac.HitCollider;
+        } else if (ac.HitCollision != null) {
+            ColHit = ac.HitCollision.collider;
+        }
+
+        
+
+        if (ColHit.transform.TryGetComponent(out iPropertyInterface IPro)) {
+            Strength = ComputeOutPutValue(element, IPro.EntityProperties_, Strength);
+        }
+
+        if (element == Elements.Pull) {
+            Strength = -Strength;
+        }
+
+        if (element == Elements.Push || element == Elements.Pull) {
+            if (ColHit.transform.TryGetComponent(out iPhysicsInterface PI)) {
+                Vector2 direction = ColHit.transform.position - ac.transform.position;
+                Debug.Log(ColHit.transform.position + " : " + direction);
+                PI.UpdateVelocity(Strength, direction.normalized);
+            }
+        } else {
+            if (ColHit.transform.TryGetComponent(out iHealthInterface HI)) {
+                HI.TakeDamage(Strength, element);
+            }
+        }
+    }
+
+    public static GameObject[] ConeCast(float Distance, GameObject Origin, Directions Direction) {
+        const float angle = 60;
+        const int noRays = 15;
+        Vector2 direction = VectorDict[Direction];
+        List<GameObject> hitPoints = new List<GameObject>();
+        float startAngle = CalculateStartAngle(direction) - (angle / 2);
+        int[] StopMask = new int[] { 8 };
+        for (int i = 0; i < noRays; i++) {
+            float SendAngle = startAngle + i * (angle / noRays);
+            SendAngle = SendAngle * Mathf.Deg2Rad;
+            Vector2 targetPosition = Distance * new Vector3(Mathf.Sin(SendAngle), Mathf.Cos(SendAngle));
+            RaycastHit2D hit = Physics2D.CircleCast(Origin.transform.position, 0.1f, targetPosition);
+            if (hit.collider != null) {
+                if (!hitPoints.Contains(hit.transform.gameObject)) {
+                    hitPoints.Add(hit.transform.gameObject);
+                }
+            }
+            Debug.DrawRay(Origin.transform.position, targetPosition, Color.blue, 1f);
+        }
+        return hitPoints.ToArray();
+    }
+
+    private static float CalculateStartAngle(Vector2 direction) {
+        float value = (float)((Mathf.Atan2(direction.x, direction.y) / System.Math.PI) * 180f);
+        return value;
+    }
 }

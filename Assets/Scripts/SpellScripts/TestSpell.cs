@@ -58,35 +58,7 @@ public class TestSpell : MonoBehaviour
         Colors = ColourDict[Elements.Push]
     };
 
-    public static IEnumerator ArcHitDetection(ArcBehaviour ac, ArcData Arc_, Elements element) {
-        float Strength = Arc_.baseStrength;
-        while (ac.HitCollider == null && ac.HitCollision == null) {
-            yield return null;
-        }
-        Collider2D ColHit  = null;
-        if (ac.HitCollider) {
-            ColHit = ac.HitCollider;
-        } else if (ac.HitCollision != null) {
-            ColHit = ac.HitCollision.collider;
-        }
 
-        Vector2 direction = ColHit.transform.position - ac.transform.position;
-        Debug.Log(ColHit.transform.position + " : " + direction);
-
-        if(ColHit.transform.TryGetComponent(out iPropertyInterface IPro)) {
-            Strength = ComputeOutPutValue(element, IPro.EntityProperties_, Strength);
-        }
-
-        if(element == Elements.Push || element == Elements.Pull) {
-            if (ColHit.transform.TryGetComponent(out iPhysicsInterface PI)) {
-                PI.UpdateVelocity(Strength, direction.normalized);
-            }
-        } else {
-            if(ColHit.transform.TryGetComponent(out iHealthInterface HI)) {
-                HI.TakeDamage(Strength, element);
-            }
-        }
-    }
 
     void Update()
     {

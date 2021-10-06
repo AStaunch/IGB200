@@ -45,6 +45,9 @@ public interface iPropertyManager {
     public void AddProperty(Properties property);
     public void RemovePropery(Properties property);
     public void AddProperty(Properties property, float duration);
+    public void AddImmunity(Elements element);
+    public void RemoveImmunity(Elements property);
+    public void AddImmunity(Elements element, float duration);
 }
 
 public class IKDYet

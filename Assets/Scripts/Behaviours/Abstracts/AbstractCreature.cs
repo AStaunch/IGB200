@@ -12,8 +12,8 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
     private int Health;
     public int MaxHealth_ { get => MaxHealth; set => MaxHealth = value; }
     public int MaxHealth;
-    public abstract Elements[] DamageImmunities_ { get; set; }
-
+    public Elements[] DamageImmunities_ { get => DamageImmunities; set => DamageImmunities = value; }
+    public Elements[] DamageImmunities;
 
     public Properties[] EntityProperties_ { get => EntityProperties; set => EntityProperties = value; }
     public Properties[] EntityProperties;
@@ -48,7 +48,6 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
         return IntDict[CurrentDirection_];
     }
 
-    
     public void TakeDamage(float damage, Elements damageType) {
         if (DamageImmunities_.Contains(damageType)) {
             return;
@@ -105,6 +104,44 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
             yield return null;
         }
         Array.Resize(ref EntityProperties, EntityProperties_.Length - 1);
+
+    }
+
+
+    public void AddImmunity(Elements element) {
+        if (!DamageImmunities_.Contains(element)) {
+            //Add Property
+            Array.Resize(ref DamageImmunities, DamageImmunities_.Length + 1);
+            DamageImmunities_[DamageImmunities_.Length - 1] = element;
+        }
+    }
+
+    public void RemoveImmunity(Elements property) {
+        if (DamageImmunities_.Contains(property)) {
+            int index = Array.FindIndex(DamageImmunities, 0, DamageImmunities_.Length, DamageImmunities_.Contains);
+            for (; index < DamageImmunities_.Length - 1; index++) {
+                DamageImmunities_[index] = DamageImmunities_[index + 1];
+            }
+            Array.Resize(ref EntityProperties, EntityProperties_.Length - 1);
+        }
+    }
+
+    public void AddImmunity(Elements element, float duration) {
+        if (!DamageImmunities_.Contains(element)) {
+            StartCoroutine(AddImmunityForDuration(element, duration));
+        }
+    }
+
+    private IEnumerator AddImmunityForDuration(Elements element, float duration) {
+        float t = 0;
+        Array.Resize(ref DamageImmunities, DamageImmunities_.Length + 1);
+        DamageImmunities_[DamageImmunities_.Length - 1] = element;
+
+        while (t < duration) {
+            t += Time.deltaTime;
+            yield return null;
+        }
+        Array.Resize(ref DamageImmunities, DamageImmunities_.Length - 1);
 
     }
     #endregion

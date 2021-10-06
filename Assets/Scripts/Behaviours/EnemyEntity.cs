@@ -1,16 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using static EnumsAndDictionaries;
 public class EnemyEntity : AbstractCreature, iEnemyInterface
 {
     public GameObject enemDeathSound;
     //TODO?
-    public EnumsAndDictionaries.Elements[] DamageImmunities;
-    public override EnumsAndDictionaries.Elements[] DamageImmunities_ { get => DamageImmunities; set => DamageImmunities = value; }
+
     public float EntityDamage;
     public float EntityDamage_ { get => EntityDamage; set => EntityDamage = value; }
 
+    public void Start() {
+        if(DamageImmunities_ == null) {
+            DamageImmunities_ = new Elements[0];
+        }
+    }
     public override void Decelerate() {
         throw new System.NotImplementedException();
     }
@@ -26,6 +30,6 @@ public class EnemyEntity : AbstractCreature, iEnemyInterface
     }
 
     public override void UpdateVelocity(float magnitude, Vector3 direction) {
-        throw new System.NotImplementedException();
+        RB_.velocity = magnitude * direction;
     }
 }

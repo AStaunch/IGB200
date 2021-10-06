@@ -114,27 +114,38 @@ public class SpellRenderer : MonoBehaviour
     public AnimationCurve arcCurve;
     public Sprite ArcSprite;
     #region Arc Drawer
-    public GameObject CreateArcProjectile(Transform origin, Color[] colors, ArcDirections arcDirection) {
-        spellMaster = new GameObject("Ray Master");
+    public GameObject CreateArcProjectile(Transform origin, Color[] colors) {
+        spellMaster = new GameObject("Arc Master");
         spellMaster.transform.position = origin.position;
-        Material material = CreateMaterial(colors);
-        GameObject arcBall = CreateObject(ArcSprite, material);
+        GameObject arcBall = CreateObject(ArcSprite, CreateMaterial(colors));
         arcBall.transform.position = origin.position;
+        TrailRenderer tr = arcBall.AddComponent<TrailRenderer>();
+        tr.startColor = colors[0];
+        tr.endColor = colors[2];
+        tr.sortingLayerName = "Objects";
+        tr.time = 0.8f;
+        tr.startWidth = 0.4f;
+        tr.endWidth = 0.2f;
+        tr.material = origin.GetComponent<Renderer>().material;
         return arcBall;
     }
     #endregion
 
     #region Orb Drawer
-
+    public Sprite OrbSprite;
     #endregion
-
+    public Sprite ConeSprite;
     #region Cone Drawer
-    public void DrawConeSprite(Transform origin, RaycastHit2D[] points, Color[] colors) {
-        throw new NotImplementedException();
+    public void DrawConeSprite(iEffectorData Data, Color[] colors) {
+        ConeData coneData = (ConeData)Data;
+        spellMaster = new GameObject("Arc Master");
+        spellMaster.transform.position = coneData.CasterObject.transform.position;
+        GameObject coneObject = CreateObject(ArcSprite, CreateMaterial(colors));
+        coneObject.transform.Rotate(Vector3.forward * RotationDict[Data.CasterObject.GetComponent<iFacingInterface>().GetEntityDirectionEnum()]);
     }
 
     #endregion
-
+    public Sprite ShieldSprite;
     #region Shield Drawer
 
     #endregion

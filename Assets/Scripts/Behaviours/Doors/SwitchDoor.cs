@@ -16,7 +16,7 @@ public class SwitchDoor : AbstractLockedDoor
         }
     }
 
-    public override void CheckSenders() {
+    public override void CheckSenders(iSenderObject iSenderObject) {
         for (int i = 0; i < switchObjects_.Length; i++) {
             if (switchObjects_[i].currentState_ == false) {
                 currentState_ = false;

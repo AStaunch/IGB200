@@ -11,6 +11,7 @@ public class PlayerEntity : AbstractCreature
     private void Start() {
         EntitySpeed_ = 5;
         gameObject.layer = 7;
+        DamageImmunities_ = new Elements[0];
     }
     private Vector3 change;
     void Update()
@@ -75,8 +76,6 @@ public class PlayerEntity : AbstractCreature
     //Hacky Checkpoint Management
     GameObject lastCheckpoint;
     List<Rigidbody2D> collidedObjects = new List<Rigidbody2D>();
-    public override Elements[] DamageImmunities_ { get => DamageImmunities; set => DamageImmunities = value; }
-    private Elements[] DamageImmunities;
 
     private void OnCollisionEnter2D(Collision2D collision) {
         bool b1 = collision.transform.TryGetComponent(out iPropertyInterface _); 

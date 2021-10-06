@@ -6,7 +6,7 @@ public interface iRecieverObject
 {
     public iSenderObject[] switchObjects_ { get; set; }
     bool currentState_ { get; set; }
-    public void CheckSenders();
+    public void CheckSenders(iSenderObject iSenderObject);
 }
 
 public interface iSenderObject

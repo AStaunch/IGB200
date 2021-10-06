@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 15017959974083763}
   - component: {fileID: 6287933508429736331}
   - component: {fileID: 3702627214776637374}
+  - component: {fileID: 7958023751844219747}
   m_Layer: 5
   m_Name: Orb
   m_TagString: Untagged
@@ -119,7 +120,35 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6287933508429736331}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7958023751844219747}
+        m_TargetAssemblyTypeName: CustomEventHandle, Assembly-CSharp
+        m_MethodName: BroadcastEvent
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &7958023751844219747
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 92129766957507616}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4bc46e3b332bcf4dbb43c1e36341f1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dataType: 0
+  eventName: OrbBroadcast
+  effector_name: 
+  template_name: Orb
 --- !u!1 &138506017553622152
 GameObject:
   m_ObjectHideFlags: 0
@@ -937,7 +966,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &5062300731213511054
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2896,6 +2925,7 @@ GameObject:
   - component: {fileID: 2332281425332829767}
   - component: {fileID: 1039339158093432655}
   - component: {fileID: 8412460716947943509}
+  - component: {fileID: 3205518095298093283}
   m_Layer: 5
   m_Name: Arc
   m_TagString: Untagged
@@ -3000,10 +3030,38 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 1039339158093432655}
+  m_TargetGraphic: {fileID: 1651768215966297957}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3205518095298093283}
+        m_TargetAssemblyTypeName: CustomEventHandle, Assembly-CSharp
+        m_MethodName: BroadcastEvent
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &3205518095298093283
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6285255539485693973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4bc46e3b332bcf4dbb43c1e36341f1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dataType: 0
+  eventName: ArcBroadcast
+  effector_name: 
+  template_name: Arc
 --- !u!1 &6573018852122272581
 GameObject:
   m_ObjectHideFlags: 0
@@ -3524,9 +3582,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dataType: 0
-  eventName: TestEvent
+  eventName: ConeBroadcast
   effector_name: 
-  template_name: 
+  template_name: Cone
 --- !u!1 &7417222192645799835
 GameObject:
   m_ObjectHideFlags: 0
@@ -3839,6 +3897,7 @@ GameObject:
   - component: {fileID: 4290086154996813817}
   - component: {fileID: 3407526176824908047}
   - component: {fileID: 7530916019811861414}
+  - component: {fileID: 9104558990486520793}
   m_Layer: 5
   m_Name: Aura
   m_TagString: Untagged
@@ -3946,7 +4005,35 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3407526176824908047}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 9104558990486520793}
+        m_TargetAssemblyTypeName: CustomEventHandle, Assembly-CSharp
+        m_MethodName: BroadcastEvent
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &9104558990486520793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8266810554898381755}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4bc46e3b332bcf4dbb43c1e36341f1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dataType: 0
+  eventName: AuraBroadcast
+  effector_name: 
+  template_name: Shield
 --- !u!1 &8601526741345830814
 GameObject:
   m_ObjectHideFlags: 0

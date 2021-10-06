@@ -101,9 +101,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f37fe37fd3d37a24691a41fef0985b55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHealth: 0
+  MaxHealth: 5
   EntityProperties: 
-  EntitySpeed: 0
+  EntitySpeed: 5
   Deceleration: 5
   isCasting: 0
 --- !u!50 &3497795528780355780

@@ -22,7 +22,7 @@ public class PressurePlate : MonoBehaviour, iSenderObject
 
     private void UpdateReciever() {
         foreach (iRecieverObject target in targetObjects_) {
-            target.CheckSenders();
+            target.CheckSenders(this);
         }
     }
     // Start is called before the first frame update

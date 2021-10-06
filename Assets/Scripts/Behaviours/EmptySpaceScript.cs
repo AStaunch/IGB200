@@ -4,15 +4,10 @@ using UnityEngine;
 
 public class EmptySpaceScript : MonoBehaviour
 {
-    [System.Serializable]
-    public enum TypeOfTile
-    {
-        Water, Void
-    }
-    public TypeOfTile emptySpaceType;
+    public VoidType VoidType_;
     public Sprite Filled;
-    SpriteRenderer sr;
-    BoxCollider2D bc;
+    private SpriteRenderer sr;
+    private BoxCollider2D bc;
     private Rigidbody2D rb;
 
     public GameObject objectIntoWaterSound;
@@ -40,13 +35,13 @@ public class EmptySpaceScript : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision) {
         if (collision.transform.TryGetComponent(out BlockScript _)){
-            if (emptySpaceType == TypeOfTile.Water) {
+            if (VoidType_ == VoidType.Water) {
                 sr.sprite = Filled;
                 Instantiate(objectIntoWaterSound);
                 Destroy(collision.gameObject);
                 Destroy(bc);
                 Destroy(rb);
-            } else if (emptySpaceType == TypeOfTile.Void) {
+            } else if (VoidType_ == VoidType.Void) {
                 Instantiate(objectIntoVoidSound);
                 Destroy(collision.gameObject);
             }

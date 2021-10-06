@@ -178,7 +178,7 @@ public class RayData : iEffectorData
     public GameObject CasterObject { get; set; }
     public SpellTemplate Calling_template { get; set; }
     public RaycastHit2D Data { get; set; }
-    public float baseStrength { get => 3f;}
+    public float baseStrength { get => 2f;}
 }
 
 public class ArcData : iEffectorData
@@ -187,7 +187,7 @@ public class ArcData : iEffectorData
     public SpellTemplate Calling_template { get; set; }
     public GameObject Data { get; set; }
     public EnumsAndDictionaries.ArcDirections ArcDirection { get; set; }
-    public float baseStrength { get => 4f; }
+    public float baseStrength { get => 3f; }
 }
 
 public class ConeData : iEffectorData
@@ -196,7 +196,7 @@ public class ConeData : iEffectorData
     public SpellTemplate Calling_template { get; set; }
     public GameObject[] Data { get; set; }
 
-    public float baseStrength { get => 1.5f; }
+    public float baseStrength { get => 1f; }
 }
 
 public class OrbData : iEffectorData
@@ -208,7 +208,7 @@ public class OrbData : iEffectorData
     public float baseStrength { get => 1.5f; }
 }
 
-public class Shield : iEffectorData
+public class ShieldData : iEffectorData
 {
     public GameObject CasterObject { get; set; }
     public SpellTemplate Calling_template { get; set; }
