@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1160035272493354698}
   - component: {fileID: 1445870326990471950}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: TilesetEternal_19
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 8238265604039801799}
   - component: {fileID: 4660940039665028970}
   - component: {fileID: 6861715113764556093}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Skeleton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -224,11 +224,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MaxHealth: 3
+  DamageImmunities: 07000000
   EntityProperties: 
   EntitySpeed: 0.5
   Deceleration: 1
   enemDeathSound: {fileID: 207168208727640438, guid: 41483acde3a6b784b9d93cb0fabbb453, type: 3}
-  DamageImmunities: 07000000
   EntityDamage: 1
 --- !u!95 &6861715113764556093
 Animator:

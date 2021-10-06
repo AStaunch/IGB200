@@ -125,7 +125,7 @@ public static class SpellFunctionLibrary
                     hitPoints.Add(hit.transform.gameObject);
                 }
             }
-            Debug.DrawRay(Origin.transform.position, targetPosition, Color.blue, 1f);
+            //Debug.DrawRay(Origin.transform.position, targetPosition, Color.blue, 1f);
         }
         return hitPoints.ToArray();
     }

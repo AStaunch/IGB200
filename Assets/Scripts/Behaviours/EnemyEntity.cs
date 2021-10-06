@@ -11,7 +11,8 @@ public class EnemyEntity : AbstractCreature, iEnemyInterface
     public float EntityDamage_ { get => EntityDamage; set => EntityDamage = value; }
 
     public void Start() {
-        if(DamageImmunities_ == null) {
+        Health_ = MaxHealth_;
+        if (DamageImmunities_ == null) {
             DamageImmunities_ = new Elements[0];
         }
     }

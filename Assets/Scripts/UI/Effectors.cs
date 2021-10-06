@@ -284,11 +284,13 @@ public static class Effectors
                     float Strength = ComputeOutPutValue(element, HI.EntityProperties_, Cone_.baseStrength);
                     Vector2 Direction = gameObject.transform.position - Cone_.CasterObject.transform.position;
                     HI.UpdateVelocity(Strength, Direction);
+                    Debug.DrawLine(Cone_.CasterObject.transform.position, Cone_.CasterObject.transform.position, Color.magenta, 1f);
                 }
             } else {
                 if (gameObject.TryGetComponent(out iHealthInterface HI)) {
                     float Strength = ComputeOutPutValue(element, HI.EntityProperties_, Cone_.baseStrength);
                     HI.TakeDamage(Strength, element);
+                    Debug.DrawLine(Cone_.CasterObject.transform.position, Cone_.CasterObject.transform.position, Color.red, 1f);
                 }
             }
         }

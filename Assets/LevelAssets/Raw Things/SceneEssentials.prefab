@@ -108,6 +108,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: UI Canvas
       objectReference: {fileID: 0}
+    - target: {fileID: 862353563440661771, guid: 0e93fb99befeccf4a8f7f9ccc3385dd5, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1769683371500705242, guid: 0e93fb99befeccf4a8f7f9ccc3385dd5, type: 3}
       propertyPath: eventName
       value: PushPlayerBroadcast
@@ -115,6 +119,10 @@ PrefabInstance:
     - target: {fileID: 1769683371500705242, guid: 0e93fb99befeccf4a8f7f9ccc3385dd5, type: 3}
       propertyPath: effector_name
       value: PushPlayer
+      objectReference: {fileID: 0}
+    - target: {fileID: 2162769437722285599, guid: 0e93fb99befeccf4a8f7f9ccc3385dd5, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3160719552529653338, guid: 0e93fb99befeccf4a8f7f9ccc3385dd5, type: 3}
       propertyPath: eventName
@@ -418,6 +426,18 @@ PrefabInstance:
       propertyPath: ArcSprite
       value: 
       objectReference: {fileID: 21300000, guid: 2f43fea180f2c9346875c7cd59c05e4c, type: 3}
+    - target: {fileID: 4423776004440969253, guid: bc3557ba8288be84bbe229066332bcc0, type: 3}
+      propertyPath: OrbSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 22bd7e7733a9ddd4b832ccf756a4c0b5, type: 3}
+    - target: {fileID: 4423776004440969253, guid: bc3557ba8288be84bbe229066332bcc0, type: 3}
+      propertyPath: ConeSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 22bd7e7733a9ddd4b832ccf756a4c0b5, type: 3}
+    - target: {fileID: 4423776004440969253, guid: bc3557ba8288be84bbe229066332bcc0, type: 3}
+      propertyPath: PulseFXObject
+      value: 
+      objectReference: {fileID: 8377872944851353150, guid: 58b74cf30c2597540bf221f9437a4667, type: 3}
     m_RemovedComponents:
     - {fileID: 4423776004440969251, guid: bc3557ba8288be84bbe229066332bcc0, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: bc3557ba8288be84bbe229066332bcc0, type: 3}

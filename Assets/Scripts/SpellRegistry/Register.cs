@@ -43,7 +43,7 @@ class Register : MonoBehaviour
             {
                 GameObject CasterObject = GameObject.FindGameObjectWithTag("Player");
                 Vector2 Direction = CasterObject.GetComponent<iFacingInterface>().GetEntityDirection();
-                Vector2 Offset = 0.1f * CasterObject.GetComponent<SpriteRenderer>().bounds.size * Direction;
+                Vector2 Offset = 0.5f * CasterObject.GetComponent<SpriteRenderer>().bounds.size * Direction;
                 Vector2 position = CasterObject.transform.position;
                 Vector2 Origin = position + Offset;
                 float maxDistance = 10f;
@@ -80,7 +80,7 @@ class Register : MonoBehaviour
                 ArcData acd = new ArcData() {
                     CasterObject = CasterObject,
                     ArcDirection = EnumsAndDictionaries.ArcDirections.Left,
-                    Data = arcDrawer.CreateArcProjectile(GameObject.FindGameObjectWithTag("Player").transform, effector.Colors),
+                    Data = arcDrawer.CreateArcProjectile(CasterObject.transform, effector.Colors),
                     Calling_template = SpellRegistrySing.Instance.Registry.QueryRegistry("Arc")
                 };
                 effector.Effector.Invoke(acd);//The null in this function would be the game object required
@@ -92,23 +92,24 @@ class Register : MonoBehaviour
                 Console.WriteLine("This would be a Cone");
                 GameObject CasterObject = GameObject.FindGameObjectWithTag("Player");
                 Vector2 Direction = CasterObject.GetComponent<iFacingInterface>().GetEntityDirection();
-                Vector2 Offset = 0.1f * CasterObject.GetComponent<SpriteRenderer>().bounds.size * Direction;
+                Vector2 Offset = 0.5f * CasterObject.GetComponent<SpriteRenderer>().bounds.size * Direction;
                 Vector2 position = CasterObject.transform.position;
                 Vector2 Origin = position + Offset;
                 float maxDistance = 10f;
-
+                int LayerStore = CasterObject.layer;
+                CasterObject.layer = 2;
                 ////There is no point using a facing variable, when this debug function will be removed soon
                 //Debug.DrawRay(GameObject.FindGameObjectWithTag("Player").transform.position, RayDirection);
                 ConeData cod = new ConeData() { 
                     CasterObject = CasterObject, 
                     Data = ConeCast(maxDistance, CasterObject, CasterObject.GetComponent<iFacingInterface>().GetEntityDirectionEnum()), 
-                    Calling_template = SpellRegistrySing.Instance.Registry.QueryRegistry("Cone") };
-                
+                    Calling_template = SpellRegistrySing.Instance.Registry.QueryRegistry("Cone") 
+                };
+                CasterObject.layer = LayerStore;
                 effector.Effector.Invoke(cod);                
                 //Create the Sprites for the Ray Spell 
                 SpellRenderer coneDrawer = FindObjectOfType<SpellRenderer>();
                 coneDrawer.DrawConeSprite(cod, effector.Colors);
-                effector.Effector.Invoke(null); //The null in this function would be the game object required
             }),1));
 
             //Shield Template

@@ -52,6 +52,8 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
         if (DamageImmunities_.Contains(damageType)) {
             return;
         }
+        SpellRenderer hitDrawer = FindObjectOfType<SpellRenderer>();
+        hitDrawer.CreateBurstFX(transform.position, ColourDict[damageType]);
         Health_ -= Mathf.RoundToInt(damage);
         Health_ = Mathf.Clamp(Health_, 0, MaxHealth_);
         if (0 >= Health_) {

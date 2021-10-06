@@ -9,9 +9,12 @@ public class PlayerEntity : AbstractCreature
     // Update is called once per frame
 
     private void Start() {
+        Health_ = MaxHealth_;
         EntitySpeed_ = 5;
         gameObject.layer = 7;
-        DamageImmunities_ = new Elements[0];
+        if (DamageImmunities_ == null) {
+            DamageImmunities_ = new Elements[0];
+        }
     }
     private Vector3 change;
     void Update()
