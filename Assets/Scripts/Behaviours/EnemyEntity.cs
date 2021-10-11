@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using static EnumsAndDictionaries;
 public class EnemyEntity : AbstractCreature, iEnemyInterface
@@ -41,6 +42,9 @@ public class EnemyEntity : AbstractCreature, iEnemyInterface
     }
 
     public override void UpdateForce(float magnitude, Vector3 direction) {
+        if (EntityProperties_.Contains(Properties.Immovable)) {
+            return;
+        }
         gameObject.layer = 6;
         RB_.AddForce(magnitude * direction * RB_.mass, ForceMode2D.Impulse);
     }

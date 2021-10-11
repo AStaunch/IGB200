@@ -35,11 +35,7 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
 
 
     public abstract void Decelerate();
-
-    public abstract void UpdateForce(float magnitude, Vector3 direction);
-
     public abstract void EntityDeath();
-
     public Vector2 GetEntityDirection() {
         return VectorDict[CurrentDirection_];
     }
@@ -74,7 +70,7 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
     }
 
     public abstract void  UpdateVelocity(float magnitude, Vector3 direction);
-
+    public abstract void UpdateForce(float magnitude, Vector3 direction);
     #region Property Management
     public void AddProperty(Properties property) {
         if (!EntityProperties_.Contains(property)) {

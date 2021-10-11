@@ -41,7 +41,7 @@ public static class Effectors
 
                     case "Cone":
                         ConeData Cone_ = (ConeData)EffectorData_;
-                        ConeProcess(Cone_, element);
+                        ConeProcess(Cone_,baseStrength, element);
                         break;
 
                     default:
@@ -77,7 +77,7 @@ public static class Effectors
 
                     case "Cone":
                         ConeData Cone_ = (ConeData)EffectorData_;
-                        ConeProcess(Cone_, element);
+                        ConeProcess(Cone_, -baseStrength, element);
                         break;
 
                     default:
@@ -108,7 +108,7 @@ public static class Effectors
 
                     case "Cone":
                         ConeData Cone_ = (ConeData)EffectorData_;
-                        ConeProcess(Cone_, element);
+                        ConeProcess(Cone_, -baseStrength, element);
                         break;
 
                     default:
@@ -146,7 +146,7 @@ public static class Effectors
 
                     case "Cone":
                         ConeData Cone_ = (ConeData)EffectorData_;
-                        ConeProcess(Cone_, element);
+                        ConeProcess(Cone_,baseStrength, element);
                         break;
 
                     default:
@@ -169,7 +169,7 @@ public static class Effectors
                             float Strength = -1f * ComputeOutPutValue(element, thisEntity.EntityProperties_, baseStrength);
                             Vector2 Direction = Ray_.CasterObject.transform.GetComponent<iFacingInterface>().GetEntityDirection();
                             thisEntity.UpdateForce(Strength, Direction);
-                            Ray_.CasterObject.GetComponent<MonoBehaviour>().StartCoroutine(CheckVelocityCanBridgeGaps(Ray_.CasterObject));
+                            EffectorData_.CasterObject.GetComponent<MonoBehaviour>().StartCoroutine(CheckVelocityCanBridgeGaps(EffectorData_.CasterObject));
                             Debug.Log(Strength * Direction);
                         }
                         break;
@@ -190,11 +190,14 @@ public static class Effectors
                                 float Strength = 0.4f * ComputeOutPutValue(element, HI.EntityProperties_, Cone_.baseStrength);
                                 Vector2 Direction = gameObject.transform.position - Cone_.CasterObject.transform.position;
                                 HI.UpdateForce(Strength, Direction);
+                                gameObject.GetComponent<MonoBehaviour>().StartCoroutine(CheckVelocityCanBridgeGaps(gameObject));
                                 Debug.DrawLine(Cone_.CasterObject.transform.position, Cone_.CasterObject.transform.position, Color.magenta, 1f);
                             }
                             TotalForce += Vector2.Distance(Cone_.CasterObject.transform.position, gameObject.transform.position);
                         }
                         Vector2 direction = Cone_.CasterObject.transform.GetComponent<iFacingInterface>().GetEntityDirection();
+                        Cone_.CasterObject.GetComponent<iPhysicsInterface>().UpdateForce(TotalForce, -direction);
+                        EffectorData_.CasterObject.GetComponent<MonoBehaviour>().StartCoroutine(CheckVelocityCanBridgeGaps(EffectorData_.CasterObject));
                         Debug.Log(TotalForce * direction);
                         break;
 
@@ -231,11 +234,11 @@ public static class Effectors
 
                     case "Cone":
                         ConeData Cone_ = (ConeData)EffectorData_;
-                        ConeProcess(Cone_, element);
+                        ConeProcess(Cone_,baseStrength, element);
                         break;
 
                     default:
-                        Debug.Log($"{EffectorData_.Calling_template.Name} is not yet defined for Fire");
+                        Debug.Log($"{EffectorData_.Calling_template.Name} is not yet defined for Ice");
                         break;                
                 }
             }),
@@ -267,11 +270,11 @@ public static class Effectors
 
                     case "Cone":
                         ConeData Cone_ = (ConeData)EffectorData_;
-                        ConeProcess(Cone_, element);
+                        ConeProcess(Cone_,baseStrength, element);
                         break;
 
                     default:
-                        Debug.Log($"{EffectorData_.Calling_template.Name} is not yet defined for Fire");
+                        Debug.Log($"{EffectorData_.Calling_template.Name} is not yet defined for Life");
                         break;
                 }
             }),
@@ -303,11 +306,11 @@ public static class Effectors
 
                     case "Cone":
                         ConeData Cone_ = (ConeData)EffectorData_;
-                        ConeProcess(Cone_, element);
+                        ConeProcess(Cone_,baseStrength, element);
                         break;
 
                     default:
-                        Debug.Log($"{EffectorData_.Calling_template.Name} is not yet defined for Fire");
+                        Debug.Log($"{EffectorData_.Calling_template.Name} is not yet defined for Electricity");
                         break;
                 }
             }),
