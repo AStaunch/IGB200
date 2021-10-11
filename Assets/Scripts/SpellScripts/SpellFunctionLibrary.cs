@@ -22,7 +22,7 @@ public static class SpellFunctionLibrary
         {Elements.Ice,          new float[] {2f, 0f} },
         {Elements.Electricity,  new float[] {2f, 0f} },
         {Elements.Life,         new float[] {-1f, -1f} },
-        {Elements.Pull,         new float[] {-1.5f,-0.5f} },
+        {Elements.Pull,         new float[] {1.5f, 0.5f} },
         {Elements.Push,         new float[] {1.5f, 0.5f} },
         {Elements.Death,        new float[] {0f, 0f} },
         {Elements.Earth,        new float[] {5f, .5f} },
@@ -44,7 +44,8 @@ public static class SpellFunctionLibrary
     }
 
     public static IEnumerator CheckVelocityCanBridgeGaps(GameObject gameObject) {
-        if(gameObject.transform.TryGetComponent(out Rigidbody2D rb)) {
+        if (gameObject.transform.TryGetComponent(out Rigidbody2D rb)) {
+            gameObject.layer = 6;
             while (rb.velocity.magnitude > 1f) {
                 gameObject.layer = 6;
                 yield return null;
@@ -56,6 +57,7 @@ public static class SpellFunctionLibrary
     }
 
     public static IEnumerator LerpSelf(GameObject targetObject, Vector2 targetPosition, float duration) {
+        Debug.Log($" Moving { targetObject.transform.name } to {targetPosition}");
         if (targetObject.TryGetComponent(out iPhysicsInterface iPhysics)) {
             float time = 0;
             Vector2 startPosition = targetObject.transform.position;
@@ -83,9 +85,7 @@ public static class SpellFunctionLibrary
             ColHit = ac.HitCollider;
         } else if (ac.HitCollision != null) {
             ColHit = ac.HitCollision.collider;
-        }
-
-        
+        }        
 
         if (ColHit.transform.TryGetComponent(out iPropertyInterface IPro)) {
             Strength = ComputeOutPutValue(element, IPro.EntityProperties_, Strength);
@@ -99,11 +99,56 @@ public static class SpellFunctionLibrary
             if (ColHit.transform.TryGetComponent(out iPhysicsInterface PI)) {
                 Vector2 direction = ColHit.transform.position - ac.transform.position;
                 Debug.Log(ColHit.transform.position + " : " + direction);
-                PI.UpdateVelocity(Strength, direction.normalized);
+                PI.UpdateForce(Strength, direction.normalized);
             }
         } else {
             if (ColHit.transform.TryGetComponent(out iHealthInterface HI)) {
                 HI.TakeDamage(Strength, element);
+            }
+        }
+    }
+
+    public static IEnumerator ArcPlayerMove(ArcBehaviour ac, ArcData Arc_, Elements element) {
+        float Strength = Arc_.baseStrength;
+        Vector3 LastPosition = Arc_.CasterObject.transform.position;
+        while (ac.HitCollider == null && ac.HitCollision == null) {
+            LastPosition = ac.transform.position;
+            yield return null;
+        }
+
+        if (Arc_.CasterObject.TryGetComponent(out iPropertyInterface IP)) {
+            Strength = ComputeOutPutValue(element, IP.EntityProperties_, Strength);
+        }
+
+        if (element == Elements.Pull) {
+            float Distance = Vector2.Distance(Arc_.CasterObject.transform.position, LastPosition);
+            Arc_.CasterObject.GetComponent<MonoBehaviour>().StartCoroutine(LerpSelf(Arc_.CasterObject, LastPosition, 1f));
+        }else if (element == Elements.Push) {
+            if (Arc_.CasterObject.TryGetComponent(out iPhysicsInterface PI)) {
+                Vector2 direction = LastPosition - Arc_.CasterObject.transform.position;
+                Debug.Log(LastPosition + " : " + direction);
+                Arc_.CasterObject.GetComponent<iPhysicsInterface>().UpdateForce(-Strength, direction.normalized);
+                Arc_.CasterObject.GetComponent<MonoBehaviour>().StartCoroutine(CheckVelocityCanBridgeGaps(Arc_.CasterObject));
+
+            }
+        }
+    }
+
+    public static void ConeProcess(ConeData Cone_, float baseStrength, Elements element) {
+        foreach (GameObject gameObject in Cone_.Data) {
+            if (element == Elements.Pull || element == Elements.Push) {
+                if (gameObject.TryGetComponent(out iPhysicsInterface HI)) {
+                    float Strength = ComputeOutPutValue(element, HI.EntityProperties_, baseStrength);
+                    Vector2 Direction = gameObject.transform.position - Cone_.CasterObject.transform.position;
+                    HI.UpdateForce(Strength, Direction);
+                    Debug.DrawLine(Cone_.CasterObject.transform.position, Cone_.CasterObject.transform.position, Color.magenta, 1f);
+                }
+            } else {
+                if (gameObject.TryGetComponent(out iHealthInterface HI)) {
+                    float Strength = ComputeOutPutValue(element, HI.EntityProperties_, baseStrength);
+                    HI.TakeDamage(Strength, element);
+                    Debug.DrawLine(Cone_.CasterObject.transform.position, Cone_.CasterObject.transform.position, Color.red, 1f);
+                }
             }
         }
     }
