@@ -33,11 +33,8 @@ class Register : MonoBehaviour
     //private Sprite RaySprite_ { get { return RaySprite != null ? RaySprite : null; } }
 
     void Start()
-    {
-        if (GameObject.FindGameObjectWithTag("UnlockManager") == null)
-            _ = UnlockManager.Instance;
-
-        if (GameObject.FindGameObjectWithTag("SpellReg") == null)
+    {  
+        if(GameObject.FindGameObjectWithTag("SpellReg") == null)
         {
             #region Register game spells and effect first
             //fuck valve - Agreed - Doubled - Thirded - Fourthd - Fifth'd
@@ -159,8 +156,6 @@ class Register : MonoBehaviour
 
             #endregion
         }
-
-
         Destroy(this.transform.gameObject);
     }
 

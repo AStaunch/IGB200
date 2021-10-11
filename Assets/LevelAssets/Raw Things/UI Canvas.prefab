@@ -149,7 +149,6 @@ MonoBehaviour:
   eventName: OrbBroadcast
   effector_name: 
   template_name: Orb
-  Disabled: 1
 --- !u!1 &138506017553622152
 GameObject:
   m_ObjectHideFlags: 0
@@ -871,7 +870,6 @@ MonoBehaviour:
   eventName: IceBroadcast
   effector_name: Ice
   template_name: 
-  Disabled: 1
 --- !u!1 &2030233406005030160
 GameObject:
   m_ObjectHideFlags: 0
@@ -1165,7 +1163,6 @@ MonoBehaviour:
   eventName: PullBroadcast
   effector_name: Pull
   template_name: 
-  Disabled: 1
 --- !u!1 &2733611004333322363
 GameObject:
   m_ObjectHideFlags: 0
@@ -2125,7 +2122,6 @@ MonoBehaviour:
   eventName: PullPlayerBroadcast
   effector_name: PullPlayer
   template_name: 
-  Disabled: 1
 --- !u!1 &4367187897669642510
 GameObject:
   m_ObjectHideFlags: 0
@@ -2275,7 +2271,6 @@ MonoBehaviour:
   eventName: RayBroadcast
   effector_name: 
   template_name: Ray
-  Disabled: 0
 --- !u!1 &4987284228490898912
 GameObject:
   m_ObjectHideFlags: 0
@@ -2425,7 +2420,6 @@ MonoBehaviour:
   eventName: PushBroadcast
   effector_name: Push
   template_name: 
-  Disabled: 1
 --- !u!1 &5312241019117824113
 GameObject:
   m_ObjectHideFlags: 0
@@ -3036,7 +3030,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 1039339158093432655}
+  m_TargetGraphic: {fileID: 1651768215966297957}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
@@ -3068,7 +3062,6 @@ MonoBehaviour:
   eventName: ArcBroadcast
   effector_name: 
   template_name: Arc
-  Disabled: 1
 --- !u!1 &6573018852122272581
 GameObject:
   m_ObjectHideFlags: 0
@@ -3293,7 +3286,6 @@ MonoBehaviour:
   eventName: FireBroadcast
   effector_name: Fire
   template_name: 
-  Disabled: 1
 --- !u!1 &6891781392881948734
 GameObject:
   m_ObjectHideFlags: 0
@@ -3444,7 +3436,6 @@ MonoBehaviour:
   eventName: PushPlayerBroadcast
   effector_name: PushPlayer
   template_name: 
-  Disabled: 1
 --- !u!1 &7151174350190445035
 GameObject:
   m_ObjectHideFlags: 0
@@ -3594,7 +3585,6 @@ MonoBehaviour:
   eventName: ConeBroadcast
   effector_name: 
   template_name: Cone
-  Disabled: 1
 --- !u!1 &7417222192645799835
 GameObject:
   m_ObjectHideFlags: 0
@@ -4044,7 +4034,6 @@ MonoBehaviour:
   eventName: AuraBroadcast
   effector_name: 
   template_name: Shield
-  Disabled: 1
 --- !u!1 &8601526741345830814
 GameObject:
   m_ObjectHideFlags: 0
