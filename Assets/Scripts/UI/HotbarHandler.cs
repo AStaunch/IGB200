@@ -22,12 +22,11 @@ public class HotbarHandler : MonoBehaviour
     }
 
     public Shader PalleteShader;
-    private PlayerEntity Player;
+
 
 
     private void Awake()
     {
-        Player = FindObjectOfType<PlayerEntity>();
         UpdateSlots();
     }
 
@@ -57,7 +56,6 @@ public class HotbarHandler : MonoBehaviour
                 if (Hotbar[activeslot] != null && CastTime <= Time.timeSinceLevelLoad)
                 {
                     Hotbar[activeslot].run();
-                    Player.CastSpell();
                     CastTime = Hotbar[activeslot].template.CastDelay;
                 }
             }

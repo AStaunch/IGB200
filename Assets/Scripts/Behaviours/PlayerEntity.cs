@@ -19,23 +19,22 @@ public class PlayerEntity : AbstractCreature
     private Vector3 change;
     void Update()
     {
-        if(this.gameObject.layer == 7) {
-            change = Vector3.zero;
-            change.x = Input.GetAxisRaw("Horizontal");
-            change.y = Input.GetAxisRaw("Vertical");
-            if (change != Vector3.zero) {
-                if (VectorToDirection(change) == GetEntityDirectionEnum()) {
-                    UpdateVelocity(EntitySpeed_, change.normalized);
-                }
-                UpdateDirection(change);
-                UpdateAnimation(RB_.velocity);
-            } else {
-                UpdateAnimation(RB_.velocity);
+        change = Vector3.zero;
+        change.x = Input.GetAxisRaw("Horizontal");
+        change.y = Input.GetAxisRaw("Vertical");
+        if (change != Vector3.zero) {
+            if(VectorToDirection(change) == GetEntityDirectionEnum()) {
+                UpdateVelocity(EntitySpeed_, change.normalized);
             }
+            UpdateDirection(change);
+            UpdateAnimation(RB_.velocity);
+        } else {
+            UpdateAnimation(RB_.velocity);
         }
-        //if (Input.GetKeyDown(KeyCode.Space)){
-        //    CastSpell();
-        //}
+
+        if (Input.GetKeyDown(KeyCode.Space)){
+            CastSpell();
+        }
 
 
         if (Input.GetKeyDown(KeyCode.R)) {
@@ -78,15 +77,9 @@ public class PlayerEntity : AbstractCreature
 
 
     //Hacky Checkpoint Management
-    public GameObject lastCheckpoint;
+    GameObject lastCheckpoint;
     List<Rigidbody2D> collidedObjects = new List<Rigidbody2D>();
-    private void OnTriggerEnter2D(Collider2D collision) {
-        if (collision.TryGetComponent(out CheckPoint cp)) {
-            lastCheckpoint = cp.gameObject;
-        }
-    }
 
-    //Very Hacky Kino Management
     private void OnCollisionEnter2D(Collision2D collision) {
         bool b1 = collision.transform.TryGetComponent(out iPropertyInterface _); 
         bool b2 = collision.transform.TryGetComponent(out Rigidbody2D rb);
@@ -97,6 +90,14 @@ public class PlayerEntity : AbstractCreature
             rb.velocity = Vector2.zero;
         }        
     }
+
+    //Very Hacky Kino Management
+    private void OnTriggerEnter2D(Collider2D collision) {
+        if (collision.TryGetComponent(out CheckPoint cp)) {
+            lastCheckpoint = cp.gameObject;
+        }
+    }
+
     private void OnCollisionExit2D(Collision2D collision) {
         if (collision.transform.TryGetComponent(out Rigidbody2D rb)){
             if(collidedObjects.Contains(rb)) {
@@ -106,8 +107,4 @@ public class PlayerEntity : AbstractCreature
         }        
     }
 
-    public override void UpdateForce(float magnitude, Vector3 direction) {
-        gameObject.layer = 6;
-        RB_.AddForce(magnitude * direction * RB_.mass, ForceMode2D.Impulse);
-    }
 }

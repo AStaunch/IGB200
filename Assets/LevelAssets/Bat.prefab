@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 8820126500696495901}
   - component: {fileID: 8820126500696495900}
   - component: {fileID: 4247143225670407978}
-  m_Layer: 6
+  m_Layer: 2
   m_Name: Bat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -100,12 +100,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5d253a2642842f459f94fbb2a4a5360, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MaxHealth: 0
   EntityProperties: 
-  EntityType: 1
-  EntitySpeed: 0.75
+  EntitySpeed: 0
   Deceleration: 5
   enemDeathSound: {fileID: 207168208727640438, guid: 41483acde3a6b784b9d93cb0fabbb453, type: 3}
-  EntityDamage: 1
+  DamageImmunities: 
+  EntityDamage: 0
 --- !u!114 &8820126500696495898
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -121,6 +122,7 @@ MonoBehaviour:
   DetectionRange: 4
   Min_distance_from_target: 1
   Min_distance_from_target_variation: 0.25
+  MoveSpeed: 0.75
 --- !u!61 &7630893933186507112
 BoxCollider2D:
   m_ObjectHideFlags: 0

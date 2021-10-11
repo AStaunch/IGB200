@@ -25,9 +25,8 @@ public static class SharedMemory
     }
 
     public static PlayerData LastState;
-    public static void UpdatePlayer(PlayerEntity player, CheckPoint respawnLocation) {
-        LastState.Health = player.MaxHealth_;
-        LastState.SavePoint = player.lastCheckpoint.transform.position;
+    public static void UpdatePlayer() {
+
     }
 
     public static void SaveToFile() {
@@ -44,5 +43,4 @@ public class PlayerData
     public bool[] ElementsUnlocked = new bool[8];
     public bool[] TemplatesUnlocked = new bool[5];
     public HotbarItem[] CurrentSpells = new HotbarItem[5];
-    public Vector3 SavePoint;
 }

@@ -9,6 +9,7 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
 {
     public GameObject walkThroughSoundEffect;
     public AbstractDoor ExitDoor;
+    public Directions exitDirection;
     [Range(-1, 10)]
     public int sceneIndex = -1;
     protected bool isInvulnerable;
@@ -20,7 +21,7 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
     public EntityTypes EntityType_ { get => EntityType; set => EntityType = value; }
     private EntityTypes EntityType = EntityTypes.Object;
     public Directions CurrentDirection_ { get => CurrentDirection; set => CurrentDirection = value; }
-    public Directions CurrentDirection;
+    private Directions CurrentDirection;
     public int Health_ { get => Health; set => Health = value; }
     private int Health;
     public int MaxHealth_ { get => MaxHealth; set => MaxHealth = value; }
@@ -31,11 +32,11 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
 
     private void OnTriggerEnter2D(Collider2D collision) {
         Debug.Log(collision.transform.name + " entered");
-        if (collision.gameObject.TryGetComponent(out iCreatureInterface em) && !collision.isTrigger) {
-            if (em.GetEntityDirectionEnum() == CurrentDirection_ && IsOpen) {
+        if (collision.gameObject.TryGetComponent(out iCreatureInterface em)) {
+            if (em.GetEntityDirectionEnum() == exitDirection && IsOpen) {
                 if (sceneIndex < 0) {
                     if (delayTimer < Time.timeSinceLevelLoad) {
-                        Vector3 offset = VectorDict[CurrentDirection_];
+                        Vector3 offset = VectorDict[exitDirection];
                         collision.gameObject.transform.position = ExitDoor.transform.position + offset;
                         Instantiate(walkThroughSoundEffect);
                     }
@@ -51,7 +52,7 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
             return;
         if (IsOpen) {
             ExitDoor.IsOpen = IsOpen;
-            ExitDoor.GetComponent<Collider2D>().isTrigger = true;
+            ExitDoor.GetComponent<Collider2D>().isTrigger = GetComponent<Collider2D>().isTrigger;
         }
         if (isInvulnerable) {
             ExitDoor.isInvulnerable = isInvulnerable;
@@ -63,14 +64,14 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
         if (!ExitDoor)
             return;
         ExitDoor.IsOpen = IsOpen;
-        ExitDoor.GetComponent<Collider2D>().isTrigger = true;
+        ExitDoor.GetComponent<Collider2D>().isTrigger = GetComponent<Collider2D>().isTrigger;
         ExitDoor.isInvulnerable = isInvulnerable;
         ExitDoor.UpdateSprite();
     }
 
     public void OpenCloseDoor(bool newState) {
         IsOpen = newState;
-        GetComponent<Collider2D>().isTrigger = true;
+        GetComponent<Collider2D>().isTrigger = newState;
         UpdateSprite();
         SyncExitDoor();
     }
@@ -88,20 +89,13 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
         try {
             Sprite currentSprite;
             if (IsOpen) {
-                currentSprite = SpriteDict["OpenDoor"][IntDict[CurrentDirection_]];
+                currentSprite = SpriteDict["OpenDoor"][IntDict[exitDirection]];
             } else if (isInvulnerable) {
-                currentSprite = SpriteDict["MetalDoor"][IntDict[CurrentDirection_]];
+                currentSprite = SpriteDict["MetalDoor"][IntDict[exitDirection]];
             } else {
-                currentSprite = SpriteDict["WoodDoor"][IntDict[CurrentDirection_]];
+                currentSprite = SpriteDict["WoodDoor"][IntDict[exitDirection]];
             }
             GetComponent<SpriteRenderer>().sprite = currentSprite;
-
-            if (TryGetComponent(out BoxCollider2D boxCollider2D)) {
-                Vector2 SpriteSize = GetComponent<SpriteRenderer>().bounds.size;
-                Vector2 Mag = new Vector2(Mathf.Abs(VectorDict[CurrentDirection_].x), Mathf.Abs(VectorDict[CurrentDirection_].y));
-                boxCollider2D.size =  0.5f * Mag * SpriteSize;
-                boxCollider2D.size += 1.0f * SpriteSize;
-            }
         }
         catch (System.Exception) {
             //Debug.LogWarning(ex.Message);
@@ -119,7 +113,7 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
         }
     }
 
-    public void EntityDeath() {
+    public virtual void EntityDeath() {
         OpenCloseDoor(true);
         // TODO: Impliment Colour change
     }

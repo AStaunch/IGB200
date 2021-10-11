@@ -11,15 +11,13 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
     public int Health_ { get => Health; set => Health = value; }
     private int Health;
     public int MaxHealth_ { get => MaxHealth; set => MaxHealth = value; }
-    private int MaxHealth;
+    public int MaxHealth;
     public Elements[] DamageImmunities_ { get => DamageImmunities; set => DamageImmunities = value; }
-    private Elements[] DamageImmunities;
+    public Elements[] DamageImmunities;
 
     public Properties[] EntityProperties_ { get => EntityProperties; set => EntityProperties = value; }
-    [SerializeField]
-    private Properties[] EntityProperties;
+    public Properties[] EntityProperties;
     public EntityTypes EntityType_ { get => EntityType; set => EntityType = value; }
-    [SerializeField]
     private EntityTypes EntityType = EntityTypes.Creature;
     public float EntitySpeed_ { get => EntitySpeed; set => EntitySpeed = value; }
     [SerializeField]
@@ -35,8 +33,6 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
 
 
     public abstract void Decelerate();
-
-    public abstract void UpdateForce(float magnitude, Vector3 direction);
 
     public abstract void EntityDeath();
 

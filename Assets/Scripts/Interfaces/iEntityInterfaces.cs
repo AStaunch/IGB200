@@ -19,13 +19,13 @@ public interface iPhysicsInterface : iPropertyInterface {
     public Rigidbody2D RB_ { get;}
     public float Deceleration_ { get; set; }
     public void UpdateVelocity(float magnitude, Vector3 direction);
-    public void UpdateForce(float magnitude, Vector3 direction);
     public void Decelerate();
 }
 
 public interface iCreatureInterface : iFacingInterface {
     public float EntitySpeed_ { get; set; }
-    Animator Anim_ { get;}    
+    Animator Anim_ { get;}
+    
     public void UpdateAnimation(Vector3 change);
     public void UpdateDirection(Vector3 change);
 }
