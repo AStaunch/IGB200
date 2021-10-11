@@ -73,7 +73,7 @@ SpriteRenderer:
   m_SortingLayerID: 1771340957
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 3230424311799132286, guid: b70a6685bc103304c9105438d8c921ca, type: 3}
+  m_Sprite: {fileID: -6315338081298181389, guid: b70a6685bc103304c9105438d8c921ca, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -101,14 +101,14 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.75, y: 2.1875}
+    oldSize: {x: 1.625, y: 1.4375}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.1, y: 2.25}
+  m_Size: {x: 1.6251, y: 2.15625}
   m_EdgeRadius: 0
 --- !u!114 &1088794763017600630
 MonoBehaviour:
@@ -124,5 +124,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   walkThroughSoundEffect: {fileID: 6187046135797150018, guid: 3364cfdb60bd5ce4e88811a6f85ea207, type: 3}
   ExitDoor: {fileID: 0}
-  exitDirection: 1
   sceneIndex: -1
+  CurrentDirection: 0

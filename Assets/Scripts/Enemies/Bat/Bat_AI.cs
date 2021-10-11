@@ -56,7 +56,7 @@ public class Bat_AI : MonoBehaviour
 
     private GameObject PlayerRef;
 
-    public float MoveSpeed;
+    private float MoveSpeed;
 
 
     void Start()

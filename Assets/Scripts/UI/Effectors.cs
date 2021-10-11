@@ -62,11 +62,11 @@ public static class Effectors
                 switch (EffectorData_.Calling_template.Name) {
                     case "Ray":
                         RayData Ray_ = (RayData)EffectorData_;
-                        GameObject obj = Ray_.Data.collider.gameObject;
-                        Vector2 direction = GameObject.FindGameObjectWithTag("Player").transform.GetComponent<iCreatureInterface>().GetEntityDirection();
+                        Vector2 direction = Ray_.CasterObject.transform.GetComponent<iCreatureInterface>().GetEntityDirection();
                         if (Ray_.Data.collider.gameObject.TryGetComponent(out iPhysicsInterface otherEntity)) {
-                            float Strength = ComputeOutPutValue(Elements.Pull,otherEntity.EntityProperties_ , baseStrength);
-                            otherEntity.UpdateVelocity(Strength, direction.normalized);
+                            float Strength = ComputeOutPutValue(element, otherEntity.EntityProperties_, baseStrength);
+                            otherEntity.UpdateForce(Strength, direction);
+                            Ray_.Data.collider.gameObject.GetComponent<MonoBehaviour>().StartCoroutine(CheckVelocityCanBridgeGaps(Ray_.Data.collider.gameObject));
                         }
                         break;
 
@@ -91,11 +91,24 @@ public static class Effectors
             Name = "PullPlayer",
             Effector = new Action<iEffectorData>((EffectorData_) => {
                 float baseStrength = EffectorData_.baseStrength;
+                Elements element = Elements.Pull;
                 switch (EffectorData_.Calling_template.Name) {
                     case "Ray":
                         RayData Ray_ = (RayData)EffectorData_;
-                        GameObject player = GameObject.FindGameObjectWithTag("Player");
-                        player.GetComponent<MonoBehaviour>().StartCoroutine(LerpSelf(player, Ray_.Data.point, 1f));
+                        Ray_.CasterObject.GetComponent<MonoBehaviour>().StartCoroutine(LerpSelf(Ray_.CasterObject, Ray_.Data.point, 1f));
+                        break;
+                                            
+                    case "Arc":
+                        ArcData Arc_ = (ArcData)EffectorData_;
+                        ArcBehaviour ac = Arc_.Data.AddComponent<ArcBehaviour>();
+                        ac.direction = Arc_.CasterObject.GetComponent<iFacingInterface>().GetEntityDirectionEnum();
+                        ac.arcDirection = Arc_.ArcDirection;
+                        ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcPlayerMove(ac, Arc_, element));
+                        break;
+
+                    case "Cone":
+                        ConeData Cone_ = (ConeData)EffectorData_;
+                        ConeProcess(Cone_, element);
                         break;
 
                     default:
@@ -115,11 +128,11 @@ public static class Effectors
                 switch (EffectorData_.Calling_template.Name) {
                     case "Ray":
                         RayData Ray_ = (RayData)EffectorData_;
-                        GameObject obj = Ray_.Data.collider.gameObject;
-                        Vector2 direction = GameObject.FindGameObjectWithTag("Player").transform.GetComponent<iCreatureInterface>().GetEntityDirection();
+                        Vector2 direction = Ray_.CasterObject.transform.GetComponent<iCreatureInterface>().GetEntityDirection();
                         if (Ray_.Data.collider.gameObject.TryGetComponent(out iPhysicsInterface otherEntity)) {
-                            float Strength = ComputeOutPutValue(Elements.Push, otherEntity.EntityProperties_, baseStrength);
-                            otherEntity.UpdateVelocity(Strength, direction);
+                            float Strength = ComputeOutPutValue(element, otherEntity.EntityProperties_, baseStrength);
+                            otherEntity.UpdateForce(Strength, direction);
+                            Ray_.Data.collider.gameObject.GetComponent<MonoBehaviour>().StartCoroutine(CheckVelocityCanBridgeGaps(Ray_.Data.collider.gameObject));
                         }
                         break;
 
@@ -148,14 +161,41 @@ public static class Effectors
             Name = "PushPlayer",
             Effector = new Action<iEffectorData>((EffectorData_) => {
                 float baseStrength = EffectorData_.baseStrength;
+                Elements element = Elements.Push;
                 switch (EffectorData_.Calling_template.Name) {
                     case "Ray":
-                        GameObject obj = GameObject.FindGameObjectWithTag("Player");
-                        
-                        Vector2 direction = obj.GetComponent<iCreatureInterface>().GetEntityDirection();
-                        float currentStrength = baseStrength * 2;
-                        currentStrength = ComputeOutPutValue(Elements.Push, obj.transform.GetComponent<iPhysicsInterface>().EntityProperties_ , currentStrength);
-                        obj.transform.GetComponent<iPhysicsInterface>().UpdateVelocity(-currentStrength,direction);
+                        RayData Ray_ = (RayData)EffectorData_;                        
+                        if (Ray_.CasterObject.TryGetComponent(out iPhysicsInterface thisEntity)) {
+                            float Strength = -1f * ComputeOutPutValue(element, thisEntity.EntityProperties_, baseStrength);
+                            Vector2 Direction = Ray_.CasterObject.transform.GetComponent<iFacingInterface>().GetEntityDirection();
+                            thisEntity.UpdateForce(Strength, Direction);
+                            Ray_.CasterObject.GetComponent<MonoBehaviour>().StartCoroutine(CheckVelocityCanBridgeGaps(Ray_.CasterObject));
+                            Debug.Log(Strength * Direction);
+                        }
+                        break;
+
+                    case "Arc":
+                        ArcData Arc_ = (ArcData)EffectorData_;
+                        ArcBehaviour ac = Arc_.Data.AddComponent<ArcBehaviour>();
+                        ac.direction = Arc_.CasterObject.GetComponent<iFacingInterface>().GetEntityDirectionEnum();
+                        ac.arcDirection = Arc_.ArcDirection;
+                        ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcPlayerMove(ac, Arc_, element));                        
+                        break;
+
+                    case "Cone":
+                        ConeData Cone_ = (ConeData)EffectorData_;
+                        float TotalForce = 0;
+                        foreach (GameObject gameObject in Cone_.Data) {
+                            if (gameObject.TryGetComponent(out iPhysicsInterface HI)) {
+                                float Strength = 0.4f * ComputeOutPutValue(element, HI.EntityProperties_, Cone_.baseStrength);
+                                Vector2 Direction = gameObject.transform.position - Cone_.CasterObject.transform.position;
+                                HI.UpdateForce(Strength, Direction);
+                                Debug.DrawLine(Cone_.CasterObject.transform.position, Cone_.CasterObject.transform.position, Color.magenta, 1f);
+                            }
+                            TotalForce += Vector2.Distance(Cone_.CasterObject.transform.position, gameObject.transform.position);
+                        }
+                        Vector2 direction = Cone_.CasterObject.transform.GetComponent<iFacingInterface>().GetEntityDirection();
+                        Debug.Log(TotalForce * direction);
                         break;
 
                     default:
@@ -271,30 +311,12 @@ public static class Effectors
                         break;
                 }
             }),
-            Colors = ColourDict[Elements.Ice]
+            Colors = ColourDict[Elements.Electricity]
         },
         #endregion
 
     };
 
-    private static void ConeProcess(ConeData Cone_, Elements element) {
-        foreach (GameObject gameObject in Cone_.Data) {
-            if(element == Elements.Pull || element == Elements.Push) {
-                if (gameObject.TryGetComponent(out iPhysicsInterface HI)) {
-                    float Strength = ComputeOutPutValue(element, HI.EntityProperties_, Cone_.baseStrength);
-                    Vector2 Direction = gameObject.transform.position - Cone_.CasterObject.transform.position;
-                    HI.UpdateVelocity(Strength, Direction);
-                    Debug.DrawLine(Cone_.CasterObject.transform.position, Cone_.CasterObject.transform.position, Color.magenta, 1f);
-                }
-            } else {
-                if (gameObject.TryGetComponent(out iHealthInterface HI)) {
-                    float Strength = ComputeOutPutValue(element, HI.EntityProperties_, Cone_.baseStrength);
-                    HI.TakeDamage(Strength, element);
-                    Debug.DrawLine(Cone_.CasterObject.transform.position, Cone_.CasterObject.transform.position, Color.red, 1f);
-                }
-            }
-        }
-    }
 
     public static SpellEffector Find(string name) {
         return SpellEffects.Find((e) => { return e.Name == name; });
