@@ -16,8 +16,14 @@ public class EnemyEntity : AbstractCreature, iEnemyInterface
             DamageImmunities_ = new Elements[0];
         }
     }
+
+    private void FixedUpdate() {
+        if (RB_.velocity != Vector2.zero && gameObject.layer == 7) {
+            Decelerate();
+        }
+    }
     public override void Decelerate() {
-        throw new System.NotImplementedException();
+        RB_.velocity *= 0.1f;
     }
 
     public override void EntityDeath() {
@@ -32,5 +38,10 @@ public class EnemyEntity : AbstractCreature, iEnemyInterface
 
     public override void UpdateVelocity(float magnitude, Vector3 direction) {
         RB_.velocity = magnitude * direction;
+    }
+
+    public override void UpdateForce(float magnitude, Vector3 direction) {
+        gameObject.layer = 6;
+        RB_.AddForce(magnitude * direction * RB_.mass, ForceMode2D.Impulse);
     }
 }

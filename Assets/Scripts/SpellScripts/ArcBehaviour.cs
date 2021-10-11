@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +31,7 @@ public class ArcBehaviour : MonoBehaviour
         cc.radius = 0.01f;
 
         //initialise Variables
-        duration = 4f;
+        duration = 2f;
         ac = FindObjectOfType<SpellRenderer>().arcCurve;
         //Find Value for Direction of movement
         arcValue = ArcValueDict[arcDirection];
@@ -61,10 +62,12 @@ public class ArcBehaviour : MonoBehaviour
             //1st Half of path
             if (time <= half) {
                 float x = time / half;
-                float y = ac.Evaluate(x);
-                xPos = directionVector * x;
+                float xDialate = DialateTime(x);                
+                float y = ac.Evaluate(xDialate);
+
+                xPos = directionVector * xDialate;
                 yPos = (invertedDirection * y);
-            } 
+            }  
             //Straight After Path
             else if (time > duration) {
                 float x = (duration - time) / half;
@@ -75,8 +78,10 @@ public class ArcBehaviour : MonoBehaviour
             //2nd Half of Path
             else {
                 float x = (duration - time) / half;
-                float y = -ac.Evaluate(x);
-                xPos = directionVector * x;
+                float xDialate = DialateTime(x);
+                float y = -ac.Evaluate(xDialate);
+
+                xPos = directionVector * xDialate;
                 yPos = invertedDirection * y;
             }
 
@@ -90,6 +95,11 @@ public class ArcBehaviour : MonoBehaviour
             Destroy(this.gameObject);
         }
 
+    }
+
+    private float DialateTime(float x) {
+        float ret = 1 - Mathf.Pow(x - 1, 2f);
+        return Mathf.Abs(ret);
     }
 
     IEnumerator ArcMove(float duration, Directions direction, ArcDirections arcDirection) {

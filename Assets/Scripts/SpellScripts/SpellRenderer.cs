@@ -32,9 +32,6 @@ public class SpellRenderer : MonoBehaviour
     public void DrawRaySprite(RayData Ray_, Color[] colors) {
         Transform origin = Ray_.CasterObject.transform; 
         RaycastHit2D other = Ray_.Data;
-        GameObject start = null;
-        GameObject middle = null;
-        GameObject end = null;
         spellMaster = new GameObject("Ray Master");
 
         Directions Direction = origin.GetComponent<iFacingInterface>().GetEntityDirectionEnum();
@@ -46,67 +43,43 @@ public class SpellRenderer : MonoBehaviour
         //Set Sprite Colours
         Material material = CreateMaterial(colors);
 
-        // Create the laser start from the prefab
-        if (start == null) {
-            start = CreateObject(rayPieces[0], material, offset);  
-            start.transform.position += offset;
-            start.transform.Rotate(Vector3.forward * rotationAmount);
-            start.GetComponent<SpriteRenderer>().sortingOrder = origin.GetComponent<SpriteRenderer>().sortingOrder;
-        }
+        // Create the laser start
+        GameObject start = CreateObject(rayPieces[0], material, offset);  
+        start.transform.position += offset;
+        start.transform.Rotate(Vector3.forward * rotationAmount);
+        start.GetComponent<SpriteRenderer>().sortingOrder = origin.GetComponent<SpriteRenderer>().sortingOrder;
 
         // Laser middle
-        if (middle == null) {
-            middle = CreateObject(rayPieces[1], material, offset);
-            middle.transform.Rotate(Vector3.forward * rotationAmount);
-            middle.GetComponent<SpriteRenderer>().sortingOrder = start.GetComponent<SpriteRenderer>().sortingOrder - 1;
-        }
+        GameObject middle = CreateObject(rayPieces[1], material, offset);
+        middle.transform.Rotate(Vector3.forward * rotationAmount);
+        middle.GetComponent<SpriteRenderer>().sortingOrder = start.GetComponent<SpriteRenderer>().sortingOrder - 1;
 
-        // Define an "infinite" size, not too big but enough to go off screen
-        float maxLaserSize = Vector2.Distance(offset, other.transform.position);
-        float currentLaserSize = maxLaserSize;
+        // -- Create the end sprite
+        GameObject end = CreateObject(rayPieces[2], material, offset);
+        end.transform.Rotate(Vector3.forward * rotationAmount);
+        end.GetComponent<SpriteRenderer>().sortingOrder = start.GetComponent<SpriteRenderer>().sortingOrder + 1;
 
-        // Raycast at the right as our sprite has been design for that
-        if (other.collider != null) {
-            // We touched something!
-
-            // -- Get the laser length
-            currentLaserSize = Vector2.Distance(other.point, origin.position + offset);
-
-            // -- Create the end sprite
-            if (end == null) {
-                end = CreateObject(rayPieces[2], material, offset);
-                end.transform.Rotate(Vector3.forward * rotationAmount);
-                end.GetComponent<SpriteRenderer>().sortingOrder = start.GetComponent<SpriteRenderer>().sortingOrder - 2;
-            }
-        } else {
-            // Nothing hit
-            // -- No more end
-            if (end != null) Destroy(end);
-        }
+        // Define an the maximum size, not too big but enough to go off screen
+        float maxLaserSize = Vector2.Distance(offset, other.point);
+        float currentLaserSize = Vector2.Distance(other.point, origin.position + offset);
 
         // Place things
         // -- Gather some data
         Renderer renderer1 = start.GetComponent<Renderer>();
         float startSpriteWidth = renderer1.bounds.size.x;
-        float endSpriteWidth = 0;
-        if (end != null) {
-            endSpriteWidth = end.GetComponent<Renderer>().bounds.size.x; 
-        }
+        float endSpriteWidth = end.GetComponent<Renderer>().bounds.size.x;
 
         // -- the middle is after start and, as it has a center pivot, have a size of half the laser (minus start and end)
         middle.transform.localScale = new Vector3(middle.transform.localScale.x, (currentLaserSize - (endSpriteWidth + startSpriteWidth)), middle.transform.localScale.z);
         middle.transform.localPosition = DirectionVect * (currentLaserSize / 2f);
         middle.transform.localPosition += 0.5f * offset;
 
-        // End?
-        if (end != null) {
-            end.transform.localPosition = DirectionVect * currentLaserSize;
-
-            end.AddComponent<DestroyThis>();
-        }
+        end.transform.localPosition = DirectionVect * currentLaserSize;
+        
         spellMaster.AddComponent<DestroyThis>();
         start.AddComponent<DestroyThis>();
         middle.AddComponent<DestroyThis>();
+        end.AddComponent<DestroyThis>();
     }
     #endregion
     public AnimationCurve arcCurve;

@@ -35,6 +35,11 @@ public class BlockScript : MonoBehaviour, iPhysicsInterface
         Debug.Log(magnitude+ " " + direction);
     }
 
+
+    public void UpdateForce(float magnitude, Vector3 direction) {
+        UpdateVelocity(magnitude, direction);
+    }
+
     private void OnCollisionEnter2D(Collision2D collision) {
         transform.TryGetComponent(out Rigidbody2D rb);
         bool b1 = collision.transform.TryGetComponent(out BlockScript _);
@@ -60,4 +65,5 @@ public class BlockScript : MonoBehaviour, iPhysicsInterface
             }
         }
     }
+
 }
