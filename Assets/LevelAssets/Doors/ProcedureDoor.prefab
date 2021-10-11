@@ -108,7 +108,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.1, y: 2.25}
+  m_Size: {x: 1.6251, y: 2.15625}
   m_EdgeRadius: 0
 --- !u!114 &6074465643313548604
 MonoBehaviour:
@@ -124,6 +124,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   walkThroughSoundEffect: {fileID: 6187046135797150018, guid: 3364cfdb60bd5ce4e88811a6f85ea207, type: 3}
   ExitDoor: {fileID: 0}
-  exitDirection: 0
   sceneIndex: -1
+  CurrentDirection: 0
   Switches: []
