@@ -23,17 +23,32 @@ public class CraftingSyst : MonoBehaviour
     [SerializeField]
     List<CustomEventHandle> Events = new List<CustomEventHandle>();
 
-    private void Awake()
+    private void Start()
     {
         if (Self_Populate_Events)
         {
-            Events.Clear();
+            //Events.Clear();
             Events.AddRange(gameObject.GetComponentsInChildren<CustomEventHandle>(false));
         }
 
         foreach(CustomEventHandle customEvent in Events)
         {
             customEvent.onBroadcast += onRecieved;
+            UnlockManager.Instance.Registry.ItemUnlocked += customEvent.Registry_ItemUnlocked;
+
+
+            SpellWrapper spw = new SpellWrapper(UnlockType.TEMPLATE, null, null);
+            if(customEvent.dataType == CustomEventHandle.EventData.EvntType.Template)
+            {
+                SpellTemplate template = SpellRegistrySing.Instance.Registry.QueryRegistry(customEvent.template_name);
+                spw = new SpellWrapper(UnlockType.TEMPLATE, template, null);
+            }
+            else
+            {
+                SpellEffector effector = Effectors.Find(customEvent.effector_name);
+                spw = new SpellWrapper(UnlockType.EFFECTOR, null, effector);
+            }
+            UnlockManager.Instance.Registry.AddUnlockItem(spw);
         }
     }
 
@@ -45,7 +60,7 @@ public class CraftingSyst : MonoBehaviour
             case CustomEventHandle.EventData.EvntType.Effect:
                 effect = e.eventData.effector;
 
-                UI_EffectorDisplay.sprite = e.eventData.SentBy_Sprite;
+                UI_EffectorDisplay.sprite = e.eventData.SlotSprite;
                 UI_EffectorDisplay.color = Color.white;
                 break;
 
@@ -53,7 +68,7 @@ public class CraftingSyst : MonoBehaviour
             case CustomEventHandle.EventData.EvntType.Template:
                 template = e.eventData.template;
 
-                UI_TemplateDisplay.sprite = e.eventData.SentBy_Sprite;
+                UI_TemplateDisplay.sprite = e.eventData.SlotSprite;
                 UI_TemplateDisplay.color = Color.white;
                 break;
         }

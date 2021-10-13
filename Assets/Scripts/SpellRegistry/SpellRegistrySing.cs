@@ -63,7 +63,7 @@ public sealed class SpellRegistrySing : MonoBehaviour
 
 public class SpellRegistry
 {
-    public delegate void onAdd_d();
+    public delegate void onAdd_d(SpellRegArgs args);
     public event onAdd_d onAdd;
     public delegate void onRemove_d();
     public event onRemove_d onRemove;
@@ -80,7 +80,7 @@ public class SpellRegistry
         {
             S_Registry.Add(template.Name, template);
             if (onAdd != null)
-                onAdd.Invoke();
+                onAdd.Invoke( new SpellRegArgs() { template = template });
         }
     }
 
@@ -153,6 +153,16 @@ public class SpellRegistry
     //}
     #endregion
 }
+
+public class SpellRegArgs
+{
+    public SpellTemplate template;
+    public string name { get { return template.Name; } }
+}
+
+
+
+
 
 public interface ExternalSpell
 {
