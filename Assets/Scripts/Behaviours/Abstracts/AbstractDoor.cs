@@ -7,6 +7,8 @@ using static SpriteManager;
 public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
 {
     public GameObject walkThroughSoundEffect;
+    public bool isTriggerDoor;
+
     public AbstractDoor ExitDoor;
     [Range(-1, 10)]
     public int sceneIndex = -1;
@@ -35,7 +37,13 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
                     if (delayTimer < Time.timeSinceLevelLoad) {
                         Vector3 offset = VectorDict[CurrentDirection_];
                         collision.gameObject.transform.position = ExitDoor.transform.position + offset;
+
                         Instantiate(walkThroughSoundEffect);
+                        if (isTriggerDoor) { 
+                            GameObject.FindGameObjectWithTag("MovingDoor").transform.position = ExitDoor.transform.position;
+                            Destroy(ExitDoor);
+                            Destroy(this);
+                        }
                     }
                 } else {
                     UnityEngine.SceneManagement.SceneManager.LoadScene(sceneIndex);
