@@ -24,6 +24,9 @@ public class CustomEventHandle : MonoBehaviour
         public SpellEffector effector;
         public SpellTemplate template;
         public EvntType type;
+        public bool HasAdditionalParam;
+        public GameObject AdditionalParam_menu;
+        public bool IsAdditionalParam;
     }
 
     public class EvntHndl_args
@@ -42,17 +45,28 @@ public class CustomEventHandle : MonoBehaviour
     public string effector_name;
     public string template_name;
     public Sprite Crafting_Slot_img;
+    [Header("Additional params - Leave unless needed")]
+    public bool HasAdditionalParam = false;
+    public GameObject AdditionalParamMenu;
+    public bool IsAdditionalParam = false;
 
 
     public void BroadcastEvent()
     {
+        if (HasAdditionalParam && IsAdditionalParam)
+            throw new Exception($"{eventName} Is marked as both having an additional param, and being one. Please un mark one of these.");
+        if ((HasAdditionalParam || IsAdditionalParam) && dataType == EventData.EvntType.Template)
+            throw new Exception($"{eventName} Is an additional param, or has one as a template, which is not allowed.");
 
         EventData eventData = new EventData()
         {
             SentBy = gameObject,
             type = dataType,
             eventName = eventName,
-            SlotSprite = Crafting_Slot_img//gameObject.GetComponent<Image>().sprite
+            SlotSprite = Crafting_Slot_img,
+            HasAdditionalParam = HasAdditionalParam,
+            AdditionalParam_menu = AdditionalParamMenu,
+            IsAdditionalParam = IsAdditionalParam
         };
 
         if (dataType == EventData.EvntType.Effect)
@@ -67,6 +81,7 @@ public class CustomEventHandle : MonoBehaviour
 
     #region Unlock syst
     
+    [Header("ignore")]
     public Button Mine;
     [Header("Loot system shit")]
     public bool Disabled = true;

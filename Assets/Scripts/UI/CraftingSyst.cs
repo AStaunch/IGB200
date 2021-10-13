@@ -13,6 +13,7 @@ public class CraftingSyst : MonoBehaviour
 
     public Image UI_TemplateDisplay;
     public Image UI_EffectorDisplay;
+    public Image UI_AdditionalParam;
 
     public Text Hotbar_msg;
 
@@ -52,25 +53,48 @@ public class CraftingSyst : MonoBehaviour
         }
     }
 
+
+    private bool AdditionalParam = false;
+    private GameObject ActiveAdditionalMenu;
+
     private void onRecieved(object sender, CustomEventHandle.EvntHndl_args e)
     {
-        Debug.Log(e.eventData.eventName);
-        switch (e.eventData.type)
+        //only effects have additional params since this is Old El Paso cheating and the "params" are actually coded, and we just shift depending on this instead and ignore the base one
+        if (e.eventData.type == CustomEventHandle.EventData.EvntType.Effect && e.eventData.HasAdditionalParam)
         {
-            case CustomEventHandle.EventData.EvntType.Effect:
-                effect = e.eventData.effector;
+            AdditionalParam = e.eventData.HasAdditionalParam;
+            ActiveAdditionalMenu = e.eventData.AdditionalParam_menu;
+            ActiveAdditionalMenu.SetActive(true);
 
-                UI_EffectorDisplay.sprite = e.eventData.SlotSprite;
-                UI_EffectorDisplay.color = Color.white;
-                break;
+            UI_EffectorDisplay.sprite = e.eventData.SlotSprite;
+            UI_EffectorDisplay.color = Color.white;
+        }
+        else if(AdditionalParam && e.eventData.IsAdditionalParam)
+        {
+            effect = e.eventData.effector;
+
+            UI_AdditionalParam.sprite = e.eventData.SlotSprite;
+            UI_AdditionalParam.color = Color.white;
+        }
+        else
+        {
+            switch (e.eventData.type)
+            {
+                case CustomEventHandle.EventData.EvntType.Effect:
+                    effect = e.eventData.effector;
+                    
+                    UI_EffectorDisplay.sprite = e.eventData.SlotSprite;
+                    UI_EffectorDisplay.color = Color.white;
+                    break;
 
 
-            case CustomEventHandle.EventData.EvntType.Template:
-                template = e.eventData.template;
+                case CustomEventHandle.EventData.EvntType.Template:
+                    template = e.eventData.template;
 
-                UI_TemplateDisplay.sprite = e.eventData.SlotSprite;
-                UI_TemplateDisplay.color = Color.white;
-                break;
+                    UI_TemplateDisplay.sprite = e.eventData.SlotSprite;
+                    UI_TemplateDisplay.color = Color.white;
+                    break;
+            }
         }
     }
 
@@ -78,6 +102,7 @@ public class CraftingSyst : MonoBehaviour
 
     public void BuildSpell()
     {
+
         if (effect == null || template == null)
             Debug.Log($"Spell Build Failed: effect present: {effect != null}, template present: {template != null}");
         else
@@ -90,6 +115,8 @@ public class CraftingSyst : MonoBehaviour
         UI_EffectorDisplay.color = Color.clear;
         UI_TemplateDisplay.sprite = null;
         UI_TemplateDisplay.color = Color.clear;
+        UI_AdditionalParam.sprite = null;
+        UI_AdditionalParam.color = Color.clear;
     }
 
     IEnumerator BuildSet()
@@ -104,6 +131,9 @@ public class CraftingSyst : MonoBehaviour
                 hotbarscript.AssignSpell(new HotbarHandler.HotbarItem() { effector = effect, template = template }, 0);
                 effect = null;
                 template = null;
+                ActiveAdditionalMenu.SetActive(false);
+                ActiveAdditionalMenu = null;
+                AdditionalParam = false;
                 ResetUI();
                 KeyChosen = true;
             }
@@ -113,6 +143,9 @@ public class CraftingSyst : MonoBehaviour
                 hotbarscript.AssignSpell(new HotbarHandler.HotbarItem() { effector = effect, template = template }, 1);
                 effect = null;
                 template = null;
+                ActiveAdditionalMenu.SetActive(false);
+                ActiveAdditionalMenu = null;
+                AdditionalParam = false;
                 ResetUI();
                 KeyChosen = true;
             }
@@ -122,6 +155,9 @@ public class CraftingSyst : MonoBehaviour
                 hotbarscript.AssignSpell(new HotbarHandler.HotbarItem() { effector = effect, template = template }, 2);
                 effect = null;
                 template = null;
+                ActiveAdditionalMenu.SetActive(false);
+                ActiveAdditionalMenu = null;
+                AdditionalParam = false;
                 ResetUI();
                 KeyChosen = true;
             }
@@ -131,6 +167,9 @@ public class CraftingSyst : MonoBehaviour
                 hotbarscript.AssignSpell(new HotbarHandler.HotbarItem() { effector = effect, template = template }, 3);
                 effect = null;
                 template = null;
+                ActiveAdditionalMenu.SetActive(false);
+                ActiveAdditionalMenu = null;
+                AdditionalParam = false;
                 ResetUI();
                 KeyChosen = true;
             }
@@ -140,6 +179,9 @@ public class CraftingSyst : MonoBehaviour
                 hotbarscript.AssignSpell(new HotbarHandler.HotbarItem() { effector = effect, template = template }, 4);
                 effect = null;
                 template = null;
+                ActiveAdditionalMenu.SetActive(false);
+                ActiveAdditionalMenu = null;
+                AdditionalParam = false;
                 ResetUI();
                 KeyChosen = true;
             }
