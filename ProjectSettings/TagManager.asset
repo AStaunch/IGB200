@@ -10,6 +10,7 @@ TagManager:
   - SpriteManager
   - BGM
   - UnlockManager
+  - MovingDoor
   layers:
   - Default
   - TransparentFX
