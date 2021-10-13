@@ -1905,23 +1905,22 @@ Tilemap:
   - m_RefCount: 1
     m_Data: {fileID: 1072788505936352025, guid: a2620ff2aa17e94468eabe0c4f5898ce, type: 3}
   - m_RefCount: 1
-    m_Data: {fileID: 7591774343886807129, guid: 95485cf68614ce34188bded1cb055306, type: 3}
+    m_Data: {fileID: 7591774343886807129, guid: e56e038512fb0a74e83f886d3a9df365, type: 3}
   - m_RefCount: 1
-    m_Data: {fileID: -5882170695943828418, guid: 95485cf68614ce34188bded1cb055306, type: 3}
+    m_Data: {fileID: -5882170695943828418, guid: e56e038512fb0a74e83f886d3a9df365, type: 3}
   - m_RefCount: 1
-    m_Data: {fileID: 6049605792901559095, guid: 95485cf68614ce34188bded1cb055306, type: 3}
+    m_Data: {fileID: 6049605792901559095, guid: e56e038512fb0a74e83f886d3a9df365, type: 3}
   - m_RefCount: 1
-    m_Data: {fileID: 8954592487278907307, guid: 95485cf68614ce34188bded1cb055306, type: 3}
+    m_Data: {fileID: 8954592487278907307, guid: e56e038512fb0a74e83f886d3a9df365, type: 3}
   - m_RefCount: 1
-    m_Data: {fileID: 4177692092066526168, guid: 95485cf68614ce34188bded1cb055306, type: 3}
+    m_Data: {fileID: 4177692092066526168, guid: e56e038512fb0a74e83f886d3a9df365, type: 3}
   - m_RefCount: 1
-    m_Data: {fileID: 8088830456793213489, guid: 95485cf68614ce34188bded1cb055306, type: 3}
+    m_Data: {fileID: 8088830456793213489, guid: e56e038512fb0a74e83f886d3a9df365, type: 3}
   - m_RefCount: 1
-    m_Data: {fileID: -7504709878752999052, guid: 95485cf68614ce34188bded1cb055306, type: 3}
+    m_Data: {fileID: -7504709878752999052, guid: e56e038512fb0a74e83f886d3a9df365, type: 3}
   - m_RefCount: 1
-    m_Data: {fileID: -4272997025716492783, guid: 95485cf68614ce34188bded1cb055306, type: 3}
+    m_Data: {fileID: -4272997025716492783, guid: e56e038512fb0a74e83f886d3a9df365, type: 3}
   - m_RefCount: 1
-<<<<<<< Updated upstream
     m_Data: {fileID: -4906324669642958461, guid: e56e038512fb0a74e83f886d3a9df365, type: 3}
   - m_RefCount: 1
     m_Data: {fileID: 1726011499405689783, guid: 27a29e19a3c0c624ba8b5b6871b34d56, type: 3}
@@ -1935,9 +1934,6 @@ Tilemap:
     m_Data: {fileID: 2295423965162872159, guid: 27a29e19a3c0c624ba8b5b6871b34d56, type: 3}
   - m_RefCount: 1
     m_Data: {fileID: -4877221629314531370, guid: 27a29e19a3c0c624ba8b5b6871b34d56, type: 3}
-=======
-    m_Data: {fileID: -4906324669642958461, guid: 95485cf68614ce34188bded1cb055306, type: 3}
->>>>>>> Stashed changes
   m_TileMatrixArray:
   - m_RefCount: 135
     m_Data:
@@ -1960,16 +1956,6 @@ Tilemap:
   m_TileColorArray:
   - m_RefCount: 135
     m_Data: {r: 1, g: 1, b: 1, a: 1}
-  - m_RefCount: 0
-    m_Data: {r: 0, g: 0, b: 0, a: 0}
-  - m_RefCount: 0
-    m_Data: {r: 0, g: 0, b: 0, a: 0}
-  - m_RefCount: 0
-    m_Data: {r: 0, g: 0, b: 0, a: 0}
-  - m_RefCount: 0
-    m_Data: {r: 0, g: 0, b: 0, a: 0}
-  - m_RefCount: 0
-    m_Data: {r: 0, g: 0, b: 0, a: 0}
   - m_RefCount: 0
     m_Data: {r: 0, g: 0, b: 0, a: 0}
   - m_RefCount: 0
@@ -2094,11 +2080,7 @@ Grid:
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
-<<<<<<< Updated upstream
 --- !u!114 &3226592725052761851
-=======
---- !u!114 &6843558556963172950
->>>>>>> Stashed changes
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
