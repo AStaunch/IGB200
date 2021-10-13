@@ -28,12 +28,10 @@ public class DestructableDoor : AbstractLockedDoor
         currentState_ = true;
     }
 
-    public override void OnValidate() {
+    public override void ValidateFunction() {
         isInvulnerable = false;
         UpdateSprite();
         SetDoorProperties();
         InitExitDoor();
     }
-
-
 }

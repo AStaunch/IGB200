@@ -5,21 +5,18 @@ using static EnumsAndDictionaries;
 
 
 
-public class ProcedureDoor : AbstractDoor, iRecieverObject
+public class ProcedureDoor : AbstractLockedDoor, iRecieverObject
 {
     [SerializeField]
     public SwitchObjects[] Switches;
     private SwitchOrders[] Solution;
     private SwitchOrders[] Input;
-
-    public iSenderObject[] switchObjects_ { get => switchObjects; set => switchObjects = value; }
-    public bool currentState_ { get { return currentState; } set { OpenCloseDoor(value); currentState = value; } }
     private bool currentState;
 
     private iSenderObject[] switchObjects;
     private int CorrectAnswers;
 
-    public void CheckSenders(iSenderObject iSenderObject) {
+    public override void CheckSenders(iSenderObject iSenderObject) {
         string msg = "";
         //Update the List of Inputs
         for (int j = CorrectAnswers; j < Solution.Length - 1; j++) {
@@ -72,26 +69,21 @@ public class ProcedureDoor : AbstractDoor, iRecieverObject
         }
     }
 
-    public override void OnValidate() {
+    protected new iSenderObject[] GetSwitches() {
+        iSenderObject[] returnValue = new iSenderObject[Switches.Length];
+        for (int i = 0; i < Switches.Length; i++) {
+            if(Switches[i].SwitchObject.TryGetComponent(out iSenderObject si))
+            returnValue[i] = si;
+        }
+        return returnValue;
+    }
+
+    public override void ValidateFunction() {
         isInvulnerable = true;
         UpdateSprite();
         SetDoorProperties();
         InitExitDoor();
     }
-
-    protected iSenderObject[] GetSwitches() {
-        iSenderObject[] returnValue = new iSenderObject[Switches.Length];
-        for (int i = 0; i < Switches.Length; i++) {
-            returnValue[i] = Switches[i].SwitchObject.GetComponent<iSenderObject>();
-        }
-        return returnValue;
-    }
-
-    protected void initSwitches() {
-        foreach (iSenderObject iSender in switchObjects_) {
-            iSender.targetObjects_.Add(this);
-        }
-    }    
 }
 
 public struct SwitchOrders

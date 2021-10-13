@@ -24,6 +24,9 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
     public int MaxHealth_ { get => MaxHealth; set => MaxHealth = value; }
     private int MaxHealth;
     public Elements[] DamageImmunities_ { get => null; set => _ = value; }
+    private void Awake() {
+        ValidateFunction();
+    }
     private void OnTriggerEnter2D(Collider2D collision) {
         //Debug.Log(collision.transform.name + " entered");
         if (collision.gameObject.TryGetComponent(out iFacingInterface em) && !collision.isTrigger) {
@@ -74,24 +77,24 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
             EntityProperties = new Properties[] { Properties.Door, Properties.Immovable, Properties.Flamable };
         }
     }
+    protected Sprite currentSprite;
     public void UpdateSprite() {
         try {
-            Sprite currentSprite;
-            if (IsOpen) {
+            
+            if (IsOpen || ExitDoor.IsOpen) {
                 currentSprite = SpriteDict["OpenDoor"][IntDict[CurrentDirection_]];
-            } else if (isInvulnerable) {
+            } else if (isInvulnerable || ExitDoor.isInvulnerable) {
                 currentSprite = SpriteDict["MetalDoor"][IntDict[CurrentDirection_]];
             } else {
                 currentSprite = SpriteDict["WoodDoor"][IntDict[CurrentDirection_]];
             }
-            GetComponent<SpriteRenderer>().sprite = currentSprite;
-
             if (TryGetComponent(out BoxCollider2D boxCollider2D)) {
                 Vector2 SpriteSize = GetComponent<SpriteRenderer>().bounds.size;
                 Vector2 Mag = new Vector2(Mathf.Abs(VectorDict[CurrentDirection_].x), Mathf.Abs(VectorDict[CurrentDirection_].y));
                 boxCollider2D.size = 0.5f * Mag * SpriteSize;
                 boxCollider2D.size += 1.0f * SpriteSize;
             }
+            GetComponent<SpriteRenderer>().sprite = currentSprite;
         }
         catch (System.Exception) {
             //Debug.LogWarning(ex.Message);
@@ -111,5 +114,6 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
         OpenCloseDoor(true);
         // TODO: Impliment Colour change
     }
-    public abstract void OnValidate();
+
+    public abstract void ValidateFunction();
 }

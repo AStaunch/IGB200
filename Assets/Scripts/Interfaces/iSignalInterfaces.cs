@@ -4,6 +4,7 @@ using UnityEngine;
 
 public interface iRecieverObject
 {
+    public GameObject[] switchGameObjects_ { get; set; }
     public iSenderObject[] switchObjects_ { get; set; }
     bool currentState_ { get; set; }
     public void CheckSenders(iSenderObject iSenderObject);

@@ -8,11 +8,12 @@ using static SpriteManager;
 
 public abstract class AbstractLockedDoor : AbstractDoor, iRecieverObject
 {
+    public GameObject[] switchGameObjects_ { get => switchGameObjects; set => switchGameObjects = value; }
     public GameObject[] switchGameObjects;
-    private iSenderObject[] switchObjects;
     public iSenderObject[] switchObjects_ { get => this.switchObjects; set => this.switchObjects = value; }
-    private bool currentState;
+    private iSenderObject[] switchObjects;
     public bool currentState_ { get { return currentState; } set { OpenCloseDoor(value); currentState = value; } }
+    private bool currentState;
 
     protected iSenderObject[] GetSwitches() {
         iSenderObject[] returnValue = new iSenderObject[switchGameObjects.Length];
@@ -30,7 +31,7 @@ public abstract class AbstractLockedDoor : AbstractDoor, iRecieverObject
 
     public abstract void CheckSenders(iSenderObject iSenderObject);
 
-    public override void OnValidate() {
-        UpdateSprite();
-    }
+    //public override void OnValidate() {
+    //    UpdateSprite();
+    //}
 }

@@ -26,8 +26,7 @@ public class SwitchDoor : AbstractLockedDoor
         }
         currentState_ = true;
     }
-
-    public override void OnValidate() {
+    public override void ValidateFunction() {
         isInvulnerable = true;
         UpdateSprite();
         SetDoorProperties();

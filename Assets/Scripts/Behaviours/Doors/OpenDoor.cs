@@ -12,7 +12,7 @@ public class OpenDoor : AbstractDoor
         IsOpen = true;
     }
 
-    public override void OnValidate() {
+    public override void ValidateFunction() {
         IsOpen = true;
         UpdateSprite();
         SetDoorProperties();
