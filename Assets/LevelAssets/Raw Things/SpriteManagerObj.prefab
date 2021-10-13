@@ -69,3 +69,7 @@ MonoBehaviour:
     Sprites:
     - {fileID: -4343367186929615182, guid: a2620ff2aa17e94468eabe0c4f5898ce, type: 3}
     - {fileID: -4343367186929615182, guid: a2620ff2aa17e94468eabe0c4f5898ce, type: 3}
+  - name: ChestSprites
+    Sprites:
+    - {fileID: 4714410783012859700, guid: a9a98fc1c05e0f34ebfc7dfb15f10208, type: 3}
+    - {fileID: -5281422124547630143, guid: a9a98fc1c05e0f34ebfc7dfb15f10208, type: 3}

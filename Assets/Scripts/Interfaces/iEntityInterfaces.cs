@@ -21,6 +21,7 @@ public interface iPhysicsInterface : iPropertyInterface {
     public void UpdateVelocity(float magnitude, Vector3 direction);
     public void UpdateForce(float magnitude, Vector3 direction);
     public void Decelerate();
+    public void UpdateSorting();
 }
 
 public interface iCreatureInterface {
