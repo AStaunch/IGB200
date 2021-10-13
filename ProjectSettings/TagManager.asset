@@ -9,6 +9,7 @@ TagManager:
   - SpellReg
   - SpriteManager
   - BGM
+  - UnlockManager
   layers:
   - Default
   - TransparentFX

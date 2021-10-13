@@ -33,8 +33,11 @@ class Register : MonoBehaviour
     //private Sprite RaySprite_ { get { return RaySprite != null ? RaySprite : null; } }
 
     void Start()
-    {  
-        if(GameObject.FindGameObjectWithTag("SpellReg") == null)
+    {
+        if (GameObject.FindGameObjectWithTag("UnlockManager") == null)
+            _ = UnlockManager.Instance;
+
+        if (GameObject.FindGameObjectWithTag("SpellReg") == null)
         {
             #region Register game spells and effect first
             //fuck valve - Agreed - Doubled - Thirded - Fourthd - Fifth'd
@@ -70,10 +73,10 @@ class Register : MonoBehaviour
                 effector.Effector.Invoke(null);//The null in this function would be the game object required
             }),1));
 
-            //Arc Left Template
+            //Arc (Left) Template
             SpellRegistrySing.Instance.Registry.AddItemToregistry(new SpellTemplate("ArcLeft", ArcSprite_, new Action<SpellEffector>((effector) =>
             {
-                Console.WriteLine("This would be a ArcLeft");
+                Console.WriteLine("This would be a Arc");
 
                 SpellRenderer arcDrawer = FindObjectOfType<SpellRenderer>();
                 GameObject CasterObject = GameObject.FindGameObjectWithTag("Player");
@@ -81,22 +84,24 @@ class Register : MonoBehaviour
                     CasterObject = CasterObject,
                     ArcDirection = EnumsAndDictionaries.ArcDirections.Left,
                     Data = arcDrawer.CreateArcProjectile(CasterObject.transform, effector.Colors),
-                    Calling_template = SpellRegistrySing.Instance.Registry.QueryRegistry("ArcLeft")
+                    Calling_template = SpellRegistrySing.Instance.Registry.QueryRegistry("Arc")
                 };
                 effector.Effector.Invoke(acd);//The null in this function would be the game object required
             }),1));
 
-            //Arc Right Template
-            SpellRegistrySing.Instance.Registry.AddItemToregistry(new SpellTemplate("ArcRight", ArcSprite_, new Action<SpellEffector>((effector) => {
-                Console.WriteLine("This would be a ArcRight");
+            //Arc (Right) Template
+            SpellRegistrySing.Instance.Registry.AddItemToregistry(new SpellTemplate("ArcRight", ArcSprite_, new Action<SpellEffector>((effector) =>
+            {
+                Console.WriteLine("This would be a Arc");
 
                 SpellRenderer arcDrawer = FindObjectOfType<SpellRenderer>();
                 GameObject CasterObject = GameObject.FindGameObjectWithTag("Player");
-                ArcData acd = new ArcData() {
+                ArcData acd = new ArcData()
+                {
                     CasterObject = CasterObject,
                     ArcDirection = EnumsAndDictionaries.ArcDirections.Right,
                     Data = arcDrawer.CreateArcProjectile(CasterObject.transform, effector.Colors),
-                    Calling_template = SpellRegistrySing.Instance.Registry.QueryRegistry("ArcRight")
+                    Calling_template = SpellRegistrySing.Instance.Registry.QueryRegistry("Arc")
                 };
                 effector.Effector.Invoke(acd);//The null in this function would be the game object required
             }), 1));
@@ -110,7 +115,7 @@ class Register : MonoBehaviour
                 Vector2 Offset = 0.5f * CasterObject.GetComponent<SpriteRenderer>().bounds.size * Direction;
                 Vector2 position = CasterObject.transform.position;
                 Vector2 Origin = position + Offset;
-                float maxDistance = 3f;
+                float maxDistance = 10f;
                 int LayerStore = CasterObject.layer;
                 CasterObject.layer = 2;
                 ////There is no point using a facing variable, when this debug function will be removed soon
@@ -171,6 +176,8 @@ class Register : MonoBehaviour
 
             #endregion
         }
+
+
         Destroy(this.transform.gameObject);
     }
 
