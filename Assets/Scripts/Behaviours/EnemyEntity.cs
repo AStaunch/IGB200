@@ -20,13 +20,11 @@ public class EnemyEntity : AbstractCreature, iEnemyInterface
         }
     }
 
-    private void FixedUpdate() {
-        if (RB_.velocity != Vector2.zero && gameObject.layer == 7) {
-            Decelerate();
-        }
-    }
+
     public override void Decelerate() {
-        RB_.velocity *= 0.1f;
+        if (RB_.velocity != Vector2.zero && gameObject.layer == 7) {
+            RB_.velocity *= 0.1f;
+        }
     }
 
     public override void EntityDeath() {

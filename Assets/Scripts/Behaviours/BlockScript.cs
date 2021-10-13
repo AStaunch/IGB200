@@ -69,4 +69,7 @@ public class BlockScript : MonoBehaviour, iPhysicsInterface
         }
     }
 
+    public void UpdateSorting() {
+        GetComponent<Renderer>().sortingOrder = -Mathf.RoundToInt(transform.position.y);
+    }
 }

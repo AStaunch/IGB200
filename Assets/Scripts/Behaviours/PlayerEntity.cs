@@ -45,11 +45,6 @@ public class PlayerEntity : AbstractCreature
             transform.position = lastCheckpoint.transform.position;
         }
     }
-    private void FixedUpdate() {
-        if(RB_.velocity != Vector2.zero && change == Vector3.zero && gameObject.layer == 7) {
-            Decelerate();
-        }
-    }
 
     public void CastSpell() {
         RB_.velocity = Vector2.zero;
@@ -76,7 +71,9 @@ public class PlayerEntity : AbstractCreature
             RB_.velocity = magnitude * direction;
     }
     public override void Decelerate() {
-        RB_.velocity *= 0.1f;
+        if (RB_.velocity != Vector2.zero && change == Vector3.zero && gameObject.layer == 7) {
+            RB_.velocity *= 0.1f;
+        }
     }
 
 

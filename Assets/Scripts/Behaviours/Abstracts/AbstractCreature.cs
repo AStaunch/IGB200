@@ -33,6 +33,10 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
     public float Deceleration;
     public float Deceleration_ { get => Deceleration; set => Deceleration = value; }
 
+    private void FixedUpdate() {
+        Decelerate();
+        UpdateSorting();
+    }
 
     public abstract void Decelerate();
     public abstract void EntityDeath();
@@ -67,6 +71,9 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
         if (change != Vector3.zero) {
             CurrentDirection_ = VectorToDirection(change);
         }
+    }
+    public void UpdateSorting() {
+        GetComponent<Renderer>().sortingOrder = -Mathf.RoundToInt(transform.position.y);
     }
 
     public abstract void  UpdateVelocity(float magnitude, Vector3 direction);
