@@ -41,7 +41,7 @@ public class TestSpell : MonoBehaviour
             ArcBehaviour ac = Arc_.Data.AddComponent<ArcBehaviour>();
             ac.direction = Arc_.CasterObject.GetComponent<iFacingInterface>().GetEntityDirectionEnum();
             ac.arcDirection = Arc_.ArcDirection;
-            ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcHitDetection(ac, Arc_, Elements.Fire));
+            ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcHitDetection(ac, Arc_.baseStrength, Elements.Fire));
         }),
         Colors = ColourDict[Elements.Fire]
     };
@@ -53,7 +53,7 @@ public class TestSpell : MonoBehaviour
             ArcBehaviour ac = Arc_.Data.AddComponent<ArcBehaviour>();
             ac.direction = Arc_.CasterObject.GetComponent<iFacingInterface>().GetEntityDirectionEnum();
             ac.arcDirection = Arc_.ArcDirection;
-            ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcHitDetection(ac, Arc_, Elements.Push));
+            ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcHitDetection(ac, Arc_.baseStrength, Elements.Push));
         }),
         Colors = ColourDict[Elements.Push]
     };

@@ -20,7 +20,7 @@ public class SwitchDoor : AbstractLockedDoor
         for (int i = 0; i < switchObjects_.Length; i++) {
             if (switchObjects_[i].currentState_ == false) {
                 currentState_ = false;
-                Debug.Log($"{i}: {switchObjects_[i].currentState_}");
+                //Debug.Log($"{i}: {switchObjects_[i].currentState_}");
                 return;
             }
         }

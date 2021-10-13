@@ -31,7 +31,6 @@ public class VoidInit : MonoBehaviour
     private GameObject CreateVoidObject(VoidType voidType) {
         GameObject GO = new GameObject();
         GO.AddComponent<EmptySpaceScript>().VoidType_ = voidType;
-        GO.GetComponent<EmptySpaceScript>().Filled = SpriteDict["FilledTile"][0];
         return GO;
     }
 }

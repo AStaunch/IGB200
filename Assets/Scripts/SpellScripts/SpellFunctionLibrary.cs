@@ -75,43 +75,42 @@ public static class SpellFunctionLibrary
         }        
     }
 
-    public static IEnumerator ArcHitDetection(ArcBehaviour ac, ArcData Arc_, Elements element) {
-        float Strength = Arc_.baseStrength;
-        while (ac.HitCollider == null && ac.HitCollision == null) {
+    public static IEnumerator ArcHitDetection(ArcBehaviour ac, float Strength, Elements element) {
+        Vector3 LastPosition = ac.transform.position;
+        while ( ac.HitCollider == null) {
+            LastPosition = ac.transform.position;
             yield return null;
         }
-        Collider2D ColHit = null;
-        if (ac.HitCollider) {
-            ColHit = ac.HitCollider;
-        } else if (ac.HitCollision != null) {
-            ColHit = ac.HitCollision.collider;
-        }        
 
-        if (ColHit.transform.TryGetComponent(out iPropertyInterface IPro)) {
+        
+        if (ac.HitCollider.transform.TryGetComponent(out iPropertyInterface IPro)) {
             Strength = ComputeOutPutValue(element, IPro.EntityProperties_, Strength);
         }
 
-        if (element == Elements.Pull) {
-            Strength = -Strength;
-        }
-
         if (element == Elements.Push || element == Elements.Pull) {
-            if (ColHit.transform.TryGetComponent(out iPhysicsInterface PI)) {
-                Vector2 direction = ColHit.transform.position - ac.transform.position;
-                Debug.Log(ColHit.transform.position + " : " + direction);
+            if (ac.HitCollider.transform.TryGetComponent(out iPhysicsInterface PI)) {
+                Vector3 HitPosition = ac.CurrentPosition;
+                Vector2 direction = HitPosition - LastPosition;
                 PI.UpdateForce(Strength, direction.normalized);
             }
         } else {
-            if (ColHit.transform.TryGetComponent(out iHealthInterface HI)) {
+            if (ac.HitCollider.transform.TryGetComponent(out iHealthInterface HI)) {
                 HI.TakeDamage(Strength, element);
             }
         }
     }
 
+    private static Vector3 NormaliseVector(Vector3 vector) {
+        float x = Mathf.Abs(vector.x) / vector.x;
+        float y = Mathf.Abs(vector.y) / vector.y;
+        float z = Mathf.Abs(vector.z) / vector.z;
+        return new Vector3(x, y, z);
+    }
+
     public static IEnumerator ArcPlayerMove(ArcBehaviour ac, ArcData Arc_, Elements element) {
         float Strength = Arc_.baseStrength;
         Vector3 LastPosition = Arc_.CasterObject.transform.position;
-        while (ac.HitCollider == null && ac.HitCollision == null) {
+        while (ac.HitCollider == null) {
             LastPosition = ac.transform.position;
             yield return null;
         }
@@ -135,22 +134,29 @@ public static class SpellFunctionLibrary
     }
 
     public static void ConeProcess(ConeData Cone_, float baseStrength, Elements element) {
+        string msg = "";
         foreach (GameObject gameObject in Cone_.Data) {
+            msg += gameObject.name + " ";
             if (element == Elements.Pull || element == Elements.Push) {
                 if (gameObject.TryGetComponent(out iPhysicsInterface HI)) {
                     float Strength = ComputeOutPutValue(element, HI.EntityProperties_, baseStrength);
                     Vector2 Direction = gameObject.transform.position - Cone_.CasterObject.transform.position;
                     HI.UpdateForce(Strength, Direction);
-                    Debug.DrawLine(Cone_.CasterObject.transform.position, Cone_.CasterObject.transform.position, Color.magenta, 1f);
+                    Debug.DrawLine(Cone_.CasterObject.transform.position, gameObject.transform.position, Color.magenta, 1f);
                 }
             } else {
                 if (gameObject.TryGetComponent(out iHealthInterface HI)) {
                     float Strength = ComputeOutPutValue(element, HI.EntityProperties_, baseStrength);
                     HI.TakeDamage(Strength, element);
-                    Debug.DrawLine(Cone_.CasterObject.transform.position, Cone_.CasterObject.transform.position, Color.red, 1f);
+                    Debug.DrawLine(Cone_.CasterObject.transform.position, gameObject.transform.position, Color.red, 1f);
+                }
+                if(gameObject.TryGetComponent(out EmptySpaceScript ESS)) {
+                    ESS.EffectTile(element);
+                    Debug.DrawLine(Cone_.CasterObject.transform.position, gameObject.transform.position, Color.cyan, 1f);
                 }
             }
         }
+        Debug.Log(msg);
     }
 
     public static GameObject[] ConeCast(float Distance, GameObject Origin, Directions Direction) {
@@ -160,17 +166,34 @@ public static class SpellFunctionLibrary
         List<GameObject> hitPoints = new List<GameObject>();
         float startAngle = CalculateStartAngle(direction) - (angle / 2);
         int[] StopMask = new int[] { 8 };
+
+        Vector2 Offset = 0.5f * Origin.GetComponent<SpriteRenderer>().bounds.size * direction;
+        Vector2 position = Origin.transform.position;
+        Vector2 CastOrigin = position + Offset;
+
+
         for (int i = 0; i < noRays; i++) {
             float SendAngle = startAngle + i * (angle / noRays);
             SendAngle = SendAngle * Mathf.Deg2Rad;
             Vector2 targetPosition = Distance * new Vector3(Mathf.Sin(SendAngle), Mathf.Cos(SendAngle));
-            RaycastHit2D hit = Physics2D.CircleCast(Origin.transform.position, 0.1f, targetPosition);
-            if (hit.collider != null) {
-                if (!hitPoints.Contains(hit.transform.gameObject)) {
-                    hitPoints.Add(hit.transform.gameObject);
+
+            // This would cast rays only against colliders in layer 5.
+            int layerMask = 1 << 5;            
+            // But instead we want to collide against everything except layer 5. The ~ operator does this, it inverts a bitmask.
+            layerMask = ~layerMask;
+            RaycastHit2D[] Hits = Physics2D.RaycastAll(CastOrigin, targetPosition, Distance, layerMask);
+            foreach(RaycastHit2D Hit in Hits) {
+                if (Hit.collider != null) {
+                    if (!hitPoints.Contains(Hit.transform.gameObject) && !StopMask.Contains(Hit.collider.gameObject.layer) && !Hit.collider.TryGetComponent(out PlayerEntity _)) {
+                        hitPoints.Add(Hit.transform.gameObject);
+                    }
+                    if (StopMask.Contains(Hit.collider.gameObject.layer)) {
+                        break;
+                    }
                 }
             }
-            //Debug.DrawRay(Origin.transform.position, targetPosition, Color.blue, 1f);
+
+            Debug.DrawRay(Origin.transform.position, targetPosition, Color.blue, 1f);
         }
         return hitPoints.ToArray();
     }

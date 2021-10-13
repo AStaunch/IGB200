@@ -6,6 +6,8 @@ using static EnumsAndDictionaries;
 public class EnemyEntity : AbstractCreature, iEnemyInterface
 {
     public GameObject enemDeathSound;
+    public GameObject attackWhiffSound;
+    public GameObject attackDamageSound;
     //TODO?
 
     public float EntityDamage;

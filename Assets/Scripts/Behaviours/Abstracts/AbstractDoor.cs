@@ -4,7 +4,6 @@ using System.Linq;
 using UnityEngine;
 using static EnumsAndDictionaries;
 using static SpriteManager;
-
 public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
 {
     public GameObject walkThroughSoundEffect;
@@ -14,7 +13,6 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
     protected bool isInvulnerable;
     private float delayTimer = 0;
     public bool IsOpen { get; set; }
-
     public Properties[] EntityProperties_ { get => EntityProperties; set => EntityProperties = value; }
     private Properties[] EntityProperties;
     public EntityTypes EntityType_ { get => EntityType; set => EntityType = value; }
@@ -26,12 +24,9 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
     public int MaxHealth_ { get => MaxHealth; set => MaxHealth = value; }
     private int MaxHealth;
     public Elements[] DamageImmunities_ { get => null; set => _ = value; }
-
-
-
     private void OnTriggerEnter2D(Collider2D collision) {
         Debug.Log(collision.transform.name + " entered");
-        if (collision.gameObject.TryGetComponent(out iCreatureInterface em) && !collision.isTrigger) {
+        if (collision.gameObject.TryGetComponent(out iFacingInterface em) && !collision.isTrigger) {
             if (em.GetEntityDirectionEnum() == CurrentDirection_ && IsOpen) {
                 if (sceneIndex < 0) {
                     if (delayTimer < Time.timeSinceLevelLoad) {
@@ -43,7 +38,6 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
                     UnityEngine.SceneManagement.SceneManager.LoadScene(sceneIndex);
                 }
             }
-
         }
     }
     public void InitExitDoor() {
@@ -58,7 +52,6 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
         }
         ExitDoor.UpdateSprite();
     }
-
     public void SyncExitDoor() {
         if (!ExitDoor)
             return;
@@ -67,14 +60,12 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
         ExitDoor.isInvulnerable = isInvulnerable;
         ExitDoor.UpdateSprite();
     }
-
     public void OpenCloseDoor(bool newState) {
         IsOpen = newState;
         GetComponent<Collider2D>().isTrigger = true;
         UpdateSprite();
         SyncExitDoor();
     }
-
     public void SetDoorProperties() {
         EntityType_ = EntityTypes.Object;
         if (isInvulnerable) {
@@ -83,7 +74,6 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
             EntityProperties = new Properties[] { Properties.Door, Properties.Immovable, Properties.Flamable };
         }
     }
-
     public void UpdateSprite() {
         try {
             Sprite currentSprite;
@@ -107,7 +97,6 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
             //Debug.LogWarning(ex.Message);
         }
     }
-
     public void TakeDamage(float damage, Elements damageType) {
         if (EntityProperties.Contains(Properties.Indestructable) || damageType != Elements.Fire) {
             return;
@@ -118,11 +107,9 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
             EntityDeath();
         }
     }
-
     public void EntityDeath() {
         OpenCloseDoor(true);
         // TODO: Impliment Colour change
     }
-
     public abstract void OnValidate();
 }

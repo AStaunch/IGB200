@@ -10,6 +10,12 @@ public class PlayerEntity : AbstractCreature
     // Update is called once per frame
 
     private void Start() {
+        //Vector3 one = Vector3.one;
+        //Debug.Log(one);
+        //one *= -1f;
+        //Debug.Log(one);
+        //Debug.Log(one.normalized);
+
         Health_ = MaxHealth_;
         EntitySpeed_ = 5;
         gameObject.layer = 7;

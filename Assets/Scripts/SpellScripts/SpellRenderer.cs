@@ -133,6 +133,7 @@ public class SpellRenderer : MonoBehaviour
     public void CreateBurstFX(Vector3 position, Color[] colors) {
         Material material = CreateMaterial(colors);
         GameObject PFXO =  Instantiate(PulseFXObject);
+        PFXO.GetComponent<Renderer>().material = material;
         PFXO.transform.position = position;
         Destroy(PFXO, 0.5f);
     }

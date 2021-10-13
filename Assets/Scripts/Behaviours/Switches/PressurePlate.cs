@@ -38,14 +38,14 @@ public class PressurePlate : MonoBehaviour, iSenderObject
     }
 
     private void OnTriggerStay2D(Collider2D collision) {
-        if (!PressOnce && collision.transform.TryGetComponent<iHealthInterface>(out _)) {
+        if (!PressOnce && collision.transform.TryGetComponent<iPhysicsInterface>(out _) && !collision.isTrigger) {
             currentState_ = true;
             UpdateSprite();            
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision) {
-        if (!PressOnce && collision.transform.TryGetComponent<iHealthInterface>(out _)) {
+        if (!PressOnce && collision.transform.TryGetComponent<iPhysicsInterface>(out _) && !collision.isTrigger) {
             currentState_ = false;
             UpdateSprite();
         }

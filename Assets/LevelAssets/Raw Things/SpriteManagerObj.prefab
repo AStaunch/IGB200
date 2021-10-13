@@ -64,4 +64,8 @@ MonoBehaviour:
     Down: {fileID: -45647430405561311, guid: 041f1d5810e41bd49afd55ac1899cddf, type: 3}
     Left: {fileID: -1262353921143904822, guid: 041f1d5810e41bd49afd55ac1899cddf, type: 3}
     Right: {fileID: -1980124987124494281, guid: 041f1d5810e41bd49afd55ac1899cddf, type: 3}
-  SpriteCollections: []
+  SpriteCollections:
+  - name: VoidFills
+    Sprites:
+    - {fileID: -4343367186929615182, guid: a2620ff2aa17e94468eabe0c4f5898ce, type: 3}
+    - {fileID: -4343367186929615182, guid: a2620ff2aa17e94468eabe0c4f5898ce, type: 3}

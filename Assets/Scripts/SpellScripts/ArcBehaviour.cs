@@ -157,37 +157,40 @@ public class ArcBehaviour : MonoBehaviour
         Destroy(this.gameObject);
     }
     int[] LayerArray = new int[] {0, 6, 7, 8 };
-    public Collider2D HitCollider = null;
+    //public Collider2D HitCollider = null;
     private void OnTriggerEnter2D(Collider2D collision) {
-        string msg = ("Touched: " + collision.transform.name);
+        string msg = "";// ("Touched: " + collision.transform.name);
         bool b1 = !collision.transform.CompareTag("Player");
         bool b2 = LayerArray.Contains(collision.gameObject.layer);
-        bool b3 = !collision.GetComponent<Collider2D>().isTrigger;
+        bool b3 = !collision.isTrigger;
         msg += b1 + " " + b2 + " ";//+ " " + b3;
         if (b1 && b2) {
             HitCollider = collision;
-            msg += 1.1f * collision.transform.position - transform.position;
+            CurrentPosition = transform.position;
+            msg += collision.transform.position - transform.position;
             Destroy(this.gameObject, 2 * Time.deltaTime);
         } else {
-           
+
         }
         Debug.Log(msg);
     }
 
-    public Collision2D HitCollision = null;
-    private void OnCollisionEnter2D(Collision2D collision) {
-        string msg = ("Touched: " + collision.transform.name);
-        bool b1 = !collision.transform.CompareTag("Player");
-        bool b2 = LayerArray.Contains(collision.gameObject.layer);
-        bool b3 = !collision.collider.isTrigger;
-        msg += " " + b1 + " " + b2 + " ";//+ " " + b3;
-        if (b1 && b2) {
-            HitCollision = collision;
-            msg += 1.1f * collision.transform.position - transform.position;
-            Destroy(this.gameObject, 2 * Time.deltaTime);
-        } else {
+    //public Collision2D HitCollision = null;
+    public Collider2D HitCollider;
+    public Vector3 CurrentPosition;
+    //private void OnCollisionEnter2D(Collision2D collision) {
+    //    string msg = ("Touched: " + collision.transform.name);
+    //    bool b1 = !collision.transform.CompareTag("Player");
+    //    bool b2 = LayerArray.Contains(collision.gameObject.layer);
+    //    bool b3 = !collision.collider.isTrigger;
+    //    msg += " " + b1 + " " + b2 + " ";//+ " " + b3;
+    //    if (b1 && b2) {
+    //        HitCollision = collision;
+    //        msg += 1.1f * collision.transform.position - transform.position;
+    //        Destroy(this.gameObject, 2 * Time.deltaTime);
+    //    } else {
             
-        }
-        Debug.Log(msg);
-    }
+    //    }
+    //    Debug.Log(msg);
+    //}
 }

@@ -30,16 +30,19 @@ public class BlockScript : MonoBehaviour, iPhysicsInterface
     }
 
     public void UpdateVelocity(float magnitude, Vector3 direction){
-        magnitude = VelocityOfOnePush;
-        RB_.velocity = magnitude * direction.normalized;
+        magnitude = Mathf.Sign(magnitude) * VelocityOfOnePush;
+        RB_.velocity = magnitude * direction;
         Debug.Log(magnitude+ " " + direction);
     }
-
-
     public void UpdateForce(float magnitude, Vector3 direction) {
         UpdateVelocity(magnitude, direction);
     }
-
+    private Vector3 NormaliseVector(Vector3 vector) {
+        float x = Mathf.Abs(vector.x) / vector.x;
+        float y = Mathf.Abs(vector.y) / vector.y;
+        float z = Mathf.Abs(vector.z) / vector.z;
+        return new Vector3(x, y, z);
+    }
     private void OnCollisionEnter2D(Collision2D collision) {
         transform.TryGetComponent(out Rigidbody2D rb);
         bool b1 = collision.transform.TryGetComponent(out BlockScript _);

@@ -23,7 +23,7 @@ public interface iPhysicsInterface : iPropertyInterface {
     public void Decelerate();
 }
 
-public interface iCreatureInterface : iFacingInterface {
+public interface iCreatureInterface {
     public float EntitySpeed_ { get; set; }
     Animator Anim_ { get;}    
     public void UpdateAnimation(Vector3 change);

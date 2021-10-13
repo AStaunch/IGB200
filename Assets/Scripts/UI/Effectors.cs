@@ -36,7 +36,7 @@ public static class Effectors
                         ArcBehaviour ac = Arc_.Data.AddComponent<ArcBehaviour>();
                         ac.direction = Arc_.CasterObject.GetComponent<iFacingInterface>().GetEntityDirectionEnum();
                         ac.arcDirection = Arc_.ArcDirection;
-                        ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcHitDetection(ac, Arc_, element));
+                        ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcHitDetection(ac, baseStrength, element));
                         break;
 
                     case "Cone":
@@ -57,27 +57,30 @@ public static class Effectors
         new SpellEffector() {
             Name = "Pull",
             Effector = new Action<iEffectorData>((EffectorData_) => {
-                float baseStrength = EffectorData_.baseStrength;
+                float baseStrength = -1f * EffectorData_.baseStrength;
                 Elements element = Elements.Pull;
                 switch (EffectorData_.Calling_template.Name) {
                     case "Ray":
                         RayData Ray_ = (RayData)EffectorData_;
-                        Vector2 direction = Ray_.CasterObject.transform.GetComponent<iCreatureInterface>().GetEntityDirection();
+                        Vector2 direction = Ray_.CasterObject.transform.GetComponent<iFacingInterface>().GetEntityDirection();
                         if (Ray_.Data.collider.gameObject.TryGetComponent(out iPhysicsInterface otherEntity)) {
                             float Strength = ComputeOutPutValue(element, otherEntity.EntityProperties_, baseStrength);
-                            otherEntity.UpdateForce(Strength, direction);
+                            otherEntity.UpdateForce(Strength,direction);
                             Ray_.Data.collider.gameObject.GetComponent<MonoBehaviour>().StartCoroutine(CheckVelocityCanBridgeGaps(Ray_.Data.collider.gameObject));
                         }
                         break;
 
                     case "Arc":
                         ArcData Arc_ = (ArcData)EffectorData_;
-                        GameObject ArcObject = Arc_.Data;
+                        ArcBehaviour ac = Arc_.Data.AddComponent<ArcBehaviour>();
+                        ac.direction = Arc_.CasterObject.GetComponent<iFacingInterface>().GetEntityDirectionEnum();
+                        ac.arcDirection = Arc_.ArcDirection;
+                        ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcHitDetection(ac, baseStrength, element));
                         break;
 
                     case "Cone":
                         ConeData Cone_ = (ConeData)EffectorData_;
-                        ConeProcess(Cone_, -baseStrength, element);
+                        ConeProcess(Cone_, baseStrength, element);
                         break;
 
                     default:
@@ -108,7 +111,7 @@ public static class Effectors
 
                     case "Cone":
                         ConeData Cone_ = (ConeData)EffectorData_;
-                        ConeProcess(Cone_, -baseStrength, element);
+                        ConeProcess(Cone_, baseStrength, element);
                         break;
 
                     default:
@@ -128,7 +131,7 @@ public static class Effectors
                 switch (EffectorData_.Calling_template.Name) {
                     case "Ray":
                         RayData Ray_ = (RayData)EffectorData_;
-                        Vector2 direction = Ray_.CasterObject.transform.GetComponent<iCreatureInterface>().GetEntityDirection();
+                        Vector2 direction = Ray_.CasterObject.transform.GetComponent<iFacingInterface>().GetEntityDirection();
                         if (Ray_.Data.collider.gameObject.TryGetComponent(out iPhysicsInterface otherEntity)) {
                             float Strength = ComputeOutPutValue(element, otherEntity.EntityProperties_, baseStrength);
                             otherEntity.UpdateForce(Strength, direction);
@@ -141,7 +144,7 @@ public static class Effectors
                         ArcBehaviour ac = Arc_.Data.AddComponent<ArcBehaviour>();
                         ac.direction = Arc_.CasterObject.GetComponent<iFacingInterface>().GetEntityDirectionEnum();
                         ac.arcDirection = Arc_.ArcDirection;
-                        ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcHitDetection(ac, Arc_, element));
+                        ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcHitDetection(ac, baseStrength, element));
                         break;
 
                     case "Cone":
@@ -166,7 +169,7 @@ public static class Effectors
                     case "Ray":
                         RayData Ray_ = (RayData)EffectorData_;                        
                         if (Ray_.CasterObject.TryGetComponent(out iPhysicsInterface thisEntity)) {
-                            float Strength = -1f * ComputeOutPutValue(element, thisEntity.EntityProperties_, baseStrength);
+                            float Strength = ComputeOutPutValue(element, thisEntity.EntityProperties_, baseStrength);
                             Vector2 Direction = Ray_.CasterObject.transform.GetComponent<iFacingInterface>().GetEntityDirection();
                             thisEntity.UpdateForce(Strength, Direction);
                             EffectorData_.CasterObject.GetComponent<MonoBehaviour>().StartCoroutine(CheckVelocityCanBridgeGaps(EffectorData_.CasterObject));
@@ -197,7 +200,7 @@ public static class Effectors
                         }
                         Vector2 direction = Cone_.CasterObject.transform.GetComponent<iFacingInterface>().GetEntityDirection();
                         Cone_.CasterObject.GetComponent<iPhysicsInterface>().UpdateForce(TotalForce, -direction);
-                        EffectorData_.CasterObject.GetComponent<MonoBehaviour>().StartCoroutine(CheckVelocityCanBridgeGaps(EffectorData_.CasterObject));
+                        Cone_.CasterObject.GetComponent<MonoBehaviour>().StartCoroutine(CheckVelocityCanBridgeGaps(Cone_.CasterObject));
                         Debug.Log(TotalForce * direction);
                         break;
 
@@ -229,7 +232,7 @@ public static class Effectors
                         ArcBehaviour ac = Arc_.Data.AddComponent<ArcBehaviour>();
                         ac.direction = Arc_.CasterObject.GetComponent<iFacingInterface>().GetEntityDirectionEnum();
                         ac.arcDirection = Arc_.ArcDirection;
-                        ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcHitDetection(ac, Arc_, element));
+                        ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcHitDetection(ac, baseStrength, element));
                         break;
 
                     case "Cone":
@@ -265,7 +268,7 @@ public static class Effectors
                         ArcBehaviour ac = Arc_.Data.AddComponent<ArcBehaviour>();
                         ac.direction = Arc_.CasterObject.GetComponent<iFacingInterface>().GetEntityDirectionEnum();
                         ac.arcDirection = Arc_.ArcDirection;
-                        ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcHitDetection(ac, Arc_, element));
+                        ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcHitDetection(ac, baseStrength, element));
                         break;
 
                     case "Cone":
@@ -301,7 +304,7 @@ public static class Effectors
                         ArcBehaviour ac = Arc_.Data.AddComponent<ArcBehaviour>();
                         ac.direction = Arc_.CasterObject.GetComponent<iFacingInterface>().GetEntityDirectionEnum();
                         ac.arcDirection = Arc_.ArcDirection;
-                        ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcHitDetection(ac, Arc_, element));
+                        ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcHitDetection(ac, baseStrength, element));
                         break;
 
                     case "Cone":
@@ -317,7 +320,6 @@ public static class Effectors
             Colors = ColourDict[Elements.Electricity]
         },
         #endregion
-
     };
 
 

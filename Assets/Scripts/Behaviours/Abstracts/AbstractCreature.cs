@@ -6,7 +6,7 @@ using UnityEngine;
 using static EnumsAndDictionaries;
 using static SpriteManager;
 
-public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreatureInterface, iPhysicsInterface, iPropertyManager
+public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreatureInterface, iPhysicsInterface, iPropertyManager, iFacingInterface
 {
     public int Health_ { get => Health; set => Health = value; }
     private int Health;

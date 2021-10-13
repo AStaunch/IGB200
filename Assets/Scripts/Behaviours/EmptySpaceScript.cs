@@ -1,17 +1,26 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static EnumsAndDictionaries;
+using static SpriteManager;
 
 public class EmptySpaceScript : MonoBehaviour
 {
     public VoidType VoidType_;
-    public Sprite Filled;
+    public string VoidFills = "VoidFills";
+    // 0 - Block Fill, 1 - Frozen Water
     private SpriteRenderer sr;
     private BoxCollider2D bc;
     private Rigidbody2D rb;
 
     public GameObject objectIntoWaterSound;
     public GameObject objectIntoVoidSound;
+    private bool isFrozen_ { 
+        get { return isFrozen; }
+        set { isFrozen = value; ToggleFrozen(value); }
+    }
+    private bool isFrozen;
 
     private void Awake() {
         gameObject.layer = 2;
@@ -36,7 +45,7 @@ public class EmptySpaceScript : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision) {
         if (collision.transform.TryGetComponent(out BlockScript _)){
             if (VoidType_ == VoidType.Water) {
-                sr.sprite = Filled;
+                sr.sprite = SpriteDict[VoidFills][0];
                 Instantiate(objectIntoWaterSound);
                 Destroy(collision.gameObject);
                 Destroy(bc);
@@ -48,5 +57,35 @@ public class EmptySpaceScript : MonoBehaviour
         }
     }
 
-    
+    private void ToggleFrozen(bool boo){
+        if (boo) {
+            sr.sprite = SpriteDict[VoidFills][1];
+            bc.enabled = false;
+        } else {
+            sr.sprite = null;
+            bc.enabled = true;
+        }
+    }
+
+    public void EffectTile(Elements element) {
+        //If it isnt water or the trigger isnt ice, dont worry for now
+        if(VoidType_ == VoidType.Water && element == Elements.Ice) {
+            float Duration = 7f;
+            StartCoroutine(FreezeForTime(Duration));
+        } else if (VoidType_ == VoidType.Water && element == Elements.Fire) {
+            isFrozen_ = false;
+        }
+        //Define Vars
+
+    }
+
+    private IEnumerator FreezeForTime(float duration) {
+        float time = 0;
+        isFrozen_ = true;
+        while (time < duration && isFrozen_ == true) {
+            time += Time.deltaTime;
+            yield return null;
+        }
+        isFrozen_ = false;
+    }
 }
