@@ -6,8 +6,6 @@ using static EnumsAndDictionaries;
 
 public class PlayerEntity : AbstractCreature
 {    
-   public bool isCasting;
-    // Update is called once per frame
 
     private void Start() {
         //Vector3 one = Vector3.one;
@@ -24,6 +22,7 @@ public class PlayerEntity : AbstractCreature
         }
     }
     private Vector3 change;
+    // Update is called once per frame
     void Update()
     {
         if(this.gameObject.layer == 7) {
@@ -50,6 +49,7 @@ public class PlayerEntity : AbstractCreature
         RB_.velocity = Vector2.zero;
         Animator anim = GetComponent<Animator>();
         anim.SetTrigger("attack");
+        Instantiate(castingSound);
     }
 
     public override void EntityDeath() {
@@ -78,8 +78,11 @@ public class PlayerEntity : AbstractCreature
 
 
     //Hacky Checkpoint Management
+    [HideInInspector]
     public GameObject lastCheckpoint;
     List<Rigidbody2D> collidedObjects = new List<Rigidbody2D>();
+    public GameObject castingSound;
+
     private void OnTriggerEnter2D(Collider2D collision) {
         if (collision.TryGetComponent(out CheckPoint cp)) {
             lastCheckpoint = cp.gameObject;
@@ -104,6 +107,26 @@ public class PlayerEntity : AbstractCreature
                 rb.isKinematic = false;
             }
         }        
+    }
+    private void OnCollisionStay2D(Collision2D collision) {
+        if(collision.collider.TryGetComponent(out EmptySpaceScript ESS) && !collision.collider.isTrigger) {
+            float Total = 0f;
+            float step = 1 / collision.contactCount;
+            Debug.Log(collision.contactCount);
+            foreach (ContactPoint2D contact in collision.contacts) {
+                Vector2 offset = 0.1f * GetComponent<SpriteRenderer>().bounds.size;
+                bool XBounds = contact.point.x > GetComponent<SpriteRenderer>().bounds.min.x + offset.x && contact.point.x < GetComponent<SpriteRenderer>().bounds.max.x - offset.x;
+                bool YBounds = contact.point.y > GetComponent<SpriteRenderer>().bounds.min.y + offset.y && contact.point.y < GetComponent<SpriteRenderer>().bounds.max.y - offset.y;
+                Debug.Log(XBounds + ":" + YBounds);
+                if (XBounds && YBounds) {
+                    EntityDeath();
+                } else {
+                    return;
+                }
+            }
+
+        }
+
     }
 
     public override void UpdateForce(float magnitude, Vector3 direction) {

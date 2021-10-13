@@ -8,6 +8,7 @@ public class EnemyEntity : AbstractCreature, iEnemyInterface
     public GameObject enemDeathSound;
     public GameObject attackWhiffSound;
     public GameObject attackDamageSound;
+    public GameObject enemPushSound;
     //TODO?
 
     public float EntityDamage;
@@ -46,6 +47,7 @@ public class EnemyEntity : AbstractCreature, iEnemyInterface
             return;
         }
         gameObject.layer = 6;
+        Instantiate(enemPushSound);
         RB_.AddForce(magnitude * direction * RB_.mass, ForceMode2D.Impulse);
     }
 }

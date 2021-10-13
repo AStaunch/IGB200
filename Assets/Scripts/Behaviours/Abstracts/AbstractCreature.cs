@@ -27,12 +27,11 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
     public Animator Anim_ { get => GetComponent<Animator>();}
     public Directions CurrentDirection_ { get => CurrentDirection; set => CurrentDirection = value; }
     private Directions CurrentDirection;
-
-
     public Rigidbody2D RB_ { get => GetComponent<Rigidbody2D>();}
     public float Deceleration;
     public float Deceleration_ { get => Deceleration; set => Deceleration = value; }
 
+    public GameObject damageSound;
     private void FixedUpdate() {
         Decelerate();
         UpdateSorting();
@@ -53,11 +52,12 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
     }
 
     public void TakeDamage(float damage, Elements damageType) {
-        if (DamageImmunities_.Contains(damageType)) {
+        if (DamageImmunities_.Contains(damageType) || Mathf.RoundToInt(damage) == 0) {
             return;
         }
         SpellRenderer hitDrawer = FindObjectOfType<SpellRenderer>();
         hitDrawer.CreateBurstFX(transform.position, ColourDict[damageType]);
+        Instantiate(damageSound);
         Health_ -= Mathf.RoundToInt(damage);
         Health_ = Mathf.Clamp(Health_, 0, MaxHealth_);
         if (0 >= Health_) {
