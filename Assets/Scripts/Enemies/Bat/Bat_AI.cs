@@ -74,15 +74,46 @@ public class Bat_AI : MonoBehaviour
     {
         if (Vector2.Distance(PlayerRef.transform.position, gameObject.transform.position) <= DetectionRange)
         {
-            RaycastHit2D hit2d = Physics2D.Raycast(gameObject.transform.position, PlayerRef.transform.position - gameObject.transform.position);
-            Debug.DrawRay(gameObject.transform.position, PlayerRef.transform.position - gameObject.transform.position);
-            if(hit2d.collider != null && hit2d.collider.gameObject == PlayerRef)
+            //RaycastHit2D hit2d = Physics2D.Raycast(gameObject.transform.position, PlayerRef.transform.position - gameObject.transform.position);
+            RaycastHit2D[] hit2d_a = Physics2D.RaycastAll(gameObject.transform.position, PlayerRef.transform.position - gameObject.transform.position, DetectionRange);
+            //Debug.DrawRay(gameObject.transform.position, PlayerRef.transform.position - gameObject.transform.position);
+            hit2d_a = Array.FindAll(hit2d_a, (h) => { return h.collider.gameObject.layer == LayerMask.NameToLayer("WALL") || h.collider.gameObject == PlayerRef; });
+            Array.Sort<RaycastHit2D>(hit2d_a, (ray1, ray2) => { return ray1.distance.CompareTo(ray2.distance); });
+
+            bool WallFirst = false;
+            RaycastHit2D hit2d = new RaycastHit2D();
+            for(int i = 0; i < hit2d_a.Length; i++)
             {
-                if (CurrentState != ValidStates.Targeting)
+                Debug.Log($"{hit2d_a[i].collider.name}");
+
+                if (hit2d_a[i].collider.gameObject.layer == LayerMask.NameToLayer("WALL"))
                 {
-                    NextState = ValidStates.Targeting;
+                    Debug.Log("Wall first");
+                    WallFirst = true;
+                    break;
                 }
-                LastViewedPos = hit2d.collider.gameObject.transform.position;
+                else if (hit2d_a[i].collider.gameObject == PlayerRef)
+                {
+                    Debug.Log("Player");
+                    hit2d = hit2d_a[i];
+                }
+                else if(hit2d_a[i].collider.gameObject == gameObject)
+                {
+                    //this is just to ignore self
+                }
+            }
+
+            if (!WallFirst && hit2d.collider != null)
+            {
+                Debug.DrawRay(gameObject.transform.position, PlayerRef.transform.position - gameObject.transform.position);
+                if (hit2d.collider != null && hit2d.collider.gameObject == PlayerRef)
+                {
+                    if (CurrentState != ValidStates.Targeting)
+                    {
+                        NextState = ValidStates.Targeting;
+                    }
+                    LastViewedPos = hit2d.collider.gameObject.transform.position;
+                }
             }
         }
         else
@@ -159,7 +190,6 @@ public class Bat_AI : MonoBehaviour
 
             yield return new WaitForFixedUpdate();
         }
-        //Tracking_Chasing(SeenPos, variation);
     }
 
     
