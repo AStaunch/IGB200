@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 5694633024578434394}
   - component: {fileID: 5694633024578434395}
   - component: {fileID: 5694633024578434724}
-  - component: {fileID: 5190803486359991003}
-  m_Layer: 0
+  - component: {fileID: 3482868894502673528}
+  m_Layer: 7
   m_Name: Chest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5694633024578434392}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 15.8, y: 74.4, z: -99.92061}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -53,7 +53,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -97,6 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b13b6139e15051b40b839b52bd844b66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UnlockName: 
 --- !u!61 &5694633024578434724
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -123,16 +124,29 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.95, y: 1}
   m_EdgeRadius: 0
---- !u!114 &5190803486359991003
-MonoBehaviour:
+--- !u!61 &3482868894502673528
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5694633024578434392}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30f232c9a6b83ab4591c18cf495836e9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  UnlockName: 
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 2}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0

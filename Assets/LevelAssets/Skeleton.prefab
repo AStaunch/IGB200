@@ -68,8 +68,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1771340957
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 3090743925612828899, guid: 47ddd525ee736394ca7470befb2cbb85, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0.6117647}
@@ -156,8 +156,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 676232457
-  m_SortingLayer: 3
+  m_SortingLayerID: 1771340957
+  m_SortingLayer: 1
   m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: b0409b7ab9e50b54f8850a3b898beb94, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -228,7 +228,11 @@ MonoBehaviour:
   EntityType: 1
   EntitySpeed: 0.5
   Deceleration: 1
+  damageSound: {fileID: 0}
   enemDeathSound: {fileID: 207168208727640438, guid: 41483acde3a6b784b9d93cb0fabbb453, type: 3}
+  attackWhiffSound: {fileID: 7343155223416498273, guid: d29b7469dd9daf44aa183d63cdde36d3, type: 3}
+  attackDamageSound: {fileID: 9142737913820445817, guid: 4f40cf88e59b2ad49b24483d8829d3af, type: 3}
+  enemPushSound: {fileID: 1464988429104889540, guid: dc1c26d67e8e0344dbf29cf2a9d4771c, type: 3}
   EntityDamage: 1
 --- !u!95 &6861715113764556093
 Animator:

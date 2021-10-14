@@ -4568,7 +4568,7 @@ MonoBehaviour:
   HasAdditionalParam: 0
   AdditionalParamMenu: {fileID: 0}
   IsAdditionalParam: 0
-  Mine: {fileID: 0}
+  Mine: {fileID: 2075873573592785926}
   Disabled: 1
 --- !u!1 &6891781392881948734
 GameObject:

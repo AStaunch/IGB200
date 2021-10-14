@@ -9,6 +9,8 @@ public class EnemyEntity : AbstractCreature, iEnemyInterface
     public GameObject attackWhiffSound;
     public GameObject attackDamageSound;
     public GameObject enemPushSound;
+
+    public bool isRanged = false;
     //TODO?
 
     public float EntityDamage;
@@ -49,5 +51,11 @@ public class EnemyEntity : AbstractCreature, iEnemyInterface
         gameObject.layer = 6;
         Instantiate(enemPushSound);
         RB_.AddForce(magnitude * direction * RB_.mass, ForceMode2D.Impulse);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision) {
+        if(collision.transform.TryGetComponent(out PlayerEntity playerEntity) && !isRanged) {
+            playerEntity.TakeDamage(EntityDamage_, Elements.NULL);
+        }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,12 +9,6 @@ public class PlayerEntity : AbstractCreature
 {    
 
     private void Start() {
-        //Vector3 one = Vector3.one;
-        //Debug.Log(one);
-        //one *= -1f;
-        //Debug.Log(one);
-        //Debug.Log(one.normalized);
-
         Health_ = MaxHealth_;
         EntitySpeed_ = 5;
         gameObject.layer = 7;
@@ -53,7 +48,7 @@ public class PlayerEntity : AbstractCreature
     }
 
     public override void EntityDeath() {
-        Anim_.SetBool("isDead", true);
+        Anim_.SetTrigger("dead");
         UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
     }
 
@@ -110,23 +105,29 @@ public class PlayerEntity : AbstractCreature
     }
     private void OnCollisionStay2D(Collision2D collision) {
         if(collision.collider.TryGetComponent(out EmptySpaceScript ESS) && !collision.collider.isTrigger) {
-            float Total = 0f;
-            float step = 1 / collision.contactCount;
-            Debug.Log(collision.contactCount);
+            //Debug.Log(collision.contactCount);
+            bool Falling = false;
             foreach (ContactPoint2D contact in collision.contacts) {
                 Vector2 offset = 0.1f * GetComponent<SpriteRenderer>().bounds.size;
                 bool XBounds = contact.point.x > GetComponent<SpriteRenderer>().bounds.min.x + offset.x && contact.point.x < GetComponent<SpriteRenderer>().bounds.max.x - offset.x;
                 bool YBounds = contact.point.y > GetComponent<SpriteRenderer>().bounds.min.y + offset.y && contact.point.y < GetComponent<SpriteRenderer>().bounds.max.y - offset.y;
-                Debug.Log(XBounds + ":" + YBounds);
+                //Debug.Log(XBounds + ":" + YBounds);
                 if (XBounds && YBounds) {
-                    EntityDeath();
+                    Falling = true;
                 } else {
                     return;
                 }
             }
-
+            if (Falling) {
+                EntityFall();
+            }
         }
 
+    }
+
+    private void EntityFall() {
+        Anim_.SetTrigger("fall");
+        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
     }
 
     public override void UpdateForce(float magnitude, Vector3 direction) {

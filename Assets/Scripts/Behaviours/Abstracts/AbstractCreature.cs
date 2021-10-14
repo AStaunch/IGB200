@@ -37,6 +37,10 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
         UpdateSorting();
     }
 
+    private void Awake() {
+        GetComponent<SpriteRenderer>().sortingLayerName = "Objects";
+    }
+
     public abstract void Decelerate();
     public abstract void EntityDeath();
     public Vector2 GetEntityDirection() {

@@ -11,7 +11,6 @@ public class ProcedureDoor : AbstractLockedDoor, iRecieverObject
     public SwitchObjects[] Switches;
     private SwitchOrders[] Solution;
     private SwitchOrders[] Input;
-    private bool currentState;
 
     private iSenderObject[] switchObjects;
     private int CorrectAnswers;

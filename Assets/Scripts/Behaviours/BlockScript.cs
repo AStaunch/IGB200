@@ -12,9 +12,14 @@ public class BlockScript : MonoBehaviour, iPhysicsInterface
     public Rigidbody2D RB_ { get => GetComponent<Rigidbody2D>(); }
     public Properties[] EntityProperties_ { get => new Properties[] { }; set => _ = value; }
     public EntityTypes EntityType_ { get => throw new System.NotImplementedException();}
+    public GameObject moveSound;
 
+    private void Start() {
+        GetComponent<SpriteRenderer>().sortingLayerName = "Objects";
+    }
     private void FixedUpdate() {
         Decelerate();
+        UpdateSorting();
     }
 
     public void Decelerate() {
@@ -35,6 +40,7 @@ public class BlockScript : MonoBehaviour, iPhysicsInterface
         Debug.Log(magnitude+ " " + direction);
     }
     public void UpdateForce(float magnitude, Vector3 direction) {
+        Instantiate(moveSound);
         UpdateVelocity(magnitude, direction);
     }
     private Vector3 NormaliseVector(Vector3 vector) {
