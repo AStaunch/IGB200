@@ -38,18 +38,23 @@ public class CraftingSyst : MonoBehaviour
             UnlockManager.Instance.Registry.ItemUnlocked += customEvent.Registry_ItemUnlocked;
 
 
-            SpellWrapper spw = new SpellWrapper(UnlockType.TEMPLATE, null, null);
+            //SpellWrapper spw = new SpellWrapper(UnlockType.TEMPLATE, null, null);
             if(customEvent.dataType == CustomEventHandle.EventData.EvntType.Template)
             {
                 SpellTemplate template = SpellRegistrySing.Instance.Registry.QueryRegistry(customEvent.template_name);
-                spw = new SpellWrapper(UnlockType.TEMPLATE, template, null);
+                SpellWrapper spw = new SpellWrapper(UnlockType.TEMPLATE, template, null);
+                UnlockManager.Instance.Registry.AddUnlockItem(spw);
+                if (customEvent.Disabled == false)
+                    UnlockManager.Instance.Registry.UnlockItem(spw.GetValue().Template.Name);
             }
             else
             {
                 SpellEffector effector = Effectors.Find(customEvent.effector_name);
-                spw = new SpellWrapper(UnlockType.EFFECTOR, null, effector);
+                SpellWrapper spw = new SpellWrapper(UnlockType.EFFECTOR, null, effector);
+                UnlockManager.Instance.Registry.AddUnlockItem(spw);
+                if (customEvent.Disabled == false)
+                    UnlockManager.Instance.Registry.UnlockItem(spw.GetValue().Effector.Name);
             }
-            UnlockManager.Instance.Registry.AddUnlockItem(spw);
         }
     }
 

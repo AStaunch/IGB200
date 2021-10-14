@@ -8,8 +8,8 @@ public class UnlockManager : MonoBehaviour
     void Awake()
     {
         DontDestroyOnLoad(this);
-        //SpellRegistrySing.Instance.Registry.onAdd += SpellReg_RegSpell;
     }
+
 
     public static UnlockManager Instance { get; private set; }
     private UnlockSingleton _registry;
@@ -24,10 +24,6 @@ public class UnlockManager : MonoBehaviour
         gme.tag = "UnlockManager";
     }
 
-    private void SpellReg_RegSpell(SpellRegArgs args)
-    {
-        //Registry.AddUnlockItem(new SpellWrapper() { ActiveType = UnlockType.TEMPLATE, UnlockedState })
-    }
 }
 
 

@@ -125,7 +125,19 @@ public class CustomEventHandle : MonoBehaviour
 
     private void UpdateImg()
     {
-        Mine.interactable = !Disabled;
+        if (gameObject.GetComponent<Button>() && Mine == null)
+        {
+            Mine = gameObject.GetComponent<Button>();
+        }
+
+        try
+        {
+            Mine.interactable = !Disabled;
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e.Message);
+        }
     }
 
     #endregion

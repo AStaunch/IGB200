@@ -9,6 +9,9 @@ public class HotbarHandler : MonoBehaviour
     public GameObject Crafting_Menu;
     public bool Crafting_Menu_Active { get { return Crafting_Menu.activeSelf; } set { Crafting_Menu.SetActive(value); } }
 
+    public Sprite Active_slot;
+    public Sprite Inactive_slot;
+
     public Image[] Slots = new Image[5];
     HotbarItem[] Hotbar = new HotbarItem[5];
     public class HotbarItem
@@ -61,6 +64,11 @@ public class HotbarHandler : MonoBehaviour
                     CastTime = Hotbar[activeslot].template.CastDelay;
                 }
             }
+
+            for (int i = 0; i < Slots.Length; i++)
+                if (i != activeslot)
+                    Slots[i].gameObject.transform.parent.GetComponent<Image>().sprite = Inactive_slot;
+            Slots[activeslot].gameObject.transform.parent.GetComponent<Image>().sprite = Active_slot;
         }
         
         if (Input.GetKeyDown(KeyCode.E))
