@@ -10,12 +10,12 @@ GameObject:
   m_Component:
   - component: {fileID: 8041835869632168912}
   - component: {fileID: 1961650295140229762}
-  - component: {fileID: 372676533213481734}
   - component: {fileID: 8820126500696495898}
   - component: {fileID: 7630893933186507112}
   - component: {fileID: 8820126500696495901}
   - component: {fileID: 8820126500696495900}
   - component: {fileID: 4247143225670407978}
+  - component: {fileID: 2756730811791438580}
   m_Layer: 6
   m_Name: Bat
   m_TagString: Untagged
@@ -75,7 +75,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1771340957
-  m_SortingLayer: 2
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: -7537196482120660328, guid: d1cbcb8374dd51445a7d8245faf13ee6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -88,24 +88,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &372676533213481734
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8820126500696495899}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5d253a2642842f459f94fbb2a4a5360, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EntityProperties: 
-  EntityType: 1
-  EntitySpeed: 0.75
-  Deceleration: 5
-  enemDeathSound: {fileID: 207168208727640438, guid: 41483acde3a6b784b9d93cb0fabbb453, type: 3}
-  EntityDamage: 1
 --- !u!114 &8820126500696495898
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -283,3 +265,26 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &2756730811791438580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8820126500696495899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da33fe4bc8f9ae547a62ca5f2f1b2203, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EntityProperties: 
+  EntityType: 1
+  EntitySpeed: 0.75
+  Deceleration: 1
+  damageSound: {fileID: 207168208727640438, guid: 41483acde3a6b784b9d93cb0fabbb453, type: 3}
+  AttackDelay: 2
+  EntityDamage: 1
+  enemDeathSound: {fileID: 207168208727640438, guid: 41483acde3a6b784b9d93cb0fabbb453, type: 3}
+  attackWhiffSound: {fileID: 7343155223416498273, guid: d29b7469dd9daf44aa183d63cdde36d3, type: 3}
+  attackDamageSound: {fileID: 9142737913820445817, guid: 4f40cf88e59b2ad49b24483d8829d3af, type: 3}
+  enemPushSound: {fileID: 1464988429104889540, guid: dc1c26d67e8e0344dbf29cf2a9d4771c, type: 3}

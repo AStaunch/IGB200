@@ -56,7 +56,7 @@ public class Bat_AI : MonoBehaviour
 
     private GameObject PlayerRef;
 
-    private float MoveSpeed;
+    private float MoveSpeed {get => GetComponent<iCreatureInterface>().EntitySpeed_; }
 
 
     void Start()
@@ -64,7 +64,6 @@ public class Bat_AI : MonoBehaviour
         rb2d = GetComponent<Rigidbody2D>();
         PlayerRef = GameObject.FindGameObjectWithTag("Player");
         NextState = ValidStates.Idle;
-        MoveSpeed = GetComponent<iCreatureInterface>().EntitySpeed_;
     }
 
 
@@ -84,7 +83,7 @@ public class Bat_AI : MonoBehaviour
             RaycastHit2D hit2d = new RaycastHit2D();
             for(int i = 0; i < hit2d_a.Length; i++)
             {
-                Debug.Log($"{hit2d_a[i].collider.name}");
+                //Debug.Log($"{hit2d_a[i].collider.name}");
 
                 if (hit2d_a[i].collider.gameObject.layer == LayerMask.NameToLayer("WALL"))
                 {

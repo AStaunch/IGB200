@@ -44,13 +44,13 @@ public class EmptySpaceScript : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision) {
         if (collision.transform.TryGetComponent(out BlockScript _)){
-            if (VoidType_ == VoidType.Water) {
+            if (VoidType_ == VoidType.Water && !bc.isTrigger) {
                 sr.sprite = SpriteDict[VoidFills][0];
                 Instantiate(objectIntoWaterSound);
                 Destroy(collision.gameObject);
                 Destroy(bc);
                 Destroy(rb);
-            } else if (VoidType_ == VoidType.Void) {
+            } else if (VoidType_ == VoidType.Void && !bc.isTrigger) {
                 Instantiate(objectIntoVoidSound);
                 Destroy(collision.gameObject);
             }
@@ -60,10 +60,10 @@ public class EmptySpaceScript : MonoBehaviour
     private void ToggleFrozen(bool boo){
         if (boo) {
             sr.sprite = SpriteDict[VoidFills][1];
-            bc.enabled = false;
+            bc.isTrigger = false;
         } else {
             sr.sprite = null;
-            bc.enabled = true;
+            bc.isTrigger = true;
         }
     }
 

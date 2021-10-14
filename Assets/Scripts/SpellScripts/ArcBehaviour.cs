@@ -28,7 +28,7 @@ public class ArcBehaviour : MonoBehaviour
         RB_.freezeRotation = true;
         CircleCollider2D cc = this.gameObject.AddComponent<CircleCollider2D>();
         cc.isTrigger = true;
-        cc.radius = 0.01f;
+        cc.radius = 0.5f * (GetComponent<SpriteRenderer>().bounds.size.x + GetComponent<SpriteRenderer>().bounds.size.y) / 2f;
 
         //initialise Variables
         duration = 2f;

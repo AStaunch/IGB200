@@ -48,7 +48,7 @@ public class PlayerEntity : AbstractCreature
     }
 
     public override void EntityDeath() {
-        Anim_.SetTrigger("dead");
+        Anim_.SetTrigger("death");
         UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
     }
 

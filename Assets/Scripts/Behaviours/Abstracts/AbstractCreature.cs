@@ -13,11 +13,11 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
     public int MaxHealth_ { get => MaxHealth; set => MaxHealth = value; }
     private int MaxHealth;
     public Elements[] DamageImmunities_ { get => DamageImmunities; set => DamageImmunities = value; }
-    private Elements[] DamageImmunities;
+    private Elements[] DamageImmunities = new Elements[0];
 
     public Properties[] EntityProperties_ { get => EntityProperties; set => EntityProperties = value; }
     [SerializeField]
-    private Properties[] EntityProperties;
+    private Properties[] EntityProperties = new Properties[0];
     public EntityTypes EntityType_ { get => EntityType; set => EntityType = value; }
     [SerializeField]
     private EntityTypes EntityType = EntityTypes.Creature;
@@ -155,7 +155,16 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
             yield return null;
         }
         Array.Resize(ref DamageImmunities, DamageImmunities_.Length - 1);
-
+    }
+    public IEnumerator MovePause(float Wait) {
+        float SpeedStore = EntitySpeed_;
+        float time = 0;
+        while (time < Wait) {
+            EntitySpeed_ = 0f;
+            time += Time.deltaTime;
+            yield return null;
+        }
+        EntitySpeed_ = SpeedStore;
     }
     #endregion
 }
