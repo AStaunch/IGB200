@@ -8,6 +8,12 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
 {
     public GameObject walkThroughSoundEffect;
     public bool isTriggerDoor;
+    public bool isSolveTrigger;
+    public bool isException;
+    public GameObject nextRoomContents;
+    public int nextRoomId = 0;
+    private bool nextExists;
+    private GameObject spawnedContents;
 
     public AbstractDoor ExitDoor;
     [Range(-1, 10)]
@@ -38,11 +44,35 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
                         Vector3 offset = VectorDict[CurrentDirection_];
                         collision.gameObject.transform.position = ExitDoor.transform.position + offset;
 
-                        Instantiate(walkThroughSoundEffect);
-                        if (isTriggerDoor) { 
-                            GameObject.FindGameObjectWithTag("MovingDoor").transform.position = ExitDoor.transform.position;
-                            Destroy(ExitDoor);
-                            Destroy(this);
+                        if (collision.tag == "Player")
+                        {
+                            if (isSolveTrigger)
+                            {
+                                foreach (GameObject gong in GameObject.FindGameObjectsWithTag("Room")) { gong.GetComponent<RoomScript>().isSolved = true; }
+                            }
+
+                            if (isException == false)
+                            {
+                                foreach (GameObject roomContents in GameObject.FindGameObjectsWithTag("Room"))
+                                {
+                                    if (roomContents.GetComponent<RoomScript>().isSolved == false) { Destroy(roomContents); }
+                                    else if (roomContents.GetComponent<RoomScript>().roomId == nextRoomId) { nextExists = true; };
+                                }
+                            }
+                            
+                            if (nextRoomContents != null && nextExists == false)
+                            {
+                                spawnedContents = Instantiate(nextRoomContents);
+                                spawnedContents.transform.position = new Vector3(0, 0, 0);
+                            }
+
+                            Instantiate(walkThroughSoundEffect);
+                            if (isTriggerDoor)
+                            {
+                                GameObject.FindGameObjectWithTag("MovingDoor").transform.position = ExitDoor.transform.position;
+                                Destroy(ExitDoor);
+                                Destroy(this);
+                            }
                         }
                     }
                 } else {

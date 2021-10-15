@@ -11,6 +11,7 @@ TagManager:
   - BGM
   - UnlockManager
   - MovingDoor
+  - Room
   layers:
   - Default
   - TransparentFX
