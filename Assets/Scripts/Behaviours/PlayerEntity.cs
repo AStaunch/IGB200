@@ -16,9 +16,20 @@ public class PlayerEntity : AbstractCreature
         if (DamageImmunities_ == null) {
             DamageImmunities_ = new Elements[0];
         }
+
+        Collider2D[] AllColliders = GetComponents<Collider2D>();
+        foreach (Collider2D collider in AllColliders) {
+            if (!collider.isTrigger) {
+                CollisionCollider = collider;
+                NoClip = collider.isTrigger;
+                break;
+            }
+        }
+
     }
     private Vector3 change;
     // Update is called once per frame
+    bool NoClip;
     void Update()
     {
         if(this.gameObject.layer == 7) {
@@ -35,17 +46,26 @@ public class PlayerEntity : AbstractCreature
                 UpdateAnimation(RB_.velocity);
             }
         }
-
+        //Restart Room
         if (Input.GetKeyDown(KeyCode.R)) {
             EntityDeath();
         }
+
+        //Turns of Player Collision
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.P)) {
+            NoClip = !NoClip;
+            CollisionCollider.isTrigger = NoClip;
+        }
     }
 
-    public void CastSpell() {
+    public void CastSpell(string CallingSpell) {
         RB_.velocity = Vector2.zero;
         Animator anim = GetComponent<Animator>();
         anim.SetTrigger("attack");
-        Instantiate(castingSound);
+        if (CallingSpell.Contains("Arc")) {
+            CallingSpell = "Arc";
+        }
+        Instantiate(SoundManager.SoundDict[CallingSpell+ "Sound"]);
     }
 
     public override void EntityDeath() {
@@ -87,7 +107,7 @@ public class PlayerEntity : AbstractCreature
     public AbstractDoor LastDoor_ { get => LastDoor; set => LastDoor = value; }
     private AbstractDoor LastDoor;
     List<Rigidbody2D> collidedObjects = new List<Rigidbody2D>();
-    public GameObject castingSound;
+    private Collider2D CollisionCollider;
 
     //Very Hacky Kino Management
     private void OnCollisionEnter2D(Collision2D collision) {

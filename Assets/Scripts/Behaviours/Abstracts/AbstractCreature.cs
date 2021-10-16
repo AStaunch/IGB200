@@ -29,8 +29,6 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
     public Rigidbody2D RB_ { get => GetComponent<Rigidbody2D>();}
     public float Deceleration_ { get => Deceleration; set => Deceleration = value; }
     private float Deceleration = 1;
-
-    public GameObject damageSound;
     private Collider2D PhysicsCollider {
         get {
             Collider2D[] AllColliders = GetComponents<Collider2D>();
@@ -91,7 +89,6 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
     }
 
     public abstract void  UpdateVelocity(float magnitude, Vector3 direction);
-    public GameObject PushSound;
     public void UpdateForce(float magnitude, Vector3 direction, Elements elementType) {
         if (EntityProperties_.Contains(Properties.Immovable)) {
             return;

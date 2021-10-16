@@ -86,22 +86,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cf46b22c527c6c4ba49718c54374837, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SoundLibrary:
-  - name: FireDamage
-    soundPrefab: {fileID: 9142737913820445817, guid: 4f40cf88e59b2ad49b24483d8829d3af, type: 3}
-  - name: IceDamage
-    soundPrefab: {fileID: 9142737913820445817, guid: 4f40cf88e59b2ad49b24483d8829d3af, type: 3}
-  - name: ElectricityDamage
-    soundPrefab: {fileID: 9142737913820445817, guid: 4f40cf88e59b2ad49b24483d8829d3af, type: 3}
-  - name: DeathDamage
-    soundPrefab: {fileID: 9142737913820445817, guid: 4f40cf88e59b2ad49b24483d8829d3af, type: 3}
-  - name: NULLDamage
-    soundPrefab: {fileID: 9142737913820445817, guid: 4f40cf88e59b2ad49b24483d8829d3af, type: 3}
-  - name: EnemyHurt
-    soundPrefab: {fileID: 9142737913820445817, guid: 4f40cf88e59b2ad49b24483d8829d3af, type: 3}
-  - name: PlayerHurt
-    soundPrefab: {fileID: 9142737913820445817, guid: 4f40cf88e59b2ad49b24483d8829d3af, type: 3}
-  - name: PullSound
-    soundPrefab: {fileID: 2120952667069339945, guid: 89990b639800bd841940a25da8f8afdd, type: 3}
-  - name: PushSound
-    soundPrefab: {fileID: 1464988429104889540, guid: dc1c26d67e8e0344dbf29cf2a9d4771c, type: 3}
+  SoundCollections:
+  - name: SpellSounds
+    soundCollections:
+    - name: RaySound
+      soundPrefab: {fileID: 2236515838088225189, guid: 27bf3c3725e29cc4d866258891443157, type: 3}
+    - name: ConeSound
+      soundPrefab: {fileID: 2236515838088225189, guid: 27bf3c3725e29cc4d866258891443157, type: 3}
+    - name: ArcSound
+      soundPrefab: {fileID: 2236515838088225189, guid: 27bf3c3725e29cc4d866258891443157, type: 3}
+    - name: ShieldSound
+      soundPrefab: {fileID: 2236515838088225189, guid: 27bf3c3725e29cc4d866258891443157, type: 3}
+    - name: OrbSound
+      soundPrefab: {fileID: 2236515838088225189, guid: 27bf3c3725e29cc4d866258891443157, type: 3}
+  - name: DamageNoises
+    soundCollections:
+    - name: FireDamage
+      soundPrefab: {fileID: 9142737913820445817, guid: 4f40cf88e59b2ad49b24483d8829d3af, type: 3}
+    - name: IceDamage
+      soundPrefab: {fileID: 9142737913820445817, guid: 4f40cf88e59b2ad49b24483d8829d3af, type: 3}
+    - name: ElectricityDamage
+      soundPrefab: {fileID: 9142737913820445817, guid: 4f40cf88e59b2ad49b24483d8829d3af, type: 3}
+    - name: DeathDamage
+      soundPrefab: {fileID: 9142737913820445817, guid: 4f40cf88e59b2ad49b24483d8829d3af, type: 3}
+    - name: NULLDamage
+      soundPrefab: {fileID: 9142737913820445817, guid: 4f40cf88e59b2ad49b24483d8829d3af, type: 3}
+    - name: EnemyHurt
+      soundPrefab: {fileID: 9142737913820445817, guid: 4f40cf88e59b2ad49b24483d8829d3af, type: 3}
+    - name: PlayerHurt
+      soundPrefab: {fileID: 2005349951531363110, guid: 4109314f66f02f8459fb7591a89219ed, type: 3}
+  - name: EnemySounds
+    soundCollections:
+    - name: PullSound
+      soundPrefab: {fileID: 2120952667069339945, guid: 89990b639800bd841940a25da8f8afdd, type: 3}
+    - name: PushSound
+      soundPrefab: {fileID: 1464988429104889540, guid: dc1c26d67e8e0344dbf29cf2a9d4771c, type: 3}
+    - name: PushSound
+      soundPrefab: {fileID: 1464988429104889540, guid: dc1c26d67e8e0344dbf29cf2a9d4771c, type: 3}

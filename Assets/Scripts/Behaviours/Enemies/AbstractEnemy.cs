@@ -9,9 +9,6 @@ public abstract class AbstractEnemy : AbstractCreature, iEnemyInterface
     public float EntityDamage;
     public Elements DamageType = Elements.NULL;
     public float EntityDamage_ { get => EntityDamage; set => EntityDamage = value; }
-    public GameObject enemDeathSound;
-    public GameObject attackWhiffSound;
-    public GameObject attackDamageSound;
     
     public void Start() {
         Health_ = MaxHealth_;
@@ -28,7 +25,7 @@ public abstract class AbstractEnemy : AbstractCreature, iEnemyInterface
     }
 
     public override void EntityDeath() {
-        Instantiate(enemDeathSound);
+        Instantiate(SoundManager.SoundDict["EnemyDeathSound"]);
         Destroy(this.gameObject);
     }
 

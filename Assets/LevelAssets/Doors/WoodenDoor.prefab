@@ -72,7 +72,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -79
+  m_SortingOrder: 0
   m_Sprite: {fileID: -4950680412457382125, guid: b70a6685bc103304c9105438d8c921ca, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -123,6 +123,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   walkThroughSoundEffect: {fileID: 6187046135797150018, guid: 3364cfdb60bd5ce4e88811a6f85ea207, type: 3}
+  isTriggerDoor: 0
+  isSolveTrigger: 0
+  isException: 0
+  nextRoomContents: {fileID: 0}
+  nextRoomId: 0
   ExitDoor: {fileID: 0}
   sceneIndex: -1
   CurrentDirection: 0

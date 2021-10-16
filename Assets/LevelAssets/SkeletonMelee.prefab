@@ -92,12 +92,12 @@ GameObject:
   m_Component:
   - component: {fileID: 6461833659243923374}
   - component: {fileID: 5789667271348616584}
+  - component: {fileID: 2717639796838957309}
   - component: {fileID: 6461833659243923373}
   - component: {fileID: 2538750432066807455}
   - component: {fileID: 8238265604039801799}
   - component: {fileID: 6861715113764556093}
   - component: {fileID: 4108642865275894072}
-  - component: {fileID: 2717639796838957309}
   m_Layer: 7
   m_Name: SkeletonMelee
   m_TagString: Untagged
@@ -132,18 +132,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da33fe4bc8f9ae547a62ca5f2f1b2203, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MaxHealth: 1
+  DamageImmunities: 
   EntityProperties: 09000000
-  EntityType: 1
-  EntitySpeed: 0.75
-  Deceleration: 1
-  damageSound: {fileID: 9142737913820445817, guid: 4f40cf88e59b2ad49b24483d8829d3af, type: 3}
+  Speed: 1
   AttackDelay: 2
   EntityDamage: 1
-  DamageType: 8
-  enemDeathSound: {fileID: 207168208727640438, guid: 41483acde3a6b784b9d93cb0fabbb453, type: 3}
-  attackWhiffSound: {fileID: 7343155223416498273, guid: d29b7469dd9daf44aa183d63cdde36d3, type: 3}
-  attackDamageSound: {fileID: 9142737913820445817, guid: 4f40cf88e59b2ad49b24483d8829d3af, type: 3}
-  enemPushSound: {fileID: 1464988429104889540, guid: dc1c26d67e8e0344dbf29cf2a9d4771c, type: 3}
+  DamageType: 7
+--- !u!114 &2717639796838957309
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6461833659243923372}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7718ebae0d35d824b8e5594b530d3202, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DetectionRange: 8
+  shuffle_delay: 1
+  shuffle_time: 250
 --- !u!212 &6461833659243923373
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -277,18 +287,3 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!114 &2717639796838957309
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6461833659243923372}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7718ebae0d35d824b8e5594b530d3202, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DetectionRange: 4
-  shuffle_delay: 1
-  shuffle_time: 250

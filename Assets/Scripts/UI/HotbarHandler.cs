@@ -61,7 +61,7 @@ public class HotbarHandler : MonoBehaviour
                 if (Hotbar[activeslot] != null && CastTime <= Time.timeSinceLevelLoad)
                 {
                     Hotbar[activeslot].run();
-                    Player.CastSpell();
+                    Player.CastSpell(Hotbar[activeslot].template.Name);
                     CastTime = Hotbar[activeslot].template.CastDelay;
                 }
             }
