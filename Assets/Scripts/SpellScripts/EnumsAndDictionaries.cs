@@ -127,6 +127,11 @@ public static class EnumsAndDictionaries
         Creature
     }
     [System.Serializable]
+    public enum AnimationEvents
+    {
+        Death, Fall
+    }
+    [System.Serializable]
     public enum Directions
     {
         Up,

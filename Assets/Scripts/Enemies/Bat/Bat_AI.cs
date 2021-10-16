@@ -93,7 +93,7 @@ public class Bat_AI : MonoBehaviour
                 }
                 else if (hit2d_a[i].collider.gameObject == PlayerRef)
                 {
-                    Debug.Log("Player");
+                    //Debug.Log("Player");
                     hit2d = hit2d_a[i];
                 }
                 else if(hit2d_a[i].collider.gameObject == gameObject)

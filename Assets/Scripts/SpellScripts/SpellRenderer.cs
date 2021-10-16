@@ -83,16 +83,16 @@ public class SpellRenderer : MonoBehaviour
     }
     #endregion
     public AnimationCurve arcCurve;
-    public Sprite ArcSprite;
+    public GameObject ArcSprite;
     #region Arc Drawer
     public GameObject CreateArcProjectile(Transform origin, Color[] colors) {
         spellMaster = new GameObject("Arc Master");
         spellMaster.transform.position = origin.position;
         Vector3 offset = GenerateOffset(origin, origin.GetComponent<iFacingInterface>().GetEntityDirection());
-        GameObject arcBall = CreateObject(ArcSprite, CreateMaterial(colors), offset);
-        arcBall.transform.position = origin.position + offset;
+        GameObject coneObject = Instantiate(ArcSprite);
+        coneObject.transform.position = origin.position + offset;
 
-        TrailRenderer tr = arcBall.AddComponent<TrailRenderer>();
+        TrailRenderer tr = coneObject.AddComponent<TrailRenderer>();
         tr.startColor = colors[0];
         tr.endColor = colors[2];
         tr.sortingLayerName = "Objects";
@@ -100,22 +100,27 @@ public class SpellRenderer : MonoBehaviour
         tr.startWidth = 0.4f;
         tr.endWidth = 0.2f;
         tr.material = origin.GetComponent<Renderer>().material;
-        return arcBall;
+        Destroy(spellMaster, 1f);
+        return coneObject;
     }
     #endregion
 
     #region Orb Drawer
     public Sprite OrbSprite;
     #endregion
-    public Sprite ConeSprite;
+    public GameObject ConeSprite;
     #region Cone Drawer
     public void DrawConeSprite(iEffectorData Data, Color[] colors) {
         ConeData coneData = (ConeData)Data;
-        spellMaster = new GameObject("Arc Master");
+        spellMaster = new GameObject("Cone Master");
         spellMaster.transform.position = coneData.CasterObject.transform.position;
-        GameObject coneObject = CreateObject(ConeSprite, CreateMaterial(colors),GenerateOffset(coneData.CasterObject.transform, coneData.CasterObject.transform.GetComponent<iFacingInterface>().GetEntityDirection()));
+        GameObject coneObject = Instantiate(ConeSprite);
+        coneObject.transform.parent = spellMaster.transform;
+        Vector2 offset = GenerateOffset(coneData.CasterObject.transform, coneData.CasterObject.transform.GetComponent<iFacingInterface>().GetEntityDirection());
+        coneObject.transform.localPosition = Vector2.zero + offset;
+        coneObject.GetComponent<Renderer>().material = CreateMaterial(colors);
         coneObject.transform.Rotate(Vector3.forward * RotationDict[Data.CasterObject.GetComponent<iFacingInterface>().GetEntityDirectionEnum()]);
-        spellMaster.AddComponent<DestroyThis>();
+        Destroy(spellMaster, 1f);
     }
 
     #endregion

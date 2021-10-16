@@ -9,13 +9,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8041835869632168912}
-  - component: {fileID: 1961650295140229762}
+  - component: {fileID: 2756730811791438580}
   - component: {fileID: 8820126500696495898}
+  - component: {fileID: 1961650295140229762}
+  - component: {fileID: 2221749954650742243}
   - component: {fileID: 7630893933186507112}
   - component: {fileID: 8820126500696495901}
   - component: {fileID: 8820126500696495900}
   - component: {fileID: 4247143225670407978}
-  - component: {fileID: 2756730811791438580}
   m_Layer: 6
   m_Name: Bat
   m_TagString: Untagged
@@ -37,6 +38,45 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2756730811791438580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8820126500696495899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da33fe4bc8f9ae547a62ca5f2f1b2203, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxHealth: 1
+  DamageImmunities: 
+  EntityProperties: 
+  Speed: 0.75
+  damageSound: {fileID: 207168208727640438, guid: 41483acde3a6b784b9d93cb0fabbb453, type: 3}
+  PushSound: {fileID: 1464988429104889540, guid: dc1c26d67e8e0344dbf29cf2a9d4771c, type: 3}
+  AttackDelay: 2
+  EntityDamage: 1
+  DamageType: 8
+  enemDeathSound: {fileID: 207168208727640438, guid: 41483acde3a6b784b9d93cb0fabbb453, type: 3}
+  attackWhiffSound: {fileID: 7343155223416498273, guid: d29b7469dd9daf44aa183d63cdde36d3, type: 3}
+  attackDamageSound: {fileID: 9142737913820445817, guid: 4f40cf88e59b2ad49b24483d8829d3af, type: 3}
+--- !u!114 &8820126500696495898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8820126500696495899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5b1083382a07f94984e238e7e99b620, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DetectionRange: 4
+  Min_distance_from_target: 1
+  Min_distance_from_target_variation: 0.25
 --- !u!212 &1961650295140229762
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -88,22 +128,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8820126500696495898
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8820126500696495899}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5b1083382a07f94984e238e7e99b620, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DetectionRange: 4
-  Min_distance_from_target: 1
-  Min_distance_from_target_variation: 0.25
---- !u!61 &7630893933186507112
+--- !u!61 &2221749954650742243
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -128,6 +153,32 @@ BoxCollider2D:
   m_AutoTiling: 0
   serializedVersion: 2
   m_Size: {x: 1.8, y: 1}
+  m_EdgeRadius: 0
+--- !u!61 &7630893933186507112
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8820126500696495899}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.9987508, y: 0.9993754}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1.39, y: 0.22}
   m_EdgeRadius: 0
 --- !u!50 &8820126500696495901
 Rigidbody2D:
@@ -265,26 +316,3 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &2756730811791438580
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8820126500696495899}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da33fe4bc8f9ae547a62ca5f2f1b2203, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EntityProperties: 
-  EntityType: 1
-  EntitySpeed: 0.75
-  Deceleration: 1
-  damageSound: {fileID: 207168208727640438, guid: 41483acde3a6b784b9d93cb0fabbb453, type: 3}
-  AttackDelay: 2
-  EntityDamage: 1
-  enemDeathSound: {fileID: 207168208727640438, guid: 41483acde3a6b784b9d93cb0fabbb453, type: 3}
-  attackWhiffSound: {fileID: 7343155223416498273, guid: d29b7469dd9daf44aa183d63cdde36d3, type: 3}
-  attackDamageSound: {fileID: 9142737913820445817, guid: 4f40cf88e59b2ad49b24483d8829d3af, type: 3}
-  enemPushSound: {fileID: 1464988429104889540, guid: dc1c26d67e8e0344dbf29cf2a9d4771c, type: 3}

@@ -9,6 +9,7 @@ public class PlayerEntity : AbstractCreature
 {    
 
     private void Start() {
+        Deceleration_ = 5;
         Health_ = MaxHealth_;
         EntitySpeed_ = 5;
         gameObject.layer = 7;
@@ -36,7 +37,7 @@ public class PlayerEntity : AbstractCreature
         }
 
         if (Input.GetKeyDown(KeyCode.R)) {
-            transform.position = lastCheckpoint.transform.position;
+            EntityDeath();
         }
     }
 
@@ -48,8 +49,18 @@ public class PlayerEntity : AbstractCreature
     }
 
     public override void EntityDeath() {
-        Anim_.SetTrigger("death");
-        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
+        if(LastDoor != null) {
+            Health_ = MaxHealth_;
+            transform.position = LastDoor_.RespawnPoint;
+            LastDoor.ExitDoor.ReloadRoom();
+        }
+    }
+    protected override void EntityFall() {
+        if (LastDoor != null) {
+            TakeDamage(1f, Elements.NULL);
+            transform.position = LastDoor_.RespawnPoint;
+            LastDoor.ExitDoor.ReloadRoom();
+        }
     }
 
     public override void UpdateAnimation(Vector3 change) {
@@ -73,16 +84,10 @@ public class PlayerEntity : AbstractCreature
 
 
     //Hacky Checkpoint Management
-    [HideInInspector]
-    public GameObject lastCheckpoint;
+    public AbstractDoor LastDoor_ { get => LastDoor; set => LastDoor = value; }
+    private AbstractDoor LastDoor;
     List<Rigidbody2D> collidedObjects = new List<Rigidbody2D>();
     public GameObject castingSound;
-
-    private void OnTriggerEnter2D(Collider2D collision) {
-        if (collision.TryGetComponent(out CheckPoint cp)) {
-            lastCheckpoint = cp.gameObject;
-        }
-    }
 
     //Very Hacky Kino Management
     private void OnCollisionEnter2D(Collision2D collision) {
@@ -104,37 +109,9 @@ public class PlayerEntity : AbstractCreature
         }        
     }
     private void OnCollisionStay2D(Collision2D collision) {
-        if(collision.collider.TryGetComponent(out EmptySpaceScript ESS) && !collision.collider.isTrigger) {
-            //Debug.Log(collision.contactCount);
-            bool Falling = false;
-            foreach (ContactPoint2D contact in collision.contacts) {
-                Vector2 offset = 0.1f * GetComponent<SpriteRenderer>().bounds.size;
-                bool XBounds = contact.point.x > GetComponent<SpriteRenderer>().bounds.min.x + offset.x && contact.point.x < GetComponent<SpriteRenderer>().bounds.max.x - offset.x;
-                bool YBounds = contact.point.y > GetComponent<SpriteRenderer>().bounds.min.y + offset.y && contact.point.y < GetComponent<SpriteRenderer>().bounds.max.y - offset.y;
-                //Debug.Log(XBounds + ":" + YBounds);
-                if (XBounds && YBounds) {
-                    Falling = true;
-                } else {
-                    return;
-                }
-            }
-            if (Falling) {
-                EntityFall();
-            }
+        if(gameObject.layer != 6) {
+            CheckFalling(collision);
         }
-
     }
 
-    private void EntityFall() {
-        Anim_.SetTrigger("fall");
-        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
-    }
-
-    public override void UpdateForce(float magnitude, Vector3 direction) {
-        if (EntityProperties_.Contains(Properties.Immovable)) {
-            return;
-        }
-        gameObject.layer = 6;
-        RB_.AddForce(magnitude * direction * RB_.mass, ForceMode2D.Impulse);
-    }
 }

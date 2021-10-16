@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static EnumsAndDictionaries;
-
+using static SoundManager;
 public class BlockScript : MonoBehaviour, iPhysicsInterface
 {
     private List<Rigidbody2D> collidedObjects = new List<Rigidbody2D>();
@@ -11,8 +11,7 @@ public class BlockScript : MonoBehaviour, iPhysicsInterface
     public float Deceleration_ { get => Deceleration; set => Deceleration = value; }
     public Rigidbody2D RB_ { get => GetComponent<Rigidbody2D>(); }
     public Properties[] EntityProperties_ { get => new Properties[] { }; set => _ = value; }
-    public EntityTypes EntityType_ { get => throw new System.NotImplementedException();}
-    public GameObject moveSound;
+    public EntityTypes EntityType_ { get => EntityTypes.Object;}
 
     private void Start() {
         GetComponent<SpriteRenderer>().sortingLayerName = "Objects";
@@ -39,8 +38,8 @@ public class BlockScript : MonoBehaviour, iPhysicsInterface
         RB_.velocity = magnitude * direction;
         Debug.Log(magnitude+ " " + direction);
     }
-    public void UpdateForce(float magnitude, Vector3 direction) {
-        Instantiate(moveSound);
+    public void UpdateForce(float magnitude, Vector3 direction, Elements elementType) {
+        Instantiate(SoundDict[elementType.ToString() + "Sound"]);
         UpdateVelocity(magnitude, direction);
     }
     private Vector3 NormaliseVector(Vector3 vector) {
@@ -78,4 +77,5 @@ public class BlockScript : MonoBehaviour, iPhysicsInterface
     public void UpdateSorting() {
         GetComponent<Renderer>().sortingOrder = -Mathf.RoundToInt(transform.position.y);
     }
+
 }

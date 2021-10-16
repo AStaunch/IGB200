@@ -17,8 +17,15 @@ public abstract class AbstractLockedDoor : AbstractDoor, iRecieverObject
 
     protected iSenderObject[] GetSwitches() {
         iSenderObject[] returnValue = new iSenderObject[switchGameObjects.Length];
-        for (int i = 0; i < switchGameObjects.Length; i++) {
+        for (int i = 0 ; i < switchGameObjects.Length; i++) {
+            
+            try{
             returnValue[i] = switchGameObjects[i].GetComponent<iSenderObject>();
+            }
+            catch(Exception) {                
+                switchGameObjects[i] = null;
+                break;
+            }
         }
         return returnValue;
     }

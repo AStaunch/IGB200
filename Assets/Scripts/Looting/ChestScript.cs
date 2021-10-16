@@ -11,6 +11,7 @@ public class ChestScript : MonoBehaviour, iSenderObject
     public List<iRecieverObject> targetObjects_ { get => targetObjects; set => targetObjects = value; }
     private List<iRecieverObject> targetObjects = new List<iRecieverObject>();
 
+    public bool Debug = false;
     private void UpdateReciever() {
         foreach (iRecieverObject target in targetObjects_) {
             target.CheckSenders(this);
@@ -31,7 +32,11 @@ public class ChestScript : MonoBehaviour, iSenderObject
 
     public string[] UnlockNames;
     private void OnTriggerEnter2D(Collider2D collision) {
-        if (collision.CompareTag("Player") && !currentState) {
+        if (collision.CompareTag("Player") && !currentState){
+            if (Debug) {
+                UnlockNames = UnlockManager.Instance.Registry.AllKeys();
+            }
+
             foreach (string UnlockName in UnlockNames) {
                 if (Array.Exists(UnlockManager.Instance.Registry.AllKeys(), (e) => { return e == UnlockName; })) {
                     UnlockManager.Instance.Registry.UnlockItem(UnlockName);

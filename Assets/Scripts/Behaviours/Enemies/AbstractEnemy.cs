@@ -12,7 +12,7 @@ public abstract class AbstractEnemy : AbstractCreature, iEnemyInterface
     public GameObject enemDeathSound;
     public GameObject attackWhiffSound;
     public GameObject attackDamageSound;
-    public GameObject enemPushSound;
+    
     public void Start() {
         Health_ = MaxHealth_;
     }
@@ -28,9 +28,12 @@ public abstract class AbstractEnemy : AbstractCreature, iEnemyInterface
     }
 
     public override void EntityDeath() {
-        Anim_.SetTrigger("death");
         Instantiate(enemDeathSound);
         Destroy(this.gameObject);
+    }
+
+    protected override void EntityFall() {
+        EntityDeath();
     }
 
     public override void UpdateAnimation(Vector3 change) {
@@ -45,14 +48,5 @@ public abstract class AbstractEnemy : AbstractCreature, iEnemyInterface
 
     public override void UpdateVelocity(float magnitude, Vector3 direction) {
         RB_.velocity = magnitude * direction;
-    }
-
-    public override void UpdateForce(float magnitude, Vector3 direction) {
-        if (EntityProperties_.Contains(Properties.Immovable)) {
-            return;
-        }
-        gameObject.layer = 6;
-        Instantiate(enemPushSound);
-        RB_.AddForce(magnitude * direction * RB_.mass, ForceMode2D.Impulse);
     }
 }

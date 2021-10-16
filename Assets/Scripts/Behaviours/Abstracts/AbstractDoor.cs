@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,8 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
     [Range(-1, 10)]
     public int sceneIndex = -1;
     protected bool isInvulnerable;
-    private float delayTimer = 0;
+    private float delayTimer_ {get => delayTimer; set => delayTimer = Time.timeSinceLevelLoad + value; }
+    private float delayTimer;
     public bool IsOpen { get; set; }
     public Properties[] EntityProperties_ { get => EntityProperties; set => EntityProperties = value; }
     private Properties[] EntityProperties;
@@ -39,48 +41,51 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
         //Debug.Log(collision.transform.name + " entered");
         if (collision.gameObject.TryGetComponent(out iFacingInterface em) && !collision.isTrigger) {
             if (em.GetEntityDirectionEnum() == CurrentDirection_ && IsOpen) {
-                if (sceneIndex < 0) {
-                    if (delayTimer < Time.timeSinceLevelLoad) {
-                        Vector3 offset = VectorDict[CurrentDirection_];
-                        collision.gameObject.transform.position = ExitDoor.transform.position + offset;
-
-                        if (collision.tag == "Player")
-                        {
-                            if (isSolveTrigger)
-                            {
-                                foreach (GameObject gong in GameObject.FindGameObjectsWithTag("Room")) { gong.GetComponent<RoomScript>().isSolved = true; }
-                            }
-
-                            if (isException == false)
-                            {
-                                foreach (GameObject roomContents in GameObject.FindGameObjectsWithTag("Room"))
-                                {
-                                    if (roomContents.GetComponent<RoomScript>().isSolved == false) { Destroy(roomContents); }
-                                    else if (roomContents.GetComponent<RoomScript>().roomId == nextRoomId) { nextExists = true; };
-                                }
-                            }
-                            
-                            if (nextRoomContents != null && nextExists == false)
-                            {
-                                spawnedContents = Instantiate(nextRoomContents);
-                                spawnedContents.transform.position = new Vector3(0, 0, 0);
-                            }
-
-                            Instantiate(walkThroughSoundEffect);
-                            if (isTriggerDoor)
-                            {
-                                GameObject.FindGameObjectWithTag("MovingDoor").transform.position = ExitDoor.transform.position;
-                                Destroy(ExitDoor);
-                                Destroy(this);
-                            }
+                if (sceneIndex < 0 && delayTimer_ < Time.timeSinceLevelLoad) {
+                    delayTimer_ = 2 * Time.deltaTime;
+                    Vector3 offset = VectorDict[CurrentDirection_];
+                    collision.gameObject.transform.position = ExitDoor.transform.position + offset;
+                    Instantiate(walkThroughSoundEffect);
+                    if (collision.TryGetComponent(out PlayerEntity player)) {
+                        player.LastDoor_ = this.ExitDoor;
+                        if (isSolveTrigger) {
+                            foreach (GameObject gong in GameObject.FindGameObjectsWithTag("Room")) { gong.GetComponent<RoomScript>().isSolved = true; }
                         }
-                    }
+
+                        ReloadRoom();
+
+                        if (isTriggerDoor){
+                            GameObject.FindGameObjectWithTag("MovingDoor").transform.position = ExitDoor.transform.position;
+                            Destroy(ExitDoor);
+                            Destroy(this);
+                        }
+                    }                    
                 } else {
                     UnityEngine.SceneManagement.SceneManager.LoadScene(sceneIndex);
                 }
             }
         }
     }
+
+    public void ReloadRoom() {
+        delayTimer_ = 2 * Time.deltaTime;
+        if (isException == false) {
+            foreach (GameObject roomContents in GameObject.FindGameObjectsWithTag("Room")) {
+                if (roomContents.GetComponent<RoomScript>().isSolved == false) {
+                    Destroy(roomContents);
+                } else if (roomContents.GetComponent<RoomScript>().roomId == nextRoomId) {
+                    nextExists = true;
+                }
+            }
+        }
+
+        if (nextRoomContents != null && nextExists == false) {
+            spawnedContents = Instantiate(nextRoomContents);
+            spawnedContents.transform.position = new Vector3(0, 0, 0);
+        }
+    }
+
+    public Vector3 RespawnPoint {get => transform.position - (Vector3) VectorDict[CurrentDirection_]; }
     public void InitExitDoor() {
         if (!ExitDoor)
             return;
