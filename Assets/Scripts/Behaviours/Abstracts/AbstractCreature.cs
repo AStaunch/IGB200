@@ -5,33 +5,43 @@ using System.Linq;
 using UnityEngine;
 using static EnumsAndDictionaries;
 using static SpriteManager;
-
+using static SoundManager;
 public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreatureInterface, iPhysicsInterface, iPropertyManager, iFacingInterface
 {
     public int Health_ { get => Health; set => Health = value; }
     private int Health;
     public int MaxHealth_ { get => MaxHealth; set => MaxHealth = value; }
-    private int MaxHealth;
+    public int MaxHealth = 1;
     public Elements[] DamageImmunities_ { get => DamageImmunities; set => DamageImmunities = value; }
-    private Elements[] DamageImmunities = new Elements[0];
+    public Elements[] DamageImmunities = new Elements[0];
 
     public Properties[] EntityProperties_ { get => EntityProperties; set => EntityProperties = value; }
     [SerializeField]
     private Properties[] EntityProperties = new Properties[0];
     public EntityTypes EntityType_ { get => EntityType; set => EntityType = value; }
-    [SerializeField]
     private EntityTypes EntityType = EntityTypes.Creature;
-    public float EntitySpeed_ { get => EntitySpeed; set => EntitySpeed = value; }
+    public float EntitySpeed_ { get => Speed; set => Speed = value; }
     [SerializeField]
-    private float EntitySpeed;
+    private float Speed = 0.5f;
     public Animator Anim_ { get => GetComponent<Animator>();}
     public Directions CurrentDirection_ { get => CurrentDirection; set => CurrentDirection = value; }
     private Directions CurrentDirection;
     public Rigidbody2D RB_ { get => GetComponent<Rigidbody2D>();}
-    public float Deceleration;
     public float Deceleration_ { get => Deceleration; set => Deceleration = value; }
+    private float Deceleration = 1;
 
     public GameObject damageSound;
+    private Collider2D PhysicsCollider {
+        get {
+            Collider2D[] AllColliders = GetComponents<Collider2D>();
+            foreach (Collider2D collider in AllColliders) {
+                if (!collider.isTrigger) {
+                    return collider;
+                }
+            }
+            return GetComponent<Collider2D>();
+        }
+    }
     private void FixedUpdate() {
         Decelerate();
         UpdateSorting();
@@ -40,9 +50,6 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
     private void Awake() {
         GetComponent<SpriteRenderer>().sortingLayerName = "Objects";
     }
-
-    public abstract void Decelerate();
-    public abstract void EntityDeath();
     public Vector2 GetEntityDirection() {
         return VectorDict[CurrentDirection_];
     }
@@ -56,16 +63,19 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
     }
 
     public void TakeDamage(float damage, Elements damageType) {
-        if (DamageImmunities_.Contains(damageType) || Mathf.RoundToInt(damage) == 0) {
+        Debug.Log($"{transform.name} takes {Mathf.RoundToInt(damage)} {damageType} damage!");
+        if (DamageImmunities_.Contains(damageType) || Mathf.RoundToInt(damage) == 0){
             return;
         }
         SpellRenderer hitDrawer = FindObjectOfType<SpellRenderer>();
         hitDrawer.CreateBurstFX(transform.position, ColourDict[damageType]);
-        Instantiate(damageSound);
+        string SoundName = damageType.ToString() + "Damage";
+        Instantiate(SoundDict[SoundName]);
         Health_ -= Mathf.RoundToInt(damage);
         Health_ = Mathf.Clamp(Health_, 0, MaxHealth_);
         if (0 >= Health_) {
-            EntityDeath();
+            Debug.Log($"{transform.name} dies!!!");
+            Anim_.SetTrigger("death");
         }
     }
 
@@ -81,7 +91,54 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
     }
 
     public abstract void  UpdateVelocity(float magnitude, Vector3 direction);
-    public abstract void UpdateForce(float magnitude, Vector3 direction);
+    public GameObject PushSound;
+    public void UpdateForce(float magnitude, Vector3 direction, Elements elementType) {
+        if (EntityProperties_.Contains(Properties.Immovable)) {
+            return;
+        }
+        gameObject.layer = 6;
+        Instantiate(SoundDict[elementType.ToString() + "Sound"]);
+        RB_.AddForce(magnitude * direction * RB_.mass, ForceMode2D.Impulse);
+        Debug.Log(magnitude * direction * RB_.mass);
+    }
+
+    public void AlertObservers(AnimationEvents message) {
+        if (message.Equals(AnimationEvents.Death)) {
+            EntityDeath();
+        }else if (message.Equals(AnimationEvents.Fall)){
+            EntityFall();
+        }
+    }
+    protected void CheckFalling(Collision2D collision) {
+        if (collision.collider.TryGetComponent(out EmptySpaceScript _) && !collision.collider.isTrigger) {
+            //Debug.Log(collision.contactCount);
+            bool Falling = false;
+            Vector2 offset = 0.1f * PhysicsCollider.bounds.size;
+            float offsetX = offset.x; float offsetY = offset.y;
+
+            //float offset = 0.1f * PhysicsCollider.bounds.size;
+            //float offsetX = offset; float offsetY = offset;
+            foreach (ContactPoint2D contact in collision.contacts) {
+                bool XBounds = contact.point.x > PhysicsCollider.bounds.min.x + offsetX && contact.point.x < PhysicsCollider.bounds.max.x - offsetX;
+                bool YBounds = contact.point.y > PhysicsCollider.bounds.min.y + offsetY && contact.point.y < PhysicsCollider.bounds.max.y - offsetY;
+                //Debug.Log(XBounds + ":" + YBounds);
+                if (XBounds && YBounds) {
+                    Falling = true;
+                } else {
+                    return;
+                }
+            }
+            if (Falling) {
+                Anim_.SetTrigger("fall");
+            }
+        } else {
+            return;
+        }
+    }
+    protected abstract void EntityFall();
+    public abstract void Decelerate();
+    public abstract void EntityDeath();
+
     #region Property Management
     public void AddProperty(Properties property) {
         if (!EntityProperties_.Contains(property)) {

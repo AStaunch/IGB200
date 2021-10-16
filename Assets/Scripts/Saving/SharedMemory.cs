@@ -27,7 +27,6 @@ public static class SharedMemory
     public static PlayerData LastState;
     public static void UpdatePlayer(PlayerEntity player, CheckPoint respawnLocation) {
         LastState.Health = player.MaxHealth_;
-        LastState.SavePoint = player.lastCheckpoint.transform.position;
     }
 
     public static void SaveToFile() {

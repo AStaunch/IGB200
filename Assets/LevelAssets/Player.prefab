@@ -101,13 +101,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f37fe37fd3d37a24691a41fef0985b55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MaxHealth: 3
+  DamageImmunities: 
   EntityProperties: 
-  EntityType: 1
-  EntitySpeed: 5
-  Deceleration: 5
+  Speed: 0.5
   damageSound: {fileID: 2005349951531363110, guid: 4109314f66f02f8459fb7591a89219ed, type: 3}
-  isCasting: 0
-  lastCheckpoint: {fileID: 0}
+  PushSound: {fileID: 1464988429104889540, guid: dc1c26d67e8e0344dbf29cf2a9d4771c, type: 3}
   castingSound: {fileID: 2236515838088225189, guid: 27bf3c3725e29cc4d866258891443157, type: 3}
 --- !u!50 &3497795528780355780
 Rigidbody2D:
