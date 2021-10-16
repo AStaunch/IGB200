@@ -11,6 +11,8 @@ using static SpellFunctionLibrary;
 
 class Register : MonoBehaviour
 {
+    public EventLootCont evntCont;
+
     public Sprite RaySprite;
     private Sprite RaySprite_ { get { return RaySprite != null ? RaySprite : null; } }
 
@@ -84,7 +86,7 @@ class Register : MonoBehaviour
                     CasterObject = CasterObject,
                     ArcDirection = EnumsAndDictionaries.ArcDirections.Left,
                     Data = arcDrawer.CreateArcProjectile(CasterObject.transform, effector.Colors),
-                    Calling_template = SpellRegistrySing.Instance.Registry.QueryRegistry("Arc")
+                    Calling_template = SpellRegistrySing.Instance.Registry.QueryRegistry("ArcLeft")
                 };
                 effector.Effector.Invoke(acd);//The null in this function would be the game object required
             }),1));
@@ -101,7 +103,7 @@ class Register : MonoBehaviour
                     CasterObject = CasterObject,
                     ArcDirection = EnumsAndDictionaries.ArcDirections.Right,
                     Data = arcDrawer.CreateArcProjectile(CasterObject.transform, effector.Colors),
-                    Calling_template = SpellRegistrySing.Instance.Registry.QueryRegistry("Arc")
+                    Calling_template = SpellRegistrySing.Instance.Registry.QueryRegistry("ArcRight")
                 };
                 effector.Effector.Invoke(acd);//The null in this function would be the game object required
             }), 1));
@@ -146,7 +148,6 @@ class Register : MonoBehaviour
                 effector.Effector.Invoke(null);//The null in this function would be the game object required
             }),1));
 
-
             #endregion
 
             #region Import any addon templates and effects
@@ -175,6 +176,8 @@ class Register : MonoBehaviour
             }
 
             #endregion
+
+            evntCont.Prepared();
         }
 
 

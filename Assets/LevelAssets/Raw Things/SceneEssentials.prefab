@@ -204,14 +204,6 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3160719552529653338, guid: 0e93fb99befeccf4a8f7f9ccc3385dd5, type: 3}
-      propertyPath: eventName
-      value: PullPlayerBroadcast
-      objectReference: {fileID: 0}
-    - target: {fileID: 3160719552529653338, guid: 0e93fb99befeccf4a8f7f9ccc3385dd5, type: 3}
-      propertyPath: effector_name
-      value: PullPlayer
-      objectReference: {fileID: 0}
     - target: {fileID: 4078236618974776990, guid: 0e93fb99befeccf4a8f7f9ccc3385dd5, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -304,6 +296,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -0.30039978
       objectReference: {fileID: 0}
+    - target: {fileID: 6016298701871522411, guid: 0e93fb99befeccf4a8f7f9ccc3385dd5, type: 3}
+      propertyPath: craftsyst
+      value: 
+      objectReference: {fileID: 5031981051870628312}
     - target: {fileID: 6166952581646097457, guid: 0e93fb99befeccf4a8f7f9ccc3385dd5, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -323,6 +319,28 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4078236618974776990, guid: 0e93fb99befeccf4a8f7f9ccc3385dd5, type: 3}
   m_PrefabInstance: {fileID: 2092696556801718145}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3636329062908820109 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3421634461614378252, guid: 0e93fb99befeccf4a8f7f9ccc3385dd5, type: 3}
+  m_PrefabInstance: {fileID: 2092696556801718145}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91c0f075ab74f174daba50a5e62aa65d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5031981051870628312 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6404101582122106457, guid: 0e93fb99befeccf4a8f7f9ccc3385dd5, type: 3}
+  m_PrefabInstance: {fileID: 2092696556801718145}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03e99322795e3084fb1312b470ad9168, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &4886289829646020697
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -452,6 +470,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3352184442521316833, guid: 8c206596ae1ee4e4e9f2eae5097b2ce7, type: 3}
+      propertyPath: evntCont
+      value: 
+      objectReference: {fileID: 3636329062908820109}
     - target: {fileID: 3352184442521316835, guid: 8c206596ae1ee4e4e9f2eae5097b2ce7, type: 3}
       propertyPath: m_Name
       value: RegisterInit(THIS GETS DESTROYED)

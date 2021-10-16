@@ -27,6 +27,7 @@ public class HotbarHandler : MonoBehaviour
     public Shader PalleteShader;
     private PlayerEntity Player;
 
+    public CraftingSyst craftsyst;
 
     private void Awake()
     {
@@ -75,12 +76,18 @@ public class HotbarHandler : MonoBehaviour
         {
             Crafting_Menu_Active = !Crafting_Menu_Active;
             Time.timeScale = Crafting_Menu_Active ? 0 : 1;
+            if (!Crafting_Menu_Active)
+                craftsyst.ResetUI();
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape) && Crafting_Menu_Active)
+        if (Input.GetKeyDown(KeyCode.Escape) && Crafting_Menu_Active && !craftsyst.CurrentlyAssigning)
         {
             Crafting_Menu_Active = !Crafting_Menu_Active;
             Time.timeScale = Crafting_Menu_Active ? 0 : 1;
+        }
+        else if(Input.GetKeyDown(KeyCode.Escape) && Crafting_Menu_Active && craftsyst.CurrentlyAssigning)
+        {
+            craftsyst.CancelCraft();
         }
     }
 

@@ -31,13 +31,22 @@ public static class Effectors
                         }
                         break;
 
-                    case "Arc":
+                    case "ArcLeft":
                         ArcData Arc_ = (ArcData)EffectorData_;
                         ArcBehaviour ac = Arc_.Data.AddComponent<ArcBehaviour>();
                         ac.direction = Arc_.CasterObject.GetComponent<iFacingInterface>().GetEntityDirectionEnum();
                         ac.arcDirection = Arc_.ArcDirection;
                         ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcHitDetection(ac, baseStrength, element));
                         break;
+
+                    case "ArcRight":
+                        ArcData Arc_r = (ArcData)EffectorData_;
+                        ArcBehaviour acr = Arc_r.Data.AddComponent<ArcBehaviour>();
+                        acr.direction = Arc_r.CasterObject.GetComponent<iFacingInterface>().GetEntityDirectionEnum();
+                        acr.arcDirection = Arc_r.ArcDirection;
+                        acr.GetComponent<MonoBehaviour>().StartCoroutine(ArcHitDetection(acr, baseStrength, element));
+                        break;
+
 
                     case "Cone":
                         ConeData Cone_ = (ConeData)EffectorData_;

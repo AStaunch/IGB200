@@ -97,6 +97,7 @@ GameObject:
   - component: {fileID: 8238265604039801799}
   - component: {fileID: 6861715113764556093}
   - component: {fileID: 4108642865275894072}
+  - component: {fileID: 2717639796838957309}
   m_Layer: 7
   m_Name: SkeletonMelee
   m_TagString: Untagged
@@ -276,3 +277,18 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
+--- !u!114 &2717639796838957309
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6461833659243923372}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7718ebae0d35d824b8e5594b530d3202, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DetectionRange: 4
+  shuffle_delay: 1
+  shuffle_time: 250
