@@ -22,7 +22,11 @@ public static class Effectors
             Effector = new Action<iEffectorData>((EffectorData_) => {
                 Elements element = Elements.Fire;
                 float baseStrength = EffectorData_.baseStrength;
-                switch (EffectorData_.Calling_template.Name) {
+                string CallingTemp = EffectorData_.Calling_template.Name;
+                if (CallingTemp.Contains("Arc")) {
+                    CallingTemp = "Arc";
+                }
+                switch (CallingTemp) {
                     case "Ray":
                         RayData Ray_ = (RayData)EffectorData_;
                         if (Ray_.Data.collider.gameObject.TryGetComponent(out iHealthInterface otherEntity)) {
@@ -31,22 +35,13 @@ public static class Effectors
                         }
                         break;
 
-                    case "ArcLeft":
+                    case "Arc":
                         ArcData Arc_ = (ArcData)EffectorData_;
                         ArcBehaviour ac = Arc_.Data.AddComponent<ArcBehaviour>();
                         ac.direction = Arc_.CasterObject.GetComponent<iFacingInterface>().GetEntityDirectionEnum();
                         ac.arcDirection = Arc_.ArcDirection;
                         ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcHitDetection(ac, baseStrength, element));
                         break;
-
-                    case "ArcRight":
-                        ArcData Arc_r = (ArcData)EffectorData_;
-                        ArcBehaviour acr = Arc_r.Data.AddComponent<ArcBehaviour>();
-                        acr.direction = Arc_r.CasterObject.GetComponent<iFacingInterface>().GetEntityDirectionEnum();
-                        acr.arcDirection = Arc_r.ArcDirection;
-                        acr.GetComponent<MonoBehaviour>().StartCoroutine(ArcHitDetection(acr, baseStrength, element));
-                        break;
-
 
                     case "Cone":
                         ConeData Cone_ = (ConeData)EffectorData_;
@@ -68,7 +63,11 @@ public static class Effectors
             Effector = new Action<iEffectorData>((EffectorData_) => {
                 float baseStrength = -1f * EffectorData_.baseStrength;
                 Elements element = Elements.Pull;
-                switch (EffectorData_.Calling_template.Name) {
+                string CallingTemp = EffectorData_.Calling_template.Name;
+                if (CallingTemp.Contains("Arc")) {
+                    CallingTemp = "Arc";
+                }
+                switch (CallingTemp) {
                     case "Ray":
                         RayData Ray_ = (RayData)EffectorData_;
                         Vector2 direction = Ray_.CasterObject.transform.GetComponent<iFacingInterface>().GetEntityDirection();
@@ -104,7 +103,11 @@ public static class Effectors
             Effector = new Action<iEffectorData>((EffectorData_) => {
                 float baseStrength = EffectorData_.baseStrength;
                 Elements element = Elements.Pull;
-                switch (EffectorData_.Calling_template.Name) {
+                string CallingTemp = EffectorData_.Calling_template.Name;
+                if (CallingTemp.Contains("Arc")) {
+                    CallingTemp = "Arc";
+                }
+                switch (CallingTemp) {
                     case "Ray":
                         RayData Ray_ = (RayData)EffectorData_;
                         Ray_.CasterObject.GetComponent<MonoBehaviour>().StartCoroutine(LerpSelf(Ray_.CasterObject, Ray_.Data.point, 1f));
@@ -137,7 +140,11 @@ public static class Effectors
             Effector = new Action<iEffectorData>((EffectorData_) => {
                 float baseStrength = EffectorData_.baseStrength;
                 Elements element = Elements.Push;
-                switch (EffectorData_.Calling_template.Name) {
+                string CallingTemp = EffectorData_.Calling_template.Name;
+                if (CallingTemp.Contains("Arc")) {
+                    CallingTemp = "Arc";
+                }
+                switch (CallingTemp) {
                     case "Ray":
                         RayData Ray_ = (RayData)EffectorData_;
                         Vector2 direction = Ray_.CasterObject.transform.GetComponent<iFacingInterface>().GetEntityDirection();
@@ -174,7 +181,11 @@ public static class Effectors
             Effector = new Action<iEffectorData>((EffectorData_) => {
                 float baseStrength = EffectorData_.baseStrength;
                 Elements element = Elements.Push;
-                switch (EffectorData_.Calling_template.Name) {
+                string CallingTemp = EffectorData_.Calling_template.Name;
+                if (CallingTemp.Contains("Arc")) {
+                    CallingTemp = "Arc";
+                }
+                switch (CallingTemp) {
                     case "Ray":
                         RayData Ray_ = (RayData)EffectorData_;                        
                         if (Ray_.CasterObject.TryGetComponent(out iPhysicsInterface thisEntity)) {
@@ -227,7 +238,11 @@ public static class Effectors
             Effector = new Action<iEffectorData>((EffectorData_) => {
                 Elements element = Elements.Ice;
                 float baseStrength = EffectorData_.baseStrength;
-                switch (EffectorData_.Calling_template.Name) {
+                string CallingTemp = EffectorData_.Calling_template.Name;
+                if (CallingTemp.Contains("Arc")) {
+                    CallingTemp = "Arc";
+                }
+                switch (CallingTemp) {
                         case "Ray":
                         RayData Ray_ = (RayData)EffectorData_;
                         if (Ray_.Data.collider.gameObject.TryGetComponent(out iHealthInterface otherEntity)) {
@@ -263,7 +278,11 @@ public static class Effectors
             Effector = new Action<iEffectorData>((EffectorData_) => {
                 Elements element = Elements.Life;
                 float baseStrength = EffectorData_.baseStrength;
-                switch (EffectorData_.Calling_template.Name) {
+                string CallingTemp = EffectorData_.Calling_template.Name;
+                if (CallingTemp.Contains("Arc")) {
+                    CallingTemp = "Arc";
+                }
+                switch (CallingTemp) {
                     case "Ray":
                         RayData Ray_ = (RayData)EffectorData_;
                         if (Ray_.Data.collider.gameObject.TryGetComponent(out iHealthInterface otherEntity)) {
@@ -299,7 +318,11 @@ public static class Effectors
             Effector = new Action<iEffectorData>((EffectorData_) => {
                 Elements element = Elements.Electricity;
                 float baseStrength = EffectorData_.baseStrength;
-                switch (EffectorData_.Calling_template.Name) {
+                string CallingTemp = EffectorData_.Calling_template.Name;
+                if (CallingTemp.Contains("Arc")) {
+                    CallingTemp = "Arc";
+                }
+                switch (CallingTemp) {
                     case "Ray":
                         RayData Ray_ = (RayData)EffectorData_;
                         if (Ray_.Data.collider.gameObject.TryGetComponent(out iHealthInterface otherEntity)) {

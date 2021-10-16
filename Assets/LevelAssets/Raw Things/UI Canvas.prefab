@@ -1792,7 +1792,7 @@ MonoBehaviour:
   AdditionalParamMenu: {fileID: 6459476517572958993}
   IsAdditionalParam: 0
   Mine: {fileID: 0}
-  Disabled: 0
+  Disabled: 1
 --- !u!1 &2733611004333322363
 GameObject:
   m_ObjectHideFlags: 0
@@ -3538,7 +3538,7 @@ MonoBehaviour:
   AdditionalParamMenu: {fileID: 992255248328112602}
   IsAdditionalParam: 0
   Mine: {fileID: 0}
-  Disabled: 0
+  Disabled: 1
 --- !u!1 &5312241019117824113
 GameObject:
   m_ObjectHideFlags: 0
@@ -4542,8 +4542,9 @@ GameObject:
   - component: {fileID: 6337885788952015286}
   - component: {fileID: 1579159987527711629}
   - component: {fileID: 2743783353979868057}
+  - component: {fileID: 7400747351706838995}
   m_Layer: 5
-  m_Name: tmps
+  m_Name: ElectricBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4589,14 +4590,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.18867922, g: 0.18867922, b: 0.18867922, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 2697481083480110284, guid: d7482d273c527e546bb08e71ff013917, type: 3}
+  m_Sprite: {fileID: -4182826983547200269, guid: f76cf0a3dd42fca48bb2205b26071b6e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4646,10 +4647,44 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 1579159987527711629}
+  m_TargetGraphic: {fileID: 1661744413788628587}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7400747351706838995}
+        m_TargetAssemblyTypeName: CustomEventHandle, Assembly-CSharp
+        m_MethodName: BroadcastEvent
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &7400747351706838995
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6457033098595944356}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4bc46e3b332bcf4dbb43c1e36341f1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dataType: 1
+  eventName: ElecticityBroadcast
+  effector_name: Electricity
+  template_name: 
+  Crafting_Slot_img: {fileID: -4182826983547200269, guid: f76cf0a3dd42fca48bb2205b26071b6e, type: 3}
+  HasAdditionalParam: 0
+  AdditionalParamMenu: {fileID: 0}
+  IsAdditionalParam: 0
+  Mine: {fileID: 0}
+  Disabled: 1
 --- !u!1 &6459476517572958993
 GameObject:
   m_ObjectHideFlags: 0
@@ -5279,8 +5314,9 @@ GameObject:
   - component: {fileID: 2922167302014288642}
   - component: {fileID: 1212256793897509819}
   - component: {fileID: 6693536499510687158}
+  - component: {fileID: 1265213689875865911}
   m_Layer: 5
-  m_Name: tmps
+  m_Name: LifeBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5326,14 +5362,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.18867922, g: 0.18867922, b: 0.18867922, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 2697481083480110284, guid: d7482d273c527e546bb08e71ff013917, type: 3}
+  m_Sprite: {fileID: 8807792800053594120, guid: f76cf0a3dd42fca48bb2205b26071b6e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5386,7 +5422,41 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1212256793897509819}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1265213689875865911}
+        m_TargetAssemblyTypeName: CustomEventHandle, Assembly-CSharp
+        m_MethodName: BroadcastEvent
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1265213689875865911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6901242610893927514}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4bc46e3b332bcf4dbb43c1e36341f1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dataType: 1
+  eventName: LifeBroadcast
+  effector_name: Life
+  template_name: 
+  Crafting_Slot_img: {fileID: 8807792800053594120, guid: f76cf0a3dd42fca48bb2205b26071b6e, type: 3}
+  HasAdditionalParam: 0
+  AdditionalParamMenu: {fileID: 0}
+  IsAdditionalParam: 0
+  Mine: {fileID: 0}
+  Disabled: 1
 --- !u!1 &7086816932127873811
 GameObject:
   m_ObjectHideFlags: 0
