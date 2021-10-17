@@ -60,10 +60,10 @@ public class EmptySpaceScript : MonoBehaviour
     private void ToggleFrozen(bool boo){
         if (boo) {
             sr.sprite = SpriteDict[VoidFills][1];
-            bc.isTrigger = false;
+            bc.isTrigger = true;
         } else {
             sr.sprite = null;
-            bc.isTrigger = true;
+            bc.isTrigger = false;
         }
     }
 

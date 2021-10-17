@@ -44,6 +44,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6923693170918935097}
     m_Modifications:
+    - target: {fileID: 5519067948932802383, guid: 376748902906fdd409aa151063ed29e1, type: 3}
+      propertyPath: SoundCollections.Array.data[2].soundCollections.Array.data[2].name
+      value: EnemyDeathSound
+      objectReference: {fileID: 0}
+    - target: {fileID: 5519067948932802383, guid: 376748902906fdd409aa151063ed29e1, type: 3}
+      propertyPath: SoundCollections.Array.data[2].soundCollections.Array.data[2].soundPrefab
+      value: 
+      objectReference: {fileID: 207168208727640438, guid: 41483acde3a6b784b9d93cb0fabbb453, type: 3}
     - target: {fileID: 7949139824444931978, guid: 376748902906fdd409aa151063ed29e1, type: 3}
       propertyPath: m_Name
       value: SpriteManagerObj

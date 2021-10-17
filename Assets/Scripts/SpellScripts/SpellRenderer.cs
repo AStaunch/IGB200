@@ -91,7 +91,9 @@ public class SpellRenderer : MonoBehaviour
         Vector3 offset = GenerateOffset(origin, origin.GetComponent<iFacingInterface>().GetEntityDirection());
         GameObject coneObject = Instantiate(ArcSprite);
         coneObject.transform.position = origin.position + offset;
-
+        coneObject.GetComponent<SpriteRenderer>().material = CreateMaterial(colors);
+        coneObject.GetComponent<SpriteRenderer>().sortingLayerName = "VFX";
+        coneObject.GetComponent<SpriteRenderer>().sortingOrder = 6;
         TrailRenderer tr = coneObject.AddComponent<TrailRenderer>();
         tr.startColor = colors[0];
         tr.endColor = colors[2];
@@ -100,6 +102,8 @@ public class SpellRenderer : MonoBehaviour
         tr.startWidth = 0.4f;
         tr.endWidth = 0.2f;
         tr.material = origin.GetComponent<Renderer>().material;
+        tr.sortingLayerName = "VFX";
+        tr.sortingOrder = 5;
         Destroy(spellMaster, 1f);
         return coneObject;
     }

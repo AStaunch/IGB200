@@ -28,6 +28,29 @@ public static class SpellFunctionLibrary
         {Elements.Earth,        new float[] {5f, .5f} },
     };
 
+    private static Dictionary<Elements, PropertyValues[]> ElementKV = new Dictionary<Elements, PropertyValues[]> {
+        {Elements.Fire,         new PropertyValues[] { new PropertyValues(Properties.Flamable, 2f) } },
+        {Elements.Ice,          new PropertyValues[] { new PropertyValues(Properties.Flamable, 2f) } },
+        {Elements.Electricity,  new PropertyValues[] { new PropertyValues(Properties.Metal, 2f) } },
+        {Elements.Life,         new PropertyValues[] { new PropertyValues(Properties.Undead, 2f) } },
+        {Elements.Pull,         new PropertyValues[] { new PropertyValues(Properties.Light, -1f) } },
+        {Elements.Push,         new PropertyValues[] { new PropertyValues(Properties.Light, 2f) } },
+        {Elements.Death,        new PropertyValues[] { new PropertyValues(Properties.Undead, 0f) } },
+        {Elements.Earth,        new PropertyValues[] { new PropertyValues(Properties.Frozen, 2f) } },
+    };
+
+    public class PropertyValues
+    {
+        private Properties Property;
+        private float Value;
+
+        public PropertyValues(Properties property, float value) {
+            this.Property = property;
+            this.Value = value;
+        }
+    }
+
+
     public static float ComputeOutPutValue(Elements element, Properties[] properties, float inputValue) {
         if(properties.Length == 0) {
             return inputValue;

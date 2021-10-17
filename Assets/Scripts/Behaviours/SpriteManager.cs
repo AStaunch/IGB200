@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class SpriteManager : MonoBehaviour
 {
+    public Shader TintShader;
     public SpriteCollection4Way[] DirectionalSpriteCollections;
     public SpriteCollection[] SpriteCollections;
     public static Dictionary<string, Sprite[]> SpriteDict;
@@ -39,6 +40,12 @@ public class SpriteManager : MonoBehaviour
                 SpriteDict.Add(collection.name, collection.Sprites);
             }
         }
+    }
+    public Material CreateTint(Color32 tintColor, byte Alpha) {
+        Material material = new Material(TintShader);
+        tintColor.a = Alpha;
+        material.SetColor("_Tint", tintColor);
+        return material;
     }
 }
 [System.Serializable]

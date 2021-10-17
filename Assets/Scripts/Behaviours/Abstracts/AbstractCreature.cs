@@ -64,6 +64,9 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
         Debug.Log($"{transform.name} takes {Mathf.RoundToInt(damage)} {damageType} damage!");
         if (DamageImmunities_.Contains(damageType) || Mathf.RoundToInt(damage) == 0){
             return;
+        }else if (damageType == Elements.Ice){
+            StartCoroutine(TintSprite(2.5f, Color.cyan));
+            StartCoroutine(MovePause(2.5f));
         }
         SpellRenderer hitDrawer = FindObjectOfType<SpellRenderer>();
         hitDrawer.CreateBurstFX(transform.position, ColourDict[damageType]);
@@ -219,6 +222,18 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
             yield return null;
         }
         EntitySpeed_ = SpeedStore;
+    }
+
+    public IEnumerator TintSprite(float duration, Color color) {
+        Material MatStore = GetComponent<SpriteRenderer>().material;
+        float time = 0;
+        byte Alpha = 192;
+        GetComponent<SpriteRenderer>().material = FindObjectOfType<SpriteManager>().CreateTint(color, Alpha);
+        while (time < duration) {
+            time += Time.deltaTime;
+            yield return null;
+        }
+        GetComponent<SpriteRenderer>().material = MatStore;
     }
     #endregion
 }

@@ -44,6 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5de60bd2af5ed7441964451464b6448e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TintShader: {fileID: -6465566751694194690, guid: 7f63107b44eaed940b6318bcfa40b58e, type: 3}
   DirectionalSpriteCollections:
   - name: MetalDoor
     Up: {fileID: 8742920937583391322, guid: b70a6685bc103304c9105438d8c921ca, type: 3}

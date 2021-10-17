@@ -309,7 +309,7 @@ public static class Effectors
                         break;
                 }
             }),
-            Colors = ColourDict[Elements.Ice]
+            Colors = ColourDict[Elements.Life]
         },
         #endregion
         #region Electricity
