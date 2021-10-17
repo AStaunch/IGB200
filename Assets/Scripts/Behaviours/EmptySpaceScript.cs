@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static EnumsAndDictionaries;
 using static SpriteManager;
-
+using static SoundManager;
 public class EmptySpaceScript : MonoBehaviour
 {
     public VoidType VoidType_;
@@ -13,9 +13,6 @@ public class EmptySpaceScript : MonoBehaviour
     private SpriteRenderer sr;
     private BoxCollider2D bc;
     private Rigidbody2D rb;
-
-    public GameObject objectIntoWaterSound;
-    public GameObject objectIntoVoidSound;
     private bool isFrozen_ { 
         get { return isFrozen; }
         set { isFrozen = value; ToggleFrozen(value); }
@@ -44,14 +41,15 @@ public class EmptySpaceScript : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision) {
         if (collision.transform.TryGetComponent(out BlockScript _)){
-            if (VoidType_ == VoidType.Water && !bc.isTrigger) {
+            if (VoidType_ == VoidType.Water && !bc.isTrigger) 
+            {
                 sr.sprite = SpriteDict[VoidFills][0];
-                Instantiate(objectIntoWaterSound);
+                Instantiate(SoundDict[VoidType_ + "DropSound"]);
                 Destroy(collision.gameObject);
-                Destroy(bc);
-                Destroy(rb);
-            } else if (VoidType_ == VoidType.Void && !bc.isTrigger) {
-                Instantiate(objectIntoVoidSound);
+                Destroy(bc); Destroy(rb);
+            } else if (VoidType_ == VoidType.Void && !bc.isTrigger) 
+            {
+                Instantiate(SoundDict[VoidType_ + "DropSound"]);
                 Destroy(collision.gameObject);
             }
         }
@@ -66,7 +64,6 @@ public class EmptySpaceScript : MonoBehaviour
             bc.isTrigger = false;
         }
     }
-
     public void EffectTile(Elements element) {
         //If it isnt water or the trigger isnt ice, dont worry for now
         if(VoidType_ == VoidType.Water && element == Elements.Ice) {
@@ -78,7 +75,6 @@ public class EmptySpaceScript : MonoBehaviour
         //Define Vars
 
     }
-
     private IEnumerator FreezeForTime(float duration) {
         float time = 0;
         isFrozen_ = true;
