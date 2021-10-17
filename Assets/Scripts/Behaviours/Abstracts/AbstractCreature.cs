@@ -8,6 +8,7 @@ using static SpriteManager;
 using static SoundManager;
 public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreatureInterface, iPhysicsInterface, iPropertyManager, iFacingInterface
 {
+    public abstract bool isEnemy { get; }
     public int Health_ { get => Health; set => Health = value; }
     private int Health;
     public int MaxHealth_ { get => MaxHealth; set => MaxHealth = value; }
@@ -61,18 +62,32 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
     }
 
     public void TakeDamage(float damage, Elements damageType) {
-        Debug.Log($"{transform.name} takes {Mathf.RoundToInt(damage)} {damageType} damage!");
-        if (DamageImmunities_.Contains(damageType) || Mathf.RoundToInt(damage) == 0){
+        int damageInt = Mathf.RoundToInt(damage);
+        string SoundName = damageType.ToString() + "Damage";
+        Debug.Log($"{transform.name} takes {damageInt} {damageType} damage!");
+        if (DamageImmunities_.Contains(damageType) || damageInt == 0){
+            //Instantiate Damage Sound
+            SoundName = "AttackFail";
+            Instantiate(SoundDict[SoundName]);
             return;
-        }else if (damageType == Elements.Ice){
+        } else if(damageInt > 0) {
+            StartCoroutine(TintSprite(0.1f, Color.red));
+        } else if(damageInt < 0) {
+            StartCoroutine(TintSprite(0.1f, Color.green));
+        }
+        //Instantiate Damage Sound        
+        Instantiate(SoundDict[SoundName]);
+        // Discolour Sprite Freeze
+        if (damageType == Elements.Ice){
             StartCoroutine(TintSprite(2.5f, Color.cyan));
             StartCoroutine(MovePause(2.5f));
         }
+        //Create Damage Effect
         SpellRenderer hitDrawer = FindObjectOfType<SpellRenderer>();
         hitDrawer.CreateBurstFX(transform.position, ColourDict[damageType]);
-        string SoundName = damageType.ToString() + "Damage";
-        Instantiate(SoundDict[SoundName]);
-        Health_ -= Mathf.RoundToInt(damage);
+
+        //Process Health
+        Health_ -= damageInt;
         Health_ = Mathf.Clamp(Health_, 0, MaxHealth_);
         if (0 >= Health_) {
             Debug.Log($"{transform.name} dies!!!");

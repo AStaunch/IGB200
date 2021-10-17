@@ -59,7 +59,7 @@ public class SwitchObject : MonoBehaviour, iSenderObject, iHealthInterface
     public Elements[] DamageImmunities_ { get => null; set => _ = value; }
 
 
-    private Shader shader;
+    public Shader shader;
 
     public void TakeDamage(float damage, Elements damageType) {
         if(damageType != element) {
@@ -78,7 +78,7 @@ public class SwitchObject : MonoBehaviour, iSenderObject, iHealthInterface
     }
 
     private void OnValidate() {
-        shader = FindObjectOfType<SpellRenderer>().shader;
+        //shader = FindObjectOfType<SpellRenderer>().shader;
         materials = new Material[] { CreateMaterial(ColourDict[Elements.NULL], shader), CreateMaterial(ColourDict[element], shader) };
         UpdateSprite();
     }

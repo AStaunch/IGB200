@@ -9,13 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2432971386065078929}
+  - component: {fileID: 2432971386065078933}
   - component: {fileID: 2432971386065078930}
   - component: {fileID: 6581406119498541984}
   - component: {fileID: 737076332615218936}
   - component: {fileID: 2834761314103017474}
   - component: {fileID: 4713713022416892935}
-  - component: {fileID: 2432971386065078933}
-  - component: {fileID: 2432971386065078932}
   m_Layer: 7
   m_Name: HeavyArcher
   m_TagString: Untagged
@@ -38,6 +37,27 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2432971386065078933
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2432971386065078931}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3247b5f4d8619a34f976520d9c9f6956, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxHealth: 3
+  DamageImmunities: 000000000100000002000000060000000700000008000000
+  EntityProperties: 0000000009000000
+  Speed: 0.5
+  AttackDelay: 2
+  EntityDamage: 2
+  DamageType: 8
+  Projectile: {fileID: 4015265660507018543, guid: 005bd63ec9addbe4ab4c4f0b203893a8, type: 3}
+  ProjectileSpeed: 2
 --- !u!212 &2432971386065078930
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -171,48 +191,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!114 &2432971386065078933
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2432971386065078931}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3247b5f4d8619a34f976520d9c9f6956, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MaxHealth: 1
-  DamageImmunities: 
-  EntityProperties: 
-  Speed: 0.5
-  PushSound: {fileID: 0}
-  AttackDelay: 0
-  EntityDamage: 0
-  DamageType: 8
-  Projectile: {fileID: 0}
-  ProjectileSpeed: 1
---- !u!114 &2432971386065078932
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2432971386065078931}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da33fe4bc8f9ae547a62ca5f2f1b2203, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MaxHealth: 1
-  DamageImmunities: 000000000100000002000000060000000700000008000000
-  EntityProperties: 0900000000000000
-  Speed: 0.5
-  PushSound: {fileID: 0}
-  AttackDelay: 2
-  EntityDamage: 1
-  DamageType: 8
 --- !u!1 &3144265113372663751
 GameObject:
   m_ObjectHideFlags: 0

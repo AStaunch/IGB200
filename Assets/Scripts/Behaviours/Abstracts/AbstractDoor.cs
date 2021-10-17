@@ -37,6 +37,8 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
     private void Awake() {
         ValidateFunction();
     }
+    public RoomData RoomData_ { get => RoomData; set => RoomData = value; }
+    private RoomData RoomData;
     private void OnTriggerEnter2D(Collider2D collision) {
         //Debug.Log(collision.transform.name + " entered");
         if (collision.gameObject.TryGetComponent(out iFacingInterface em) && !collision.isTrigger) {
