@@ -99,6 +99,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentState: 0
   element: 0
+  shader: {fileID: -6465566751694194690, guid: 97840132b5feb054a8b527b4001e4547, type: 3}
 --- !u!61 &6698157219418741715
 BoxCollider2D:
   m_ObjectHideFlags: 0

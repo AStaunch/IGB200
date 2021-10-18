@@ -6,7 +6,14 @@ using UnityEngine;
 using static EnumsAndDictionaries;
 
 public class PlayerEntity : AbstractCreature
-{    
+{
+    public AbstractDoor LastDoor_ { get => LastDoor; set => LastDoor = value; }
+
+    public override bool isEnemy => false;
+
+    private AbstractDoor LastDoor;
+    List<Rigidbody2D> collidedObjects = new List<Rigidbody2D>();
+    private Collider2D CollisionCollider;
 
     private void Start() {
         Deceleration_ = 5;
@@ -104,10 +111,6 @@ public class PlayerEntity : AbstractCreature
 
 
     //Hacky Checkpoint Management
-    public AbstractDoor LastDoor_ { get => LastDoor; set => LastDoor = value; }
-    private AbstractDoor LastDoor;
-    List<Rigidbody2D> collidedObjects = new List<Rigidbody2D>();
-    private Collider2D CollisionCollider;
 
     //Very Hacky Kino Management
     private void OnCollisionEnter2D(Collision2D collision) {

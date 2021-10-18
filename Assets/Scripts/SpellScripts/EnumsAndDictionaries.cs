@@ -150,6 +150,11 @@ public static class EnumsAndDictionaries
     {
         Ray, Orb, Arc, Cone, Shield, Runner
     }
+    [System.Serializable]
+    public enum VoidType
+    {
+        Water, Void
+    }
 
     public static Directions VectorToDirection(Vector3 vector) {
         Directions direction;

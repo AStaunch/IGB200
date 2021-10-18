@@ -135,14 +135,9 @@ MonoBehaviour:
   DamageImmunities: 000000000100000002000000060000000700000008000000
   EntityProperties: 0900000000000000
   Speed: 0.5
-  damageSound: {fileID: 9142737913820445817, guid: 4f40cf88e59b2ad49b24483d8829d3af, type: 3}
-  PushSound: {fileID: 0}
   AttackDelay: 2
-  EntityDamage: 1
+  EntityDamage: 2
   DamageType: 8
-  enemDeathSound: {fileID: 207168208727640438, guid: 41483acde3a6b784b9d93cb0fabbb453, type: 3}
-  attackWhiffSound: {fileID: 7343155223416498273, guid: d29b7469dd9daf44aa183d63cdde36d3, type: 3}
-  attackDamageSound: {fileID: 9142737913820445817, guid: 4f40cf88e59b2ad49b24483d8829d3af, type: 3}
 --- !u!212 &7530107859469830135
 SpriteRenderer:
   m_ObjectHideFlags: 0

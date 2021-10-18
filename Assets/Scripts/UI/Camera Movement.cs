@@ -12,6 +12,7 @@ public class CameraMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
         UpdateMinMax();
     }
 
@@ -19,8 +20,7 @@ public class CameraMovement : MonoBehaviour
     void LateUpdate()
     {
         if(transform.position != target.position) {
-            Vector3 targetPosition = new Vector3(target.position.x, target.position.y, transform.position.z);
-
+            Vector3 targetPosition = new Vector3(target.position.x, target.position.y, transform.position.z);         
             targetPosition.x = Mathf.Clamp(targetPosition.x, minPos.x, maxPos.x);
             targetPosition.y = Mathf.Clamp(targetPosition.y, minPos.y, maxPos.y);
             transform.position = Vector3.Lerp(transform.position, targetPosition, smoothing);
@@ -28,6 +28,6 @@ public class CameraMovement : MonoBehaviour
     }
 
     void UpdateMinMax() {
-
+        minPos = target.position; maxPos = target.position;
     }
 }
