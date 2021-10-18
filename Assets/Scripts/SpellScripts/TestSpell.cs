@@ -38,7 +38,7 @@ public class TestSpell : MonoBehaviour
         Name = "Test",
         Effector = new Action<iEffectorData>((EffectorData_) => {
             ArcData Arc_ = (ArcData)EffectorData_;
-            ArcBehaviour ac = Arc_.Data.AddComponent<ArcBehaviour>();
+            ArcScript ac = Arc_.Data.AddComponent<ArcScript>();
             ac.direction = Arc_.CasterObject.GetComponent<iFacingInterface>().GetEntityDirectionEnum();
             ac.arcDirection = Arc_.ArcDirection;
             ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcHitDetection(ac, Arc_.baseStrength, Elements.Fire));
@@ -50,7 +50,7 @@ public class TestSpell : MonoBehaviour
         Name = "Test",
         Effector = new Action<iEffectorData>((EffectorData_) => {
             ArcData Arc_ = (ArcData)EffectorData_;
-            ArcBehaviour ac = Arc_.Data.AddComponent<ArcBehaviour>();
+            ArcScript ac = Arc_.Data.AddComponent<ArcScript>();
             ac.direction = Arc_.CasterObject.GetComponent<iFacingInterface>().GetEntityDirectionEnum();
             ac.arcDirection = Arc_.ArcDirection;
             ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcHitDetection(ac, Arc_.baseStrength, Elements.Push));

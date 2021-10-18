@@ -15,7 +15,6 @@ public class DestructableDoor : AbstractLockedDoor
             initSwitches();
         }
         UpdateSprite();
-        SetDoorProperties();
     }
     public override void CheckSenders(iSenderObject iSenderObject) {
         for (int i = 0; i < switchObjects_.Length; i++) {
@@ -31,7 +30,6 @@ public class DestructableDoor : AbstractLockedDoor
     public override void ValidateFunction() {
         isInvulnerable = false;
         UpdateSprite();
-        SetDoorProperties();
         InitExitDoor();
     }
 }

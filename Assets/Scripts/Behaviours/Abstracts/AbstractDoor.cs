@@ -24,9 +24,8 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
     private float delayTimer;
     public bool IsOpen { get; set; }
     public Properties[] EntityProperties_ { get => EntityProperties; set => EntityProperties = value; }
-    private Properties[] EntityProperties;
-    public EntityTypes EntityType_ { get => EntityType; set => EntityType = value; }
-    private EntityTypes EntityType = EntityTypes.Object;
+    private Properties[] EntityProperties = new Properties[0];
+    public EntityTypes EntityType_ { get => EntityTypes.Object; }
     public Directions CurrentDirection_ { get => CurrentDirection; set => CurrentDirection = value; }
     public Directions CurrentDirection;
     public int Health_ { get => Health; set => Health = value; }
@@ -48,20 +47,37 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
                     Vector3 offset = VectorDict[CurrentDirection_];
                     collision.gameObject.transform.position = ExitDoor.transform.position + offset;
                     Instantiate(walkThroughSoundEffect);
-                    if (collision.TryGetComponent(out PlayerEntity player)) {
-                        player.LastDoor_ = this.ExitDoor;
+                    // Old Room Resets
+                    //if (collision.TryGetComponent(out PlayerEntity player)) {
+                    //    player.LastDoor_ = this.ExitDoor;
+                    //    if (isSolveTrigger) {
+                    //        foreach (GameObject gong in GameObject.FindGameObjectsWithTag("Room")) { gong.GetComponent<RoomScript>().isSolved = true; }
+                    //    }
+
+                    //    ReloadRoom();
+
+                    //    if (isTriggerDoor) {
+                    //        GameObject.FindGameObjectWithTag("MovingDoor").transform.position = ExitDoor.transform.position;
+                    //        Destroy(ExitDoor);
+                    //        Destroy(this);
+                    //    }
+                    //}
+
+                    //New Room Resets
+                    if (collision.TryGetComponent(out PlayerEntity playerEntity) && !isException) {
+                        playerEntity.LastDoor_ = this.ExitDoor;
+
                         if (isSolveTrigger) {
-                            foreach (GameObject gong in GameObject.FindGameObjectsWithTag("Room")) { gong.GetComponent<RoomScript>().isSolved = true; }
+                            RoomData_.isSolved_ = true;
                         }
 
-                        ReloadRoom();
-
-                        if (isTriggerDoor){
-                            GameObject.FindGameObjectWithTag("MovingDoor").transform.position = ExitDoor.transform.position;
-                            Destroy(ExitDoor);
-                            Destroy(this);
+                        if (!ExitDoor.RoomData_.isSolved_) {
+                            ExitDoor.RoomData_.Load();
                         }
-                    }                    
+                        if (!RoomData_.isSolved_) {
+                            RoomData_.Unload();
+                        }
+                    }
                 } else {
                     UnityEngine.SceneManagement.SceneManager.LoadScene(sceneIndex);
                 }
@@ -114,14 +130,14 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
         UpdateSprite();
         SyncExitDoor();
     }
-    public void SetDoorProperties() {
-        EntityType_ = EntityTypes.Object;
-        if (isInvulnerable) {
-            EntityProperties = new Properties[] { Properties.Door, Properties.Immovable, Properties.Indestructable };
-        } else {
-            EntityProperties = new Properties[] { Properties.Door, Properties.Immovable, Properties.Flamable };
-        }
-    }
+    //public void SetDoorProperties() {
+    //    EntityType_ = EntityTypes.Object;
+    //    if (isInvulnerable) {
+    //        EntityProperties = new Properties[] { Properties.Door, Properties.Immovable, Properties.Indestructable };
+    //    } else {
+    //        EntityProperties = new Properties[] { Properties.Door, Properties.Immovable, Properties.Flamable };
+    //    }
+    //}
     protected Sprite currentSprite;
     public void UpdateSprite() {
         try {
@@ -146,7 +162,7 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
         }
     }
     public void TakeDamage(float damage, Elements damageType) {
-        if (EntityProperties.Contains(Properties.Indestructable) || damageType != Elements.Fire) {
+        if (isInvulnerable || damageType != Elements.Fire) {
             return;
         }
         Health_ -= Mathf.RoundToInt(damage);

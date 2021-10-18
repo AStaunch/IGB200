@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine;
 using static EnumsAndDictionaries;
 
-public class ArcBehaviour : MonoBehaviour
+public class ArcScript : MonoBehaviour
 {
     
     public Directions direction;

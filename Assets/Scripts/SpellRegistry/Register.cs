@@ -55,7 +55,6 @@ class Register : MonoBehaviour
 
                 RaycastHit2D hit = Physics2D.Raycast(Origin, Direction, maxDistance);
                 ////There is no point using a facing variable, when this debug function will be removed soon
-                //Debug.DrawRay(GameObject.FindGameObjectWithTag("Player").transform.position, RayDirection);
                 RayData ryd = new RayData() { CasterObject = CasterObject, Data = hit, Calling_template = SpellRegistrySing.Instance.Registry.QueryRegistry("Ray") };
                 if (hit.collider != null)
                 {
@@ -65,15 +64,22 @@ class Register : MonoBehaviour
                 }
                 //Create the Sprites for the Ray Spell 
                 SpellRenderer rayDrawer = FindObjectOfType<SpellRenderer>();
-                rayDrawer.DrawRaySprite(ryd, effector.Colors);
+                rayDrawer.CreateRay(ryd, effector.Colors);
             }),1));
 
             //Orb Template
             SpellRegistrySing.Instance.Registry.AddItemToregistry(new SpellTemplate("Orb", OrbSprite_, new Action<SpellEffector>((effector) =>
             {
                 Console.WriteLine("This would be a Orb");
-                effector.Effector.Invoke(null);//The null in this function would be the game object required
-            }),1));
+                SpellRenderer orbDrawer = FindObjectOfType<SpellRenderer>();
+                GameObject CasterObject = GameObject.FindGameObjectWithTag("Player");
+                OrbData acd = new OrbData() {
+                    CasterObject = CasterObject,
+                    Data = orbDrawer.CreateArc(CasterObject.transform, effector.Colors),
+                    Calling_template = SpellRegistrySing.Instance.Registry.QueryRegistry("Orb")
+                };
+                effector.Effector.Invoke(acd);//The null in this function would be the game object required
+            }), 1));
 
             //Arc (Left) Template
             SpellRegistrySing.Instance.Registry.AddItemToregistry(new SpellTemplate("ArcLeft", ArcSprite_, new Action<SpellEffector>((effector) =>
@@ -85,7 +91,7 @@ class Register : MonoBehaviour
                 ArcData acd = new ArcData() {
                     CasterObject = CasterObject,
                     ArcDirection = EnumsAndDictionaries.ArcDirections.Left,
-                    Data = arcDrawer.CreateArcProjectile(CasterObject.transform, effector.Colors),
+                    Data = arcDrawer.CreateArc(CasterObject.transform, effector.Colors),
                     Calling_template = SpellRegistrySing.Instance.Registry.QueryRegistry("ArcLeft")
                 };
                 effector.Effector.Invoke(acd);//The null in this function would be the game object required
@@ -102,7 +108,7 @@ class Register : MonoBehaviour
                 {
                     CasterObject = CasterObject,
                     ArcDirection = EnumsAndDictionaries.ArcDirections.Right,
-                    Data = arcDrawer.CreateArcProjectile(CasterObject.transform, effector.Colors),
+                    Data = arcDrawer.CreateArc(CasterObject.transform, effector.Colors),
                     Calling_template = SpellRegistrySing.Instance.Registry.QueryRegistry("ArcRight")
                 };
                 effector.Effector.Invoke(acd);//The null in this function would be the game object required
@@ -131,7 +137,7 @@ class Register : MonoBehaviour
                 effector.Effector.Invoke(cod);                
                 //Create the Sprites for the Ray Spell 
                 SpellRenderer coneDrawer = FindObjectOfType<SpellRenderer>();
-                coneDrawer.DrawConeSprite(cod, effector.Colors);
+                coneDrawer.CreateCone(cod, effector.Colors);
             }),1));
 
             //Shield Template
