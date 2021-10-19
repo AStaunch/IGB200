@@ -65,14 +65,22 @@ public class PlayerEntity : AbstractCreature
         }
     }
 
-    public void CastSpell(string CallingSpell) {
+    public void CastSpell(string CallingSpell)
+    {
         RB_.velocity = Vector2.zero;
         Animator anim = GetComponent<Animator>();
         anim.SetTrigger("attack");
-        if (CallingSpell.Contains("Arc")) {
+        if (CallingSpell.Contains("Arc"))
+        {
             CallingSpell = "Arc";
         }
-        Instantiate(SoundManager.SoundDict[CallingSpell+ "Sound"]);
+        if (CallingSpell.Contains("Orb")) { Instantiate(SoundManager.SoundDict["OrbThrowSound"]); }
+        else { Instantiate(SoundManager.SoundDict[CallingSpell + "Sound"]); }
+
+        if (CallingSpell.Contains("Ray")) { GameObject.FindGameObjectWithTag("TextBox").GetComponent<DebugBox>().inputs.Add("Player.raycast(parameter);"); }
+        if (CallingSpell.Contains("Arc")) { GameObject.FindGameObjectWithTag("TextBox").GetComponent<DebugBox>().inputs.Add("Player.arc(parameter):"); }
+        if (CallingSpell.Contains("Cone")) { GameObject.FindGameObjectWithTag("TextBox").GetComponent<DebugBox>().inputs.Add("Object.coneCast(parameter);"); }
+        if (CallingSpell.Contains("Orb")) { GameObject.FindGameObjectWithTag("TextBox").GetComponent<DebugBox>().inputs.Add("Object.instantiateOrb(parameter);"); }
     }
 
     public override void EntityDeath() {

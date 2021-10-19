@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static SpriteManager;
+using static SoundManager;
 
 public class ChestScript : MonoBehaviour, iSenderObject
 {
@@ -11,7 +12,7 @@ public class ChestScript : MonoBehaviour, iSenderObject
     public List<iRecieverObject> targetObjects_ { get => targetObjects; set => targetObjects = value; }
     private List<iRecieverObject> targetObjects = new List<iRecieverObject>();
 
-    public bool Debug = false;
+    public bool debug = false;
     private void UpdateReciever() {
         foreach (iRecieverObject target in targetObjects_) {
             target.CheckSenders(this);
@@ -33,17 +34,20 @@ public class ChestScript : MonoBehaviour, iSenderObject
     public string[] UnlockNames;
     private void OnTriggerEnter2D(Collider2D collision) {
         if (collision.CompareTag("Player") && !currentState){
-            if (Debug) {
+            if (debug) {
                 UnlockNames = UnlockManager.Instance.Registry.AllKeys();
             }
 
             foreach (string UnlockName in UnlockNames) {
                 if (Array.Exists(UnlockManager.Instance.Registry.AllKeys(), (e) => { return e == UnlockName; })) {
                     UnlockManager.Instance.Registry.UnlockItem(UnlockName);
+                    GameObject.FindGameObjectWithTag("TextBox").GetComponent<DebugBox>().inputs.Add("Spell.unlock(" + UnlockName + ");");
                 } else {
                     throw new Exception($"Item by the name {UnlockName} does not exist within the unlock manager");
                 }
             }
+
+            Instantiate(SoundDict["ChestOpenSound"]);
             currentState_ = true;
         }
     }
