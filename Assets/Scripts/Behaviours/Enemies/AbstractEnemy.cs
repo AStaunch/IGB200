@@ -10,7 +10,7 @@ public abstract class AbstractEnemy : AbstractCreature, iEnemyInterface
     public Elements DamageType = Elements.NULL;
     public float EntityDamage_ { get => EntityDamage; set => EntityDamage = value; }
 
-    public override bool isEnemy => true;
+    public override bool IsEnemy => true;
     public void Start() {
         Health_ = MaxHealth_;
     }

@@ -46,13 +46,77 @@ PrefabInstance:
     m_TransformParent: {fileID: 6923693170918935097}
     m_Modifications:
     - target: {fileID: 5519067948932802383, guid: 376748902906fdd409aa151063ed29e1, type: 3}
+      propertyPath: SoundCollections.Array.data[1].soundCollections.Array.size
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 5519067948932802383, guid: 376748902906fdd409aa151063ed29e1, type: 3}
+      propertyPath: SoundCollections.Array.data[2].soundCollections.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5519067948932802383, guid: 376748902906fdd409aa151063ed29e1, type: 3}
+      propertyPath: SoundCollections.Array.data[1].soundCollections.Array.data[6].name
+      value: PushDamage
+      objectReference: {fileID: 0}
+    - target: {fileID: 5519067948932802383, guid: 376748902906fdd409aa151063ed29e1, type: 3}
+      propertyPath: SoundCollections.Array.data[1].soundCollections.Array.data[7].name
+      value: PullDamage
+      objectReference: {fileID: 0}
+    - target: {fileID: 5519067948932802383, guid: 376748902906fdd409aa151063ed29e1, type: 3}
+      propertyPath: SoundCollections.Array.data[1].soundCollections.Array.data[8].name
+      value: NULLDamage
+      objectReference: {fileID: 0}
+    - target: {fileID: 5519067948932802383, guid: 376748902906fdd409aa151063ed29e1, type: 3}
+      propertyPath: SoundCollections.Array.data[1].soundCollections.Array.data[9].name
+      value: EnemyHurt
+      objectReference: {fileID: 0}
+    - target: {fileID: 5519067948932802383, guid: 376748902906fdd409aa151063ed29e1, type: 3}
+      propertyPath: SoundCollections.Array.data[2].soundCollections.Array.data[1].name
+      value: EnemyDeathSound
+      objectReference: {fileID: 0}
+    - target: {fileID: 5519067948932802383, guid: 376748902906fdd409aa151063ed29e1, type: 3}
       propertyPath: SoundCollections.Array.data[2].soundCollections.Array.data[2].name
       value: EnemyDeathSound
       objectReference: {fileID: 0}
     - target: {fileID: 5519067948932802383, guid: 376748902906fdd409aa151063ed29e1, type: 3}
+      propertyPath: SoundCollections.Array.data[1].soundCollections.Array.data[10].name
+      value: PlayerHurt
+      objectReference: {fileID: 0}
+    - target: {fileID: 5519067948932802383, guid: 376748902906fdd409aa151063ed29e1, type: 3}
+      propertyPath: SoundCollections.Array.data[1].soundCollections.Array.data[11].name
+      value: AttackFail
+      objectReference: {fileID: 0}
+    - target: {fileID: 5519067948932802383, guid: 376748902906fdd409aa151063ed29e1, type: 3}
+      propertyPath: SoundCollections.Array.data[1].soundCollections.Array.data[6].soundPrefab
+      value: 
+      objectReference: {fileID: 1464988429104889540, guid: dc1c26d67e8e0344dbf29cf2a9d4771c, type: 3}
+    - target: {fileID: 5519067948932802383, guid: 376748902906fdd409aa151063ed29e1, type: 3}
+      propertyPath: SoundCollections.Array.data[1].soundCollections.Array.data[7].soundPrefab
+      value: 
+      objectReference: {fileID: 2120952667069339945, guid: 89990b639800bd841940a25da8f8afdd, type: 3}
+    - target: {fileID: 5519067948932802383, guid: 376748902906fdd409aa151063ed29e1, type: 3}
+      propertyPath: SoundCollections.Array.data[1].soundCollections.Array.data[8].soundPrefab
+      value: 
+      objectReference: {fileID: 9142737913820445817, guid: 4f40cf88e59b2ad49b24483d8829d3af, type: 3}
+    - target: {fileID: 5519067948932802383, guid: 376748902906fdd409aa151063ed29e1, type: 3}
+      propertyPath: SoundCollections.Array.data[1].soundCollections.Array.data[9].soundPrefab
+      value: 
+      objectReference: {fileID: 9142737913820445817, guid: 4f40cf88e59b2ad49b24483d8829d3af, type: 3}
+    - target: {fileID: 5519067948932802383, guid: 376748902906fdd409aa151063ed29e1, type: 3}
+      propertyPath: SoundCollections.Array.data[2].soundCollections.Array.data[1].soundPrefab
+      value: 
+      objectReference: {fileID: 207168208727640438, guid: 41483acde3a6b784b9d93cb0fabbb453, type: 3}
+    - target: {fileID: 5519067948932802383, guid: 376748902906fdd409aa151063ed29e1, type: 3}
       propertyPath: SoundCollections.Array.data[2].soundCollections.Array.data[2].soundPrefab
       value: 
       objectReference: {fileID: 207168208727640438, guid: 41483acde3a6b784b9d93cb0fabbb453, type: 3}
+    - target: {fileID: 5519067948932802383, guid: 376748902906fdd409aa151063ed29e1, type: 3}
+      propertyPath: SoundCollections.Array.data[1].soundCollections.Array.data[10].soundPrefab
+      value: 
+      objectReference: {fileID: 2005349951531363110, guid: 4109314f66f02f8459fb7591a89219ed, type: 3}
+    - target: {fileID: 5519067948932802383, guid: 376748902906fdd409aa151063ed29e1, type: 3}
+      propertyPath: SoundCollections.Array.data[1].soundCollections.Array.data[11].soundPrefab
+      value: 
+      objectReference: {fileID: 7343155223416498273, guid: d29b7469dd9daf44aa183d63cdde36d3, type: 3}
     - target: {fileID: 7949139824444931978, guid: 376748902906fdd409aa151063ed29e1, type: 3}
       propertyPath: m_Name
       value: SpriteManagerObj
@@ -122,6 +186,10 @@ PrefabInstance:
     - target: {fileID: 862353563440661771, guid: 0e93fb99befeccf4a8f7f9ccc3385dd5, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1498524738616291155, guid: 0e93fb99befeccf4a8f7f9ccc3385dd5, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.30010986
       objectReference: {fileID: 0}
     - target: {fileID: 1769683371500705242, guid: 0e93fb99befeccf4a8f7f9ccc3385dd5, type: 3}
       propertyPath: eventName
@@ -606,7 +674,7 @@ PrefabInstance:
     - target: {fileID: 4423776004440969253, guid: bc3557ba8288be84bbe229066332bcc0, type: 3}
       propertyPath: OrbSprite
       value: 
-      objectReference: {fileID: 21300000, guid: 6a6b9b07594602840914585bf6c7989c, type: 3}
+      objectReference: {fileID: 2481669751348490954, guid: a3d09c315ac591d488dda3bdf61d5388, type: 3}
     - target: {fileID: 4423776004440969253, guid: bc3557ba8288be84bbe229066332bcc0, type: 3}
       propertyPath: ConeSprite
       value: 

@@ -127,7 +127,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   ArcSprite: {fileID: 4777539431701868471, guid: cbe3ea45cb0626945868c9494823d5f6, type: 3}
-  OrbSprite: {fileID: 21300000, guid: 6a6b9b07594602840914585bf6c7989c, type: 3}
+  OrbSprite: {fileID: 2481669751348490954, guid: a3d09c315ac591d488dda3bdf61d5388, type: 3}
   ConeSprite: {fileID: 1286767425468429618, guid: a28bc66f86257f745af7fcb9af32a62d, type: 3}
   ShieldSprite: {fileID: 21300000, guid: 021d2b4c60b97f642ae8dded8cbd1600, type: 3}
   PulseFXObject: {fileID: 8377872944851353150, guid: 58b74cf30c2597540bf221f9437a4667, type: 3}

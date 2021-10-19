@@ -73,12 +73,12 @@ class Register : MonoBehaviour
                 Console.WriteLine("This would be a Orb");
                 SpellRenderer orbDrawer = FindObjectOfType<SpellRenderer>();
                 GameObject CasterObject = GameObject.FindGameObjectWithTag("Player");
-                OrbData acd = new OrbData() {
+                OrbData ord = new OrbData() {
                     CasterObject = CasterObject,
-                    Data = orbDrawer.CreateArc(CasterObject.transform, effector.Colors),
+                    Data = orbDrawer.CreateOrb(CasterObject.transform, effector.Colors),
                     Calling_template = SpellRegistrySing.Instance.Registry.QueryRegistry("Orb")
                 };
-                effector.Effector.Invoke(acd);//The null in this function would be the game object required
+                effector.Effector.Invoke(ord);//The null in this function would be the game object required
             }), 1));
 
             //Arc (Left) Template

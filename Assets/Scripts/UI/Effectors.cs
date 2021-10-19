@@ -21,7 +21,7 @@ public static class Effectors
             Name = "Fire",
             Effector = new Action<iEffectorData>((EffectorData_) => {
                 Elements element = Elements.Fire;
-                float baseStrength = EffectorData_.baseStrength;
+                
                 string CallingTemp = EffectorData_.Calling_template.Name;
                 if (CallingTemp.Contains("Arc")) {
                     CallingTemp = "Arc";
@@ -30,8 +30,7 @@ public static class Effectors
                     case "Ray":
                         RayData Ray_ = (RayData)EffectorData_;
                         if (Ray_.Data.collider.gameObject.TryGetComponent(out iHealthInterface otherEntity)) {
-                            float Strength = ComputeOutPutValue(element, otherEntity.EntityProperties_, baseStrength);
-                            otherEntity.TakeDamage(Strength, element);
+                            otherEntity.TakeDamage(EffectorData_.baseStrength, element);
                         }
                         break;
 
@@ -40,19 +39,19 @@ public static class Effectors
                         ArcScript ac = Arc_.Data.AddComponent<ArcScript>();
                         ac.direction = Arc_.CasterObject.GetComponent<iFacingInterface>().GetEntityDirectionEnum();
                         ac.arcDirection = Arc_.ArcDirection;
-                        ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcHitDetection(ac, baseStrength, element));
+                        ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcOther(ac, EffectorData_.baseStrength, element));
                         break;
 
                     case "Cone":
                         ConeData Cone_ = (ConeData)EffectorData_;
-                        ConeProcess(Cone_,baseStrength, element);
+                        ConeProcess(Cone_,EffectorData_.baseStrength, element);
                         break;
                                             
                     case "Orb":
                         OrbData Orb_ = (OrbData)EffectorData_;
                         OrbScript orbScript = Orb_.Data.AddComponent<OrbScript>();
                         orbScript.element = element;
-                        orbScript.baseDamage = baseStrength;
+                        orbScript.baseDamage = EffectorData_.baseStrength;
                         break;
 
                     default:
@@ -68,7 +67,6 @@ public static class Effectors
         new SpellEffector() {
             Name = "Pull",
             Effector = new Action<iEffectorData>((EffectorData_) => {
-                float baseStrength = -1f * EffectorData_.baseStrength;
                 Elements element = Elements.Pull;
                 string CallingTemp = EffectorData_.Calling_template.Name;
                 if (CallingTemp.Contains("Arc")) {
@@ -79,8 +77,7 @@ public static class Effectors
                         RayData Ray_ = (RayData)EffectorData_;
                         Vector2 direction = Ray_.CasterObject.transform.GetComponent<iFacingInterface>().GetEntityDirection();
                         if (Ray_.Data.collider.gameObject.TryGetComponent(out iPhysicsInterface otherEntity)) {
-                            float Strength = ComputeOutPutValue(element, otherEntity.EntityProperties_, baseStrength);
-                            otherEntity.UpdateForce(Strength,direction);
+                            otherEntity.UpdateForce(EffectorData_.baseStrength,direction, element);
                             Ray_.Data.collider.gameObject.GetComponent<MonoBehaviour>().StartCoroutine(CheckVelocityCanBridgeGaps(Ray_.Data.collider.gameObject));
                         }
                         break;
@@ -90,12 +87,12 @@ public static class Effectors
                         ArcScript ac = Arc_.Data.AddComponent<ArcScript>();
                         ac.direction = Arc_.CasterObject.GetComponent<iFacingInterface>().GetEntityDirectionEnum();
                         ac.arcDirection = Arc_.ArcDirection;
-                        ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcHitDetection(ac, baseStrength, element));
+                        ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcOther(ac, EffectorData_.baseStrength, element));
                         break;
 
                     case "Cone":
                         ConeData Cone_ = (ConeData)EffectorData_;
-                        ConeProcess(Cone_, baseStrength, element);
+                        ConeProcess(Cone_, EffectorData_.baseStrength, element);
                         break;
 
                     default:
@@ -108,7 +105,7 @@ public static class Effectors
         new SpellEffector() {
             Name = "PullPlayer",
             Effector = new Action<iEffectorData>((EffectorData_) => {
-                float baseStrength = EffectorData_.baseStrength;
+                
                 Elements element = Elements.Pull;
                 string CallingTemp = EffectorData_.Calling_template.Name;
                 if (CallingTemp.Contains("Arc")) {
@@ -125,12 +122,12 @@ public static class Effectors
                         ArcScript ac = Arc_.Data.AddComponent<ArcScript>();
                         ac.direction = Arc_.CasterObject.GetComponent<iFacingInterface>().GetEntityDirectionEnum();
                         ac.arcDirection = Arc_.ArcDirection;
-                        ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcPlayerMove(ac, Arc_, element));
+                        ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcPlayer(ac, Arc_, element));
                         break;
 
                     case "Cone":
                         ConeData Cone_ = (ConeData)EffectorData_;
-                        ConeProcess(Cone_, baseStrength, element);
+                        ConeProcess(Cone_, EffectorData_.baseStrength, element);
                         break;
 
                     default:
@@ -145,7 +142,7 @@ public static class Effectors
         new SpellEffector() {
             Name = "Push",
             Effector = new Action<iEffectorData>((EffectorData_) => {
-                float baseStrength = EffectorData_.baseStrength;
+                
                 Elements element = Elements.Push;
                 string CallingTemp = EffectorData_.Calling_template.Name;
                 if (CallingTemp.Contains("Arc")) {
@@ -156,8 +153,7 @@ public static class Effectors
                         RayData Ray_ = (RayData)EffectorData_;
                         Vector2 direction = Ray_.CasterObject.transform.GetComponent<iFacingInterface>().GetEntityDirection();
                         if (Ray_.Data.collider.gameObject.TryGetComponent(out iPhysicsInterface otherEntity)) {
-                            float Strength = ComputeOutPutValue(element, otherEntity.EntityProperties_, baseStrength);
-                            otherEntity.UpdateForce(Strength, direction);
+                            otherEntity.UpdateForce(EffectorData_.baseStrength, direction, element);
                             Ray_.Data.collider.gameObject.GetComponent<MonoBehaviour>().StartCoroutine(CheckVelocityCanBridgeGaps(Ray_.Data.collider.gameObject));
                         }
                         break;
@@ -167,12 +163,12 @@ public static class Effectors
                         ArcScript ac = Arc_.Data.AddComponent<ArcScript>();
                         ac.direction = Arc_.CasterObject.GetComponent<iFacingInterface>().GetEntityDirectionEnum();
                         ac.arcDirection = Arc_.ArcDirection;
-                        ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcHitDetection(ac, baseStrength, element));
+                        ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcOther(ac, EffectorData_.baseStrength, element));
                         break;
 
                     case "Cone":
                         ConeData Cone_ = (ConeData)EffectorData_;
-                        ConeProcess(Cone_,baseStrength, element);
+                        ConeProcess(Cone_,EffectorData_.baseStrength, element);
                         break;
 
                     default:
@@ -185,8 +181,7 @@ public static class Effectors
 
         new SpellEffector() {
             Name = "PushPlayer",
-            Effector = new Action<iEffectorData>((EffectorData_) => {
-                float baseStrength = EffectorData_.baseStrength;
+            Effector = new Action<iEffectorData>((EffectorData_) => {                
                 Elements element = Elements.Push;
                 string CallingTemp = EffectorData_.Calling_template.Name;
                 if (CallingTemp.Contains("Arc")) {
@@ -196,11 +191,9 @@ public static class Effectors
                     case "Ray":
                         RayData Ray_ = (RayData)EffectorData_;                        
                         if (Ray_.CasterObject.TryGetComponent(out iPhysicsInterface thisEntity)) {
-                            float Strength = ComputeOutPutValue(element, thisEntity.EntityProperties_, baseStrength);
                             Vector2 Direction = Ray_.CasterObject.transform.GetComponent<iFacingInterface>().GetEntityDirection();
-                            thisEntity.UpdateForce(Strength, Direction);
+                            thisEntity.UpdateForce(EffectorData_.baseStrength, Direction, element);
                             EffectorData_.CasterObject.GetComponent<MonoBehaviour>().StartCoroutine(CheckVelocityCanBridgeGaps(EffectorData_.CasterObject));
-                            Debug.Log(Strength * Direction);
                         }
                         break;
 
@@ -209,7 +202,7 @@ public static class Effectors
                         ArcScript ac = Arc_.Data.AddComponent<ArcScript>();
                         ac.direction = Arc_.CasterObject.GetComponent<iFacingInterface>().GetEntityDirectionEnum();
                         ac.arcDirection = Arc_.ArcDirection;
-                        ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcPlayerMove(ac, Arc_, element));                        
+                        ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcPlayer(ac, Arc_, element));                        
                         break;
 
                     case "Cone":
@@ -217,16 +210,15 @@ public static class Effectors
                         float TotalForce = 0;
                         foreach (GameObject gameObject in Cone_.Data) {
                             if (gameObject.TryGetComponent(out iPhysicsInterface HI)) {
-                                float Strength = 0.4f * ComputeOutPutValue(element, HI.EntityProperties_, Cone_.baseStrength);
                                 Vector2 Direction = gameObject.transform.position - Cone_.CasterObject.transform.position;
-                                HI.UpdateForce(Strength, Direction);
+                                HI.UpdateForce(EffectorData_.baseStrength, Direction, element);
                                 gameObject.GetComponent<MonoBehaviour>().StartCoroutine(CheckVelocityCanBridgeGaps(gameObject));
                                 Debug.DrawLine(Cone_.CasterObject.transform.position, Cone_.CasterObject.transform.position, Color.magenta, 1f);
                             }
                             TotalForce += Vector2.Distance(Cone_.CasterObject.transform.position, gameObject.transform.position);
                         }
                         Vector2 direction = Cone_.CasterObject.transform.GetComponent<iFacingInterface>().GetEntityDirection();
-                        Cone_.CasterObject.GetComponent<iPhysicsInterface>().UpdateForce(TotalForce, -direction);
+                        Cone_.CasterObject.GetComponent<iPhysicsInterface>().UpdateForce(TotalForce, direction, element);
                         Cone_.CasterObject.GetComponent<MonoBehaviour>().StartCoroutine(CheckVelocityCanBridgeGaps(Cone_.CasterObject));
                         Debug.Log(TotalForce * direction);
                         break;
@@ -244,7 +236,7 @@ public static class Effectors
             Name = "Ice",
             Effector = new Action<iEffectorData>((EffectorData_) => {
                 Elements element = Elements.Ice;
-                float baseStrength = EffectorData_.baseStrength;
+                
                 string CallingTemp = EffectorData_.Calling_template.Name;
                 if (CallingTemp.Contains("Arc")) {
                     CallingTemp = "Arc";
@@ -253,8 +245,7 @@ public static class Effectors
                         case "Ray":
                         RayData Ray_ = (RayData)EffectorData_;
                         if (Ray_.Data.collider.gameObject.TryGetComponent(out iHealthInterface otherEntity)) {
-                            float Strength = ComputeOutPutValue(element, otherEntity.EntityProperties_, baseStrength);
-                            otherEntity.TakeDamage(Strength, element);
+                            otherEntity.TakeDamage(EffectorData_.baseStrength, element);
                         }
                         break;
 
@@ -263,12 +254,12 @@ public static class Effectors
                         ArcScript ac = Arc_.Data.AddComponent<ArcScript>();
                         ac.direction = Arc_.CasterObject.GetComponent<iFacingInterface>().GetEntityDirectionEnum();
                         ac.arcDirection = Arc_.ArcDirection;
-                        ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcHitDetection(ac, baseStrength, element));
+                        ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcOther(ac, EffectorData_.baseStrength, element));
                         break;
 
                     case "Cone":
                         ConeData Cone_ = (ConeData)EffectorData_;
-                        ConeProcess(Cone_,baseStrength, element);
+                        ConeProcess(Cone_,EffectorData_.baseStrength, element);
                         break;
 
                     default:
@@ -284,7 +275,7 @@ public static class Effectors
             Name = "Life",
             Effector = new Action<iEffectorData>((EffectorData_) => {
                 Elements element = Elements.Life;
-                float baseStrength = EffectorData_.baseStrength;
+                
                 string CallingTemp = EffectorData_.Calling_template.Name;
                 if (CallingTemp.Contains("Arc")) {
                     CallingTemp = "Arc";
@@ -293,8 +284,7 @@ public static class Effectors
                     case "Ray":
                         RayData Ray_ = (RayData)EffectorData_;
                         if (Ray_.Data.collider.gameObject.TryGetComponent(out iHealthInterface otherEntity)) {
-                            float Strength = ComputeOutPutValue(element, otherEntity.EntityProperties_, baseStrength);
-                            otherEntity.TakeDamage(-Strength, element);
+                            otherEntity.TakeDamage(EffectorData_.baseStrength, element);
                         }
                         break;
 
@@ -303,12 +293,12 @@ public static class Effectors
                         ArcScript ac = Arc_.Data.AddComponent<ArcScript>();
                         ac.direction = Arc_.CasterObject.GetComponent<iFacingInterface>().GetEntityDirectionEnum();
                         ac.arcDirection = Arc_.ArcDirection;
-                        ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcHitDetection(ac, baseStrength, element));
+                        ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcOther(ac, EffectorData_.baseStrength, element));
                         break;
 
                     case "Cone":
                         ConeData Cone_ = (ConeData)EffectorData_;
-                        ConeProcess(Cone_,baseStrength, element);
+                        ConeProcess(Cone_,EffectorData_.baseStrength, element);
                         break;
 
                     default:
@@ -324,7 +314,7 @@ public static class Effectors
             Name = "Electricity",
             Effector = new Action<iEffectorData>((EffectorData_) => {
                 Elements element = Elements.Electricity;
-                float baseStrength = EffectorData_.baseStrength;
+                
                 string CallingTemp = EffectorData_.Calling_template.Name;
                 if (CallingTemp.Contains("Arc")) {
                     CallingTemp = "Arc";
@@ -333,8 +323,7 @@ public static class Effectors
                     case "Ray":
                         RayData Ray_ = (RayData)EffectorData_;
                         if (Ray_.Data.collider.gameObject.TryGetComponent(out iHealthInterface otherEntity)) {
-                            float Strength = ComputeOutPutValue(element, otherEntity.EntityProperties_, baseStrength);
-                            otherEntity.TakeDamage(Strength, element);
+                            otherEntity.TakeDamage(EffectorData_.baseStrength, element);
                         }
                         break;
 
@@ -343,12 +332,12 @@ public static class Effectors
                         ArcScript ac = Arc_.Data.AddComponent<ArcScript>();
                         ac.direction = Arc_.CasterObject.GetComponent<iFacingInterface>().GetEntityDirectionEnum();
                         ac.arcDirection = Arc_.ArcDirection;
-                        ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcHitDetection(ac, baseStrength, element));
+                        ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcOther(ac, EffectorData_.baseStrength, element));
                         break;
 
                     case "Cone":
                         ConeData Cone_ = (ConeData)EffectorData_;
-                        ConeProcess(Cone_,baseStrength, element);
+                        ConeProcess(Cone_,EffectorData_.baseStrength, element);
                         break;
 
                     default:

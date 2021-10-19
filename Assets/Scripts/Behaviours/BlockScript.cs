@@ -39,8 +39,11 @@ public class BlockScript : MonoBehaviour, iPhysicsInterface
         Debug.Log(magnitude+ " " + direction);
     }
     public void UpdateForce(float magnitude, Vector3 direction, Elements elementType) {
-        Instantiate(SoundDict[elementType.ToString() + "Sound"]);
+        if (elementType == Elements.Pull) {
+            magnitude *= -1f;
+        }
         UpdateVelocity(magnitude, direction);
+        Instantiate(SoundDict[elementType.ToString() + "Damage"]);
     }
     private Vector3 NormaliseVector(Vector3 vector) {
         float x = Mathf.Abs(vector.x) / vector.x;
