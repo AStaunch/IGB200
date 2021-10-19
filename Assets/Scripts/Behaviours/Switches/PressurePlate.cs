@@ -14,6 +14,7 @@ public class PressurePlate : MonoBehaviour, iSenderObject
         }
         set {
             currentState = value;
+            UpdateSprite();
             UpdateReciever();
         }
     }

@@ -98,7 +98,7 @@ public static class SpellFunctionLibrary
         }        
     }
 
-    public static IEnumerator ArcHitDetection(ArcBehaviour ac, float Strength, Elements element) {
+    public static IEnumerator ArcHitDetection(ArcScript ac, float Strength, Elements element) {
         Vector3 LastPosition = ac.transform.position;
         while ( ac.HitCollider == null) {
             LastPosition = ac.transform.position;
@@ -130,7 +130,7 @@ public static class SpellFunctionLibrary
         return new Vector3(x, y, z);
     }
 
-    public static IEnumerator ArcPlayerMove(ArcBehaviour ac, ArcData Arc_, Elements element) {
+    public static IEnumerator ArcPlayerMove(ArcScript ac, ArcData Arc_, Elements element) {
         float Strength = Arc_.baseStrength;
         Vector3 LastPosition = Arc_.CasterObject.transform.position;
         while (ac.HitCollider == null) {
@@ -172,10 +172,6 @@ public static class SpellFunctionLibrary
                     float Strength = ComputeOutPutValue(element, HI.EntityProperties_, baseStrength);
                     HI.TakeDamage(Strength, element);
                     Debug.DrawLine(Cone_.CasterObject.transform.position, gameObject.transform.position, Color.red, 1f);
-                }
-                if(gameObject.TryGetComponent(out EmptySpaceScript ESS)) {
-                    ESS.EffectTile(element);
-                    Debug.DrawLine(Cone_.CasterObject.transform.position, gameObject.transform.position, Color.cyan, 1f);
                 }
             }
         }

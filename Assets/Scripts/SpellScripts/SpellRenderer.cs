@@ -29,7 +29,7 @@ public class SpellRenderer : MonoBehaviour
     #region Ray Drawer
     public Sprite[] rayPieces;
     GameObject spellMaster;
-    public void DrawRaySprite(RayData Ray_, Color[] colors) {
+    public void CreateRay(RayData Ray_, Color[] colors) {
         Transform origin = Ray_.CasterObject.transform; 
         RaycastHit2D other = Ray_.Data;
         spellMaster = new GameObject("Ray Master");
@@ -85,16 +85,16 @@ public class SpellRenderer : MonoBehaviour
     public AnimationCurve arcCurve;
     public GameObject ArcSprite;
     #region Arc Drawer
-    public GameObject CreateArcProjectile(Transform origin, Color[] colors) {
+    public GameObject CreateArc(Transform origin, Color[] colors) {
         spellMaster = new GameObject("Arc Master");
         spellMaster.transform.position = origin.position;
         Vector3 offset = GenerateOffset(origin, origin.GetComponent<iFacingInterface>().GetEntityDirection());
-        GameObject coneObject = Instantiate(ArcSprite);
-        coneObject.transform.position = origin.position + offset;
-        coneObject.GetComponent<SpriteRenderer>().material = CreateMaterial(colors);
-        coneObject.GetComponent<SpriteRenderer>().sortingLayerName = "VFX";
-        coneObject.GetComponent<SpriteRenderer>().sortingOrder = 6;
-        TrailRenderer tr = coneObject.AddComponent<TrailRenderer>();
+        GameObject arcObject = Instantiate(ArcSprite);
+        arcObject.transform.position = origin.position + offset;
+        arcObject.GetComponent<SpriteRenderer>().material = CreateMaterial(colors);
+        arcObject.GetComponent<SpriteRenderer>().sortingLayerName = "VFX";
+        arcObject.GetComponent<SpriteRenderer>().sortingOrder = 6;
+        TrailRenderer tr = arcObject.AddComponent<TrailRenderer>();
         tr.startColor = colors[0];
         tr.endColor = colors[2];
         tr.sortingLayerName = "Objects";
@@ -105,16 +105,38 @@ public class SpellRenderer : MonoBehaviour
         tr.sortingLayerName = "VFX";
         tr.sortingOrder = 5;
         Destroy(spellMaster, 1f);
-        return coneObject;
+        return arcObject;
     }
     #endregion
 
     #region Orb Drawer
-    public Sprite OrbSprite;
+    public GameObject OrbSprite;
+    public GameObject CreateOrb(Transform origin, Color[] colors) {
+        spellMaster = new GameObject("Orb Master");
+        spellMaster.transform.position = origin.position;
+        Vector3 offset = GenerateOffset(origin, origin.GetComponent<iFacingInterface>().GetEntityDirection());
+        GameObject orbObject = Instantiate(OrbSprite);
+        orbObject.transform.position = origin.position + offset;
+        orbObject.GetComponent<SpriteRenderer>().material = CreateMaterial(colors);
+        orbObject.GetComponent<SpriteRenderer>().sortingLayerName = "VFX";
+        orbObject.GetComponent<SpriteRenderer>().sortingOrder = 6;
+        //TrailRenderer tr = orbObject.AddComponent<TrailRenderer>();
+        //tr.startColor = colors[0];
+        //tr.endColor = colors[2];
+        //tr.sortingLayerName = "Objects";
+        //tr.time = 0.8f;
+        //tr.startWidth = 0.4f;
+        //tr.endWidth = 0.2f;
+        //tr.material = origin.GetComponent<Renderer>().material;
+        //tr.sortingLayerName = "VFX";
+        //tr.sortingOrder = 5;
+        Destroy(spellMaster, 1f);
+        return orbObject;
+    }
     #endregion
     public GameObject ConeSprite;
     #region Cone Drawer
-    public void DrawConeSprite(iEffectorData Data, Color[] colors) {
+    public void CreateCone(iEffectorData Data, Color[] colors) {
         ConeData coneData = (ConeData)Data;
         spellMaster = new GameObject("Cone Master");
         spellMaster.transform.position = coneData.CasterObject.transform.position;

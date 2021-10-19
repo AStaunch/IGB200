@@ -80,8 +80,7 @@ public class ProcedureDoor : AbstractLockedDoor, iRecieverObject
     public override void ValidateFunction() {
         isInvulnerable = true;
         UpdateSprite();
-        SetDoorProperties();
-        InitExitDoor();
+        InitExitDoor(); 
     }
 }
 

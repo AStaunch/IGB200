@@ -15,7 +15,6 @@ public class OpenDoor : AbstractDoor
     public override void ValidateFunction() {
         IsOpen = true;
         UpdateSprite();
-        SetDoorProperties();
         InitExitDoor();
     }
 }

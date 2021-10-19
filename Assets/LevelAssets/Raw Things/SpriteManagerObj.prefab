@@ -132,13 +132,11 @@ MonoBehaviour:
       soundPrefab: {fileID: 207168208727640438, guid: 41483acde3a6b784b9d93cb0fabbb453, type: 3}
   - name: VoidSounds
     soundCollections:
-    - name: PlayerSounds
-      soundPrefab: {fileID: 6798944413720866177, guid: b5157fa69721ed947906ef8a0b71383c, type: 3}
     - name: WaterDropSound
+      soundPrefab: {fileID: 6798944413720866177, guid: b5157fa69721ed947906ef8a0b71383c, type: 3}
+    - name: VoidDropSound
       soundPrefab: {fileID: 8342393830420493300, guid: 54c74cdbb00c0304999d00f6ad5e3598, type: 3}
   - name: PlayerSounds
     soundCollections:
-    - name: Player
+    - name: PlayerDamage
       soundPrefab: {fileID: 2005349951531363110, guid: 4109314f66f02f8459fb7591a89219ed, type: 3}
-    - name: WaterDropSound
-      soundPrefab: {fileID: 8342393830420493300, guid: 54c74cdbb00c0304999d00f6ad5e3598, type: 3}

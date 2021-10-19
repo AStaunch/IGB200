@@ -79,14 +79,14 @@ public class PlayerEntity : AbstractCreature
         if(LastDoor != null) {
             Health_ = MaxHealth_;
             transform.position = LastDoor_.RespawnPoint;
-            LastDoor.ExitDoor.ReloadRoom();
+            LastDoor.RoomData_.Load();
         }
     }
     protected override void EntityFall() {
         if (LastDoor != null) {
             TakeDamage(1f, Elements.NULL);
             transform.position = LastDoor_.RespawnPoint;
-            LastDoor.ExitDoor.ReloadRoom();
+            LastDoor.RoomData_.Load();
         }
     }
 
@@ -114,7 +114,7 @@ public class PlayerEntity : AbstractCreature
 
     //Very Hacky Kino Management
     private void OnCollisionEnter2D(Collision2D collision) {
-        bool b1 = collision.transform.TryGetComponent(out iPropertyInterface _); 
+        bool b1 = collision.transform.TryGetComponent(out iPropertyInterface _) && !collision.transform.TryGetComponent(out EmptySpaceScript _); 
         bool b2 = collision.transform.TryGetComponent(out Rigidbody2D rb);
         if (b1 && b2) {
             collidedObjects.Add(rb);

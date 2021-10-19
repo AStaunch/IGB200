@@ -37,7 +37,7 @@ public static class Effectors
 
                     case "Arc":
                         ArcData Arc_ = (ArcData)EffectorData_;
-                        ArcBehaviour ac = Arc_.Data.AddComponent<ArcBehaviour>();
+                        ArcScript ac = Arc_.Data.AddComponent<ArcScript>();
                         ac.direction = Arc_.CasterObject.GetComponent<iFacingInterface>().GetEntityDirectionEnum();
                         ac.arcDirection = Arc_.ArcDirection;
                         ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcHitDetection(ac, baseStrength, element));
@@ -46,6 +46,13 @@ public static class Effectors
                     case "Cone":
                         ConeData Cone_ = (ConeData)EffectorData_;
                         ConeProcess(Cone_,baseStrength, element);
+                        break;
+                                            
+                    case "Orb":
+                        OrbData Orb_ = (OrbData)EffectorData_;
+                        OrbScript orbScript = Orb_.Data.AddComponent<OrbScript>();
+                        orbScript.element = element;
+                        orbScript.baseDamage = baseStrength;
                         break;
 
                     default:
@@ -80,7 +87,7 @@ public static class Effectors
 
                     case "Arc":
                         ArcData Arc_ = (ArcData)EffectorData_;
-                        ArcBehaviour ac = Arc_.Data.AddComponent<ArcBehaviour>();
+                        ArcScript ac = Arc_.Data.AddComponent<ArcScript>();
                         ac.direction = Arc_.CasterObject.GetComponent<iFacingInterface>().GetEntityDirectionEnum();
                         ac.arcDirection = Arc_.ArcDirection;
                         ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcHitDetection(ac, baseStrength, element));
@@ -115,7 +122,7 @@ public static class Effectors
                                             
                     case "Arc":
                         ArcData Arc_ = (ArcData)EffectorData_;
-                        ArcBehaviour ac = Arc_.Data.AddComponent<ArcBehaviour>();
+                        ArcScript ac = Arc_.Data.AddComponent<ArcScript>();
                         ac.direction = Arc_.CasterObject.GetComponent<iFacingInterface>().GetEntityDirectionEnum();
                         ac.arcDirection = Arc_.ArcDirection;
                         ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcPlayerMove(ac, Arc_, element));
@@ -157,7 +164,7 @@ public static class Effectors
 
                     case "Arc":
                         ArcData Arc_ = (ArcData)EffectorData_;
-                        ArcBehaviour ac = Arc_.Data.AddComponent<ArcBehaviour>();
+                        ArcScript ac = Arc_.Data.AddComponent<ArcScript>();
                         ac.direction = Arc_.CasterObject.GetComponent<iFacingInterface>().GetEntityDirectionEnum();
                         ac.arcDirection = Arc_.ArcDirection;
                         ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcHitDetection(ac, baseStrength, element));
@@ -199,7 +206,7 @@ public static class Effectors
 
                     case "Arc":
                         ArcData Arc_ = (ArcData)EffectorData_;
-                        ArcBehaviour ac = Arc_.Data.AddComponent<ArcBehaviour>();
+                        ArcScript ac = Arc_.Data.AddComponent<ArcScript>();
                         ac.direction = Arc_.CasterObject.GetComponent<iFacingInterface>().GetEntityDirectionEnum();
                         ac.arcDirection = Arc_.ArcDirection;
                         ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcPlayerMove(ac, Arc_, element));                        
@@ -253,7 +260,7 @@ public static class Effectors
 
                     case "Arc":
                         ArcData Arc_ = (ArcData)EffectorData_;
-                        ArcBehaviour ac = Arc_.Data.AddComponent<ArcBehaviour>();
+                        ArcScript ac = Arc_.Data.AddComponent<ArcScript>();
                         ac.direction = Arc_.CasterObject.GetComponent<iFacingInterface>().GetEntityDirectionEnum();
                         ac.arcDirection = Arc_.ArcDirection;
                         ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcHitDetection(ac, baseStrength, element));
@@ -293,7 +300,7 @@ public static class Effectors
 
                     case "Arc":
                         ArcData Arc_ = (ArcData)EffectorData_;
-                        ArcBehaviour ac = Arc_.Data.AddComponent<ArcBehaviour>();
+                        ArcScript ac = Arc_.Data.AddComponent<ArcScript>();
                         ac.direction = Arc_.CasterObject.GetComponent<iFacingInterface>().GetEntityDirectionEnum();
                         ac.arcDirection = Arc_.ArcDirection;
                         ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcHitDetection(ac, baseStrength, element));
@@ -333,7 +340,7 @@ public static class Effectors
 
                     case "Arc":
                         ArcData Arc_ = (ArcData)EffectorData_;
-                        ArcBehaviour ac = Arc_.Data.AddComponent<ArcBehaviour>();
+                        ArcScript ac = Arc_.Data.AddComponent<ArcScript>();
                         ac.direction = Arc_.CasterObject.GetComponent<iFacingInterface>().GetEntityDirectionEnum();
                         ac.arcDirection = Arc_.ArcDirection;
                         ac.GetComponent<MonoBehaviour>().StartCoroutine(ArcHitDetection(ac, baseStrength, element));

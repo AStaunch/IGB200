@@ -16,7 +16,6 @@ public class DungeonDoor : AbstractDoor
     public override void ValidateFunction() {
         IsOpen = true;
         UpdateSprite();
-        SetDoorProperties();
         InitExitDoor();
     }
 }
