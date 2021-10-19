@@ -122,8 +122,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3f0e3d87a29a654b884360499ae004d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LoadDataBool: 0
-  DestroyDataBool: 0
   SolveObjects: []
   LoadedObjects: []
   isLoaded: 0
