@@ -94,7 +94,7 @@ public class RoomData : MonoBehaviour
     }
 
     private void AddObject(Collider2D collider) {
-        bool BannedTypes = collider.transform.TryGetComponent(out iRecieverObject _) || collider.transform.TryGetComponent(out iRecieverObject _);
+        bool BannedTypes = collider.transform.TryGetComponent(out iRecieverObject _) || collider.transform.TryGetComponent(out iRecieverObject _) || collider.transform.TryGetComponent(out ChestScript _);
         BannedTypes = BannedTypes || collider.transform.TryGetComponent(out PlayerEntity _) || collider.transform.TryGetComponent(out RoomData _) || collider.transform.TryGetComponent(out EmptySpaceScript _);
         if (!RoomObjects_.Contains(collider.gameObject) && collider.transform.TryGetComponent(out iPropertyInterface _) && !(BannedTypes)) {
             RoomObjects_.Add(collider.gameObject);

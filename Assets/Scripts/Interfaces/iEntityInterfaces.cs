@@ -19,7 +19,7 @@ public interface iPhysicsInterface : iPropertyInterface {
     public Rigidbody2D RB_ { get;}
     public float Deceleration_ { get; set; }
     public void UpdateVelocity(float magnitude, Vector3 direction);
-    public void UpdateForce(float magnitude, Vector3 direction, Elements elementType = Elements.Pull);
+    public void UpdateForce(float magnitude, Vector3 direction, Elements elementType);
     public void Decelerate();
     public void UpdateSorting();
 }

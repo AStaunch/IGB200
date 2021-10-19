@@ -9,7 +9,7 @@ public class PlayerEntity : AbstractCreature
 {
     public AbstractDoor LastDoor_ { get => LastDoor; set => LastDoor = value; }
 
-    public override bool isEnemy => false;
+    public override bool IsEnemy => false;
 
     private AbstractDoor LastDoor;
     List<Rigidbody2D> collidedObjects = new List<Rigidbody2D>();

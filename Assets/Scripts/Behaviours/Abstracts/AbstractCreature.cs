@@ -1,14 +1,13 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using static EnumsAndDictionaries;
-using static SpriteManager;
 using static SoundManager;
+using static SpellFunctionLibrary;
 public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreatureInterface, iPhysicsInterface, iPropertyManager, iFacingInterface
 {
-    public abstract bool isEnemy { get; }
+    public abstract bool IsEnemy { get; }
     public int Health_ { get => Health; set => Health = value; }
     private int Health;
     public int MaxHealth_ { get => MaxHealth; set => MaxHealth = value; }
@@ -62,6 +61,7 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
     }
 
     public void TakeDamage(float damage, Elements damageType) {
+        damage = ComputeSpellStrength(damageType, EntityProperties_, damage);
         int damageInt = Mathf.RoundToInt(damage);
         string SoundName = damageType.ToString() + "Damage";
         Debug.Log($"{transform.name} takes {damageInt} {damageType} damage!");
@@ -109,14 +109,20 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
 
     public abstract void  UpdateVelocity(float magnitude, Vector3 direction);
     public void UpdateForce(float magnitude, Vector3 direction, Elements elementType) {
+        magnitude = ComputeSpellStrength(elementType, EntityProperties_, magnitude);
         if (EntityProperties_.Contains(Properties.Immovable)) {
             return;
         }
+        if (elementType == Elements.Pull) {
+            magnitude *= -1f;
+        }
         gameObject.layer = 6;
-        Instantiate(SoundDict[elementType.ToString() + "Sound"]);
-        RB_.AddForce(magnitude * direction * RB_.mass, ForceMode2D.Impulse);
-        Debug.Log(magnitude * direction * RB_.mass);
+        Instantiate(SoundDict[elementType.ToString() + "Damage"]);
+        RB_.AddForce(magnitude * RB_.mass * direction, ForceMode2D.Impulse);
+        Debug.Log(magnitude * RB_.mass * direction);
     }
+
+
 
     public void AlertObservers(AnimationEvents message) {
         if (message.Equals(AnimationEvents.Death)) {
@@ -250,6 +256,21 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
             yield return null;
         }
         GetComponent<SpriteRenderer>().material = MatStore;
+    }
+
+    private float ComputeSpellStrength(Elements element, Properties[] properties, float strength) {
+        if (properties.Length == 0) {
+            return strength;
+        }
+        if (properties.Contains(ElementPropertyPairs[element][0])) {
+            strength *= ElementValuePairs[element][0];
+        } else if (properties.Contains(ElementPropertyPairs[element][1])) {
+            strength *= ElementValuePairs[element][1];
+        }
+        if (properties.Contains(Properties.Immovable) && (element == Elements.Pull || element == Elements.Push)) {
+            strength = 0f;
+        }
+        return strength;
     }
     #endregion
 }

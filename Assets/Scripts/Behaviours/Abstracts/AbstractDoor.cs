@@ -52,16 +52,17 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
                     Instantiate(walkThroughSoundEffect);
 
                     //New Room Resets
-                    if (collision.TryGetComponent(out PlayerEntity playerEntity) && !isException) {
+                    if (collision.TryGetComponent(out PlayerEntity playerEntity) && !isException && RoomData_) {
                         playerEntity.LastDoor_ = this.ExitDoor;
 
                         if (isSolveTrigger) {
                             RoomData_.IsSolved_ = true;
                             if (firstEnter == true) { Instantiate(SoundDict["PuzzleSolveSound"]); firstEnter = false; }
                         }
-
-                        if (!ExitDoor.RoomData_.IsSolved_) {
-                            ExitDoor.RoomData_.Load();
+                        if (ExitDoor.RoomData_) {
+                            if (!ExitDoor.RoomData_.IsSolved_) {
+                                ExitDoor.RoomData_.Load();
+                            }
                         }
                         if (!RoomData_.IsSolved_) {
                             RoomData_.Unload();
