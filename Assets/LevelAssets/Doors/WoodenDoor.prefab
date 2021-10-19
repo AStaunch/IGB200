@@ -126,8 +126,6 @@ MonoBehaviour:
   isTriggerDoor: 0
   isSolveTrigger: 0
   isException: 0
-  nextRoomContents: {fileID: 0}
-  nextRoomId: 0
   ExitDoor: {fileID: 0}
   sceneIndex: -1
   CurrentDirection: 0

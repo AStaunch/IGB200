@@ -31,7 +31,7 @@ public class PressurePlate : MonoBehaviour, iSenderObject
         UpdateSprite();
     }
     private void OnTriggerEnter2D(Collider2D collision) {
-        if (currentState_ == false) { Instantiate(buttonPressSound); }
+        if (currentState_ == false) { Instantiate(buttonPressSound); GameObject.FindGameObjectWithTag("TextBox").GetComponent<DebugBox>().inputs.Add("Object.isActive(switch);"); }
         if (PressOnce && collision.transform.CompareTag("Player")) {
             currentState_ = true;
         }

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5810078176139731130}
   - component: {fileID: 5554391930868122529}
   - component: {fileID: 6074465643313548604}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: ProcedureDoor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -123,7 +123,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   walkThroughSoundEffect: {fileID: 6187046135797150018, guid: 3364cfdb60bd5ce4e88811a6f85ea207, type: 3}
+  isTriggerDoor: 0
+  isSolveTrigger: 0
+  isException: 0
   ExitDoor: {fileID: 0}
   sceneIndex: -1
   CurrentDirection: 0
+  switchGameObjects: []
   Switches: []

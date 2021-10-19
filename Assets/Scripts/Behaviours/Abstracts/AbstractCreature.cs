@@ -92,6 +92,7 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
         if (0 >= Health_) {
             Debug.Log($"{transform.name} dies!!!");
             Anim_.SetTrigger("death");
+            GameObject.FindGameObjectWithTag("TextBox").GetComponent<DebugBox>().inputs.Add("Object.Destroy(collision.enemy);");
         }
     }
 

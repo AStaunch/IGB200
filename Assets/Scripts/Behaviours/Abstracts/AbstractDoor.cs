@@ -5,12 +5,15 @@ using System.Linq;
 using UnityEngine;
 using static EnumsAndDictionaries;
 using static SpriteManager;
+using static SoundManager;
+
 public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
 {
     public GameObject walkThroughSoundEffect;
     public bool isTriggerDoor;
     public bool isSolveTrigger;
     public bool isException;
+    private bool firstEnter = true;
     //public GameObject nextRoomContents;
     //public int nextRoomId = 0;
     //private bool nextExists;
@@ -54,6 +57,7 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
 
                         if (isSolveTrigger) {
                             RoomData_.IsSolved_ = true;
+                            if (firstEnter == true) { Instantiate(SoundDict["PuzzleSolveSound"]); firstEnter = false; }
                         }
                         if (ExitDoor.RoomData_) {
                             if (!ExitDoor.RoomData_.IsSolved_) {
@@ -93,6 +97,19 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
         ExitDoor.UpdateSprite();
     }
     public void OpenCloseDoor(bool newState) {
+        if (IsOpen != newState) 
+        { 
+            if (ExitDoor.IsOpen == false && isInvulnerable) 
+            { 
+                GameObject.FindGameObjectWithTag("TextBox").GetComponent<DebugBox>().inputs.Add("Object.isOpen(metalDoor);");
+                Instantiate(SoundDict["DoorOpenSound"]);
+            }
+            else if (ExitDoor.IsOpen == false) 
+            { 
+                GameObject.FindGameObjectWithTag("TextBox").GetComponent<DebugBox>().inputs.Add("Object.isOpen(woodDoor);");
+                Instantiate(SoundDict["FireDamage"]);
+            }
+        }
         IsOpen = newState;
         GetComponent<Collider2D>().isTrigger = true;
         UpdateSprite();
