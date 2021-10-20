@@ -58,7 +58,7 @@ class Register : MonoBehaviour
                 RayData ryd = new RayData() { CasterObject = CasterObject, Data = hit, Calling_template = SpellRegistrySing.Instance.Registry.QueryRegistry("Ray") };
                 if (hit.collider != null)
                 {
-                    Debug.Log("Hit: " + hit.transform.name);
+                    //Debug.Log("Hit: " + hit.transform.name);
                     effector.Effector.Invoke(ryd);
 
                 }
@@ -137,7 +137,7 @@ class Register : MonoBehaviour
                 effector.Effector.Invoke(cod);                
                 //Create the Sprites for the Ray Spell 
                 SpellRenderer coneDrawer = FindObjectOfType<SpellRenderer>();
-                coneDrawer.CreateCone(cod, effector.Colors);
+                coneDrawer.CreateCone(CasterObject.transform, effector.Colors);
             }),1));
 
             //Shield Template

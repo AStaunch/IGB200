@@ -46,11 +46,14 @@ public class OrbScript : MonoBehaviour, iPhysicsInterface
     }
     List<GameObject> collider2Ds = new List<GameObject>();
     private void ExplodePhysics() {
-        foreach (Collider2D collider in Physics2D.OverlapCircleAll(transform.position, radius)) {
+        int layerMask = 1 << 5;
+        layerMask = ~layerMask;
+        foreach (Collider2D collider in Physics2D.OverlapCircleAll(transform.position, radius, layerMask)) {
             if (collider.TryGetComponent(out iPhysicsInterface iPhysics_) && !collider2Ds.Contains(collider.gameObject)) {
                 collider2Ds.Add(collider.gameObject);
                 Vector2 direction = transform.position - collider.transform.position;
                 iPhysics_.UpdateForce(baseDamage, direction, element);
+
             }
         }
     }

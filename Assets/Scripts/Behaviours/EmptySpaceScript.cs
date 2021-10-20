@@ -76,11 +76,15 @@ public class EmptySpaceScript : MonoBehaviour, iHealthInterface
     }
 
     public void TakeDamage(float damage, Elements damageType) {
-        if (VoidType_ == VoidType.Water && damageType == Elements.Ice) {
-            float Duration = 7f;
-            StartCoroutine(FreezeForTime(Duration));
-        } else if (VoidType_ == VoidType.Water && damageType == Elements.Fire) {
-            isFrozen_ = false;
+        if(VoidType_ == VoidType.Water) {
+            if (damageType == Elements.Ice) {
+                float Duration = 7f;
+                StartCoroutine(FreezeForTime(Duration));
+            } else if (damageType == Elements.Fire) {
+                isFrozen_ = false;
+            } else if (damageType == Elements.Electricity) {
+
+            }
         }
     }
 

@@ -22,7 +22,7 @@ public class EventLootCont : MonoBehaviour
 
         foreach (CustomEventHandle customEvent in Events)
         {
-            Debug.Log($"{customEvent.eventName} registered");
+            //Debug.Log($"{customEvent.eventName} registered");
 
             customEvent.onBroadcast += Craftingsyst.onRecieved;
             UnlockManager.Instance.Registry.ItemUnlocked += customEvent.Registry_ItemUnlocked;
