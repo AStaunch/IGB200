@@ -38,7 +38,7 @@ public class TriggerArea : MonoBehaviour, iSenderObject
     public Dialogue dialogue;
 
     public void TriggerDialogue() {
-        if(dialogue != null) {
+        if(dialogue.sentences.Length > 0) {
             DialogueManager.Instance.StartDialogue(dialogue);
         }
     }

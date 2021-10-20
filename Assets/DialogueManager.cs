@@ -8,7 +8,7 @@ public class DialogueManager : MonoBehaviour
 {
     public TMP_Text nameText;
     public TMP_Text dialogText;
-    public Image Image;
+    public Image portrait;
     #region Singleton Things
     private static DialogueManager _instance;
     public static DialogueManager Instance { get { return _instance; } }
@@ -31,6 +31,7 @@ public class DialogueManager : MonoBehaviour
         OpenDialogue();
         sentences.Clear();
         nameText.text = dialogue.name ;
+        portrait.sprite = dialogue.CharacterPortrait;
         foreach (string sentence in dialogue.sentences) {
             sentences.Enqueue(sentence);
         }
@@ -38,23 +39,35 @@ public class DialogueManager : MonoBehaviour
     }
 
     private void DisplayNextSentence() {
-        if(sentences.Count == 0) {
+        Debug.Log("Display Next Dialogue");
+        if (sentences.Count == 0) {
             EndDialogue();
             return;
         }
 
         string sentence = sentences.Dequeue();
         dialogText.text = sentence;
-    }
-
-    private void EndDialogue() {
-        CloseDialogue();
+        StartCoroutine(WaitForKeyPress(KeyCode.Space));
     }
 
     private void OpenDialogue() {
-        Debug.Log("Start Dialogue");
+        Debug.Log("Open Dialogue");
+        GetComponent<Animator>().SetTrigger("Open");
     }
-    private void CloseDialogue() {
-        Debug.Log("Close Dialogue");
+
+    private void EndDialogue() {
+        Debug.Log("End Dialogue");
+        Time.timeScale = 1;
+        GetComponent<Animator>().SetTrigger("Close");
+    }
+
+    IEnumerator WaitForKeyPress(KeyCode keyCode) {
+
+        while (!Input.GetKeyUp(keyCode)) {
+            //Wait
+            yield return null;
+        }
+        //Display Next Sentence
+        DisplayNextSentence();
     }
 }
