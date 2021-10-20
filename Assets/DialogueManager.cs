@@ -8,6 +8,7 @@ public class DialogueManager : MonoBehaviour
 {
     public TMP_Text nameText;
     public TMP_Text dialogText;
+    public Image Image;
     #region Singleton Things
     private static DialogueManager _instance;
     public static DialogueManager Instance { get { return _instance; } }

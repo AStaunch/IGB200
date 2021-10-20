@@ -13,6 +13,7 @@ TagManager:
   - MovingDoor
   - TextBox
   - Room
+  - Camera
   layers:
   - Default
   - TransparentFX
