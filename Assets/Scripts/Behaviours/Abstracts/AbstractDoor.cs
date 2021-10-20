@@ -63,15 +63,15 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
                             }
                         }*/
                         if (isSolveTrigger) {
-                            RoomData_.IsSolved_ = true;
+                            RoomData_.isSolved_ = true;
                             if (firstEnter == true) { Instantiate(SoundDict["PuzzleSolveSound"]); firstEnter = false; }
                         }
                         if (ExitDoor.RoomData_) {
-                            if (!ExitDoor.RoomData_.IsSolved_) {
+                            if (!ExitDoor.RoomData_.isSolved_) {
                                 ExitDoor.RoomData_.Load();
                             }
                         }
-                        if (!RoomData_.IsSolved_) {
+                        if (!RoomData_.isSolved_) {
                             RoomData_.Unload();
                         }
                     }

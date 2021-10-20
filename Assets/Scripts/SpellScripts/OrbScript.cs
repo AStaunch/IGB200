@@ -10,7 +10,7 @@ using System;
 public class OrbScript : MonoBehaviour, iPhysicsInterface
 {
     public float baseDamage = 1f;
-    public Elements element;
+    public Elements element = Elements.NULL;
 
     private Animator Anim_ { get => GetComponent<Animator>(); }
     public Rigidbody2D RB_ => GetComponent<Rigidbody2D>();
@@ -44,8 +44,9 @@ public class OrbScript : MonoBehaviour, iPhysicsInterface
         }
         Destroy(this.gameObject);
     }
-    List<GameObject> collider2Ds = new List<GameObject>();
+    
     private void ExplodePhysics() {
+        List<GameObject> collider2Ds = new List<GameObject>();
         int layerMask = 1 << 5;
         layerMask = ~layerMask;
         foreach (Collider2D collider in Physics2D.OverlapCircleAll(transform.position, radius, layerMask)) {
@@ -53,11 +54,12 @@ public class OrbScript : MonoBehaviour, iPhysicsInterface
                 collider2Ds.Add(collider.gameObject);
                 Vector2 direction = transform.position - collider.transform.position;
                 iPhysics_.UpdateForce(baseDamage, direction, element);
-
+                collider.GetComponent<MonoBehaviour>().StartCoroutine(CheckVelocityCanBridgeGaps(collider.gameObject));
             }
         }
     }
     private void ExplodeDamage() {
+        List<GameObject> collider2Ds = new List<GameObject>();
         int layerMask = 1 << 5;
         layerMask = ~layerMask;
         foreach (Collider2D collider in Physics2D.OverlapCircleAll(transform.position, radius, layerMask)) {

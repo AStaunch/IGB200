@@ -61,36 +61,45 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
     public int GetEntityFacing() {
         return IntDict[CurrentDirection_];
     }
-
+    IEnumerator SpriteRoutine = null;
     public void TakeDamage(float damage, Elements damageType) {
         damage = ComputeSpellStrength(damageType, EntityProperties_, damage);
         int damageInt = Mathf.RoundToInt(damage);
         string SoundName = damageType.ToString() + "Damage";
-        Debug.Log($"{transform.name} takes {damageInt} {damageType} damage!");
-        if (DamageImmunities_.Contains(damageType) || damageInt == 0){
-            //Instantiate Damage Sound
+        //Check if this does damage
+        if (DamageImmunities_.Contains(damageType) || damageInt == 0) {
             SoundName = "AttackFail";
             Instantiate(SoundDict[SoundName]);
             return;
-        } else if(damageInt > 0) {
-            StartCoroutine(TintSprite(0.1f, Color.red));
-        } else if(damageInt < 0) {
-            StartCoroutine(TintSprite(0.1f, Color.green));
         }
         //Instantiate Damage Sound        
         Instantiate(SoundDict[SoundName]);
-        // Discolour Sprite Freeze
-        if (damageType == Elements.Ice){
-            StartCoroutine(TintSprite(2.5f, Color.cyan));
-            StartCoroutine(MovePause(2.5f));
-        }
         //Create Damage Effect
         SpellRenderer hitDrawer = FindObjectOfType<SpellRenderer>();
         hitDrawer.CreateBurstFX(transform.position, ColourDict[damageType]);
+        // Discolour Sprite Freeze
+        if(SpriteRoutine != null) { StopCoroutine(SpriteRoutine); }
 
-        //Process Health
-        Health_ -= damageInt;
-        Health_ = Mathf.Clamp(Health_, 0, MaxHealth_);
+        if (damageType.Equals(Elements.Ice)) {
+            Debug.Log($"{transform.name} is frozen!");
+            SpriteRoutine = TintSprite(2.5f, Color.cyan);
+            StartCoroutine(SpriteRoutine);
+            StartCoroutine(MovePause(2.5f));
+        } else {
+            if (damageInt > 0) {
+                Debug.Log($"{transform.name} takes {damageInt} {damageType} damage!");
+                SpriteRoutine =  TintSprite(0.1f, Color.red);
+                StartCoroutine(SpriteRoutine);
+            } else if (damageInt < 0) {
+                Debug.Log($"{transform.name} is healed for {damageInt} points!");
+                SpriteRoutine = TintSprite(0.1f, Color.green);
+                StartCoroutine(SpriteRoutine);
+            }
+            //Process Health
+            Health_ -= damageInt;
+            Health_ = Mathf.Clamp(Health_, 0, MaxHealth_);
+        }
+        //Check if the entity should die
         if (0 >= Health_) {
             Debug.Log($"{transform.name} dies!!!");
             Anim_.SetTrigger("death");
