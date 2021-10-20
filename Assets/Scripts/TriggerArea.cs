@@ -29,7 +29,17 @@ public class TriggerArea : MonoBehaviour, iSenderObject
     private void OnTriggerEnter2D(Collider2D collision) {
         if(collision.TryGetComponent(out PlayerEntity _) && collision.isTrigger && !currentState_) {
             currentState_ = true;
+            TriggerDialogue();
             Destroy(this.GetComponent<Collider>());
+        }
+    }
+
+
+    public Dialogue dialogue;
+
+    public void TriggerDialogue() {
+        if(dialogue != null) {
+            DialogueManager.Instance.StartDialogue(dialogue);
         }
     }
 }

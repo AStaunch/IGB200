@@ -7,6 +7,17 @@ using static EnumsAndDictionaries;
 
 public class PlayerEntity : AbstractCreature
 {
+    #region Singleton Things
+    private static PlayerEntity _instance;
+    public static PlayerEntity Instance { get { return _instance; } }
+    private void Awake() {
+        if (_instance != null && _instance != this) {
+            Destroy(this.gameObject);
+        } else {
+            _instance = this;
+        }
+    }
+    #endregion
     public AbstractDoor LastDoor_ { get => LastDoor; set => LastDoor = value; }
 
     public override bool IsEnemy => false;

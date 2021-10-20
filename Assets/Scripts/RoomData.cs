@@ -57,10 +57,11 @@ public class RoomData : MonoBehaviour
 
         Icon = new GameObject(transform.name +" icon");
         Icon.transform.position = transform.position;
-        Icon.transform.parent = transform;
-        float smallestSide = 0.5f * Mathf.Min(transform.localScale.x, transform.localScale.x);
+
+        float smallestSide = 0.5f * (Mathf.Min(transform.localScale.x, transform.localScale.y));
         Icon.layer = 5;
-        Icon.transform.localScale = 0.5f * Vector2.one;
+        Icon.gameObject.transform.localScale *= smallestSide;
+        Icon.transform.parent = transform;
         Icon.AddComponent<SpriteRenderer>().material = spriteRenderer.material;
         Icon.SetActive(false);
     }

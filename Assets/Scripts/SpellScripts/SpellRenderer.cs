@@ -22,9 +22,7 @@ public class SpellRenderer : MonoBehaviour
     #region Ray Drawer
     public Sprite[] rayPieces;
     GameObject spellMaster;
-    public void CreateRay(RayData Ray_, Color[] colors) {
-        Transform Origin = Ray_.CasterObject.transform; 
-        RaycastHit2D other = Ray_.Data;
+    public void CreateRay(Transform Origin, Vector3 point, Color[] colors) {
         spellMaster = new GameObject("Ray Master");
         Directions DirectionEnum = Origin.GetComponent<iFacingInterface>().GetEntityDirectionEnum();
         Vector2 Direction = VectorDict[DirectionEnum];
@@ -56,10 +54,10 @@ public class SpellRenderer : MonoBehaviour
         // -- Gather some data
         float startSpriteWidth =    (start.GetComponent<Renderer>().bounds.size * Direction).magnitude;
         float endSpriteWidth =      (end.GetComponent<Renderer>().bounds.size * Direction).magnitude;
-        float currentLaserSize = Vector2.Distance(other.point, Origin.position);
+        float currentLaserSize = Vector2.Distance(point, Origin.position);
 
         start.transform.localPosition = 0.5f * offset;//Direction * (Mathf.Min(endSpriteWidth, currentLaserSize));
-        end.transform.localPosition = Direction * Vector2.Distance(other.point, Origin.position);
+        end.transform.localPosition = Direction * Vector2.Distance(point, Origin.position);
         middle.transform.localScale = new Vector3(middle.transform.localScale.x, currentLaserSize, middle.transform.localScale.z);
         middle.transform.localPosition = (end.transform.localPosition + start.transform.localPosition) /2;
 
