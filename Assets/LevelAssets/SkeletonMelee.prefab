@@ -138,7 +138,7 @@ MonoBehaviour:
   Speed: 1
   AttackDelay: 2
   EntityDamage: 1
-  DamageType: 7
+  DamageType: 8
 --- !u!114 &2717639796838957309
 MonoBehaviour:
   m_ObjectHideFlags: 0

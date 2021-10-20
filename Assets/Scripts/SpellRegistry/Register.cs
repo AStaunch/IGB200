@@ -16,8 +16,11 @@ class Register : MonoBehaviour
     public Sprite RaySprite;
     private Sprite RaySprite_ { get { return RaySprite != null ? RaySprite : null; } }
 
-    public Sprite ArcSprite;
-    private Sprite ArcSprite_ { get { return ArcSprite != null ? ArcSprite : null; } }
+    public Sprite ArcSpriteLeft;
+    private Sprite ArcSpriteLeft_ { get { return ArcSpriteLeft != null ? ArcSpriteLeft : null; } }
+
+    public Sprite ArcSpriteRight;
+    private Sprite ArcSpriteRight_ { get { return ArcSpriteRight != null ? ArcSpriteRight : null; } }
 
     public Sprite OrbSprite;
     private Sprite OrbSprite_ { get { return OrbSprite != null ? OrbSprite : null; } }
@@ -82,7 +85,7 @@ class Register : MonoBehaviour
             }), 1));
 
             //Arc (Left) Template
-            SpellRegistrySing.Instance.Registry.AddItemToregistry(new SpellTemplate("ArcLeft", ArcSprite_, new Action<SpellEffector>((effector) =>
+            SpellRegistrySing.Instance.Registry.AddItemToregistry(new SpellTemplate("ArcLeft", ArcSpriteLeft_, new Action<SpellEffector>((effector) =>
             {
                 Console.WriteLine("This would be a Arc");
 
@@ -98,7 +101,7 @@ class Register : MonoBehaviour
             }),1));
 
             //Arc (Right) Template
-            SpellRegistrySing.Instance.Registry.AddItemToregistry(new SpellTemplate("ArcRight", ArcSprite_, new Action<SpellEffector>((effector) =>
+            SpellRegistrySing.Instance.Registry.AddItemToregistry(new SpellTemplate("ArcRight", ArcSpriteRight_, new Action<SpellEffector>((effector) =>
             {
                 Console.WriteLine("This would be a Arc");
 

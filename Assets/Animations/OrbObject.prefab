@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 1785327433261891598}
   - component: {fileID: 6670939073870354013}
   - component: {fileID: 8518115562787084161}
-  - component: {fileID: 8109681468688015910}
   m_Layer: 0
   m_Name: OrbObject
   m_TagString: Untagged
@@ -142,17 +141,3 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &8109681468688015910
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2481669751348490954}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 251bfacae86e4544782e5d12789463e7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  baseDamage: 1
-  element: 0
