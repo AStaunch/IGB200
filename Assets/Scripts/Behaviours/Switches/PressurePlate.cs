@@ -21,7 +21,7 @@ public class PressurePlate : MonoBehaviour, iSenderObject
     private List<iRecieverObject> targetObjects = new List<iRecieverObject>();
     public List<iRecieverObject> targetObjects_ { get => targetObjects; set => targetObjects = value; }
 
-    private void UpdateReciever() {
+    public void UpdateReciever() {
         foreach (iRecieverObject target in targetObjects_) {
             target.CheckSenders(this);
         }

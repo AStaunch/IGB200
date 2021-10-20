@@ -13,21 +13,20 @@ public class SwitchObject : MonoBehaviour, iSenderObject, iHealthInterface
             return currentState;
         }
         set {
-            currentState = value;            
+            currentState = value;
+            UpdateSprite();
             UpdateReciever();
         }
     }
-    private List<iRecieverObject> targetObjects = new List<iRecieverObject>();
     public List<iRecieverObject> targetObjects_ { get => targetObjects; set => targetObjects = value; }
-
-    public Elements element;
-
-    private void UpdateReciever() {
-        UpdateSprite();
+    private List<iRecieverObject> targetObjects = new List<iRecieverObject>();
+    public void UpdateReciever() {
         foreach (iRecieverObject target in targetObjects_) {
             target.CheckSenders(this);
         }
     }
+
+    public Elements element;
     // Start is called before the first frame update
     private void Start() {
         Health_ = MaxHealth_;

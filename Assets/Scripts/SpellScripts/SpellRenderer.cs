@@ -67,9 +67,6 @@ public class SpellRenderer : MonoBehaviour
         // -- the middle is after start and, as it has a center pivot, have a size of half the laser (minus start and end)
 
         //middle.transform.localPosition += 0.5f * offset;
-
-
-
         spellMaster.AddComponent<DestroyThis>();
         start.AddComponent<DestroyThis>();
         middle.AddComponent<DestroyThis>();
