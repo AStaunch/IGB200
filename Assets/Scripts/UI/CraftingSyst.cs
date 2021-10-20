@@ -12,6 +12,8 @@ public class CraftingSyst : MonoBehaviour
     public Image UI_TemplateDisplay;
     public Image UI_EffectorDisplay;
     public Image UI_AdditionalParam;
+    public Image UI_ScriptContext;
+    public Sprite UI_ScriptContext_default;
 
     public Text Hotbar_msg;
 
@@ -55,7 +57,7 @@ public class CraftingSyst : MonoBehaviour
         //}
         #endregion
 
-
+        ResetUI();
     }
 
 
@@ -68,7 +70,7 @@ public class CraftingSyst : MonoBehaviour
     public  void onRecieved(object sender, CustomEventHandle.EvntHndl_args e)
     {
         //only effects have additional params since this is Old El Paso cheating and the "params" are actually coded, and we just shift depending on this instead and ignore the base one
-        if (e.eventData.type == CustomEventHandle.EventData.EvntType.Effect && e.eventData.HasAdditionalParam)
+        if (e.eventData.type == CustomEventHandle.EventData.EvntType.Effect && e.eventData.HasAdditionalParam && AdditionalParam == false)
         {
             AdditionalParam = e.eventData.HasAdditionalParam;
             ActiveAdditionalMenu = e.eventData.AdditionalParam_menu;
@@ -84,6 +86,21 @@ public class CraftingSyst : MonoBehaviour
             UI_AdditionalParam.sprite = e.eventData.SlotSprite;
             UI_AdditionalParam.color = Color.white;
         }
+        else if (e.eventData.type == CustomEventHandle.EventData.EvntType.Effect && e.eventData.HasAdditionalParam && AdditionalParam)
+        {
+            if(ActiveAdditionalMenu.activeSelf)
+            {
+                ActiveAdditionalMenu.SetActive(false);
+                ActiveAdditionalMenu = null;
+            }
+
+            ActiveAdditionalMenu = e.eventData.AdditionalParam_menu;
+            ActiveAdditionalMenu.SetActive(true);
+
+            UI_EffectorDisplay.sprite = e.eventData.SlotSprite;
+            UI_EffectorDisplay.color = Color.white;
+
+        }
         else
         {
             switch (e.eventData.type)
@@ -98,6 +115,8 @@ public class CraftingSyst : MonoBehaviour
 
                 case CustomEventHandle.EventData.EvntType.Template:
                     template = e.eventData.template;
+                    if (e.eventData.scriptbox_sprite != null)
+                        UI_ScriptContext.sprite = e.eventData.scriptbox_sprite;
 
                     UI_TemplateDisplay.sprite = e.eventData.SlotSprite;
                     UI_TemplateDisplay.color = Color.white;
@@ -126,6 +145,7 @@ public class CraftingSyst : MonoBehaviour
         UI_TemplateDisplay.color = Color.clear;
         UI_AdditionalParam.sprite = null;
         UI_AdditionalParam.color = Color.clear;
+        UI_ScriptContext.sprite = UI_ScriptContext_default;
 
         CurrentlyAssigning = false;
         if (AdditionalParam)
@@ -141,7 +161,8 @@ public class CraftingSyst : MonoBehaviour
     {
         Debug.Log("Select Hotbar slot to place spell");
         bool KeyChosen = false;
-        Hotbar_msg.gameObject.SetActive(true);
+        //Hotbar_msg.gameObject.SetActive(true);
+        GameObject.FindGameObjectWithTag("TextBox").GetComponent<DebugBox>().inputs.Add("'System: Select hotbar slot'");
         while (!KeyChosen)
         {
             if (Input.GetKeyDown(KeyCode.Alpha1))
@@ -192,7 +213,7 @@ public class CraftingSyst : MonoBehaviour
             yield return null;
         }
         StopCoroutine("BuildSet");
-        Hotbar_msg.gameObject.SetActive(false);
+        //Hotbar_msg.gameObject.SetActive(false);
         yield return null;
     }
 

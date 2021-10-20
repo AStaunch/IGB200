@@ -24,6 +24,9 @@ public class CustomEventHandle : MonoBehaviour
         public SpellEffector effector;
         public SpellTemplate template;
         public EvntType type;
+
+        public Sprite scriptbox_sprite;
+
         public bool HasAdditionalParam;
         public GameObject AdditionalParam_menu;
         public bool IsAdditionalParam;
@@ -45,6 +48,9 @@ public class CustomEventHandle : MonoBehaviour
     public string effector_name;
     public string template_name;
     public Sprite Crafting_Slot_img;
+
+    public Sprite ScriptBox_sprite;
+
     [Header("Additional params - Leave unless needed")]
     public bool HasAdditionalParam = false;
     public GameObject AdditionalParamMenu;
@@ -66,7 +72,8 @@ public class CustomEventHandle : MonoBehaviour
             SlotSprite = Crafting_Slot_img,
             HasAdditionalParam = HasAdditionalParam,
             AdditionalParam_menu = AdditionalParamMenu,
-            IsAdditionalParam = IsAdditionalParam
+            IsAdditionalParam = IsAdditionalParam,
+            scriptbox_sprite = ScriptBox_sprite
         };
 
         if (dataType == EventData.EvntType.Effect)
