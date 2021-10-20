@@ -7,8 +7,8 @@ using static SoundManager;
 
 public class ChestScript : MonoBehaviour, iSenderObject
 {
-    public bool currentState_ { get { return currentState; } set { currentState = value; UpdateSprite(value); UpdateReciever(); } }
-    private bool currentState;   
+    public bool currentState_ { get { return currentState; } set { _ = value; } }
+    private bool currentState = false;   
     public List<iRecieverObject> targetObjects_ { get => targetObjects; set => targetObjects = value; }
     private List<iRecieverObject> targetObjects = new List<iRecieverObject>();
 
@@ -46,9 +46,9 @@ public class ChestScript : MonoBehaviour, iSenderObject
                     throw new Exception($"Item by the name {UnlockName} does not exist within the unlock manager");
                 }
             }
-
             Instantiate(SoundDict["ChestOpenSound"]);
-            currentState_ = true;
+            currentState = true; 
+            UpdateSprite(true); UpdateReciever();
         }
     }
 }

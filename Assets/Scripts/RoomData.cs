@@ -58,9 +58,10 @@ public class RoomData : MonoBehaviour
         Icon = new GameObject(transform.name +" icon");
         Icon.transform.position = transform.position;
         Icon.transform.parent = transform;
-        float smallestSide = 0.5f * Mathf.Min(spriteRenderer.bounds.size.x, spriteRenderer.bounds.size.y);
-        Icon.AddComponent<SpriteRenderer>().size = new Vector2(smallestSide, smallestSide);
-        Icon.GetComponent<SpriteRenderer>().material = spriteRenderer.material;
+        float smallestSide = 0.5f * Mathf.Min(transform.localScale.x, transform.localScale.x);
+        Icon.layer = 5;
+        Icon.transform.localScale = 0.5f * Vector2.one;
+        Icon.AddComponent<SpriteRenderer>().material = spriteRenderer.material;
         Icon.SetActive(false);
     }
     private void CreateData() {
@@ -96,11 +97,25 @@ public class RoomData : MonoBehaviour
         }
         GetComponent<Collider2D>().enabled = true;
         RoomObjects_ = new List<GameObject>();
-
         Collider2D[] hitColliders = Physics2D.OverlapAreaAll(GetComponent<Collider2D>().bounds.min, GetComponent<Collider2D>().bounds.max, m_LayerMask);
         foreach (Collider2D collider in hitColliders) {
             if (!collider.transform.TryGetComponent(out AbstractDoor ab)) {
                 AddObject(collider);
+            } else {
+                if (!RoomDoors_.Contains(ab)) {
+                    RoomDoors_.Add(ab);
+                    if (!ab.isException) {
+                        ab.RoomData_ = this;
+                    }
+                }
+            }
+
+            if (collider.transform.TryGetComponent(out iSenderObject _)) {
+                if (!RoomSwitches_.Contains(collider.gameObject)) {
+                    RoomSwitches_.Add(collider.gameObject);
+                    //collider.gameObject.layer = SortingLayer.NameToID("IgnoreRaycast");
+                    //Debug.Log(RoomSwitches_.Count);
+                }
             }
         }
         GetComponent<Collider2D>().enabled = false;
@@ -146,7 +161,8 @@ public class RoomData : MonoBehaviour
     }
 
     public void Unload() {
-        foreach(GameObject gameObject in LoadedObjects.ToArray()) {
+        hasVisited_ = true;
+        foreach (GameObject gameObject in LoadedObjects.ToArray()) {
             //LoadedObjects.Remove(gameObject);
             Destroy(gameObject);
         }
