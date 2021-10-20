@@ -16,6 +16,7 @@ public class PlayerEntity : AbstractCreature
     private Collider2D CollisionCollider;
 
     private void Start() {
+        DefaultMat = GetComponent<SpriteRenderer>().material;
         Deceleration_ = 5;
         Health_ = MaxHealth_;
         EntitySpeed_ = 5;
@@ -70,13 +71,13 @@ public class PlayerEntity : AbstractCreature
         RB_.velocity = Vector2.zero;
         Animator anim = GetComponent<Animator>();
         anim.SetTrigger("attack");
+
         if (CallingSpell.Contains("Arc"))
         {
             CallingSpell = "Arc";
         }
         if (CallingSpell.Contains("Orb")) { Instantiate(SoundManager.SoundDict["OrbThrowSound"]); }
         else { Instantiate(SoundManager.SoundDict[CallingSpell + "Sound"]); }
-
         if (CallingSpell.Contains("Ray")) { GameObject.FindGameObjectWithTag("TextBox").GetComponent<DebugBox>().inputs.Add("Player.raycast(parameter);"); }
         if (CallingSpell.Contains("Arc")) { GameObject.FindGameObjectWithTag("TextBox").GetComponent<DebugBox>().inputs.Add("Player.arc(parameter):"); }
         if (CallingSpell.Contains("Cone")) { GameObject.FindGameObjectWithTag("TextBox").GetComponent<DebugBox>().inputs.Add("Object.coneCast(parameter);"); }

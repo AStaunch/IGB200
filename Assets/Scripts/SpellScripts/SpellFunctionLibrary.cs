@@ -101,7 +101,7 @@ public static class SpellFunctionLibrary
             }
         }
     }
-    public static IEnumerator ArcPlayer(ArcScript ac, ArcData Arc_, Elements element) {
+    public static IEnumerator ArcSelf(ArcScript ac, ArcData Arc_, Elements element) {
         Vector3 LastPosition = Arc_.CasterObject.transform.position;
         while (ac.HitCollider == null) {
             LastPosition = ac.transform.position;

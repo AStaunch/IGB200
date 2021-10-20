@@ -14,4 +14,5 @@ public interface iSenderObject
 {
     public List<iRecieverObject> targetObjects_ { get; set; }
     public bool currentState_ { get; set; }
+    public void UpdateReciever();
 }

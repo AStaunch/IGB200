@@ -40,6 +40,8 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
             return GetComponent<Collider2D>();
         }
     }
+    protected Material DefaultMat;
+
     private void FixedUpdate() {
         Decelerate();
         UpdateSorting();
@@ -245,9 +247,7 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
         }
         EntitySpeed_ = SpeedStore;
     }
-
     public IEnumerator TintSprite(float duration, Color color) {
-        Material MatStore = GetComponent<SpriteRenderer>().material;
         float time = 0;
         byte Alpha = 192;
         GetComponent<SpriteRenderer>().material = FindObjectOfType<SpriteManager>().CreateTint(color, Alpha);
@@ -255,7 +255,7 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
             time += Time.deltaTime;
             yield return null;
         }
-        GetComponent<SpriteRenderer>().material = MatStore;
+        GetComponent<SpriteRenderer>().material = DefaultMat;
     }
 
     private float ComputeSpellStrength(Elements element, Properties[] properties, float strength) {

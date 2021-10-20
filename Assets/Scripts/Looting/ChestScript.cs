@@ -7,13 +7,13 @@ using static SoundManager;
 
 public class ChestScript : MonoBehaviour, iSenderObject
 {
-    public bool currentState_ { get { return currentState; } set { currentState = value; UpdateSprite(value); } }
+    public bool currentState_ { get { return currentState; } set { currentState = value; UpdateSprite(value); UpdateReciever(); } }
     private bool currentState;   
     public List<iRecieverObject> targetObjects_ { get => targetObjects; set => targetObjects = value; }
     private List<iRecieverObject> targetObjects = new List<iRecieverObject>();
 
     public bool debug = false;
-    private void UpdateReciever() {
+    public void UpdateReciever() {
         foreach (iRecieverObject target in targetObjects_) {
             target.CheckSenders(this);
         }

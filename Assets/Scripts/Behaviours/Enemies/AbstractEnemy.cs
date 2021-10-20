@@ -12,6 +12,7 @@ public abstract class AbstractEnemy : AbstractCreature, iEnemyInterface
 
     public override bool IsEnemy => true;
     public void Start() {
+        DefaultMat = GetComponent<SpriteRenderer>().material;
         Health_ = MaxHealth_;
     }
     public void Update() {
