@@ -10,7 +10,7 @@ using static SoundManager;
 public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
 {
     public GameObject walkThroughSoundEffect;
-    public bool isTriggerDoor;
+    public int triggerID;
     public bool isSolveTrigger;
     public bool isException;
     private bool firstEnter = true;
@@ -55,6 +55,13 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
                     if (collision.TryGetComponent(out PlayerEntity playerEntity) && !isException && RoomData_) {
                         playerEntity.LastDoor_ = this.ExitDoor;
 
+                        if (triggerID != 0) 
+                        { 
+                            foreach (GameObject x in GameObject.FindGameObjectsWithTag("MovingDoor"))
+                            {
+                                if (triggerID == x.GetComponent<DungeonDoor>().id) { x.GetComponent<DungeonDoor>().isOpen = true; }
+                            }
+                        }
                         if (isSolveTrigger) {
                             RoomData_.isSolved_ = true;
                             if (firstEnter == true) { Instantiate(SoundDict["PuzzleSolveSound"]); firstEnter = false; }
