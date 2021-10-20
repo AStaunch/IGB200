@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TriggerVolume : MonoBehaviour, iSenderObject
+public class TriggerArea : MonoBehaviour, iSenderObject
 {
     public bool currentState_ {
         get {
