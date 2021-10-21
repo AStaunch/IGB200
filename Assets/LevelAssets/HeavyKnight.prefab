@@ -92,6 +92,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7530107859469830132}
   - component: {fileID: 7022341059925933522}
+  - component: {fileID: 8025751539796210941}
   - component: {fileID: 7530107859469830135}
   - component: {fileID: 1303280099948242629}
   - component: {fileID: 4862032320047774621}
@@ -138,6 +139,21 @@ MonoBehaviour:
   AttackDelay: 2
   EntityDamage: 2
   DamageType: 8
+--- !u!114 &8025751539796210941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7530107859469830134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7718ebae0d35d824b8e5594b530d3202, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DetectionRange: 8
+  shuffle_delay: 1
+  shuffle_time: 250
 --- !u!212 &7530107859469830135
 SpriteRenderer:
   m_ObjectHideFlags: 0
