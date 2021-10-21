@@ -21,10 +21,19 @@ public class DialogueManager : MonoBehaviour
     }
     #endregion
     private Queue<string> sentences;
+    private bool IsOpen;
+
     // Start is called before the first frame update
     void Start()
     {
         sentences = new Queue<string>();
+        EndDialogue();
+    }
+
+    private void Update() {
+        if(IsOpen && Input.GetKeyUp(KeyCode.Space)) {
+            DisplayNextSentence();
+        }
     }
 
     internal void StartDialogue(Dialogue dialogue) {
@@ -47,27 +56,28 @@ public class DialogueManager : MonoBehaviour
 
         string sentence = sentences.Dequeue();
         dialogText.text = sentence;
-        StartCoroutine(WaitForKeyPress(KeyCode.Space));
     }
 
     private void OpenDialogue() {
+        for (int i = 0; i < transform.childCount; i++) {
+            transform.GetChild(i).gameObject.SetActive(true);
+        }
         Debug.Log("Open Dialogue");
-        GetComponent<Animator>().SetTrigger("Open");
+        //GetComponent<Animator>().SetTrigger("Open");
+        IsOpen = true;
     }
 
     private void EndDialogue() {
+        for(int i = 0; i < transform.childCount; i++) {
+            transform.GetChild(i).gameObject.SetActive(false);
+        }
         Debug.Log("End Dialogue");
         Time.timeScale = 1;
-        GetComponent<Animator>().SetTrigger("Close");
+        //GetComponent<Animator>().SetTrigger("Close");
+        IsOpen = false;
     }
 
-    IEnumerator WaitForKeyPress(KeyCode keyCode) {
-
-        while (!Input.GetKeyUp(keyCode)) {
-            //Wait
-            yield return null;
-        }
-        //Display Next Sentence
-        DisplayNextSentence();
-    }
+    //IEnumerator LerpToPosition(KeyCode keyCode) {
+        
+    //}
 }

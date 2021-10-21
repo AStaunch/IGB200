@@ -5,8 +5,6 @@ using static EnumsAndDictionaries;
 
 public class RangedEnemy : AbstractEnemy
 {
-    private Vector3 CurrentPosition = Vector3.zero;
-    private Vector3 LastPosition = Vector3.zero;
     public override Vector3 CalculateFacing() {
         return Vector3.zero;
     }

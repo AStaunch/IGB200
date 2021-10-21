@@ -17,7 +17,7 @@ public class SpellRenderer : MonoBehaviour
         }
     }
     #endregion
-
+    public Material defaultUnlit;
     public Shader shader;
     #region Ray Drawer
     public Sprite[] rayPieces;
