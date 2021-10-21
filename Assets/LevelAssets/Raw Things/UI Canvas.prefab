@@ -932,10 +932,10 @@ RectTransform:
   m_Father: {fileID: 3679736480343614499}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 84.53993, y: -79.588936}
-  m_SizeDelta: {x: 169.07986, y: 53.05929}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7446455607834730650
 CanvasRenderer:
@@ -1335,7 +1335,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &5062300731213511054
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1544,10 +1544,10 @@ RectTransform:
   m_Father: {fileID: 3679736480343614499}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 84.53993, y: -185.70752}
-  m_SizeDelta: {x: 169.07986, y: 53.05929}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1076255871492134792
 CanvasRenderer:
@@ -2419,7 +2419,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0.9998549}
   m_AnchoredPosition: {x: 0.0000076293945, y: 0.032096863}
-  m_SizeDelta: {x: 0.0001, y: 97.08145}
+  m_SizeDelta: {x: 0.0001, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &5671105161510931397
 CanvasRenderer:
@@ -2926,7 +2926,7 @@ MonoBehaviour:
   eventName: PushBroadcast
   effector_name: Push
   template_name: 
-  Crafting_Slot_img: {fileID: 21300000, guid: dec4718bbaeef8d4e887f14c9a63fd2c, type: 3}
+  Crafting_Slot_img: {fileID: -928087350880632164, guid: 72671891ac8a2044ca433f1c71d85b7e, type: 3}
   ScriptBox_sprite: {fileID: 0}
   HasAdditionalParam: 0
   AdditionalParamMenu: {fileID: 0}
@@ -3238,7 +3238,7 @@ MonoBehaviour:
   eventName: PullPlayerBroadcast
   effector_name: PullPlayer
   template_name: 
-  Crafting_Slot_img: {fileID: 21300000, guid: 7ad5102325176c84a9250fdd73b310c7, type: 3}
+  Crafting_Slot_img: {fileID: 5073463087489030586, guid: 0a1d1eac1499c3c4799380f04f338e1c, type: 3}
   ScriptBox_sprite: {fileID: 0}
   HasAdditionalParam: 0
   AdditionalParamMenu: {fileID: 0}
@@ -3357,10 +3357,10 @@ RectTransform:
   m_Father: {fileID: 3679736480343614499}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 84.53993, y: -132.64822}
-  m_SizeDelta: {x: 169.07986, y: 53.05929}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7884171063560849823
 CanvasRenderer:
@@ -4369,10 +4369,10 @@ RectTransform:
   m_Father: {fileID: 3679736480343614499}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 84.53993, y: -238.76682}
-  m_SizeDelta: {x: 169.07986, y: 53.05929}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6337885788952015286
 CanvasRenderer:
@@ -4810,7 +4810,7 @@ MonoBehaviour:
   eventName: PullBroadcast
   effector_name: Pull
   template_name: 
-  Crafting_Slot_img: {fileID: 21300000, guid: dec4718bbaeef8d4e887f14c9a63fd2c, type: 3}
+  Crafting_Slot_img: {fileID: -928087350880632164, guid: 72671891ac8a2044ca433f1c71d85b7e, type: 3}
   ScriptBox_sprite: {fileID: 0}
   HasAdditionalParam: 0
   AdditionalParamMenu: {fileID: 0}
@@ -4852,10 +4852,10 @@ RectTransform:
   m_Father: {fileID: 3679736480343614499}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 84.53993, y: -26.529646}
-  m_SizeDelta: {x: 169.07986, y: 53.05929}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1669863002014353659
 CanvasRenderer:
@@ -5143,7 +5143,7 @@ MonoBehaviour:
   eventName: PushPlayerBroadcast
   effector_name: PushPlayer
   template_name: 
-  Crafting_Slot_img: {fileID: 21300000, guid: 7ad5102325176c84a9250fdd73b310c7, type: 3}
+  Crafting_Slot_img: {fileID: 5073463087489030586, guid: 0a1d1eac1499c3c4799380f04f338e1c, type: 3}
   ScriptBox_sprite: {fileID: 0}
   HasAdditionalParam: 0
   AdditionalParamMenu: {fileID: 0}
@@ -5185,10 +5185,10 @@ RectTransform:
   m_Father: {fileID: 3679736480343614499}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 84.53993, y: -291.82608}
-  m_SizeDelta: {x: 169.07986, y: 53.05929}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2922167302014288642
 CanvasRenderer:
