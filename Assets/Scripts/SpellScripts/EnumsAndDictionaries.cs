@@ -148,7 +148,8 @@ public static class EnumsAndDictionaries
     [System.Serializable]
     public enum SpellTemplates
     {
-        Ray, Orb, Arc, Cone, Shield, Runner
+        Ray, Orb, Arc, Cone, Shield, Runner,
+        NULL
     }
     [System.Serializable]
     public enum VoidType

@@ -25,8 +25,15 @@ public class PlayerEntity : AbstractCreature
     private AbstractDoor LastDoor;
     List<Rigidbody2D> collidedObjects = new List<Rigidbody2D>();
     private Collider2D CollisionCollider;
+    public RoomData StartRoomData_ {get => StartRoomData; set => StartRoomData = value; }
+    private RoomData StartRoomData;
+    private Vector3 StartPosition_;
+    private Vector3 change;
+    // Update is called once per frame
+    bool NoClip;
 
     private void Start() {
+        StartPosition_ = transform.position;
         DefaultMat = GetComponent<SpriteRenderer>().material;
         Deceleration_ = 5;
         Health_ = MaxHealth_;
@@ -46,9 +53,6 @@ public class PlayerEntity : AbstractCreature
         }
 
     }
-    private Vector3 change;
-    // Update is called once per frame
-    bool NoClip;
     void Update()
     {
         if(this.gameObject.layer == 7) {
@@ -69,37 +73,35 @@ public class PlayerEntity : AbstractCreature
         if (Input.GetKeyDown(KeyCode.R)) {
             EntityDeath();
         }
-
         //Turns of Player Collision
         if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.P)) {
             NoClip = !NoClip;
             CollisionCollider.isTrigger = NoClip;
         }
     }
-
-    public void CastSpell(string CallingSpell)
+    public void CastSpell(SpellTemplate CallingSpell)
     {
         RB_.velocity = Vector2.zero;
         Animator anim = GetComponent<Animator>();
         anim.SetTrigger("attack");
-
-        if (CallingSpell.Contains("Arc"))
+        string CallingSpellName = CallingSpell.Name;
+        if (CallingSpellName.Contains("Arc"))
         {
-            CallingSpell = "Arc";
+            CallingSpellName = "Arc";
         }
-        if (CallingSpell.Contains("Orb")) { Instantiate(SoundManager.SoundDict["OrbThrowSound"]); }
-        else { Instantiate(SoundManager.SoundDict[CallingSpell + "Sound"]); }
-        if (CallingSpell.Contains("Ray")) { GameObject.FindGameObjectWithTag("TextBox").GetComponent<DebugBox>().inputs.Add("Player.raycast(parameter);"); }
-        if (CallingSpell.Contains("Arc")) { GameObject.FindGameObjectWithTag("TextBox").GetComponent<DebugBox>().inputs.Add("Player.arc(parameter):"); }
-        if (CallingSpell.Contains("Cone")) { GameObject.FindGameObjectWithTag("TextBox").GetComponent<DebugBox>().inputs.Add("Object.coneCast(parameter);"); }
-        if (CallingSpell.Contains("Orb")) { GameObject.FindGameObjectWithTag("TextBox").GetComponent<DebugBox>().inputs.Add("Object.instantiateOrb(parameter);"); }
+        if (CallingSpellName.Contains("Orb")) { Instantiate(SoundManager.SoundDict["OrbThrowSound"]); }
+        else { Instantiate(SoundManager.SoundDict[CallingSpellName + "Sound"]); }
+        if (CallingSpellName.Contains("Ray")) { GameObject.FindGameObjectWithTag("TextBox").GetComponent<DebugBox>().inputs.Add("Player.raycast(parameter);"); }
+        if (CallingSpellName.Contains("Arc")) { GameObject.FindGameObjectWithTag("TextBox").GetComponent<DebugBox>().inputs.Add("Player.arc(parameter):"); }
+        if (CallingSpellName.Contains("Cone")) { GameObject.FindGameObjectWithTag("TextBox").GetComponent<DebugBox>().inputs.Add("Object.coneCast(parameter);"); }
+        if (CallingSpellName.Contains("Orb")) { GameObject.FindGameObjectWithTag("TextBox").GetComponent<DebugBox>().inputs.Add("Object.instantiateOrb(parameter);"); }
     }
-
     public override void EntityDeath() {
-        if(LastDoor != null) {
-            Health_ = MaxHealth_;
-            transform.position = LastDoor_.RespawnPoint;
-            LastDoor.RoomData_.Load();
+        Health_ = MaxHealth_;
+        transform.position = StartPosition_;
+        StartRoomData_.Load();
+        if (LastDoor != null) {
+            LastDoor.RoomData_.Unload();
         }
     }
     protected override void EntityFall() {

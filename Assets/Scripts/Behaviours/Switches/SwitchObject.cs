@@ -60,7 +60,7 @@ public class SwitchObject : MonoBehaviour, iSenderObject, iHealthInterface
 
     public Shader shader;
 
-    public void TakeDamage(float damage, Elements damageType) {
+    public void TakeDamage(float damage, Elements damageType, SpellTemplates damageSource = SpellTemplates.NULL) {
         if(damageType != element) {
             return;
         }

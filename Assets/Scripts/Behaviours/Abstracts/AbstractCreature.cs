@@ -63,7 +63,7 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
     }
     IEnumerator SpriteRoutine = null;
 
-    public void TakeDamage(float damage, Elements damageType) {
+    public void TakeDamage(float damage, Elements damageType, SpellTemplates damageSource = SpellTemplates.NULL) {
         damage = ComputeSpellStrength(damageType, EntityProperties_, damage);
         int damageInt = Mathf.RoundToInt(damage);
         string SoundName = damageType.ToString() + "Damage";

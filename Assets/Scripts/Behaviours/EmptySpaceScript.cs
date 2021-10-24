@@ -20,7 +20,7 @@ public class EmptySpaceScript : MonoBehaviour, iHealthInterface
     private bool isFrozen;
     float Duration = 7f;
 
-    private void Awake() {
+    private void Start() {
         gameObject.layer = 2;
         if (!TryGetComponent(out rb)) {
             rb = gameObject.AddComponent<Rigidbody2D>();
@@ -33,7 +33,7 @@ public class EmptySpaceScript : MonoBehaviour, iHealthInterface
             sr = gameObject.AddComponent<SpriteRenderer>();
         }
         sr.sprite = null;
-        sr.sortingLayerID = -1;
+        sr.sortingLayerID = 0;
         sr.material = SpellRenderer.Instance.defaultUnlit;
 
         if (!TryGetComponent(out bc)) {
@@ -64,7 +64,6 @@ public class EmptySpaceScript : MonoBehaviour, iHealthInterface
             sr.sprite = SpriteDict[VoidFills][1];
             bc.isTrigger = true;
             StartCoroutine(FreezeForTime(Duration));
-            ChainReactionIce();
         } else {
             sr.sprite = null;
             bc.isTrigger = false;
@@ -76,22 +75,22 @@ public class EmptySpaceScript : MonoBehaviour, iHealthInterface
         foreach (Collider2D collider in Physics2D.OverlapCircleAll(transform.position, 1f, mask)) {
             if(collider.TryGetComponent(out EmptySpaceScript ESS)) {
                 if (!ESS.isFrozen_) {
-                    ESS.isFrozen_ = true;
+                    ESS.TakeDamage(1f, Elements.Ice, SpellTemplates.Orb);
                 }
             }
         }
     }
 
     private void ChainReactionElecticity() {
-        int mask = 1 << 2 | 1 << 6 | 1 << 7 | 1 << 0;
+        int mask = 1 << 2 | 1 << 6 ;
         foreach (Collider2D collider in Physics2D.OverlapCircleAll(transform.position, 1f, mask)) {
             if (collider.TryGetComponent(out iHealthInterface iHealth)) {
                 if (collider.TryGetComponent(out EmptySpaceScript ESS)) {
                     if (!ESS.isElectric_) {
-                        ESS.TakeDamage(1f, Elements.Electricity);
+                        ESS.TakeDamage(1f, Elements.Electricity, SpellTemplates.Orb);
                     }
                 } else {
-                    iHealth.TakeDamage(1f, Elements.Electricity);
+                    iHealth.TakeDamage(1f, Elements.Electricity, SpellTemplates.Orb);
                 }
             }
         }
@@ -116,14 +115,17 @@ public class EmptySpaceScript : MonoBehaviour, iHealthInterface
         isElectric = false;
     }
 
-    public void TakeDamage(float damage, Elements damageType) {
+    public void TakeDamage(float damage, Elements damageType, SpellTemplates damageSource = SpellTemplates.NULL) {
         if(VoidType_ == VoidType.Water) {
             if (damageType == Elements.Ice) {
                 isFrozen_ = true;
+                if (damageSource == SpellTemplates.Orb) {
+                    ChainReactionIce();
+                }
             } else if (damageType == Elements.Fire) {
                 isFrozen_ = false;
             } else if (damageType == Elements.Electricity) {
-                if(!isFrozen_ && !isElectric_) {
+                if(!isFrozen_ && !isElectric_ && damageSource == SpellTemplates.Orb) {
                     ChainReactionElecticity();
                 }
             }

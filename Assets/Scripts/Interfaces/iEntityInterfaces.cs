@@ -11,7 +11,7 @@ public interface iHealthInterface : iPropertyInterface {
     public int Health_ { get; set; }
     public int MaxHealth_ { get; set; }
     public Elements[] DamageImmunities_ { get; set; }
-    public void TakeDamage(float damage, Elements damageType);
+    public void TakeDamage(float damage, Elements damageType, SpellTemplates damageSource = SpellTemplates.NULL);
     public void EntityDeath();
 }
 
