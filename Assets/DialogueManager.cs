@@ -59,6 +59,7 @@ public class DialogueManager : MonoBehaviour
     }
 
     private void OpenDialogue() {
+        Time.timeScale = 0;
         for (int i = 0; i < transform.childCount; i++) {
             transform.GetChild(i).gameObject.SetActive(true);
         }
@@ -68,7 +69,8 @@ public class DialogueManager : MonoBehaviour
     }
 
     private void EndDialogue() {
-        for(int i = 0; i < transform.childCount; i++) {
+        Time.timeScale = 1;
+        for (int i = 0; i < transform.childCount; i++) {
             transform.GetChild(i).gameObject.SetActive(false);
         }
         Debug.Log("End Dialogue");
