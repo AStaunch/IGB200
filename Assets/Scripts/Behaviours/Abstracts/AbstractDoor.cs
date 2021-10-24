@@ -144,7 +144,7 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
             //Debug.LogWarning(ex.Message);
         }
     }
-    public void TakeDamage(float damage, Elements damageType) {
+    public void TakeDamage(float damage, Elements damageType, SpellTemplates damageSource = SpellTemplates.NULL) {
         if (isInvulnerable || damageType != Elements.Fire) {
             return;
         }

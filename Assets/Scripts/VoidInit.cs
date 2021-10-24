@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using static EnumsAndDictionaries;
@@ -9,6 +11,7 @@ using static SpriteManager;
 public class VoidInit : MonoBehaviour
 {
     public List<TileAssetArrays> TileAssets;
+    private List<GameObject> VoidTiles = new List<GameObject>();
     //private List<TileAsset> TileAsset = new List<TileAsset>();
     private Dictionary<Vector3Int, VoidType> TileDict = new Dictionary<Vector3Int, VoidType>();
     private Dictionary<Sprite, VoidType> TileSpriteDict = new Dictionary<Sprite, VoidType>();
@@ -16,11 +19,19 @@ public class VoidInit : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        if(VoidTiles.Count == 0) {
+            GenerateVoid();
+        }
+    }
+
+    public void GenerateVoid() {
+        DeleteVoid();
+
         TileSpriteDict = new Dictionary<Sprite, VoidType>();
 
         foreach (TileAssetArrays TAA in TileAssets.ToArray()) {
-            foreach(Sprite sprite in TAA.Tiles) {
-                if (!TileSpriteDict.ContainsKey(sprite)){
+            foreach (Sprite sprite in TAA.Tiles) {
+                if (!TileSpriteDict.ContainsKey(sprite)) {
                     TileSpriteDict.Add(sprite, TAA.voidType);
                 }
             }
@@ -30,28 +41,29 @@ public class VoidInit : MonoBehaviour
                 Vector3Int TilePosRaw = new Vector3Int(x, y, Mathf.RoundToInt(Tile_map.transform.position.z));
                 Vector3 TilePos = Tile_map.CellToWorld(TilePosRaw);
                 if (Tile_map.HasTile(TilePosRaw)) {
-                    if (TileSpriteDict.ContainsKey(Tile_map.GetSprite(TilePosRaw))) {
+                    if (TileSpriteDict.ContainsKey(Tile_map.GetSprite(TilePosRaw)) && !TileDict.ContainsKey(TilePosRaw)) {
                         TileDict.Add(TilePosRaw, TileSpriteDict[Tile_map.GetSprite(TilePosRaw)]);
                     }
                 }
             }
         }
 
-        foreach(Vector3Int vector3Int in TileDict.Keys.ToArray()) {
+        foreach (Vector3Int vector3Int in TileDict.Keys.ToArray()) {
             GameObject Tile = CreateVoidObject(TileDict[vector3Int]);
-            Tile.transform.position = Tile_map.CellToWorld(vector3Int) + 0.5f * new Vector3(1,1,0);
+            Tile.transform.position = Tile_map.CellToWorld(vector3Int) + 0.5f * new Vector3(1, 1, 0);
             Tile.transform.parent = this.transform;
-            switch (TileDict[vector3Int]) {
-                case VoidType.Water:
-
-                    break;
-                case VoidType.Void:
-                    break;
-                default:
-                    break;
-            }
+            VoidTiles.Add(Tile);
         }
     }
+
+    public void DeleteVoid() {
+        foreach (GameObject gameObject in VoidTiles.ToArray()) {
+            VoidTiles.Remove(gameObject);
+            DestroyImmediate(gameObject);
+        }
+        VoidTiles = new List<GameObject>();
+    }
+
     private GameObject CreateVoidObject(VoidType voidType) {
         GameObject GO = new GameObject(voidType.ToString() + "Tile");
         GO.AddComponent<EmptySpaceScript>().VoidType_ = voidType;        

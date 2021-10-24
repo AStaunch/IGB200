@@ -97,6 +97,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentState: 0
+  dialogue:
+    name: Computer
+    sentences: []
+    CharacterPortrait: {fileID: -793353157780737, guid: 4f42ef56959610c47943dd41158711f9, type: 3}
 --- !u!61 &1164201930975916864
 BoxCollider2D:
   m_ObjectHideFlags: 0

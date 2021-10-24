@@ -13,13 +13,14 @@ public class EmptySpaceScript : MonoBehaviour, iHealthInterface
     private SpriteRenderer sr;
     private BoxCollider2D bc;
     private Rigidbody2D rb;
-    private bool isFrozen_ { 
+    public bool isFrozen_ { 
         get { return isFrozen; }
         set { isFrozen = value; ToggleFrozen(value); }
     }
     private bool isFrozen;
+    float Duration = 7f;
 
-    private void Awake() {
+    private void Start() {
         gameObject.layer = 2;
         if (!TryGetComponent(out rb)) {
             rb = gameObject.AddComponent<Rigidbody2D>();
@@ -32,6 +33,8 @@ public class EmptySpaceScript : MonoBehaviour, iHealthInterface
             sr = gameObject.AddComponent<SpriteRenderer>();
         }
         sr.sprite = null;
+        sr.sortingLayerID = 0;
+        sr.material = SpellRenderer.Instance.defaultUnlit;
 
         if (!TryGetComponent(out bc)) {
             bc = gameObject.AddComponent<BoxCollider2D>();
@@ -60,14 +63,41 @@ public class EmptySpaceScript : MonoBehaviour, iHealthInterface
         if (boo) {
             sr.sprite = SpriteDict[VoidFills][1];
             bc.isTrigger = true;
+            StartCoroutine(FreezeForTime(Duration));
         } else {
             sr.sprite = null;
             bc.isTrigger = false;
         }
     }
+
+    private void ChainReactionIce() {
+        int mask = 1 << 2;
+        foreach (Collider2D collider in Physics2D.OverlapCircleAll(transform.position, 1f, mask)) {
+            if(collider.TryGetComponent(out EmptySpaceScript ESS)) {
+                if (!ESS.isFrozen_) {
+                    ESS.TakeDamage(1f, Elements.Ice, SpellTemplates.Orb);
+                }
+            }
+        }
+    }
+
+    private void ChainReactionElecticity() {
+        int mask = 1 << 2 | 1 << 6 ;
+        foreach (Collider2D collider in Physics2D.OverlapCircleAll(transform.position, 1f, mask)) {
+            if (collider.TryGetComponent(out iHealthInterface iHealth)) {
+                if (collider.TryGetComponent(out EmptySpaceScript ESS)) {
+                    if (!ESS.isElectric_) {
+                        ESS.TakeDamage(1f, Elements.Electricity, SpellTemplates.Orb);
+                    }
+                } else {
+                    iHealth.TakeDamage(1f, Elements.Electricity, SpellTemplates.Orb);
+                }
+            }
+        }
+    }
+
     private IEnumerator FreezeForTime(float duration) {
         float time = 0;
-        isFrozen_ = true;
         while (time < duration && isFrozen_ == true) {
             time += Time.deltaTime;
             yield return null;
@@ -75,15 +105,29 @@ public class EmptySpaceScript : MonoBehaviour, iHealthInterface
         isFrozen_ = false;
     }
 
-    public void TakeDamage(float damage, Elements damageType) {
+    private IEnumerator ElectricForTime(float duration) {
+        float time = 0;
+        isElectric = true;
+        while (time < duration && !isFrozen_) {
+            time += Time.deltaTime;
+            yield return null;
+        }
+        isElectric = false;
+    }
+
+    public void TakeDamage(float damage, Elements damageType, SpellTemplates damageSource = SpellTemplates.NULL) {
         if(VoidType_ == VoidType.Water) {
             if (damageType == Elements.Ice) {
-                float Duration = 7f;
-                StartCoroutine(FreezeForTime(Duration));
+                isFrozen_ = true;
+                if (damageSource == SpellTemplates.Orb) {
+                    ChainReactionIce();
+                }
             } else if (damageType == Elements.Fire) {
                 isFrozen_ = false;
             } else if (damageType == Elements.Electricity) {
-
+                if(!isFrozen_ && !isElectric_ && damageSource == SpellTemplates.Orb) {
+                    ChainReactionElecticity();
+                }
             }
         }
     }
@@ -96,4 +140,7 @@ public class EmptySpaceScript : MonoBehaviour, iHealthInterface
     public Elements[] DamageImmunities_ { get => new Elements[0]; set => _ = value; }
     public Properties[] EntityProperties_ { get => new Properties[0]; set => _ = value; }
     public EntityTypes EntityType_ => EntityTypes.Object;
+
+    public bool isElectric_ { get => isElectric; set => StartCoroutine(ElectricForTime(0.1f)); }
+    private bool isElectric;
 }

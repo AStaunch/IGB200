@@ -35,6 +35,10 @@ public class ArcScript : MonoBehaviour
         ac = FindObjectOfType<SpellRenderer>().arcCurve;
         //Find Value for Direction of movement
         arcValue = ArcValueDict[arcDirection];
+        if (IntDict[direction] % 2 == 1) {
+            arcValue *= -1;
+        }
+        //arcValue = Mathf.RoundToInt(Mathf.Pow(arcValue, IntDict[direction]));
         //Find Value for Movement Direction
         directionVector = VectorDict[direction];
         invertedDirection = new Vector2(directionVector.y, directionVector.x);

@@ -62,7 +62,8 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
         return IntDict[CurrentDirection_];
     }
     IEnumerator SpriteRoutine = null;
-    public void TakeDamage(float damage, Elements damageType) {
+
+    public void TakeDamage(float damage, Elements damageType, SpellTemplates damageSource = SpellTemplates.NULL) {
         damage = ComputeSpellStrength(damageType, EntityProperties_, damage);
         int damageInt = Mathf.RoundToInt(damage);
         string SoundName = damageType.ToString() + "Damage";
@@ -259,12 +260,12 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
     public IEnumerator TintSprite(float duration, Color color) {
         float time = 0;
         byte Alpha = 192;
-        GetComponent<SpriteRenderer>().material = FindObjectOfType<SpriteManager>().CreateTint(color, Alpha);
+        GetComponent<SpriteRenderer>().material = SpriteManager.Instance.CreateTint(color, Alpha);
         while (time < duration) {
             time += Time.deltaTime;
             yield return null;
         }
-        GetComponent<SpriteRenderer>().material = DefaultMat;
+        GetComponent<SpriteRenderer>().material = SpellRenderer.Instance.defaultUnlit;
     }
 
     private float ComputeSpellStrength(Elements element, Properties[] properties, float strength) {

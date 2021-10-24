@@ -132,7 +132,7 @@ public static class SpellFunctionLibrary
                 }
             } else {
                 if (gameObject.TryGetComponent(out iHealthInterface iHealth_)) {
-                    iHealth_.TakeDamage(baseStrength, element);
+                    iHealth_.TakeDamage(baseStrength, element, SpellTemplates.Cone);
                     Debug.DrawLine(Cone_.CasterObject.transform.position, gameObject.transform.position, Color.red, 1f);
                 }
             }

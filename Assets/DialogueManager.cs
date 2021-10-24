@@ -8,7 +8,7 @@ public class DialogueManager : MonoBehaviour
 {
     public TMP_Text nameText;
     public TMP_Text dialogText;
-    public Image Image;
+    public Image portrait;
     #region Singleton Things
     private static DialogueManager _instance;
     public static DialogueManager Instance { get { return _instance; } }
@@ -21,16 +21,26 @@ public class DialogueManager : MonoBehaviour
     }
     #endregion
     private Queue<string> sentences;
+    private bool IsOpen;
+
     // Start is called before the first frame update
     void Start()
     {
         sentences = new Queue<string>();
+        EndDialogue();
+    }
+
+    private void Update() {
+        if(IsOpen && Input.GetKeyUp(KeyCode.Space)) {
+            DisplayNextSentence();
+        }
     }
 
     internal void StartDialogue(Dialogue dialogue) {
         OpenDialogue();
         sentences.Clear();
         nameText.text = dialogue.name ;
+        portrait.sprite = dialogue.CharacterPortrait;
         foreach (string sentence in dialogue.sentences) {
             sentences.Enqueue(sentence);
         }
@@ -38,7 +48,8 @@ public class DialogueManager : MonoBehaviour
     }
 
     private void DisplayNextSentence() {
-        if(sentences.Count == 0) {
+        Debug.Log("Display Next Dialogue");
+        if (sentences.Count == 0) {
             EndDialogue();
             return;
         }
@@ -47,14 +58,26 @@ public class DialogueManager : MonoBehaviour
         dialogText.text = sentence;
     }
 
-    private void EndDialogue() {
-        CloseDialogue();
+    private void OpenDialogue() {
+        for (int i = 0; i < transform.childCount; i++) {
+            transform.GetChild(i).gameObject.SetActive(true);
+        }
+        Debug.Log("Open Dialogue");
+        //GetComponent<Animator>().SetTrigger("Open");
+        IsOpen = true;
     }
 
-    private void OpenDialogue() {
-        Debug.Log("Start Dialogue");
+    private void EndDialogue() {
+        for(int i = 0; i < transform.childCount; i++) {
+            transform.GetChild(i).gameObject.SetActive(false);
+        }
+        Debug.Log("End Dialogue");
+        Time.timeScale = 1;
+        //GetComponent<Animator>().SetTrigger("Close");
+        IsOpen = false;
     }
-    private void CloseDialogue() {
-        Debug.Log("Close Dialogue");
-    }
+
+    //IEnumerator LerpToPosition(KeyCode keyCode) {
+        
+    //}
 }

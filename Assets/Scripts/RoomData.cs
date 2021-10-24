@@ -35,7 +35,8 @@ public class RoomData : MonoBehaviour
     private List<GameObject> RoomObjects_  = new List<GameObject>();
     private List<AbstractDoor> RoomDoors_ = new List<AbstractDoor>();
     private List<GameObject> RoomSwitches_ = new List<GameObject>();
-    public bool isSolved_ {get{ return isSolved; } set{ isSolved = value; } }// if(value) UpdateData(); } }
+    private List<GameObject> RoomVoid_ = new List<GameObject>();
+    public bool isSolved_ {get{ return isSolved; } set{ isSolved = value; } }
     private bool isSolved = false;
     public SpriteRenderer spriteRenderer { get => GetComponent<SpriteRenderer>(); }
     public List<GameObject> LoadedObjects = new List<GameObject>();
@@ -50,7 +51,7 @@ public class RoomData : MonoBehaviour
     [HideInInspector]
     public GameObject Icon;
     void Start() {
-        //PlayerRef = FindObjectOfType<PlayerEntity>().gameObject;
+        //PlayerRef = PlayerEntity.Instance.gameObject;
         //Use this to ensure that the Gizmos are being drawn when in Play Mode.
         spriteRenderer.enabled = false;
         CreateData();
@@ -83,8 +84,6 @@ public class RoomData : MonoBehaviour
             if (collider.transform.TryGetComponent(out iSenderObject _)) {
                 if (!RoomSwitches_.Contains(collider.gameObject)) {
                     RoomSwitches_.Add(collider.gameObject);
-                    //collider.gameObject.layer = SortingLayer.NameToID("IgnoreRaycast");
-                    //Debug.Log(RoomSwitches_.Count);
                 }
             }
         }   
@@ -114,8 +113,6 @@ public class RoomData : MonoBehaviour
             if (collider.transform.TryGetComponent(out iSenderObject _)) {
                 if (!RoomSwitches_.Contains(collider.gameObject)) {
                     RoomSwitches_.Add(collider.gameObject);
-                    //collider.gameObject.layer = SortingLayer.NameToID("IgnoreRaycast");
-                    //Debug.Log(RoomSwitches_.Count);
                 }
             }
         }
@@ -126,15 +123,26 @@ public class RoomData : MonoBehaviour
     private void AddObject(Collider2D collider) {
         if(collider.transform.TryGetComponent(out ChestScript _)) {
             hasChest = true;
-        } else {
-            bool BannedTypes = collider.transform.TryGetComponent(out iRecieverObject _) || collider.transform.TryGetComponent(out iSenderObject _);
-            BannedTypes = BannedTypes || collider.transform.TryGetComponent(out PlayerEntity _) || collider.transform.TryGetComponent(out RoomData _) || collider.transform.TryGetComponent(out EmptySpaceScript _);
-            if (!RoomObjects_.Contains(collider.gameObject) && collider.transform.TryGetComponent(out iPropertyInterface _) && !(BannedTypes)) {
-                RoomObjects_.Add(collider.gameObject);
+            return;
+        }
+        if(collider.TryGetComponent(out EmptySpaceScript _)) {
+            if (!RoomVoid_.Contains(collider.gameObject)) {
+                RoomVoid_.Add(collider.gameObject);
                 collider.gameObject.SetActive(false);
             }
+            return;
+        }
+        if(collider.transform.TryGetComponent(out PlayerEntity playerEntity)) {
+            playerEntity.StartRoomData_ = this;
+            return;
         }
 
+        bool BannedTypes = collider.transform.TryGetComponent(out iRecieverObject _) || collider.transform.TryGetComponent(out iSenderObject _);
+        BannedTypes = BannedTypes || collider.transform.TryGetComponent(out RoomData _);
+        if (!RoomObjects_.Contains(collider.gameObject) && collider.transform.TryGetComponent(out iPropertyInterface _) && !(BannedTypes)) {
+            RoomObjects_.Add(collider.gameObject);
+            collider.gameObject.SetActive(false);
+        }
     }
 
     public void Load() {
@@ -147,16 +155,21 @@ public class RoomData : MonoBehaviour
             clone.AddComponent<LoadedObject>().roomDataParent = this;
             LoadedObjects.Add(clone);
         }
-
         foreach (GameObject iSender in RoomSwitches_) {
             iSender.GetComponent<iSenderObject>().currentState_ = false;
         }
-
         foreach(AbstractDoor abstractDoor in RoomDoors_) {
             if(abstractDoor.TryGetComponent(out AbstractLockedDoor lockedDoor) && abstractDoor.isException) {
                 abstractDoor.OpenCloseDoor(false);
                 abstractDoor.Health_ = abstractDoor.MaxHealth_;
             }
+        }
+        foreach(GameObject emptySpace in RoomVoid_) {
+            GameObject clone = Instantiate(emptySpace, emptySpace.transform.position, emptySpace.transform.rotation);
+            clone.transform.parent = this.transform;
+            clone.SetActive(true);
+            clone.AddComponent<LoadedObject>().roomDataParent = this;
+            LoadedObjects.Add(clone);
         }
         isLoaded_ = true;
     }
