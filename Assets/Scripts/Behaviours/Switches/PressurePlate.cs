@@ -8,17 +8,13 @@ public class PressurePlate : MonoBehaviour, iSenderObject
     public bool PressOnce = true;
     public Sprite[] sprites;
     private bool currentState;
-    public bool currentState_ {
-        get {
-            return currentState;
-        }
-        set {
-            currentState = value;
-            UpdateSprite();
-            UpdateReciever();
-        }
+    public bool desiredState = true;
+    public bool currentStateUpdate_ {get => currentState; set { currentState_ = value; UpdateReciever(); } }
+    public bool currentState_ { get { return currentState; } set { currentState = value; UpdateSprite(); }
     }
     private List<iRecieverObject> targetObjects = new List<iRecieverObject>();
+    private bool resetState;
+
     public List<iRecieverObject> targetObjects_ { get => targetObjects; set => targetObjects = value; }
 
     public void UpdateReciever() {
@@ -31,32 +27,41 @@ public class PressurePlate : MonoBehaviour, iSenderObject
         UpdateSprite();
     }
     private void OnTriggerEnter2D(Collider2D collision) {
-        if (currentState_ == false) { Instantiate(buttonPressSound); GameObject.FindGameObjectWithTag("TextBox").GetComponent<DebugBox>().inputs.Add("Object.isActive(switch);"); }
         if (PressOnce && collision.transform.CompareTag("Player")) {
-            currentState_ = true;
+            Instantiate(buttonPressSound); 
+            GameObject.FindGameObjectWithTag("TextBox").GetComponent<DebugBox>().inputs.Add("Object.isActive(switch);");
+            currentStateUpdate_ = true;
         }
         UpdateSprite();
     }
 
     private void OnTriggerStay2D(Collider2D collision) {
         if (!PressOnce && collision.transform.TryGetComponent<iPhysicsInterface>(out _) && !collision.isTrigger) {
-            currentState_ = true;
+            currentStateUpdate_ = true;
             UpdateSprite();            
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision) {
         if (!PressOnce && collision.transform.TryGetComponent<iPhysicsInterface>(out _) && !collision.isTrigger) {
-            currentState_ = false;
+            currentStateUpdate_ = false;
             UpdateSprite();
+        }
+        if(resetState && PressOnce && collision.transform.CompareTag("Player")) {
+            currentState_ = false;
+            resetState = false;
         }
     }
 
     private void UpdateSprite() {
-        if (currentState_) {
+        if (currentStateUpdate_) {
             GetComponent<SpriteRenderer>().sprite = sprites[1];
         } else {
             GetComponent<SpriteRenderer>().sprite = sprites[0];
         }
+    }
+
+    public void ResetSender() {
+        resetState = true;
     }
 }

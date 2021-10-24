@@ -61,12 +61,16 @@ public class VoidInit : MonoBehaviour
             VoidTiles.Remove(gameObject);
             DestroyImmediate(gameObject);
         }
+        while (transform.childCount > 0){
+            DestroyImmediate(transform.GetChild(transform.childCount - 1).gameObject);
+        }
         VoidTiles = new List<GameObject>();
     }
 
     private GameObject CreateVoidObject(VoidType voidType) {
         GameObject GO = new GameObject(voidType.ToString() + "Tile");
-        GO.AddComponent<EmptySpaceScript>().VoidType_ = voidType;        
+        GO.AddComponent<EmptySpaceScript>().VoidType_ = voidType;
+        GO.AddComponent<BoxCollider2D>();
         return GO;
     }
 }

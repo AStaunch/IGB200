@@ -43,6 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc78c95602c79cb4b84d2f3a438f80ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultUnlit: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   shader: {fileID: -6465566751694194690, guid: 97840132b5feb054a8b527b4001e4547, type: 3}
   rayPieces:
   - {fileID: -6896016907692476293, guid: 08719681da426644b91edfd89609a11f, type: 3}

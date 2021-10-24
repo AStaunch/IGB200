@@ -51,4 +51,8 @@ public class ChestScript : MonoBehaviour, iSenderObject
             UpdateSprite(true); UpdateReciever();
         }
     }
+
+    public void ResetSender() {
+        currentState_ = false;
+    }
 }

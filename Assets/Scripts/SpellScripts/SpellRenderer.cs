@@ -3,7 +3,7 @@ using System.Collections;
 using static EnumsAndDictionaries;
 using System;
 using System.Collections.Generic;
-
+[ExecuteInEditMode]
 public class SpellRenderer : MonoBehaviour
 {
     #region Singleton Things
@@ -158,11 +158,9 @@ public class SpellRenderer : MonoBehaviour
         obj.transform.localPosition = Vector2.zero + offset;
         return obj;
     }
-
-    private Material CreateMaterial(Color[] colors) {
+    public Material CreateMaterial(Color[] colors) {
         return CreateMaterial(colors, shader);
     }
-
     public static Material CreateMaterial(Color[] colors, Shader shader) {
         Material material = new Material(shader);
         material.SetColor("_PrimaryColour", colors[0]);

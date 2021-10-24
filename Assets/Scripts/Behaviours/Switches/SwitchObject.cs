@@ -1,50 +1,18 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static EnumsAndDictionaries;
-using static SpellRenderer;
 
 public class SwitchObject : MonoBehaviour, iSenderObject, iHealthInterface
 {
-    private Material[] materials;
-    public bool currentState;
     public bool currentState_ {
-        get {
-            return currentState;
-        }
-        set {
-            currentState = value;
-            UpdateSprite();
-            UpdateReciever();
-        }
+        get { return currentState; }
+        set { currentState = value; UpdateSprite(); UpdateReciever(); }
     }
+    public bool currentState;
     public List<iRecieverObject> targetObjects_ { get => targetObjects; set => targetObjects = value; }
     private List<iRecieverObject> targetObjects = new List<iRecieverObject>();
-    public void UpdateReciever() {
-        foreach (iRecieverObject target in targetObjects_) {
-            target.CheckSenders(this);
-        }
-    }
-
-    public Elements element;
-    // Start is called before the first frame update
-    private void Start() {
-        Health_ = MaxHealth_;
-        EntityProperties_ = new Properties[] { Properties.Immovable };
-        currentState_ = false;
-        shader = FindObjectOfType<SpellRenderer>().shader;
-        materials = new Material[] { CreateMaterial(ColourDict[Elements.NULL], shader), CreateMaterial(ColourDict[element], shader) };
-        UpdateSprite();    
-    }
-    private void UpdateSprite() {
-        if (!currentState_) {
-            GetComponent<SpriteRenderer>().material = materials[1];
-        } else {
-            GetComponent<SpriteRenderer>().material = materials[0];
-        }
-    }
-
-
     public Properties[] EntityProperties_ { get => EntityProperties; set => EntityProperties = value; }
     private Properties[] EntityProperties;
     public EntityTypes EntityType_ { get => EntityType; set => EntityType = value; }
@@ -55,30 +23,43 @@ public class SwitchObject : MonoBehaviour, iSenderObject, iHealthInterface
     private int Health;
     public int MaxHealth_ { get => MaxHealth; set => MaxHealth = value; }
     private int MaxHealth = 1;
-    public Elements[] DamageImmunities_ { get => null; set => _ = value; }
+    public Elements[] DamageImmunities_ { get => new Elements[0]; set => _ = value; }
+    public Elements activeElement; public Elements inactiveElement = Elements.NULL;
 
-
-    public Shader shader;
-
-    public void TakeDamage(float damage, Elements damageType, SpellTemplates damageSource = SpellTemplates.NULL) {
-        if(damageType != element) {
-            return;
+    // Start is called before the first frame update
+    private void Start() {
+        Health_ = MaxHealth_;
+        EntityProperties_ = new Properties[] { Properties.Immovable };
+        currentState_ = false;
+        UpdateSprite();    
+    }
+    public void UpdateReciever() {
+        foreach (iRecieverObject target in targetObjects_) {
+            target.CheckSenders(this);
         }
-        Health_ -= Mathf.RoundToInt(damage);
-        Health_ = Mathf.Clamp(Health_, 0, MaxHealth_);
-        if (0 >= Health_) {
+    }
+    private void UpdateSprite() {
+        if (!currentState_) {
+            GetComponent<SpriteRenderer>().material = SpellRenderer.Instance.CreateMaterial(ColourDict[activeElement]);
+        } else {
+            GetComponent<SpriteRenderer>().material = SpellRenderer.Instance.CreateMaterial(ColourDict[inactiveElement]);
+        }
+    }
+    public void TakeDamage(float damage, Elements damageType, SpellTemplates damageSource = SpellTemplates.NULL) {
+        if(damageType == activeElement && currentState_) {
+            EntityDeath();
+        } else if (damageType != inactiveElement && !currentState_) {
             EntityDeath();
         }
     }
-
     public void EntityDeath() {
-        currentState_ = true;
+        currentState_ = !currentState_;
+        UpdateSprite();
+    }    
+    public void ValidateFunction() {
         UpdateSprite();
     }
-
-    private void OnValidate() {
-        //shader = FindObjectOfType<SpellRenderer>().shader;
-        materials = new Material[] { CreateMaterial(ColourDict[Elements.NULL], shader), CreateMaterial(ColourDict[element], shader) };
-        UpdateSprite();
+    public void ResetSender() {
+        throw new System.NotImplementedException();
     }
 }

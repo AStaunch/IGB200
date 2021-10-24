@@ -42,4 +42,8 @@ public class TriggerArea : MonoBehaviour, iSenderObject
             DialogueManager.Instance.StartDialogue(dialogue);
         }
     }
+
+    public void ResetSender() {
+        currentState_ = false;
+    }
 }
