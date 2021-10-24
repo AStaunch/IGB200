@@ -159,7 +159,7 @@ public class CraftingSyst : MonoBehaviour
 
     IEnumerator BuildSet()
     {
-        Debug.Log("Select Hotbar slot to place spell");
+        //Debug.Log("Select Hotbar slot to place spell");
         bool KeyChosen = false;
         //Hotbar_msg.gameObject.SetActive(true);
         GameObject.FindGameObjectWithTag("TextBox").GetComponent<DebugBox>().inputs.Add("'System: Select hotbar slot'");

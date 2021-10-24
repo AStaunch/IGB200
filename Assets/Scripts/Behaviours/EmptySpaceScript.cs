@@ -82,37 +82,34 @@ public class EmptySpaceScript : MonoBehaviour, iHealthInterface
     }
 
     private void ChainReactionElecticity() {
-        int mask = 1 << 2 | 1 << 6 ;
-        foreach (Collider2D collider in Physics2D.OverlapCircleAll(transform.position, 1f, mask)) {
+        foreach (Collider2D collider in Physics2D.OverlapCircleAll(transform.position, 1f, 1 << 2)) {
             if (collider.TryGetComponent(out iHealthInterface iHealth)) {
                 if (collider.TryGetComponent(out EmptySpaceScript ESS)) {
-                    if (!ESS.isElectric_) {
+                    if (!ESS.isFrozen_ && !ESS.isElectric_) {
                         ESS.TakeDamage(1f, Elements.Electricity, SpellTemplates.Orb);
                     }
-                } else {
-                    iHealth.TakeDamage(1f, Elements.Electricity, SpellTemplates.Orb);
                 }
+            }
+        }
+        int mask = 1 << 6 | 1 << 7;
+        foreach (Collider2D collider in Physics2D.OverlapCircleAll(transform.position, 1f, mask)) {
+            if (collider.TryGetComponent(out iHealthInterface iHealth)) {
+                iHealth.TakeDamage(1f, Elements.Electricity);
             }
         }
     }
 
     private IEnumerator FreezeForTime(float duration) {
-        float time = 0;
-        while (time < duration && isFrozen_ == true) {
-            time += Time.deltaTime;
-            yield return null;
-        }
+        yield return new WaitForSeconds(duration);
         isFrozen_ = false;
     }
 
     private IEnumerator ElectricForTime(float duration) {
-        float time = 0;
-        isElectric = true;
-        while (time < duration && !isFrozen_) {
-            time += Time.deltaTime;
-            yield return null;
-        }
-        isElectric = false;
+        isElectric_ = true;
+        Debug.Log("Elec Start");
+        yield return new WaitForSeconds(duration);
+        isElectric_ = false;
+        Debug.Log("Elec Start");
     }
 
     public void TakeDamage(float damage, Elements damageType, SpellTemplates damageSource = SpellTemplates.NULL) {
@@ -126,6 +123,7 @@ public class EmptySpaceScript : MonoBehaviour, iHealthInterface
                 isFrozen_ = false;
             } else if (damageType == Elements.Electricity) {
                 if(!isFrozen_ && !isElectric_ && damageSource == SpellTemplates.Orb) {
+                    StartCoroutine(ElectricForTime(0.1f));
                     ChainReactionElecticity();
                 }
             }
@@ -141,6 +139,6 @@ public class EmptySpaceScript : MonoBehaviour, iHealthInterface
     public Properties[] EntityProperties_ { get => new Properties[0]; set => _ = value; }
     public EntityTypes EntityType_ => EntityTypes.Object;
 
-    public bool isElectric_ { get => isElectric; set => StartCoroutine(ElectricForTime(0.1f)); }
+    public bool isElectric_ { get => isElectric; set => isElectric = value; }
     private bool isElectric;
 }

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1785327433261891598}
   - component: {fileID: 6670939073870354013}
   - component: {fileID: 8518115562787084161}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: OrbObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -152,7 +152,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2863673625490691008}
   - component: {fileID: 3334711544642932840}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: DropShadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}

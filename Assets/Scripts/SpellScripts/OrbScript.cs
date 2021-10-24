@@ -22,6 +22,7 @@ public class OrbScript : MonoBehaviour, iPhysicsInterface
     // Start is called before the first frame update
     void Start() {
         Anim_.speed = 1f;
+        gameObject.layer = 6;
     }
     public void AlertObservers(AnimationEvents message) {
         if (message == AnimationEvents.Start) {

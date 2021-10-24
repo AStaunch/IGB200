@@ -66,18 +66,18 @@ public class DebugBox : MonoBehaviour
 
         if (text.text != "" && inputs.Count == 0 && t_time <= Time.timeSinceLevelLoad && Grad_remove == null)
         {
-            Debug.Log("fuck");
+            //Debug.Log("fuck");
             Grad_remove = StartCoroutine(Rem());
         }
         else if (t_time >= Time.timeSinceLevelLoad && Grad_remove != null)
         {
-            Debug.Log("kcuf");
+            //Debug.Log("kcuf");
             StopCoroutine(Grad_remove);
             Grad_remove = null;
         }
         else if (Grad_remove != null && text.text == "")
         {
-            Debug.Log("kfuc");
+            //Debug.Log("kfuc");
             StopCoroutine(Grad_remove);
             Grad_remove = null;
             image.color = new Color(0.1981f, 0.1981f, 0.1981f, 0f);

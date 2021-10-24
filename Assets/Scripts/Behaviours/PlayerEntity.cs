@@ -78,6 +78,18 @@ public class PlayerEntity : AbstractCreature
             NoClip = !NoClip;
             CollisionCollider.isTrigger = NoClip;
         }
+
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.LeftBracket)) {
+            string[] UnlockNames = UnlockManager.Instance.Registry.AllKeys();
+            foreach (string UnlockName in UnlockNames) {
+                if (Array.Exists(UnlockManager.Instance.Registry.AllKeys(), (e) => { return e == UnlockName; })) {
+                    UnlockManager.Instance.Registry.UnlockItem(UnlockName);
+                    GameObject.FindGameObjectWithTag("TextBox").GetComponent<DebugBox>().inputs.Add("Spell.unlock(" + UnlockName + ");");
+                } else {
+                    throw new Exception($"Item by the name {UnlockName} does not exist within the unlock manager");
+                }
+            }
+        }
     }
     public void CastSpell(SpellTemplate CallingSpell)
     {

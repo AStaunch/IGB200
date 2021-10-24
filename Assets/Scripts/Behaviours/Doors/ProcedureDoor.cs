@@ -57,31 +57,17 @@ public class ProcedureDoor : AbstractLockedDoor, iRecieverObject
                 InputBools[i] = iSender.currentState_;
                 InputSenders[i] = iSender;
                 return;
-
-
-                if (i < Switches.Length - 1) {
-                    InputBools[i] = InputBools[i + 1];
-                    InputSenders[i] = InputSenders[i + 1];
-                } else {
-
-                }
             }
         }
     }
     public void UpdateStates(iSenderObject iSender) {
         for (int i = 0; i < Switches.Length; i++) {
-            //if (isSolved[i]) {
-            //    if (InputSenders[i] == iSender) {
-            //        return;
-            //    }
-            //} else {
             bool SameState = InputBools[i];
             bool SameObject = InputSenders[i] == SolutionSenders[i];
             isSolved[i] = SameState && SameObject;
             if (SolutionSenders[i] == iSender) {
                 return;
-            }
-            //}            
+            }         
         }
     }
     protected new iSenderObject[] GetSwitches() {
