@@ -73,7 +73,7 @@ public class DialogueManager : MonoBehaviour
         for (int i = 0; i < transform.childCount; i++) {
             transform.GetChild(i).gameObject.SetActive(false);
         }
-        Debug.Log("End Dialogue");
+        Debug.Log("End Dialogue"); 
         Time.timeScale = 1;
         //GetComponent<Animator>().SetTrigger("Close");
         IsOpen = false;
