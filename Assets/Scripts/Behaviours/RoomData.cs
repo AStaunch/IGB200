@@ -30,7 +30,7 @@ public class RoomData : MonoBehaviour
     //    }
     //}
     #endregion
-
+    public bool isInterestPoint_;
     public GameObject[] SolveObjects;
     private List<GameObject> RoomObjects_  = new List<GameObject>();
     private List<AbstractDoor> RoomDoors_ = new List<AbstractDoor>();
@@ -47,24 +47,29 @@ public class RoomData : MonoBehaviour
     private bool hasVisited = false;
     public bool hasChest_ { get { return hasChest; } set { hasChest = value; } }
     private bool hasChest = false;
+
     private int m_LayerMask = ~ (1 << 8);
-    [HideInInspector]
-    public GameObject Icon;
+    internal GameObject Icon;
+
+    private bool needsIcon { get => hasChest_ || isInterestPoint_; }
     void Start() {
-        //PlayerRef = PlayerEntity.Instance.gameObject;
         //Use this to ensure that the Gizmos are being drawn when in Play Mode.
         spriteRenderer.enabled = false;
         CreateData();
 
-        Icon = new GameObject(transform.name +" icon");
-        Icon.transform.position = transform.position;
-
-        float smallestSide = 0.5f * (Mathf.Min(transform.localScale.x, transform.localScale.y));
-        Icon.layer = 5;
-        Icon.gameObject.transform.localScale *= smallestSide;
-        Icon.transform.parent = transform;
-        Icon.AddComponent<SpriteRenderer>().material = spriteRenderer.material;
-        Icon.SetActive(false);
+        if (needsIcon) {
+            Icon = new GameObject(transform.name + " icon");
+            Icon.transform.position = transform.position;
+            float smallestSide = 0.5f * (Mathf.Min(transform.localScale.x, transform.localScale.y));
+            Icon.layer = 5;
+            Icon.gameObject.transform.localScale *= smallestSide;
+            Icon.transform.parent = transform;
+            SpriteRenderer isr = Icon.AddComponent<SpriteRenderer>();
+            isr.material = spriteRenderer.material;
+            isr.sortingLayerName = "VFX";
+            isr.sortingOrder = 10;
+            Icon.SetActive(false);
+        }
     }
     private void CreateData() {
         GetComponent<Collider2D>().enabled = true;
@@ -89,7 +94,6 @@ public class RoomData : MonoBehaviour
         }   
         GetComponent<Collider2D>().enabled = false;
     }
-
     private void UpdateData() {
         foreach (GameObject gameObject in RoomObjects_.ToArray()) {
             //LoadedObjects.Remove(gameObject);
@@ -134,6 +138,8 @@ public class RoomData : MonoBehaviour
         }
         if(collider.transform.TryGetComponent(out PlayerEntity playerEntity)) {
             playerEntity.StartRoomData_ = this;
+            isLoaded_ = true;
+            hasVisited_ = true;
             return;
         }
 

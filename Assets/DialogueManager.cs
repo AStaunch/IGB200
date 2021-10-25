@@ -23,6 +23,9 @@ public class DialogueManager : MonoBehaviour
     private Queue<string> sentences;
     private bool IsOpen;
 
+    private float textSpeed = 0.075f;
+    private bool donePrinting = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,8 +34,10 @@ public class DialogueManager : MonoBehaviour
     }
 
     private void Update() {
-        if(IsOpen && Input.GetKeyUp(KeyCode.Space)) {
+        if(IsOpen && Input.GetKeyUp(KeyCode.Space) && donePrinting) {
             DisplayNextSentence();
+        } else if (IsOpen && Input.GetKeyUp(KeyCode.Space) && !donePrinting) {
+            textSpeed = 0f;
         }
     }
 
@@ -48,6 +53,7 @@ public class DialogueManager : MonoBehaviour
     }
 
     private void DisplayNextSentence() {
+        //StopCoroutine("WriteSentence");
         Debug.Log("Display Next Dialogue");
         if (sentences.Count == 0) {
             EndDialogue();
@@ -55,10 +61,25 @@ public class DialogueManager : MonoBehaviour
         }
 
         string sentence = sentences.Dequeue();
-        dialogText.text = sentence;
+        dialogText.text = "";
+        StartCoroutine(WriteSentence(sentence));
     }
 
-    private void OpenDialogue() {
+    IEnumerator WriteSentence(string sentence) {
+        donePrinting = false;
+        textSpeed = 0.075f;
+        foreach (char Char in sentence.ToCharArray()) {
+            dialogText.text += Char;
+            if(Char == ' ') {
+                yield return null;
+            } else {
+                yield return new WaitForSecondsRealtime(textSpeed);
+            }
+        }
+        donePrinting = true;
+    }
+
+private void OpenDialogue() {
         Time.timeScale = 0;
         for (int i = 0; i < transform.childCount; i++) {
             transform.GetChild(i).gameObject.SetActive(true);

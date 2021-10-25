@@ -70,8 +70,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 1771340957
-  m_SortingLayer: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -6315338081298181389, guid: b70a6685bc103304c9105438d8c921ca, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -123,7 +123,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   walkThroughSoundEffect: {fileID: 6187046135797150018, guid: 3364cfdb60bd5ce4e88811a6f85ea207, type: 3}
-  isTriggerDoor: 0
   isSolveTrigger: 0
   isException: 0
   ExitDoor: {fileID: 0}

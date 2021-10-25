@@ -116,7 +116,12 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
         }
     }
     public void UpdateSorting() {
-        GetComponent<Renderer>().sortingOrder = -Mathf.RoundToInt(transform.position.y);
+        if (PhysicsCollider) {
+            GetComponent<Renderer>().sortingOrder = -Mathf.RoundToInt(PhysicsCollider.bounds.center.y);
+        } else {
+            GetComponent<Renderer>().sortingOrder = -Mathf.RoundToInt(transform.position.y);
+        }
+
     }
 
     public abstract void  UpdateVelocity(float magnitude, Vector3 direction);

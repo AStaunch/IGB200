@@ -41,7 +41,6 @@ public class MapManager : MonoBehaviour
         }
 
     }
-
     void LoadMenu() {
         Time.timeScale = 0;
         isLoaded = true;
@@ -56,11 +55,19 @@ public class MapManager : MonoBehaviour
                 Room.spriteRenderer.color = Color.red;
             } else {
                 Room.spriteRenderer.color = Color.green;
+                if (Room.isInterestPoint_ && Room.Icon) {
+                    Room.Icon.SetActive(isLoaded);
+                    Room.Icon.GetComponent<SpriteRenderer>().sprite = SpriteDict["ChestSprites"][0];
+                }
             }
 
-            if(Room.hasVisited_ && Room.hasChest_ && Room.Icon) {
+            if(Room.hasChest_ && Room.Icon) {
                 Room.Icon.SetActive(isLoaded);
-                Room.Icon.GetComponent<SpriteRenderer>().sprite = SpriteDict["ChestSprites"][0];
+                if (Room.hasVisited_) {
+                    Room.Icon.GetComponent<SpriteRenderer>().sprite = SpriteDict["ChestSprites"][1];
+                } else {
+                    Room.Icon.GetComponent<SpriteRenderer>().sprite = SpriteDict["ChestSprites"][0];
+                }                
             } else {
 
             }

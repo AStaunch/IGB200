@@ -30,7 +30,7 @@ public class TriggerArea : MonoBehaviour, iSenderObject
         if(collision.TryGetComponent(out PlayerEntity _) && collision.isTrigger && !currentState_) {
             currentState_ = true;
             TriggerDialogue();
-            Destroy(this.GetComponent<Collider>());
+            Destroy(this.GetComponent<Collider2D>());
         }
     }
 
