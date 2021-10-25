@@ -8,6 +8,7 @@ public class ProjectileScript : MonoBehaviour
     public Vector3 Direction;
     public float Damage;
     public EnumsAndDictionaries.Elements element;
+    public GameObject Shooter;
 
     // Update is called once per frame
     void Start() {
@@ -18,14 +19,20 @@ public class ProjectileScript : MonoBehaviour
     }
     void Update()
     {
-        transform.position += Velocity * Direction.normalized;
+        transform.position += Velocity * Time.deltaTime * Direction.normalized;
     }
-
     private void OnTriggerEnter2D(Collider2D collision) {
-        if (!collision.isTrigger) {
-            if(collision.transform.TryGetComponent(out iHealthInterface iHealth)) {
+        if (!collision.isTrigger || collision.gameObject != Shooter) {
+            if (collision.transform.TryGetComponent(out iHealthInterface iHealth)) {
                 iHealth.TakeDamage(Damage, element);
+                Debug.Log("Projectile Hit " + collision.transform.name);
             }
+            Destroy(this.gameObject);
+            Debug.Log("Trigger");
         }
+        //if (collision.gameObject.layer == 8) {
+        //    Destroy(this.gameObject);
+        //    Debug.Log("TriggerWall");
+        //}
     }
 }

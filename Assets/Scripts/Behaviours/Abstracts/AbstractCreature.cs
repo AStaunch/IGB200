@@ -73,6 +73,9 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
             Instantiate(SoundDict[SoundName]);
             return;
         }
+        if(damageType == Elements.Life) {
+            damageInt *= -1;
+        }
         //Instantiate Damage Sound        
         Instantiate(SoundDict[SoundName]);
         //Create Damage Effect
@@ -92,8 +95,8 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
                 SpriteRoutine =  TintSprite(0.1f, Color.red);
                 StartCoroutine(SpriteRoutine);
             } else if (damageInt < 0) {
-                Debug.Log($"{transform.name} is healed for {damageInt} points!");
-                SpriteRoutine = TintSprite(0.1f, Color.green);
+                Debug.Log($"{transform.name} is healed for {-1 * damageInt} points!");
+                SpriteRoutine = TintSprite(0.3f, Color.green);
                 StartCoroutine(SpriteRoutine);
             }
             //Process Health
@@ -142,6 +145,7 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
 
 
     public void AlertObservers(AnimationEvents message) {
+        Debug.Log(transform.name + " recieved message " + message);
         if (message.Equals(AnimationEvents.Death)) {
             EntityDeath();
         }else if (message.Equals(AnimationEvents.Fall)){

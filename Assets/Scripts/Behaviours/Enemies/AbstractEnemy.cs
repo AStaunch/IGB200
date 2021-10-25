@@ -27,11 +27,13 @@ public abstract class AbstractEnemy : AbstractCreature, iEnemyInterface
     }
 
     public override void EntityDeath() {
+        Debug.Log(transform.name + " Died");
         Instantiate(SoundManager.SoundDict["EnemyDeathSound"]);
         Destroy(this.gameObject);
     }
-
+        
     protected override void EntityFall() {
+        Debug.Log(transform.name + " Fell");
         EntityDeath();
     }
 

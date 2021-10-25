@@ -88,7 +88,6 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
             return;
         if (IsOpen) {
             ExitDoor.IsOpen = IsOpen;
-            ExitDoor.GetComponent<Collider2D>().isTrigger = true;
         }
         if (isInvulnerable) {
             ExitDoor.isInvulnerable = isInvulnerable;
@@ -99,7 +98,6 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
         if (!ExitDoor)
             return;
         ExitDoor.IsOpen = IsOpen;
-        ExitDoor.GetComponent<Collider2D>().isTrigger = true;
         ExitDoor.isInvulnerable = isInvulnerable;
         ExitDoor.UpdateSprite();
     }
@@ -118,14 +116,15 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
             }
         }
         IsOpen = newState;
-        GetComponent<Collider2D>().isTrigger = true;
         UpdateSprite();
         SyncExitDoor();
     }
     protected Sprite currentSprite;
     public void UpdateSprite() {
         try {
-            
+            GetComponent<SpriteRenderer>().sortingOrder = - (int)transform.position.y;
+            GetComponent<SpriteRenderer>().sortingLayerName = "Default";
+            GetComponent<Collider2D>().isTrigger = true;
             if (IsOpen || ExitDoor.IsOpen) {
                 GetComponent<SpriteRenderer>().sprite = SpriteDict["OpenDoor"][IntDict[CurrentDirection_]];
             } else if (isInvulnerable || ExitDoor.isInvulnerable) {
