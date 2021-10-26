@@ -7,27 +7,25 @@ using static EnumsAndDictionaries;
 
 public class ProcedureDoor : AbstractLockedDoor, iRecieverObject
 {
-    [SerializeField]
-    public GameObject[] Switches;
     private bool[] InputBools;
     private iSenderObject[] InputSenders;
     private iSenderObject[] SolutionSenders;
     // Start is called before the first frame update
     void Start() {
         isInvulnerable = true;
-        if (Switches.Length > 0) {
+        if (switchGameObjects.Length > 0) {
             switchObjects_ = GetSwitches();
             foreach (iSenderObject iSender in switchObjects_) {
                 iSender.targetObjects_.Add(this);
             }
         }
-        isSolved = new bool[Switches.Length];
-        InputBools = new bool[Switches.Length];
-        InputSenders = new iSenderObject[Switches.Length];
-        SolutionSenders = new iSenderObject[Switches.Length];
+        isSolved = new bool[switchGameObjects.Length];
+        InputBools = new bool[switchGameObjects.Length];
+        InputSenders = new iSenderObject[switchGameObjects.Length];
+        SolutionSenders = new iSenderObject[switchGameObjects.Length];
 
-        for (int i = 0; i < Switches.Length; i++) {
-            SolutionSenders[i] = Switches[i].GetComponent<iSenderObject>();
+        for (int i = 0; i < switchGameObjects.Length; i++) {
+            SolutionSenders[i] = switchGameObjects[i].GetComponent<iSenderObject>();
         }
     }
     public override void CheckSenders(iSenderObject iSender) {
@@ -40,7 +38,7 @@ public class ProcedureDoor : AbstractLockedDoor, iRecieverObject
     }
 
     private void ResetSwitches() {
-        for (int i = 0; i < Switches.Length; i++) {
+        for (int i = 0; i < switchGameObjects.Length; i++) {
             if (!isSolved[i] && InputSenders[i] != null) {
                 InputSenders[i].ResetSender();
             }
@@ -49,7 +47,7 @@ public class ProcedureDoor : AbstractLockedDoor, iRecieverObject
 
     bool[] isSolved;
     public void UpdateInput(iSenderObject iSender) {
-        for (int i = 0; i < Switches.Length; i++) {
+        for (int i = 0; i < switchGameObjects.Length; i++) {
             if (InputSenders[i] == iSender) {
                 return;
             }
@@ -61,7 +59,7 @@ public class ProcedureDoor : AbstractLockedDoor, iRecieverObject
         }
     }
     public void UpdateStates(iSenderObject iSender) {
-        for (int i = 0; i < Switches.Length; i++) {
+        for (int i = 0; i < switchGameObjects.Length; i++) {
             bool SameState = InputBools[i];
             bool SameObject = InputSenders[i] == SolutionSenders[i];
             isSolved[i] = SameState && SameObject;
@@ -71,9 +69,9 @@ public class ProcedureDoor : AbstractLockedDoor, iRecieverObject
         }
     }
     protected new iSenderObject[] GetSwitches() {
-        iSenderObject[] returnValue = new iSenderObject[Switches.Length];
-        for (int i = 0; i < Switches.Length; i++) {
-            if(Switches[i].TryGetComponent(out iSenderObject si))
+        iSenderObject[] returnValue = new iSenderObject[switchGameObjects.Length];
+        for (int i = 0; i < switchGameObjects.Length; i++) {
+            if(switchGameObjects[i].TryGetComponent(out iSenderObject si))
             returnValue[i] = si;
         }
         return returnValue;
