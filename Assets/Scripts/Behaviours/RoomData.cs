@@ -71,6 +71,19 @@ public class RoomData : MonoBehaviour
             Icon.SetActive(false);
         }
     }
+    public void SortScene() {
+        Collider2D[] hitColliders = Physics2D.OverlapAreaAll(GetComponent<Collider2D>().bounds.min, GetComponent<Collider2D>().bounds.max, m_LayerMask);
+        foreach (Collider2D collider in hitColliders) {
+            bool b1 = collider.transform.TryGetComponent(out iRecieverObject _) || collider.transform.TryGetComponent(out iSenderObject _);
+            bool b2 = collider.transform.TryGetComponent(out iPropertyInterface _);
+            bool b3 = collider.transform.TryGetComponent(out AbstractDoor _) || collider.transform.TryGetComponent(out ChestScript _);
+            bool Allowed = b1 || b2 || b3;
+            bool Banned = collider.transform.TryGetComponent(out RoomData _) || collider.transform.TryGetComponent(out EmptySpaceScript _);
+            if (Allowed && !Banned) {
+                collider.transform.parent = this.transform;
+            }
+        }
+    }
     private void CreateData() {
         GetComponent<Collider2D>().enabled = true;
         Collider2D[] hitColliders = Physics2D.OverlapAreaAll(GetComponent<Collider2D>().bounds.min, GetComponent<Collider2D>().bounds.max, m_LayerMask);
@@ -155,11 +168,13 @@ public class RoomData : MonoBehaviour
         Unload();
         hasVisited_ = true;
         foreach (GameObject gameObject in RoomObjects_) {
+            gameObject.transform.parent = null;
             GameObject clone = Instantiate(gameObject, gameObject.transform.position, gameObject.transform.rotation);
             clone.transform.parent = this.transform;
             clone.SetActive(true);
             clone.AddComponent<LoadedObject>().roomDataParent = this;
             LoadedObjects.Add(clone);
+            gameObject.transform.parent = this.transform;
         }
         foreach (GameObject iSender in RoomSwitches_) {
             iSender.GetComponent<iSenderObject>().currentState_ = false;

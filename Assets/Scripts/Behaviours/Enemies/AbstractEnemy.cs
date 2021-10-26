@@ -25,18 +25,15 @@ public abstract class AbstractEnemy : AbstractCreature, iEnemyInterface
             RB_.velocity *= 0.1f;
         }
     }
-
     public override void EntityDeath() {
         Debug.Log(transform.name + " Died");
         Instantiate(SoundManager.SoundDict["EnemyDeathSound"]);
         Destroy(this.gameObject);
-    }
-        
+    }        
     protected override void EntityFall() {
         Debug.Log(transform.name + " Fell");
         EntityDeath();
     }
-
     public override void UpdateAnimation(Vector3 change) {
         if (change != Vector3.zero) {
             Anim_.SetFloat("moveX", change.x);
@@ -46,8 +43,13 @@ public abstract class AbstractEnemy : AbstractCreature, iEnemyInterface
             Anim_.SetBool("moving", false);
         }
     }
-
     public override void UpdateVelocity(float magnitude, Vector3 direction) {
         RB_.velocity = magnitude * direction;
+    }
+    private void OnCollisionEnter2D(Collision2D collision) {
+        EnterVoid(collision);
+    }
+    private void OnCollisionExit2D(Collision2D collision) {
+        //LeaveVoid(collision);
     }
 }

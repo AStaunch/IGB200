@@ -14,7 +14,6 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
     public int MaxHealth = 1;
     public Elements[] DamageImmunities_ { get => DamageImmunities; set => DamageImmunities = value; }
     public Elements[] DamageImmunities = new Elements[0];
-
     public Properties[] EntityProperties_ { get => EntityProperties; set => EntityProperties = value; }
     [SerializeField]
     private Properties[] EntityProperties = new Properties[0];
@@ -41,28 +40,23 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
         }
     }
     protected Material DefaultMat;
-
     private void FixedUpdate() {
         Decelerate();
         UpdateSorting();
     }
-
     private void Awake() {
         GetComponent<SpriteRenderer>().sortingLayerName = "Objects";
     }
     public Vector2 GetEntityDirection() {
         return VectorDict[CurrentDirection_];
     }
-
     public Directions GetEntityDirectionEnum() {
         return CurrentDirection_;
     }
-
     public int GetEntityFacing() {
         return IntDict[CurrentDirection_];
     }
     IEnumerator SpriteRoutine = null;
-
     public void TakeDamage(float damage, Elements damageType, SpellTemplates damageSource = SpellTemplates.NULL) {
         damage = ComputeSpellStrength(damageType, EntityProperties_, damage);
         int damageInt = Mathf.RoundToInt(damage);
@@ -110,9 +104,7 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
             GameObject.FindGameObjectWithTag("TextBox").GetComponent<DebugBox>().inputs.Add("Object.Destroy(collision.enemy);");
         }
     }
-
     public abstract void UpdateAnimation(Vector3 change);
-
     public void UpdateDirection(Vector3 change) {
         if (change != Vector3.zero) {
             CurrentDirection_ = VectorToDirection(change);
@@ -177,6 +169,62 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
         } else {
             return;
         }
+    }
+    private void OnCollisionStay2D(Collision2D collision) {
+        EnterVoid(collision);
+    }
+    private bool[] EdgeChecks = new bool[4];
+    internal void EnterVoid(Collision2D collision) {
+        if (collision.gameObject.TryGetComponent(out EmptySpaceScript _) && gameObject.layer != 6) {
+            //check NE corner
+            Vector2 NE = PhysicsCollider.bounds.max;
+            if (CheckIfContained(NE, collision.collider)) EdgeChecks[0] = true;
+            //check NW corner
+            Vector2 NW = new Vector2(PhysicsCollider.bounds.min.x, PhysicsCollider.bounds.max.y);
+            if (CheckIfContained(NW, collision.collider)) EdgeChecks[1] = true;
+            //check SE corner
+            Vector2 SE = new Vector2(PhysicsCollider.bounds.max.x, PhysicsCollider.bounds.min.y);
+            if (CheckIfContained(SE, collision.collider)) EdgeChecks[2] = true;
+            //check SW corner
+            Vector2 SW = GetComponent<Collider2D>().bounds.min;
+            if (CheckIfContained(SW, collision.collider)) EdgeChecks[3] = true;
+            bool IsContained = !EdgeChecks.Contains(false);
+            Debug.Log($"{NE} {NW} {SE} {SW}");
+            string msg = "";
+            foreach(bool boo in EdgeChecks) {
+                msg += boo + " ";
+            }
+            Debug.Log(msg + transform.name);
+            if (IsContained) {
+                Debug.LogWarning(transform.name + " has fallen into the River");
+                Anim_.SetTrigger("fall");
+            }
+        }
+    }
+    internal void LeaveVoid(Collision2D collision) {
+        if (collision.gameObject.TryGetComponent(out EmptySpaceScript _) && gameObject.layer != 6) {
+            //check NE corner
+            Vector2 NE = PhysicsCollider.bounds.max;
+            if (CheckIfContained(NE, collision.collider)) EdgeChecks[0] = true;
+            //check NW corner
+            Vector2 NW = new Vector2(PhysicsCollider.bounds.min.x, PhysicsCollider.bounds.max.y);
+            if (CheckIfContained(NW, collision.collider)) EdgeChecks[1] = true;
+            //check SE corner
+            Vector2 SE = new Vector2(PhysicsCollider.bounds.max.x, PhysicsCollider.bounds.min.y);
+            if (CheckIfContained(SE, collision.collider)) EdgeChecks[2] = true;
+            //check SW corner
+            Vector2 SW = GetComponent<Collider2D>().bounds.min;
+            if (CheckIfContained(SW, collision.collider)) EdgeChecks[3] = true;
+            bool IsContained = !EdgeChecks.Contains(false);
+            if (IsContained) {
+                Anim_.SetTrigger("fall");
+            }
+        }
+    }
+    private bool CheckIfContained(Vector2 vector2, Collider2D collider) {
+        bool XBounds = vector2.x > collider.bounds.min.x && vector2.x < collider.bounds.max.x;
+        bool YBounds = vector2.y > collider.bounds.min.y && vector2.y < collider.bounds.max.y;
+        return XBounds && YBounds;
     }
     protected abstract void EntityFall();
     public abstract void Decelerate();

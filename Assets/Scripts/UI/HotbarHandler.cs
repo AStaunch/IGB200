@@ -20,7 +20,7 @@ public class HotbarHandler : MonoBehaviour
         public SpellTemplate template;
         public void run()
         {
-            template.RunFunction(effector);
+            template.RunFunction(effector);     
         }
     }
 

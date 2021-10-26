@@ -53,7 +53,7 @@ MonoBehaviour:
   DamageImmunities: 000000000100000002000000060000000700000008000000
   EntityProperties: 0000000009000000
   Speed: 0.5
-  AttackDelay: 2
+  AttackDelay: 4
   EntityDamage: 2
   DamageType: 8
   Projectile: {fileID: 8796769972016898954, guid: a56005c5e9d282048b61373a6eff513e, type: 3}

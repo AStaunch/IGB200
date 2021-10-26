@@ -155,7 +155,8 @@ public class PlayerEntity : AbstractCreature
             rb.isKinematic = true;
             rb.useFullKinematicContacts = true;
             rb.velocity = Vector2.zero;
-        }        
+        }
+        EnterVoid(collision);
     }
     private void OnCollisionExit2D(Collision2D collision) {
         if (collision.transform.TryGetComponent(out Rigidbody2D rb)){
@@ -163,12 +164,8 @@ public class PlayerEntity : AbstractCreature
                 collidedObjects.Remove(rb);
                 rb.isKinematic = false;
             }
-        }        
-    }
-    private void OnCollisionStay2D(Collision2D collision) {
-        if(gameObject.layer != 6) {
-            CheckFalling(collision);
         }
+        LeaveVoid(collision);
     }
 
 }

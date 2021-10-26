@@ -25,11 +25,13 @@ public class RangedEnemy : AbstractEnemy
         projectile.Shooter = this.gameObject;
         lastAttackDir = Direction;
     }
-    private float Range = 20f;
-    public void Update() {
+    public float Range = 20f;
+    public new void  Update() {
         if (Vector3.Distance(transform.position, PlayerEntity.Instance.transform.position) < Range && AttackTime < Time.timeSinceLevelLoad) {
             Attack(PlayerEntity.Instance.transform.position - transform.position);
             AttackTime_ = AttackDelay;
+            UpdateAnimation(PlayerEntity.Instance.transform.position - transform.position);
         }
+
     }
 }

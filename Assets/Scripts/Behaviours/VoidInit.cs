@@ -64,6 +64,11 @@ public class VoidInit : MonoBehaviour
         while (transform.childCount > 0){
             DestroyImmediate(transform.GetChild(transform.childCount - 1).gameObject);
         }
+        EmptySpaceScript[] AllVoids = FindObjectsOfType<EmptySpaceScript>();
+        foreach (EmptySpaceScript gameObject in AllVoids) {
+            VoidTiles.Remove(gameObject.gameObject);
+            DestroyImmediate(gameObject.gameObject);
+        }
         VoidTiles = new List<GameObject>();
     }
 
