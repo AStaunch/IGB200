@@ -5,13 +5,15 @@ using UnityEngine;
 using static EnumsAndDictionaries;
 public abstract class AbstractEnemy : AbstractCreature, iEnemyInterface
 {
-    public float AttackDelay;
+    public static float AttackDelay = 3;
     public float EntityDamage;
     public Elements DamageType = Elements.NULL;
     public float EntityDamage_ { get => EntityDamage; set => EntityDamage = value; }
-
+    public float AttackTime_ { get { return AttackTime; } set { AttackTime = Time.timeSinceLevelLoad + value; } }//Automatically update the cast time to the new time
+    private float AttackTime = 0;
     public override bool IsEnemy => true;
     public void Start() {
+        AttackTime_ = AttackDelay;
         DefaultMat = GetComponent<SpriteRenderer>().material;
         Health_ = MaxHealth_;
     }
@@ -21,7 +23,7 @@ public abstract class AbstractEnemy : AbstractCreature, iEnemyInterface
     }
     public abstract Vector3 CalculateFacing();
     public override void Decelerate() {
-        if (RB_.velocity != Vector2.zero && gameObject.layer == 7) {
+        if (RB_.velocity != Vector2.zero && gameObject.layer != 6) {
             RB_.velocity *= 0.1f;
         }
     }

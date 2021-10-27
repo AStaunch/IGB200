@@ -78,7 +78,7 @@ public class RoomData : MonoBehaviour
             bool b2 = collider.transform.TryGetComponent(out iPropertyInterface _);
             bool b3 = collider.transform.TryGetComponent(out AbstractDoor _) || collider.transform.TryGetComponent(out ChestScript _);
             bool Allowed = b1 || b2 || b3;
-            bool Banned = collider.transform.TryGetComponent(out RoomData _) || collider.transform.TryGetComponent(out EmptySpaceScript _);
+            bool Banned = collider.transform.TryGetComponent(out RoomData _) || collider.transform.TryGetComponent(out EmptySpaceScript _) || collider.transform.TryGetComponent(out PlayerEntity _);
             if (Allowed && !Banned) {
                 collider.transform.parent = this.transform;
             }
@@ -167,6 +167,10 @@ public class RoomData : MonoBehaviour
     public void Load() {
         Unload();
         hasVisited_ = true;
+        ProjectileScript[] pss = FindObjectsOfType<ProjectileScript>();
+        foreach (ProjectileScript ps in pss) {
+            Destroy(ps.gameObject);
+        }
         foreach (GameObject gameObject in RoomObjects_) {
             gameObject.transform.parent = null;
             GameObject clone = Instantiate(gameObject, gameObject.transform.position, gameObject.transform.rotation);

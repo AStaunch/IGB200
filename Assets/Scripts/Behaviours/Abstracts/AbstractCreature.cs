@@ -13,15 +13,16 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
     public int MaxHealth_ { get => MaxHealth; set => MaxHealth = value; }
     public int MaxHealth = 1;
     public Elements[] DamageImmunities_ { get => DamageImmunities; set => DamageImmunities = value; }
-    public Elements[] DamageImmunities = new Elements[0];
+    [SerializeField]
+    private Elements[] DamageImmunities = new Elements[0];
     public Properties[] EntityProperties_ { get => EntityProperties; set => EntityProperties = value; }
     [SerializeField]
     private Properties[] EntityProperties = new Properties[0];
     public EntityTypes EntityType_ { get => EntityType; set => EntityType = value; }
     private EntityTypes EntityType = EntityTypes.Creature;
-    public float EntitySpeed_ { get => Speed; set => Speed = value; }
+    public float EntitySpeed_ { get => EntitySpeed; set => EntitySpeed = value; }
     [SerializeField]
-    private float Speed = 0.5f;
+    private float EntitySpeed = 0.5f;
     public Animator Anim_ { get => GetComponent<Animator>();}
     public Directions CurrentDirection_ { get => CurrentDirection; set => CurrentDirection = value; }
     private Directions CurrentDirection;
@@ -57,35 +58,34 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
         return IntDict[CurrentDirection_];
     }
     IEnumerator SpriteRoutine = null;
-    public void TakeDamage(float damage, Elements damageType, SpellTemplates damageSource = SpellTemplates.NULL) {
-        damage = ComputeSpellStrength(damageType, EntityProperties_, damage);
+    public void TakeDamage(float damage, Elements elementType, SpellTemplates damageSource = SpellTemplates.NULL) {
+        damage *= ComputeValue(elementType, EntityProperties_);
         int damageInt = Mathf.RoundToInt(damage);
-        string SoundName = damageType.ToString() + "Damage";
+        string SoundName = elementType.ToString() + "Damage";
         //Check if this does damage
-        if (DamageImmunities_.Contains(damageType) || damageInt == 0) {
+        if (DamageImmunities_.Contains(elementType) || damageInt == 0) {
             SoundName = "AttackFail";
             Instantiate(SoundDict[SoundName]);
             return;
         }
-        if(damageType == Elements.Life) {
+        if(elementType == Elements.Life) {
             damageInt *= -1;
         }
         //Instantiate Damage Sound        
         Instantiate(SoundDict[SoundName]);
         //Create Damage Effect
-        SpellRenderer hitDrawer = FindObjectOfType<SpellRenderer>();
-        hitDrawer.CreateBurstFX(transform.position, ColourDict[damageType]);
+        SpellRenderer.Instance.CreateBurstFX(transform.position, ColourDict[elementType]);
         // Discolour Sprite Freeze
         if(SpriteRoutine != null) { StopCoroutine(SpriteRoutine); }
 
-        if (damageType.Equals(Elements.Ice)) {
+        if (elementType.Equals(Elements.Ice)) {
             Debug.Log($"{transform.name} is frozen!");
             SpriteRoutine = TintSprite(2.5f, Color.cyan);
             StartCoroutine(SpriteRoutine);
             StartCoroutine(MovePause(2.5f));
         } else {
             if (damageInt > 0) {
-                Debug.Log($"{transform.name} takes {damageInt} {damageType} damage!");
+                Debug.Log($"{transform.name} takes {damageInt} {elementType} damage!");
                 SpriteRoutine =  TintSprite(0.1f, Color.red);
                 StartCoroutine(SpriteRoutine);
             } else if (damageInt < 0) {
@@ -100,8 +100,9 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
         //Check if the entity should die
         if (0 >= Health_) {
             Debug.Log($"{transform.name} dies!!!");
+            EntitySpeed_ = 0;
             Anim_.SetTrigger("death");
-            GameObject.FindGameObjectWithTag("TextBox").GetComponent<DebugBox>().inputs.Add("Object.Destroy(collision.enemy);");
+            DebugBox.Instance.inputs.Add($"Object.Destroy({transform.name});");
         }
     }
     public abstract void UpdateAnimation(Vector3 change);
@@ -116,26 +117,17 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
         } else {
             GetComponent<Renderer>().sortingOrder = -Mathf.RoundToInt(transform.position.y);
         }
-
     }
-
     public abstract void  UpdateVelocity(float magnitude, Vector3 direction);
     public void UpdateForce(float magnitude, Vector3 direction, Elements elementType) {
-        magnitude = ComputeSpellStrength(elementType, EntityProperties_, magnitude);
-        if (EntityProperties_.Contains(Properties.Immovable)) {
-            return;
-        }
-        if (elementType == Elements.Pull) {
-            magnitude *= -1f;
-        }
-        gameObject.layer = 6;
+        magnitude = ComputeValue(elementType, EntityProperties_);
+        if (EntityProperties_.Contains(Properties.Immovable)) return;
+        if (elementType == Elements.Pull) magnitude *= -1f;
         Instantiate(SoundDict[elementType.ToString() + "Damage"]);
-        RB_.AddForce(magnitude * RB_.mass * direction, ForceMode2D.Impulse);
-        Debug.Log(magnitude * RB_.mass * direction);
+        Vector2 Velocity = 2 * magnitude * RB_.mass * direction.normalized;
+        StartCoroutine(CheckVelocityCanBridgeGaps(gameObject, Velocity));
+        
     }
-
-
-
     public void AlertObservers(AnimationEvents message) {
         Debug.Log(transform.name + " recieved message " + message);
         if (message.Equals(AnimationEvents.Death)) {
@@ -144,38 +136,12 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
             EntityFall();
         }
     }
-    protected void CheckFalling(Collision2D collision) {
-        if (collision.collider.TryGetComponent(out EmptySpaceScript _) && !collision.collider.isTrigger) {
-            //Debug.Log(collision.contactCount);
-            bool Falling = false;
-            Vector2 offset = 0.1f * PhysicsCollider.bounds.size;
-            float offsetX = offset.x; float offsetY = offset.y;
-
-            //float offset = 0.1f * PhysicsCollider.bounds.size;
-            //float offsetX = offset; float offsetY = offset;
-            foreach (ContactPoint2D contact in collision.contacts) {
-                bool XBounds = contact.point.x > PhysicsCollider.bounds.min.x + offsetX && contact.point.x < PhysicsCollider.bounds.max.x - offsetX;
-                bool YBounds = contact.point.y > PhysicsCollider.bounds.min.y + offsetY && contact.point.y < PhysicsCollider.bounds.max.y - offsetY;
-                //Debug.Log(XBounds + ":" + YBounds);
-                if (XBounds && YBounds) {
-                    Falling = true;
-                } else {
-                    return;
-                }
-            }
-            if (Falling) {
-                Anim_.SetTrigger("fall");
-            }
-        } else {
-            return;
-        }
-    }
     private void OnCollisionStay2D(Collision2D collision) {
         EnterVoid(collision);
     }
     private bool[] EdgeChecks = new bool[4];
     internal void EnterVoid(Collision2D collision) {
-        if (collision.gameObject.TryGetComponent(out EmptySpaceScript _) && gameObject.layer != 6) {
+        if ((collision.gameObject.TryGetComponent(out EmptySpaceScript _)/* || collision.gameObject.layer == 8*/) && gameObject.layer == 7) {
             //check NE corner
             Vector2 NE = PhysicsCollider.bounds.max;
             if (CheckIfContained(NE, collision.collider)) EdgeChecks[0] = true;
@@ -188,21 +154,17 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
             //check SW corner
             Vector2 SW = GetComponent<Collider2D>().bounds.min;
             if (CheckIfContained(SW, collision.collider)) EdgeChecks[3] = true;
-            bool IsContained = !EdgeChecks.Contains(false);
-            Debug.Log($"{NE} {NW} {SE} {SW}");
-            string msg = "";
-            foreach(bool boo in EdgeChecks) {
-                msg += boo + " ";
-            }
-            Debug.Log(msg + transform.name);
-            if (IsContained) {
-                Debug.LogWarning(transform.name + " has fallen into the River");
-                Anim_.SetTrigger("fall");
-            }
+            if (!EdgeChecks.Contains(false)) { Anim_.SetTrigger("fall"); EntitySpeed_ = 0; }
+
+            //string msg = "";
+            //foreach (bool boo in EdgeChecks) msg += boo + " ";
+            //Debug.Log(msg + transform.name);
+            //if (!EdgeChecks.Contains(false)) Debug.LogWarning(transform.name + " has fallen into the River");
+            //Debug.Log($"{NE} {NW} {SE} {SW}");
         }
     }
     internal void LeaveVoid(Collision2D collision) {
-        if (collision.gameObject.TryGetComponent(out EmptySpaceScript _) && gameObject.layer != 6) {
+        if ((collision.gameObject.TryGetComponent(out EmptySpaceScript _)/* || collision.gameObject.layer == 8*/) && gameObject.layer == 7) {
             //check NE corner
             Vector2 NE = PhysicsCollider.bounds.max;
             if (CheckIfContained(NE, collision.collider)) EdgeChecks[0] = true;
@@ -215,10 +177,13 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
             //check SW corner
             Vector2 SW = GetComponent<Collider2D>().bounds.min;
             if (CheckIfContained(SW, collision.collider)) EdgeChecks[3] = true;
-            bool IsContained = !EdgeChecks.Contains(false);
-            if (IsContained) {
-                Anim_.SetTrigger("fall");
-            }
+            if (!EdgeChecks.Contains(false)){ Anim_.SetTrigger("fall"); EntitySpeed_ = 0; }
+
+            //string msg = "";
+            //foreach (bool boo in EdgeChecks) msg += boo + " ";
+            //Debug.Log(msg + transform.name);
+            //if (!EdgeChecks.Contains(false)) Debug.LogWarning(transform.name + " has fallen into the River");
+            //Debug.Log($"{NE} {NW} {SE} {SW}");
         }
     }
     private bool CheckIfContained(Vector2 vector2, Collider2D collider) {
@@ -238,7 +203,6 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
             EntityProperties_[EntityProperties_.Length - 1] = property;
         }
     }
-
     public void RemovePropery(Properties property) {
         if (EntityProperties_.Contains(property)) {
             int index = Array.FindIndex(EntityProperties, 0, EntityProperties_.Length, EntityProperties_.Contains);
@@ -248,13 +212,11 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
             Array.Resize(ref EntityProperties, EntityProperties_.Length - 1);
         }
     }
-
     public void AddProperty(Properties property, float duration) {
         if (!EntityProperties_.Contains(property)) {
             StartCoroutine(AddPropertyForDuration(property, duration));
         }
     }
-
     private IEnumerator AddPropertyForDuration(Properties property, float duration) {
         float t = 0;
         Array.Resize(ref EntityProperties, EntityProperties_.Length + 1);
@@ -265,10 +227,7 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
             yield return null;
         }
         Array.Resize(ref EntityProperties, EntityProperties_.Length - 1);
-
     }
-
-
     public void AddImmunity(Elements element) {
         if (!DamageImmunities_.Contains(element)) {
             //Add Property
@@ -276,7 +235,6 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
             DamageImmunities_[DamageImmunities_.Length - 1] = element;
         }
     }
-
     public void RemoveImmunity(Elements property) {
         if (DamageImmunities_.Contains(property)) {
             int index = Array.FindIndex(DamageImmunities, 0, DamageImmunities_.Length, DamageImmunities_.Contains);
@@ -286,13 +244,11 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
             Array.Resize(ref EntityProperties, EntityProperties_.Length - 1);
         }
     }
-
     public void AddImmunity(Elements element, float duration) {
         if (!DamageImmunities_.Contains(element)) {
             StartCoroutine(AddImmunityForDuration(element, duration));
         }
     }
-
     private IEnumerator AddImmunityForDuration(Elements element, float duration) {
         float t = 0;
         Array.Resize(ref DamageImmunities, DamageImmunities_.Length + 1);
@@ -323,21 +279,6 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
             yield return null;
         }
         GetComponent<SpriteRenderer>().material = SpellRenderer.Instance.defaultUnlit;
-    }
-
-    private float ComputeSpellStrength(Elements element, Properties[] properties, float strength) {
-        if (properties.Length == 0) {
-            return strength;
-        }
-        if (properties.Contains(ElementPropertyPairs[element][0])) {
-            strength *= ElementValuePairs[element][0];
-        } else if (properties.Contains(ElementPropertyPairs[element][1])) {
-            strength *= ElementValuePairs[element][1];
-        }
-        if (properties.Contains(Properties.Immovable) && (element == Elements.Pull || element == Elements.Push)) {
-            strength = 0f;
-        }
-        return strength;
     }
     #endregion
 }

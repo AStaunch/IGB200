@@ -32,7 +32,7 @@ public class ArcScript : MonoBehaviour
 
         //initialise Variables
         duration = 2f;
-        ac = FindObjectOfType<SpellRenderer>().arcCurve;
+        ac = SpellRenderer.Instance.arcCurve;
         //Find Value for Direction of movement
         arcValue = ArcValueDict[arcDirection];
         if (IntDict[direction] % 2 == 1) {

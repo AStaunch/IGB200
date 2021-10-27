@@ -13,9 +13,10 @@ public static class Effectors
         new SpellEffector()
         {
             Name = "Test",
-            Colors = new Color[] { Color.white, Color.white, Color.white, Color.white },
+            Colors =  ColourDict[Elements.NULL],
             Effector = new Action<iEffectorData>((edd) => { Debug.Log("works"); })
         },
+
     #region Damage Effectors
         new SpellEffector() {
             Name = "Fire",
@@ -119,8 +120,7 @@ public static class Effectors
                         RayData Ray_ = (RayData)EffectorData_;                        
                         if (Ray_.CasterObject.TryGetComponent(out iPhysicsInterface thisEntity)) {
                             Vector2 Direction = Ray_.CasterObject.transform.GetComponent<iFacingInterface>().GetEntityDirection();
-                            thisEntity.UpdateForce(EffectorData_.baseStrength, Direction, element);
-                            EffectorData_.CasterObject.GetComponent<MonoBehaviour>().StartCoroutine(CheckVelocityCanBridgeGaps(EffectorData_.CasterObject));
+                            thisEntity.UpdateForce(-1 * EffectorData_.baseStrength, Direction, element);
                         }
                         break;
 
@@ -139,14 +139,12 @@ public static class Effectors
                             if (gameObject.TryGetComponent(out iPhysicsInterface HI)) {
                                 Vector2 Direction = gameObject.transform.position - Cone_.CasterObject.transform.position;
                                 HI.UpdateForce(EffectorData_.baseStrength, Direction, element);
-                                gameObject.GetComponent<MonoBehaviour>().StartCoroutine(CheckVelocityCanBridgeGaps(gameObject));
                                 Debug.DrawLine(Cone_.CasterObject.transform.position, Cone_.CasterObject.transform.position, Color.magenta, 1f);
                             }
                             TotalForce += Vector2.Distance(Cone_.CasterObject.transform.position, gameObject.transform.position);
                         }
                         Vector2 direction = Cone_.CasterObject.transform.GetComponent<iFacingInterface>().GetEntityDirection();
                         Cone_.CasterObject.GetComponent<iPhysicsInterface>().UpdateForce(TotalForce, direction, element);
-                        Cone_.CasterObject.GetComponent<MonoBehaviour>().StartCoroutine(CheckVelocityCanBridgeGaps(Cone_.CasterObject));
                         Debug.Log(TotalForce * direction);
                         break;
 
@@ -211,7 +209,6 @@ public static class Effectors
                 Vector2 direction = Ray_.CasterObject.transform.GetComponent<iFacingInterface>().GetEntityDirection();
                 if (Ray_.Data.collider.gameObject.TryGetComponent(out iPhysicsInterface otherEntity)) {
                     otherEntity.UpdateForce(EffectorData_.baseStrength, direction, element);
-                    Ray_.Data.collider.gameObject.GetComponent<MonoBehaviour>().StartCoroutine(CheckVelocityCanBridgeGaps(Ray_.Data.collider.gameObject));
                 }
                 break;
 

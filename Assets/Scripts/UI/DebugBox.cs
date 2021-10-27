@@ -15,6 +15,16 @@ public class DebugBox : MonoBehaviour
     public List<string> inputs;
     private Image image;
 
+    private static DebugBox _instance;
+    public static DebugBox Instance { get { return _instance; } }
+    private void Awake() {
+        if (_instance != null && _instance != this) {
+            Destroy(this.gameObject);
+        } else {
+            _instance = this;
+        }
+    }
+
     void Start()
     {
         text = textBox.GetComponent<TextMeshProUGUI>();

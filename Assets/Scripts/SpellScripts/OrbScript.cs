@@ -55,7 +55,6 @@ public class OrbScript : MonoBehaviour, iPhysicsInterface
                 collider2Ds.Add(collider.gameObject);
                 Vector2 direction = transform.position - collider.transform.position;
                 iPhysics_.UpdateForce(baseDamage, direction, element);
-                collider.GetComponent<MonoBehaviour>().StartCoroutine(CheckVelocityCanBridgeGaps(collider.gameObject));
             }
         }
     }

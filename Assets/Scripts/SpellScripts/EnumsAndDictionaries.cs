@@ -114,11 +114,7 @@ public static class EnumsAndDictionaries
     [System.Serializable]
     public enum Properties
     {
-        Heavy, Light, Flamable, Fireproof, Metal, Insulated, Door, Indestructable, Immovable,
-        Undead,
-        Freezable,
-        Unfreezable,
-        Frozen
+        Heavy, Light, Flamable, Fireproof, Metal, Indestructable, Immovable, Undead, Frozen
     }
     [System.Serializable]
     public enum EntityTypes
@@ -156,23 +152,8 @@ public static class EnumsAndDictionaries
     {
         Water, Void
     }
-
     public static Directions VectorToDirection(Vector3 vector) {
-        Directions direction;
-        if (Mathf.Abs(vector.x) < Mathf.Abs(vector.y)) {
-            if (vector.y > 0) {
-                direction = Directions.Up;
-            } else {
-                direction = Directions.Down;
-            }
-        } else {
-            if (vector.x > 0) {
-                direction = Directions.Right;
-            } else {
-                direction = Directions.Left;
-            }
-        }
-        return direction;
+        return VectorToDirection((Vector2) vector);
     }
 
     public static Directions VectorToDirection(Vector2 vector) {

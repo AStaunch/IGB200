@@ -18,8 +18,7 @@ public class PlayerEntity : AbstractCreature
         }
     }
     #endregion
-    public AbstractDoor LastDoor_ { get => LastDoor; set => LastDoor = value; }
-
+    internal AbstractDoor LastDoor_ { get => LastDoor; set => LastDoor = value; }
     public override bool IsEnemy => false;
 
     private AbstractDoor LastDoor;
@@ -42,7 +41,6 @@ public class PlayerEntity : AbstractCreature
         if (DamageImmunities_ == null) {
             DamageImmunities_ = new Elements[0];
         }
-
         Collider2D[] AllColliders = GetComponents<Collider2D>();
         foreach (Collider2D collider in AllColliders) {
             if (!collider.isTrigger) {
@@ -51,7 +49,7 @@ public class PlayerEntity : AbstractCreature
                 break;
             }
         }
-
+        StartRoomData_.Load();
     }
     void Update()
     {
@@ -93,7 +91,7 @@ public class PlayerEntity : AbstractCreature
     }
     public void CastSpell(SpellTemplate CallingSpell)
     {
-        RB_.velocity = Vector2.zero;
+        //RB_.velocity = Vector2.zero;
         Animator anim = GetComponent<Animator>();
         anim.SetTrigger("attack");
         string CallingSpellName = CallingSpell.Name;
@@ -111,10 +109,12 @@ public class PlayerEntity : AbstractCreature
     public override void EntityDeath() {
         Health_ = MaxHealth_;
         transform.position = StartPosition_;
+        EntitySpeed_ = 5;
         StartRoomData_.Load();
         if (LastDoor != null) {
             LastDoor.RoomData_.Unload();
         }
+        RB_.velocity = Vector2.zero;
     }
     protected override void EntityFall() {
         if (LastDoor != null) {
@@ -122,8 +122,8 @@ public class PlayerEntity : AbstractCreature
             transform.position = LastDoor_.RespawnPoint;
             LastDoor.RoomData_.Load();
         }
+        RB_.velocity = Vector2.zero;
     }
-
     public override void UpdateAnimation(Vector3 change) {
         if (change != Vector3.zero) {
             Anim_.SetFloat("moveX", change.x);
@@ -133,19 +133,14 @@ public class PlayerEntity : AbstractCreature
             Anim_.SetBool("moving", false);
         }
     }
-
     public override void UpdateVelocity(float magnitude, Vector3 direction) {
-            RB_.velocity = magnitude * direction;
+            RB_.velocity = magnitude * direction.normalized;
     }
     public override void Decelerate() {
-        if (RB_.velocity != Vector2.zero && change == Vector3.zero && gameObject.layer == 7) {
+        if (RB_.velocity != Vector2.zero && change == Vector3.zero && gameObject.layer != 6) {
             RB_.velocity *= 0.1f;
         }
     }
-
-
-    //Hacky Checkpoint Management
-
     //Very Hacky Kino Management
     private void OnCollisionEnter2D(Collision2D collision) {
         bool b1 = collision.transform.TryGetComponent(out iPropertyInterface _) && !collision.transform.TryGetComponent(out EmptySpaceScript _); 

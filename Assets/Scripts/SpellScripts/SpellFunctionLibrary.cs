@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,10 +7,46 @@ using static EnumsAndDictionaries;
 
 public static class SpellFunctionLibrary
 {
+    public static PropertyData[] propertyData = new PropertyData[] {
+        new PropertyData(Elements.Fire, Properties.Flamable, 2f),
+        new PropertyData(Elements.Electricity, Properties.Metal, 2f),
+        new PropertyData(Elements.Life, Properties.Undead, -1f),
+        new PropertyData(Elements.Push, Properties.Light, 2f),
+        new PropertyData(Elements.Push, Properties.Heavy, 0.5f),
+        new PropertyData(Elements.Pull, Properties.Light, 2f),
+        new PropertyData(Elements.Pull, Properties.Heavy, 0.5f),
+        new PropertyData(Elements.Death ,Properties.Undead, -1f),
+        new PropertyData(Elements.Earth, Properties.Frozen, 2f),
+        new PropertyData(Elements.Earth, Properties.Metal, 0f)
+    };
+    public static Dictionary<Tuple<Elements, Properties>, float> ElementProperties {get {
+        Dictionary<Tuple<Elements, Properties>, float> kvp = new Dictionary<Tuple<Elements, Properties>, float>();
+        foreach(PropertyData propertyValue in propertyData) {
+            Tuple<Elements, Properties> add = new Tuple<Elements, Properties>(propertyValue.Element, propertyValue.Property);
+            kvp.Add(add, propertyValue.Value);
+        }
+        return kvp;
+    }}
+    public static Dictionary<Properties, float> PropertyValues {get {
+        Dictionary<Properties, float>  kvp = new Dictionary<Properties, float>();
+        foreach(PropertyData propertyValue in propertyData) {
+            kvp.Add(propertyValue.Property, propertyValue.Value);
+        }
+        return kvp;
+    }}
+    public static float ComputeValue(Elements element, Properties[] properties) {
+            foreach(Properties property in properties) {
+            Tuple<Elements, Properties> check = new Tuple<Elements, Properties>(element, property);
+            if (ElementProperties.ContainsKey(check)) {
+                    return ElementProperties[check];
+                }
+            }
+        return 1;
+    }
+
     public static Dictionary<Elements, Properties[]> ElementPropertyPairs = new Dictionary<Elements, Properties[]> {
         {Elements.Fire,             new Properties[] {Properties.Flamable,  Properties.Fireproof} },
-        {Elements.Ice,              new Properties[] {Properties.Freezable, Properties.Unfreezable} },
-        {Elements.Electricity,      new Properties[] {Properties.Metal,     Properties.Insulated} },
+        {Elements.Electricity,      new Properties[] {Properties.Metal} },
         {Elements.Life,             new Properties[] {Properties.Undead,    Properties.Undead} },
         {Elements.Pull,             new Properties[] {Properties.Light,     Properties.Heavy} },
         {Elements.Push,             new Properties[] {Properties.Light,     Properties.Heavy} },
@@ -27,42 +64,32 @@ public static class SpellFunctionLibrary
         {Elements.Death,        new float[] {0f, 0f} },
         {Elements.Earth,        new float[] {5f, .5f} },
     };
-
-    public static Dictionary<Elements, PropertyValues[]> ElementKV = new Dictionary<Elements, PropertyValues[]> {
-        {Elements.Fire,         new PropertyValues[] { new PropertyValues(Properties.Flamable, 2f) } },
-        {Elements.Ice,          new PropertyValues[] { new PropertyValues(Properties.Flamable, 2f) } },
-        {Elements.Electricity,  new PropertyValues[] { new PropertyValues(Properties.Metal, 2f) } },
-        {Elements.Life,         new PropertyValues[] { new PropertyValues(Properties.Undead, 2f) } },
-        {Elements.Pull,         new PropertyValues[] { new PropertyValues(Properties.Light, -1f) } },
-        {Elements.Push,         new PropertyValues[] { new PropertyValues(Properties.Light, 2f) } },
-        {Elements.Death,        new PropertyValues[] { new PropertyValues(Properties.Undead, 0f) } },
-        {Elements.Earth,        new PropertyValues[] { new PropertyValues(Properties.Frozen, 2f) } },
-    };
-
-    public class PropertyValues
+    public class PropertyData
     {
-        private Properties Property;
-        private float Value;
-
-        public PropertyValues(Properties property, float value) {
+        public Elements Element;
+        public Properties Property;
+        public float Value;
+        public PropertyData(Elements element, Properties property, float value) {
+            this.Element = element;
             this.Property = property;
             this.Value = value;
         }
     }
-
-    public static IEnumerator CheckVelocityCanBridgeGaps(GameObject gameObject) {
+    public static IEnumerator CheckVelocityCanBridgeGaps(GameObject gameObject, Vector2 force) {
         if (gameObject.transform.TryGetComponent(out Rigidbody2D rb)) {
+            rb.AddForce(force, ForceMode2D.Impulse);
             gameObject.layer = 6;
+            Debug.Log($"{force} {gameObject.layer} Start");
             while (rb.velocity.magnitude > 1f) {
                 gameObject.layer = 6;
                 yield return null;
             }
             gameObject.layer = 7;
+            Debug.Log($"{force} {gameObject.layer} End");
         } else {
             yield return null;
         }
     }
-
     public static IEnumerator LerpSelf(GameObject targetObject, Vector2 targetPosition, float duration) {
         Debug.Log($" Moving { targetObject.transform.name } to {targetPosition}");
         if (targetObject.TryGetComponent(out iPhysicsInterface iPhysics)) {
@@ -81,7 +108,6 @@ public static class SpellFunctionLibrary
             targetObject.layer = 7;
         }        
     }
-
     public static IEnumerator ArcOther(ArcScript ac, float Strength, Elements element) {
         Vector3 LastPosition = ac.transform.position;
         while ( ac.HitCollider == null) {
@@ -107,7 +133,6 @@ public static class SpellFunctionLibrary
             LastPosition = ac.transform.position;
             yield return null;
         }
-
         if (element == Elements.Pull) {
             float Distance = Vector2.Distance(Arc_.CasterObject.transform.position, LastPosition);
             Arc_.CasterObject.GetComponent<MonoBehaviour>().StartCoroutine(LerpSelf(Arc_.CasterObject, LastPosition, 1f));
@@ -116,12 +141,9 @@ public static class SpellFunctionLibrary
                 Vector2 direction = LastPosition - Arc_.CasterObject.transform.position;
                 Debug.Log(LastPosition + " : " + direction);
                 Arc_.CasterObject.GetComponent<iPhysicsInterface>().UpdateForce(Arc_.baseStrength, direction.normalized, element);
-                Arc_.CasterObject.GetComponent<MonoBehaviour>().StartCoroutine(CheckVelocityCanBridgeGaps(Arc_.CasterObject));
-
             }
         }
     }
-
     public static void ConeProcess(ConeData Cone_, float baseStrength, Elements element) {
         foreach (GameObject gameObject in Cone_.Data) {
             if (element == Elements.Pull || element == Elements.Push) {
@@ -138,7 +160,6 @@ public static class SpellFunctionLibrary
             }
         }
     }
-
     public static GameObject[] ConeCast(float Distance, GameObject Origin, Directions Direction) {
         const float angle = 60;
         const int noRays = 15;
@@ -146,12 +167,9 @@ public static class SpellFunctionLibrary
         List<GameObject> hitPoints = new List<GameObject>();
         float startAngle = CalculateStartAngle(direction) - (angle / 2);
         int[] StopMask = new int[] { 8 };
-
         Vector2 Offset = 0.5f * Origin.GetComponent<SpriteRenderer>().bounds.size * direction;
         Vector2 position = Origin.transform.position;
         Vector2 CastOrigin = position + Offset;
-
-
         for (int i = 0; i < noRays; i++) {
             float SendAngle = startAngle + i * (angle / noRays);
             SendAngle = SendAngle * Mathf.Deg2Rad;
@@ -171,12 +189,10 @@ public static class SpellFunctionLibrary
                     }
                 }
             }
-
             Debug.DrawRay(Origin.transform.position, targetPosition, Color.blue, 1f);
         }
         return hitPoints.ToArray();
     }
-
     private static float CalculateStartAngle(Vector2 direction) {
         float value = (float)((Mathf.Atan2(direction.x, direction.y) / System.Math.PI) * 180f);
         return value;

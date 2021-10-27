@@ -44,7 +44,7 @@ public class DialogueManager : MonoBehaviour
     internal void StartDialogue(Dialogue dialogue) {
         OpenDialogue();
         sentences.Clear();
-        nameText.text = dialogue.name ;
+        nameText.text = dialogue.name;
         portrait.sprite = dialogue.CharacterPortrait;
         foreach (string sentence in dialogue.sentences) {
             sentences.Enqueue(sentence);
