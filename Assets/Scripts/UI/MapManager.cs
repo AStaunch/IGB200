@@ -36,6 +36,7 @@ public class MapManager : MonoBehaviour
         mapScreen.SetActive(isLoaded);
         foreach (RoomData Room in AllRooms) {
             Room.gameObject.layer = 2;
+            Room.border.SetActive(isLoaded);
             Room.spriteRenderer.enabled = isLoaded;
             if (Room.Icon)  Room.Icon.SetActive(isLoaded);
         }
@@ -49,6 +50,7 @@ public class MapManager : MonoBehaviour
         foreach (RoomData Room in AllRooms) {
             Room.gameObject.layer = 5;
             Room.spriteRenderer.enabled = isLoaded;
+            Room.border.SetActive(isLoaded);
             if (Room.isLoaded_) {
                 Room.spriteRenderer.color = Color.white;
             } else if (Room.hasVisited_) {

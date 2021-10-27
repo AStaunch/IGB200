@@ -50,13 +50,13 @@ public class RoomData : MonoBehaviour
 
     private int m_LayerMask = ~ (1 << 8);
     internal GameObject Icon;
-
+    public GameObject border;
     private bool needsIcon { get => hasChest_ || isInterestPoint_; }
     void Start() {
         //Use this to ensure that the Gizmos are being drawn when in Play Mode.
         spriteRenderer.enabled = false;
         CreateData();
-
+        border.SetActive(false);
         if (needsIcon) {
             Icon = new GameObject(transform.name + " icon");
             Icon.transform.position = transform.position;
@@ -71,7 +71,7 @@ public class RoomData : MonoBehaviour
             Icon.SetActive(false);
         }
     }
-    public void SortScene() {
+    public void SortRoom() {
         Collider2D[] hitColliders = Physics2D.OverlapAreaAll(GetComponent<Collider2D>().bounds.min, GetComponent<Collider2D>().bounds.max, m_LayerMask);
         foreach (Collider2D collider in hitColliders) {
             bool b1 = collider.transform.TryGetComponent(out iRecieverObject _) || collider.transform.TryGetComponent(out iSenderObject _);
@@ -83,6 +83,12 @@ public class RoomData : MonoBehaviour
                 collider.transform.parent = this.transform;
             }
         }
+    }
+    public void UnSortRoom() {
+        for (int i = transform.childCount - 1; i >= 0; i--) {
+            transform.GetChild(i).parent = null;
+        }
+        border.transform.parent = this.transform;
     }
     private void CreateData() {
         GetComponent<Collider2D>().enabled = true;

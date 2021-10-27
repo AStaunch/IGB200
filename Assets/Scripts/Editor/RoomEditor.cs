@@ -13,7 +13,15 @@ public class RoomEditor : Editor
             RoomData[] AllRooms = FindObjectsOfType<RoomData>();
             foreach(RoomData room in AllRooms) {
                 room.GetComponent<Collider2D>().enabled = true;
-                room.SortScene();
+                room.SortRoom();
+                room.GetComponent<Collider2D>().enabled = false;
+            }
+        }
+        if (GUILayout.Button("Unsort All Rooms")) {
+            RoomData[] AllRooms = FindObjectsOfType<RoomData>();
+            foreach (RoomData room in AllRooms) {
+                room.GetComponent<Collider2D>().enabled = true;
+                room.UnSortRoom();
                 room.GetComponent<Collider2D>().enabled = false;
             }
         }
