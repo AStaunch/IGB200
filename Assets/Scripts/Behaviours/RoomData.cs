@@ -150,7 +150,7 @@ public class RoomData : MonoBehaviour
             return;
         }
         if(collider.transform.TryGetComponent(out PlayerEntity playerEntity)) {
-            playerEntity.StartRoomData_ = this;
+            playerEntity.SaveRoomData_ = this;
             isLoaded_ = true;
             hasVisited_ = true;
             return;

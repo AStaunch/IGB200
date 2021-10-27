@@ -24,7 +24,7 @@ public class PlayerEntity : AbstractCreature
     private AbstractDoor LastDoor;
     List<Rigidbody2D> collidedObjects = new List<Rigidbody2D>();
     private Collider2D CollisionCollider;
-    public RoomData StartRoomData_ {get => StartRoomData; set => StartRoomData = value; }
+    public RoomData SaveRoomData_ {get => StartRoomData; set => StartRoomData = value; }
     private RoomData StartRoomData;
     private Vector3 StartPosition_;
     private Vector3 change;
@@ -49,8 +49,8 @@ public class PlayerEntity : AbstractCreature
                 break;
             }
         }
-        if (StartRoomData_) {
-            StartRoomData_.Load();
+        if (SaveRoomData_) {
+            SaveRoomData_.Load();
         }        
     }
     void Update()
@@ -111,7 +111,7 @@ public class PlayerEntity : AbstractCreature
         Health_ = MaxHealth_;
         transform.position = StartPosition_;
         EntitySpeed_ = 5;
-        StartRoomData_.Load();
+        SaveRoomData_.Load();
         if (LastDoor != null) {
             LastDoor.RoomData_.Unload();
         }
@@ -120,9 +120,13 @@ public class PlayerEntity : AbstractCreature
     protected override void EntityFall() {
         EntitySpeed_ = 5;
         if (LastDoor != null) {            
-            transform.position = LastDoor_.RespawnPoint;
-            LastDoor.RoomData_.Load();
-            TakeDamage(1f, Elements.NULL);
+            Health_ -= 1;
+            if(Health_ <= 0) {
+                EntityDeath();
+            } else {
+                transform.position = LastDoor_.RespawnPoint;
+                LastDoor.RoomData_.Load();
+            }
         }
         RB_.velocity = Vector2.zero;
     }

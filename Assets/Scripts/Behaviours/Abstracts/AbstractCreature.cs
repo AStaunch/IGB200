@@ -8,7 +8,7 @@ using static SpellFunctionLibrary;
 public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreatureInterface, iPhysicsInterface, iPropertyManager, iFacingInterface
 {
     public abstract bool IsEnemy { get; }
-    public int Health_ { get => Health; set => Health = value; }
+    public int Health_ { get => Health; set { Health = value; } }
     private int Health;
     public int MaxHealth_ { get => MaxHealth; set => MaxHealth = value; }
     public int MaxHealth = 1;
@@ -95,9 +95,12 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
                 StartCoroutine(SpriteRoutine);
             }
             //Process Health
-            Health_ -= damageInt;
-            Health_ = Mathf.Clamp(Health_, 0, MaxHealth_);
+            Health_ -= damageInt;            
         }
+        ValidateHealth();
+    }
+    internal void ValidateHealth() {
+        Health = Mathf.Clamp(Health, 0, MaxHealth_);
         //Check if the entity should die
         if (0 >= Health_) {
             Debug.Log($"{transform.name} dies!!!");

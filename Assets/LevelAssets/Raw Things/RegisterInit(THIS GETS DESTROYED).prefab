@@ -45,7 +45,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   evntCont: {fileID: 0}
   RaySprite: {fileID: 5936396870620081566, guid: 47ddd525ee736394ca7470befb2cbb85, type: 3}
-  ArcSprite: {fileID: -4435265332863923220, guid: 47ddd525ee736394ca7470befb2cbb85, type: 3}
+  ArcSpriteLeft: {fileID: 1803127562974839785, guid: f5360f7adcf3f674b8ab96a67f0d96f3, type: 3}
+  ArcSpriteRight: {fileID: 8099359594923804446, guid: f5360f7adcf3f674b8ab96a67f0d96f3, type: 3}
   OrbSprite: {fileID: -787316018014522781, guid: decaff74e94b5db4a8f4736d7e897484, type: 3}
   ConeSprite: {fileID: 21300000, guid: 9ef808ec011c53f44811cdf5109b8411, type: 3}
   ShieldSprite: {fileID: 21300000, guid: 972d317e95b9a6c45a6fef6a653fd577, type: 3}
