@@ -6989,6 +6989,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: DialogManager
       objectReference: {fileID: 0}
+    - target: {fileID: 3634737058595683190, guid: b5a44bf26f8aa1142be5c6d353ab7af4, type: 3}
+      propertyPath: m_fontSize
+      value: 35.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 3634737058595683190, guid: b5a44bf26f8aa1142be5c6d353ab7af4, type: 3}
+      propertyPath: m_fontSizeMax
+      value: 72
+      objectReference: {fileID: 0}
+    - target: {fileID: 3634737058595683190, guid: b5a44bf26f8aa1142be5c6d353ab7af4, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3634737058595683190, guid: b5a44bf26f8aa1142be5c6d353ab7af4, type: 3}
+      propertyPath: m_enableAutoSizing
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3634737058595683190, guid: b5a44bf26f8aa1142be5c6d353ab7af4, type: 3}
+      propertyPath: m_HorizontalAlignment
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b5a44bf26f8aa1142be5c6d353ab7af4, type: 3}
 --- !u!224 &389161065261326567 stripped

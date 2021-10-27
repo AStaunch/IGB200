@@ -100,6 +100,15 @@ public static class Effectors
                         ConeProcess(Cone_, EffectorData_.baseStrength, element);
                         break;
 
+                    case "Orb":
+                        OrbData Orb_ = (OrbData)EffectorData_;
+                        OrbScript orbScript = Orb_.Data.AddComponent<OrbScript>();
+                        orbScript.element = element;
+                        orbScript.targetsPlayer = true;
+                        orbScript.baseDamage = EffectorData_.baseStrength;
+                        Orb_.Data.GetComponent<Rigidbody2D>().AddForce(4 * Orb_.CasterObject.GetComponent<iFacingInterface>().GetEntityDirection(), ForceMode2D.Impulse);
+                        break;
+
                     default:
                         Debug.Log($"{EffectorData_.Calling_template.Name} is not yet defined for PullPlayer");
                         break;
@@ -120,7 +129,7 @@ public static class Effectors
                         RayData Ray_ = (RayData)EffectorData_;                        
                         if (Ray_.CasterObject.TryGetComponent(out iPhysicsInterface thisEntity)) {
                             Vector2 Direction = Ray_.CasterObject.transform.GetComponent<iFacingInterface>().GetEntityDirection();
-                            thisEntity.UpdateForce(-1 * EffectorData_.baseStrength, Direction, element);
+                            thisEntity.UpdateForce(EffectorData_.baseStrength, -1 * Direction, element);
                         }
                         break;
 
@@ -146,6 +155,15 @@ public static class Effectors
                         Vector2 direction = Cone_.CasterObject.transform.GetComponent<iFacingInterface>().GetEntityDirection();
                         Cone_.CasterObject.GetComponent<iPhysicsInterface>().UpdateForce(TotalForce, direction, element);
                         Debug.Log(TotalForce * direction);
+                        break;
+
+                    case "Orb":
+                        OrbData Orb_ = (OrbData)EffectorData_;
+                        OrbScript orbScript = Orb_.Data.AddComponent<OrbScript>();
+                        orbScript.element = element;
+                        orbScript.targetsPlayer = true;
+                        orbScript.baseDamage = EffectorData_.baseStrength;
+                        Orb_.Data.GetComponent<Rigidbody2D>().AddForce(4 * Orb_.CasterObject.GetComponent<iFacingInterface>().GetEntityDirection(), ForceMode2D.Impulse);
                         break;
 
                     default:

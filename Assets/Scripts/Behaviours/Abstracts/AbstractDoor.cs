@@ -54,14 +54,6 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
                     //New Room Resets
                     if (collision.TryGetComponent(out PlayerEntity playerEntity) && !isException && RoomData_) {
                         playerEntity.LastDoor_ = this.ExitDoor;
-
-                        /*if (triggerID != 0) 
-                        { 
-                            foreach (GameObject x in GameObject.FindGameObjectsWithTag("MovingDoor"))
-                            {
-                                if (triggerID == x.GetComponent<DungeonDoor>().id) { x.GetComponent<DungeonDoor>().isOpen = true; }
-                            }
-                        }*/
                         if (isSolveTrigger) {
                             RoomData_.isSolved_ = true;
                             if (firstEnter == true) { Instantiate(SoundDict["PuzzleSolveSound"]); firstEnter = false; }
@@ -106,12 +98,12 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
         { 
             if (ExitDoor.IsOpen == false && isInvulnerable) 
             { 
-                GameObject.FindGameObjectWithTag("TextBox").GetComponent<DebugBox>().inputs.Add("Object.isOpen(metalDoor);");
+                DebugBox.Instance.inputs.Add("Object.isOpen(metalDoor);");
                 Instantiate(SoundDict["DoorOpenSound"]);
             }
             else if (ExitDoor.IsOpen == false) 
             { 
-                GameObject.FindGameObjectWithTag("TextBox").GetComponent<DebugBox>().inputs.Add("Object.isOpen(woodDoor);");
+                DebugBox.Instance.inputs.Add("Object.isOpen(woodDoor);");
                 Instantiate(SoundDict["FireDamage"]);
             }
         }
@@ -143,12 +135,13 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
             //Debug.LogWarning(ex.Message);
         }
     }
-    public void TakeDamage(float damage, Elements damageType, SpellTemplates damageSource = SpellTemplates.NULL) {
-        if (isInvulnerable || damageType != Elements.Fire) {
+    public void TakeDamage(float damage, Elements elementType, SpellTemplates damageSource = SpellTemplates.NULL) {
+        if (isInvulnerable || elementType != Elements.Fire) {
             return;
         }
         Health_ -= Mathf.RoundToInt(damage);
         Health_ = Mathf.Clamp(Health_, 0, MaxHealth_);
+        SpellRenderer.Instance.CreateBurstFX(transform.position, ColourDict[elementType]);
         if (0 >= Health_) {
             EntityDeath();
         }

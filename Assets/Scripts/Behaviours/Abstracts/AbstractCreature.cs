@@ -58,6 +58,7 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
         return IntDict[CurrentDirection_];
     }
     IEnumerator SpriteRoutine = null;
+    internal bool isFrozen_ = false;
     public void TakeDamage(float damage, Elements elementType, SpellTemplates damageSource = SpellTemplates.NULL) {
         damage *= ComputeValue(elementType, EntityProperties_);
         int damageInt = Mathf.RoundToInt(damage);
@@ -270,11 +271,13 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
     public IEnumerator MovePause(float Wait) {
         float SpeedStore = EntitySpeed_;
         float time = 0;
+        isFrozen_ = true;
         while (time < Wait) {
             EntitySpeed_ = 0f;
             time += Time.deltaTime;
             yield return null;
         }
+        isFrozen_ = false;
         EntitySpeed_ = SpeedStore;
     }
     public IEnumerator TintSprite(float duration, Color color) {

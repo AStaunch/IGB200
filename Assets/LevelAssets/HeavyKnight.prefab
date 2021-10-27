@@ -52,9 +52,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxHealth: 1
   DamageImmunities: 000000000100000002000000060000000700000008000000
-  EntityProperties: 0900000000000000
-  Speed: 0.5
-  AttackDelay: 2
+  EntityProperties: 0700000000000000
+  EntitySpeed: 0.5
   EntityDamage: 2
   DamageType: 8
 --- !u!114 &8025751539796210941
@@ -70,8 +69,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DetectionRange: 8
-  shuffle_delay: 1
-  shuffle_time: 250
+  shuffle_delay: 0
+  shuffle_time: 100
 --- !u!212 &7530107859469830135
 SpriteRenderer:
   m_ObjectHideFlags: 0

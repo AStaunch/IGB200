@@ -27,7 +27,7 @@ public class RangedEnemy : AbstractEnemy
     }
     public float Range = 20f;
     public new void  Update() {
-        if (Vector3.Distance(transform.position, PlayerEntity.Instance.transform.position) < Range && AttackTime_ < Time.timeSinceLevelLoad) {
+        if (Vector3.Distance(transform.position, PlayerEntity.Instance.transform.position) < Range && AttackTime_ < Time.timeSinceLevelLoad && !isFrozen_) {
             Attack(PlayerEntity.Instance.transform.position - transform.position);
             AttackTime_ = AttackDelay;
             UpdateAnimation(PlayerEntity.Instance.transform.position - transform.position);

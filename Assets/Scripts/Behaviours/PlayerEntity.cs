@@ -49,7 +49,9 @@ public class PlayerEntity : AbstractCreature
                 break;
             }
         }
-        StartRoomData_.Load();
+        if (StartRoomData_) {
+            StartRoomData_.Load();
+        }        
     }
     void Update()
     {
@@ -82,7 +84,7 @@ public class PlayerEntity : AbstractCreature
             foreach (string UnlockName in UnlockNames) {
                 if (Array.Exists(UnlockManager.Instance.Registry.AllKeys(), (e) => { return e == UnlockName; })) {
                     UnlockManager.Instance.Registry.UnlockItem(UnlockName);
-                    GameObject.FindGameObjectWithTag("TextBox").GetComponent<DebugBox>().inputs.Add("Spell.unlock(" + UnlockName + ");");
+                    DebugBox.Instance.inputs.Add("Spell.unlock(" + UnlockName + ");");
                 } else {
                     throw new Exception($"Item by the name {UnlockName} does not exist within the unlock manager");
                 }
@@ -100,10 +102,10 @@ public class PlayerEntity : AbstractCreature
         }
         if (CallingSpellName.Contains("Orb")) { Instantiate(SoundManager.SoundDict["OrbThrowSound"]); }
         else { Instantiate(SoundManager.SoundDict[CallingSpellName + "Sound"]); }
-        if (CallingSpellName.Contains("Ray")) { GameObject.FindGameObjectWithTag("TextBox").GetComponent<DebugBox>().inputs.Add("Player.raycast(parameter);"); }
-        if (CallingSpellName.Contains("Arc")) { GameObject.FindGameObjectWithTag("TextBox").GetComponent<DebugBox>().inputs.Add("Player.arc(parameter):"); }
-        if (CallingSpellName.Contains("Cone")) { GameObject.FindGameObjectWithTag("TextBox").GetComponent<DebugBox>().inputs.Add("Object.coneCast(parameter);"); }
-        if (CallingSpellName.Contains("Orb")) { GameObject.FindGameObjectWithTag("TextBox").GetComponent<DebugBox>().inputs.Add("Object.instantiateOrb(parameter);"); }
+        if (CallingSpellName.Contains("Ray")) { DebugBox.Instance.inputs.Add("Player.raycast(parameter);"); }
+        if (CallingSpellName.Contains("Arc")) { DebugBox.Instance.inputs.Add("Player.instantiateArc(parameter):"); }
+        if (CallingSpellName.Contains("Cone")) { DebugBox.Instance.inputs.Add("Object.coneCast(parameter);"); }
+        if (CallingSpellName.Contains("Orb")) { DebugBox.Instance.inputs.Add("Object.instantiateOrb(parameter);"); }
     }
     public override void EntityDeath() {
         Health_ = MaxHealth_;
@@ -117,10 +119,10 @@ public class PlayerEntity : AbstractCreature
     }
     protected override void EntityFall() {
         EntitySpeed_ = 5;
-        if (LastDoor != null) {
-            TakeDamage(1f, Elements.NULL);
+        if (LastDoor != null) {            
             transform.position = LastDoor_.RespawnPoint;
             LastDoor.RoomData_.Load();
+            TakeDamage(1f, Elements.NULL);
         }
         RB_.velocity = Vector2.zero;
     }

@@ -102,9 +102,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxHealth: 1
   DamageImmunities: 
-  EntityProperties: 
-  Speed: 0.5
-  AttackDelay: 3
+  EntityProperties: 07000000
+  EntitySpeed: 0.5
   EntityDamage: 1
   DamageType: 8
   Projectile: {fileID: 8796769972016898954, guid: a56005c5e9d282048b61373a6eff513e, type: 3}

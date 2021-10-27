@@ -52,9 +52,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxHealth: 3
   DamageImmunities: 
-  EntityProperties: 09000000
-  Speed: 1
-  AttackDelay: 2
+  EntityProperties: 07000000
+  EntitySpeed: 0.5
   EntityDamage: 1
   DamageType: 8
 --- !u!114 &2717639796838957309

@@ -18,8 +18,6 @@ public class MeleeEnemy : AbstractEnemy
         CurrentPosition = transform.position;
         return (CurrentPosition - LastPosition).normalized;
     }
-    private float AttackTime_ { get { return AttackTime; } set { AttackTime = Time.timeSinceLevelLoad + value; } }//Automatically update the cast time to the new time
-    private float AttackTime;
     private void OnCollisionEnter2D(Collision2D collision) {
         if (collision.transform.TryGetComponent(out PlayerEntity playerEntity) && AttackTime_ < Time.timeSinceLevelLoad) {
             playerEntity.TakeDamage(EntityDamage_, DamageType);

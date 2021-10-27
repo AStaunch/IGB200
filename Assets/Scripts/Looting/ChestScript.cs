@@ -41,7 +41,7 @@ public class ChestScript : MonoBehaviour, iSenderObject
             foreach (string UnlockName in UnlockNames) {
                 if (Array.Exists(UnlockManager.Instance.Registry.AllKeys(), (e) => { return e == UnlockName; })) {
                     UnlockManager.Instance.Registry.UnlockItem(UnlockName);
-                    GameObject.FindGameObjectWithTag("TextBox").GetComponent<DebugBox>().inputs.Add("Spell.unlock(" + UnlockName + ");");
+                    DebugBox.Instance.inputs.Add("Spell.unlock(" + UnlockName + ");");
                 } else {
                     throw new Exception($"Item by the name {UnlockName} does not exist within the unlock manager");
                 }

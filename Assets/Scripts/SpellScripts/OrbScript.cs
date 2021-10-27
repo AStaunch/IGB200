@@ -19,6 +19,8 @@ public class OrbScript : MonoBehaviour, iPhysicsInterface
     public EntityTypes EntityType_ => EntityTypes.Object;
     private float radius = 2.5f;
     private float duration = 5f;
+    public bool targetsPlayer = false;
+
     // Start is called before the first frame update
     void Start() {
         Anim_.speed = 1f;
@@ -39,13 +41,30 @@ public class OrbScript : MonoBehaviour, iPhysicsInterface
 
     private void Explode() {
         if (element == Elements.Push || element == Elements.Pull) {
-            ExplodePhysics();
+            if (targetsPlayer) {
+                ExplodePlayer();
+            } else {
+                ExplodePhysics();
+            }
         } else {
             ExplodeDamage();
         }
         Destroy(this.gameObject);
     }
-    
+
+    private void ExplodePlayer() {
+        float DistanceToPlayer = Vector2.Distance(transform.position, PlayerEntity.Instance.transform.position);
+        Vector2 direction = transform.position - PlayerEntity.Instance.transform.position;
+
+        if (PlayerEntity.Instance && DistanceToPlayer < 2 * 2 * radius) {
+            if (element == Elements.Push) {
+                PlayerEntity.Instance.UpdateForce(3 * baseDamage, direction, element);
+            } else {
+                PlayerEntity.Instance.StartCoroutine(LerpSelf(PlayerEntity.Instance.gameObject, transform.position, 1f));
+            }            
+        }
+    }
+
     private void ExplodePhysics() {
         List<GameObject> collider2Ds = new List<GameObject>();
         int layerMask = 1 << 5;
@@ -54,7 +73,7 @@ public class OrbScript : MonoBehaviour, iPhysicsInterface
             if (collider.TryGetComponent(out iPhysicsInterface iPhysics_) && !collider2Ds.Contains(collider.gameObject)) {
                 collider2Ds.Add(collider.gameObject);
                 Vector2 direction = transform.position - collider.transform.position;
-                iPhysics_.UpdateForce(baseDamage, direction, element);
+                iPhysics_.UpdateForce(3 * baseDamage, -direction, element);
             }
         }
     }
