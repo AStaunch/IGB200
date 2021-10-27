@@ -20,7 +20,7 @@ public class MapManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q)) {
+        if (Input.GetKeyDown(KeyCode.Q) && !DialogueManager.Instance.IsOpen) {
             if (isLoaded) {
                 UnloadMenu();
             } else {

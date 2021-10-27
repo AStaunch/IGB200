@@ -21,7 +21,7 @@ public class DialogueManager : MonoBehaviour
     }
     #endregion
     private Queue<string> sentences;
-    private bool IsOpen;
+    public bool IsOpen;
 
     private float textSpeed = 0.075f;
     private bool donePrinting = false;

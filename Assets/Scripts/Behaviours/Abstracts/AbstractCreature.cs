@@ -130,6 +130,7 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
     }
     public void AlertObservers(AnimationEvents message) {
         Debug.Log(transform.name + " recieved message " + message);
+        EdgeChecks = new bool[EdgeChecks.Length];
         if (message.Equals(AnimationEvents.Death)) {
             EntityDeath();
         }else if (message.Equals(AnimationEvents.Fall)){
@@ -139,7 +140,7 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
     private void OnCollisionStay2D(Collision2D collision) {
         EnterVoid(collision);
     }
-    private bool[] EdgeChecks = new bool[4];
+    internal bool[] EdgeChecks = new bool[4];
     internal void EnterVoid(Collision2D collision) {
         if ((collision.gameObject.TryGetComponent(out EmptySpaceScript _)/* || collision.gameObject.layer == 8*/) && gameObject.layer == 7) {
             //check NE corner
@@ -154,7 +155,10 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
             //check SW corner
             Vector2 SW = GetComponent<Collider2D>().bounds.min;
             if (CheckIfContained(SW, collision.collider)) EdgeChecks[3] = true;
-            if (!EdgeChecks.Contains(false)) { Anim_.SetTrigger("fall"); EntitySpeed_ = 0; }
+
+            int i = 0;
+            foreach (bool boo in EdgeChecks) { if (boo) { i++; } }
+            if (i > 2) { Anim_.SetTrigger("fall"); EntitySpeed_ = 0; }
 
             //string msg = "";
             //foreach (bool boo in EdgeChecks) msg += boo + " ";
@@ -167,17 +171,20 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
         if ((collision.gameObject.TryGetComponent(out EmptySpaceScript _)/* || collision.gameObject.layer == 8*/) && gameObject.layer == 7) {
             //check NE corner
             Vector2 NE = PhysicsCollider.bounds.max;
-            if (CheckIfContained(NE, collision.collider)) EdgeChecks[0] = true;
+            if (!CheckIfContained(NE, collision.collider)) EdgeChecks[0] = false;
             //check NW corner
             Vector2 NW = new Vector2(PhysicsCollider.bounds.min.x, PhysicsCollider.bounds.max.y);
-            if (CheckIfContained(NW, collision.collider)) EdgeChecks[1] = true;
+            if (!CheckIfContained(NW, collision.collider)) EdgeChecks[1] = false;
             //check SE corner
             Vector2 SE = new Vector2(PhysicsCollider.bounds.max.x, PhysicsCollider.bounds.min.y);
-            if (CheckIfContained(SE, collision.collider)) EdgeChecks[2] = true;
+            if (!CheckIfContained(SE, collision.collider)) EdgeChecks[2] = false;
             //check SW corner
             Vector2 SW = GetComponent<Collider2D>().bounds.min;
-            if (CheckIfContained(SW, collision.collider)) EdgeChecks[3] = true;
-            if (!EdgeChecks.Contains(false)){ Anim_.SetTrigger("fall"); EntitySpeed_ = 0; }
+            if (!CheckIfContained(SW, collision.collider)) EdgeChecks[3] = false;
+
+            int i = 0;
+            foreach(bool boo in EdgeChecks){ if(boo) {i++; } }
+            if (i > 2){ Anim_.SetTrigger("fall"); EntitySpeed_ = 0; }
 
             //string msg = "";
             //foreach (bool boo in EdgeChecks) msg += boo + " ";

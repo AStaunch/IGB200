@@ -91,7 +91,6 @@ public class PlayerEntity : AbstractCreature
     }
     public void CastSpell(SpellTemplate CallingSpell)
     {
-        //RB_.velocity = Vector2.zero;
         Animator anim = GetComponent<Animator>();
         anim.SetTrigger("attack");
         string CallingSpellName = CallingSpell.Name;
@@ -117,6 +116,7 @@ public class PlayerEntity : AbstractCreature
         RB_.velocity = Vector2.zero;
     }
     protected override void EntityFall() {
+        EntitySpeed_ = 5;
         if (LastDoor != null) {
             TakeDamage(1f, Elements.NULL);
             transform.position = LastDoor_.RespawnPoint;
