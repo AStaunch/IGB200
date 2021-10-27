@@ -137,14 +137,18 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
         EdgeChecks = new bool[EdgeChecks.Length];
         if (message.Equals(AnimationEvents.Death)) {
             EntityDeath();
-        }else if (message.Equals(AnimationEvents.Fall)){
+            hasFallen = false;
+        } else if (message.Equals(AnimationEvents.Fall)){
             EntityFall();
+            hasFallen = false;
         }
     }
     private void OnCollisionStay2D(Collision2D collision) {
         EnterVoid(collision);
     }
     internal bool[] EdgeChecks = new bool[4];
+    internal bool hasFallen = false;
+
     internal void EnterVoid(Collision2D collision) {
         if ((collision.gameObject.TryGetComponent(out EmptySpaceScript _)/* || collision.gameObject.layer == 8*/) && gameObject.layer == 7) {
             //check NE corner
@@ -162,7 +166,7 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
 
             int i = 0;
             foreach (bool boo in EdgeChecks) { if (boo) { i++; } }
-            if (i > 2) { Anim_.SetTrigger("fall"); EntitySpeed_ = 0; }
+            if (i > 2 && !hasFallen) { Anim_.SetTrigger("fall"); EntitySpeed_ = 0; hasFallen = true; }
 
             //string msg = "";
             //foreach (bool boo in EdgeChecks) msg += boo + " ";
@@ -185,16 +189,6 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
             //check SW corner
             Vector2 SW = GetComponent<Collider2D>().bounds.min;
             if (!CheckIfContained(SW, collision.collider)) EdgeChecks[3] = false;
-
-            int i = 0;
-            foreach(bool boo in EdgeChecks){ if(boo) {i++; } }
-            if (i > 2){ Anim_.SetTrigger("fall"); EntitySpeed_ = 0; }
-
-            //string msg = "";
-            //foreach (bool boo in EdgeChecks) msg += boo + " ";
-            //Debug.Log(msg + transform.name);
-            //if (!EdgeChecks.Contains(false)) Debug.LogWarning(transform.name + " has fallen into the River");
-            //Debug.Log($"{NE} {NW} {SE} {SW}");
         }
     }
     private bool CheckIfContained(Vector2 vector2, Collider2D collider) {
