@@ -68,7 +68,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7718ebae0d35d824b8e5594b530d3202, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DetectionRange: 8
+  DetectionRange: 10
   shuffle_delay: 0
   shuffle_time: 100
 --- !u!212 &7530107859469830135
