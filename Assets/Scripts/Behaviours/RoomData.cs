@@ -75,7 +75,7 @@ public class RoomData : MonoBehaviour
         Collider2D[] hitColliders = Physics2D.OverlapAreaAll(GetComponent<Collider2D>().bounds.min, GetComponent<Collider2D>().bounds.max, m_LayerMask);
         foreach (Collider2D collider in hitColliders) {
             bool b1 = collider.transform.TryGetComponent(out iRecieverObject _) || collider.transform.TryGetComponent(out iSenderObject _);
-            bool b2 = collider.transform.TryGetComponent(out iPropertyInterface _);
+            bool b2 = collider.transform.TryGetComponent(out iReloadInterface _);
             bool b3 = collider.transform.TryGetComponent(out AbstractDoor _) || collider.transform.TryGetComponent(out ChestScript _);
             bool Allowed = b1 || b2 || b3;
             bool Banned = collider.transform.TryGetComponent(out RoomData _) || collider.transform.TryGetComponent(out EmptySpaceScript _) || collider.transform.TryGetComponent(out PlayerEntity _);
