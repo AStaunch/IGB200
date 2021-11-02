@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using static EnumsAndDictionaries;
 
@@ -13,6 +14,8 @@ public class RangedEnemy : AbstractEnemy
     public GameObject Projectile;
     public float ProjectileSpeed = 3f;
     public void Attack(Vector2 Direction) {
+        AttackTime_ = AttackDelay;
+        UpdateAnimation(PlayerEntity.Instance.transform.position - transform.position);
         Anim_.SetTrigger("attack");
         Vector3 Dir3 = Direction.normalized;
         GameObject newProjectile = Instantiate(Projectile, transform.position + Dir3, transform.rotation);
@@ -28,10 +31,24 @@ public class RangedEnemy : AbstractEnemy
     public float Range = 20f;
     public new void  Update() {
         if (Vector3.Distance(transform.position, PlayerEntity.Instance.transform.position) < Range && AttackTime_ < Time.timeSinceLevelLoad && !isFrozen_) {
-            Attack(PlayerEntity.Instance.transform.position - transform.position);
-            AttackTime_ = AttackDelay;
-            UpdateAnimation(PlayerEntity.Instance.transform.position - transform.position);
+            if (checkLOS()) {
+                Attack(PlayerEntity.Instance.transform.position - transform.position);
+            }
         }
+    }
 
+    private void LastSeenFSM() {
+
+    }
+
+    private bool checkLOS() {
+        foreach (RaycastHit2D hit in Physics2D.RaycastAll(transform.position, PlayerEntity.Instance.transform.position, Range)) {
+            if (hit.transform.gameObject.layer == 8) {
+                return false;
+            } else if (hit.transform.gameObject != PlayerEntity.Instance.gameObject) {
+                return true;
+            }
+        }
+        return false;
     }
 }

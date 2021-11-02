@@ -83,17 +83,17 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
         if(SpriteRoutine != null) { StopCoroutine(SpriteRoutine); }
 
         if (elementType.Equals(Elements.Ice)) {
-            Debug.Log($"{transform.name} is frozen!");
+            //Debug.Log($"{transform.name} is frozen!");
             SpriteRoutine = TintSprite(2.5f, Color.cyan);
             StartCoroutine(SpriteRoutine);
             StartCoroutine(MovePause(2.5f));
         } else {
             if (damageInt > 0) {
-                Debug.Log($"{transform.name} takes {damageInt} {elementType} damage!");
+                //Debug.Log($"{transform.name} takes {damageInt} {elementType} damage!");
                 SpriteRoutine =  TintSprite(0.1f, Color.red);
                 StartCoroutine(SpriteRoutine);
             } else if (damageInt < 0) {
-                Debug.Log($"{transform.name} is healed for {-1 * damageInt} points!");
+                //Debug.Log($"{transform.name} is healed for {-1 * damageInt} points!");
                 SpriteRoutine = TintSprite(0.3f, Color.green);
                 StartCoroutine(SpriteRoutine);
             }
@@ -106,10 +106,10 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
         Health = Mathf.Clamp(Health, 0, MaxHealth_);
         //Check if the entity should die
         if (0 >= Health_) {
-            Debug.Log($"{transform.name} dies!!!");
+            //Debug.Log($"{transform.name} dies!!!");
             EntitySpeed_ = 0;
             Anim_.SetTrigger("death");
-            DebugBox.Instance.inputs.Add($"Object.Destroy({transform.name});");
+            DebugBox.Instance.inputs.Add($"Object.Destroy({transform.name.Replace("(Clone)","")});");
         }
     }
     public abstract void UpdateAnimation(Vector3 change);

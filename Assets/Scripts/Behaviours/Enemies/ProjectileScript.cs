@@ -28,7 +28,6 @@ public class ProjectileScript : MonoBehaviour , iPhysicsInterface
                 SpellRenderer.Instance.CreateBurstFX(transform.position, ColourDict[element]);
             }
             Destroy(this.gameObject);
-            Debug.Log("Trigger");
         }
     }
     public void StartProj() {
