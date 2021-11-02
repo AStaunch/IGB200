@@ -99,7 +99,7 @@ public class RoomData : MonoBehaviour
             } else {
                 if (!RoomDoors_.Contains(ab)) {
                     RoomDoors_.Add(ab);
-                    if (!ab.isException) {
+                    if (!ab.isException_) {
                         ab.RoomData_ = this;
                     }
                 }
@@ -161,12 +161,13 @@ public class RoomData : MonoBehaviour
             hasVisited_ = true;
             return;
         }
-
-        bool BannedTypes = collider.transform.TryGetComponent(out iRecieverObject _) || collider.transform.TryGetComponent(out iSenderObject _);
-        BannedTypes = BannedTypes || collider.transform.TryGetComponent(out RoomData _);
-        if (!RoomObjects_.Contains(collider.gameObject) && collider.transform.TryGetComponent(out iPropertyInterface _) && !(BannedTypes)) {
-            RoomObjects_.Add(collider.gameObject);
-            collider.gameObject.SetActive(false);
+        if (collider.transform.TryGetComponent(out iReloadInterface iReload)) {
+            if (!iReload.isException_) {
+                if (!RoomObjects_.Contains(collider.gameObject)) {
+                    RoomObjects_.Add(collider.gameObject);
+                    collider.gameObject.SetActive(false);
+                }
+            }
         }
     }
 

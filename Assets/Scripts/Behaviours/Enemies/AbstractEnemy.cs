@@ -5,6 +5,7 @@ using UnityEngine;
 using static EnumsAndDictionaries;
 public abstract class AbstractEnemy : AbstractCreature, iEnemyInterface
 {
+    public override bool isException_ => false;
     public static float AttackDelay = 3;
     public float EntityDamage;
     public Elements DamageType = Elements.NULL;

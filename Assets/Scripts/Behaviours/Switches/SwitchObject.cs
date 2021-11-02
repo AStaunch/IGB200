@@ -23,7 +23,7 @@ public class SwitchObject : MonoBehaviour, iSenderObject, iHealthInterface
     private int Health;
     public int MaxHealth_ { get => MaxHealth; set => MaxHealth = value; }
     private int MaxHealth = 1;
-    public Elements[] DamageImmunities_ { get => new Elements[0]; set => _ = value; }
+    public Elements[] ElementImmunities_ { get => new Elements[0]; set => _ = value; }
     public Elements activeElement = Elements.Electricity; public Elements inactiveElement = Elements.NULL;
 
     // Start is called before the first frame update

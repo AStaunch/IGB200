@@ -25,21 +25,24 @@ public class PlayerEntity : AbstractCreature
     List<Rigidbody2D> collidedObjects = new List<Rigidbody2D>();
     private Collider2D CollisionCollider;
     public RoomData SaveRoomData_ {get => StartRoomData; set => StartRoomData = value; }
+
+    public override bool isException_ => true;
+
     private RoomData StartRoomData;
-    private Vector3 StartPosition_;
+    internal Vector3 SavePosition_;
     private Vector3 change;
     // Update is called once per frame
     bool NoClip;
 
     private void Start() {
-        StartPosition_ = transform.position;
+        SavePosition_ = transform.position;
         DefaultMat = GetComponent<SpriteRenderer>().material;
         Deceleration_ = 5;
         Health_ = MaxHealth_;
         EntitySpeed_ = 5;
         gameObject.layer = 7;
-        if (DamageImmunities_ == null) {
-            DamageImmunities_ = new Elements[0];
+        if (ElementImmunities_ == null) {
+            ElementImmunities_ = new Elements[0];
         }
         Collider2D[] AllColliders = GetComponents<Collider2D>();
         foreach (Collider2D collider in AllColliders) {
@@ -109,7 +112,7 @@ public class PlayerEntity : AbstractCreature
     }
     public override void EntityDeath() {
         Health_ = MaxHealth_;
-        transform.position = StartPosition_;
+        transform.position = SavePosition_;
         EntitySpeed_ = 5;
         SaveRoomData_.Load();
         if (LastDoor != null) {

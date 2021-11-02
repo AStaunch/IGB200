@@ -5,7 +5,7 @@ using UnityEngine;
 using static EnumsAndDictionaries;
 using static SpriteManager;
 using static SoundManager;
-public class EmptySpaceScript : MonoBehaviour, iHealthInterface
+public class EmptySpaceScript : MonoBehaviour, iDamageInterface
 {
     public VoidType VoidType_;
 
@@ -19,6 +19,8 @@ public class EmptySpaceScript : MonoBehaviour, iHealthInterface
     }
     private bool isFrozen;
     float Duration = 7f;
+    public bool isElectric_ { get => isElectric; set => isElectric = value; }
+    private bool isElectric;
 
     private void Start() {
         gameObject.layer = 2;
@@ -42,7 +44,6 @@ public class EmptySpaceScript : MonoBehaviour, iHealthInterface
         bc.size = new Vector2( 1.0f, 1.0f );
         bc.isTrigger = false;
     }
-
     private void OnCollisionEnter2D(Collision2D collision) {
         if (collision.transform.TryGetComponent(out BlockScript _)){
             if (VoidType_ == VoidType.Water && !bc.isTrigger) 
@@ -83,7 +84,7 @@ public class EmptySpaceScript : MonoBehaviour, iHealthInterface
 
     private void ChainReactionElecticity() {
         foreach (Collider2D collider in Physics2D.OverlapCircleAll(transform.position, 1f, 1 << 2)) {
-            if (collider.TryGetComponent(out iHealthInterface iHealth)) {
+            if (collider.TryGetComponent(out iDamageInterface _)) {
                 if (collider.TryGetComponent(out EmptySpaceScript ESS)) {
                     if (!ESS.isFrozen_ && !ESS.isElectric_) {
                         ESS.TakeDamage(1f, Elements.Electricity, SpellTemplates.Orb);
@@ -93,7 +94,7 @@ public class EmptySpaceScript : MonoBehaviour, iHealthInterface
         }
         int mask = 1 << 6 | 1 << 7;
         foreach (Collider2D collider in Physics2D.OverlapCircleAll(transform.position, 1f, mask)) {
-            if (collider.TryGetComponent(out iHealthInterface iHealth)) {
+            if (collider.TryGetComponent(out iDamageInterface iHealth)) {
                 iHealth.TakeDamage(1f, Elements.Electricity);
             }
         }
@@ -129,16 +130,4 @@ public class EmptySpaceScript : MonoBehaviour, iHealthInterface
             }
         }
     }
-
-    public void EntityDeath() {
-        throw new NotImplementedException();
-    }
-    public int Health_ { get => -1; set => _ = value; }
-    public int MaxHealth_ { get => -1; set => _ = value; }
-    public Elements[] DamageImmunities_ { get => new Elements[0]; set => _ = value; }
-    public Properties[] EntityProperties_ { get => new Properties[0]; set => _ = value; }
-    public EntityTypes EntityType_ => EntityTypes.Object;
-
-    public bool isElectric_ { get => isElectric; set => isElectric = value; }
-    private bool isElectric;
 }

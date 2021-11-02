@@ -184,7 +184,7 @@ public static class Effectors
         switch (CallingTemp) {
             case "Ray":
                 RayData Ray_ = (RayData)EffectorData_;
-                if (Ray_.Data.collider.gameObject.TryGetComponent(out iHealthInterface otherEntity)) {
+                if (Ray_.Data.collider.gameObject.TryGetComponent(out iDamageInterface otherEntity)) {
                     otherEntity.TakeDamage(EffectorData_.baseStrength, element);
                 }
                 break;

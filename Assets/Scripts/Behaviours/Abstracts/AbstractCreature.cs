@@ -5,14 +5,14 @@ using UnityEngine;
 using static EnumsAndDictionaries;
 using static SoundManager;
 using static SpellFunctionLibrary;
-public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreatureInterface, iPhysicsInterface, iPropertyManager, iFacingInterface
+public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreatureInterface, iPhysicsInterface, iPropertyInterface,iPropertyManager, iFacingInterface, iReloadInterface
 {
     public abstract bool IsEnemy { get; }
     public int Health_ { get => Health; set { Health = value; } }
     private int Health;
     public int MaxHealth_ { get => MaxHealth; set => MaxHealth = value; }
     public int MaxHealth = 1;
-    public Elements[] DamageImmunities_ { get => DamageImmunities; set => DamageImmunities = value; }
+    public Elements[] ElementImmunities_ { get => DamageImmunities; set => DamageImmunities = value; }
     [SerializeField]
     private Elements[] DamageImmunities = new Elements[0];
     public Properties[] EntityProperties_ { get => EntityProperties; set => EntityProperties = value; }
@@ -40,6 +40,9 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
             return GetComponent<Collider2D>();
         }
     }
+
+    public abstract bool isException_ { get; }
+
     protected Material DefaultMat;
     private void FixedUpdate() {
         Decelerate();
@@ -64,7 +67,7 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
         int damageInt = Mathf.RoundToInt(damage);
         string SoundName = elementType.ToString() + "Damage";
         //Check if this does damage
-        if (DamageImmunities_.Contains(elementType) || damageInt == 0) {
+        if (ElementImmunities_.Contains(elementType) || damageInt == 0) {
             SoundName = "AttackFail";
             Instantiate(SoundDict[SoundName]);
             return;
@@ -234,36 +237,36 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
         Array.Resize(ref EntityProperties, EntityProperties_.Length - 1);
     }
     public void AddImmunity(Elements element) {
-        if (!DamageImmunities_.Contains(element)) {
+        if (!ElementImmunities_.Contains(element)) {
             //Add Property
-            Array.Resize(ref DamageImmunities, DamageImmunities_.Length + 1);
-            DamageImmunities_[DamageImmunities_.Length - 1] = element;
+            Array.Resize(ref DamageImmunities, ElementImmunities_.Length + 1);
+            ElementImmunities_[ElementImmunities_.Length - 1] = element;
         }
     }
     public void RemoveImmunity(Elements property) {
-        if (DamageImmunities_.Contains(property)) {
-            int index = Array.FindIndex(DamageImmunities, 0, DamageImmunities_.Length, DamageImmunities_.Contains);
-            for (; index < DamageImmunities_.Length - 1; index++) {
-                DamageImmunities_[index] = DamageImmunities_[index + 1];
+        if (ElementImmunities_.Contains(property)) {
+            int index = Array.FindIndex(DamageImmunities, 0, ElementImmunities_.Length, ElementImmunities_.Contains);
+            for (; index < ElementImmunities_.Length - 1; index++) {
+                ElementImmunities_[index] = ElementImmunities_[index + 1];
             }
             Array.Resize(ref EntityProperties, EntityProperties_.Length - 1);
         }
     }
     public void AddImmunity(Elements element, float duration) {
-        if (!DamageImmunities_.Contains(element)) {
+        if (!ElementImmunities_.Contains(element)) {
             StartCoroutine(AddImmunityForDuration(element, duration));
         }
     }
     private IEnumerator AddImmunityForDuration(Elements element, float duration) {
         float t = 0;
-        Array.Resize(ref DamageImmunities, DamageImmunities_.Length + 1);
-        DamageImmunities_[DamageImmunities_.Length - 1] = element;
+        Array.Resize(ref DamageImmunities, ElementImmunities_.Length + 1);
+        ElementImmunities_[ElementImmunities_.Length - 1] = element;
 
         while (t < duration) {
             t += Time.deltaTime;
             yield return null;
         }
-        Array.Resize(ref DamageImmunities, DamageImmunities_.Length - 1);
+        Array.Resize(ref DamageImmunities, ElementImmunities_.Length - 1);
     }
     public IEnumerator MovePause(float Wait) {
         float SpeedStore = EntitySpeed_;

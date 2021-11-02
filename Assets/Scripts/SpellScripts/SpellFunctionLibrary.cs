@@ -122,7 +122,7 @@ public static class SpellFunctionLibrary
                 PI.UpdateForce(Strength, direction.normalized, element);
             }
         } else {
-            if (ac.HitCollider.transform.TryGetComponent(out iHealthInterface HI)) {
+            if (ac.HitCollider.transform.TryGetComponent(out iDamageInterface HI)) {
                 HI.TakeDamage(Strength, element);
             }
         }
@@ -153,7 +153,7 @@ public static class SpellFunctionLibrary
                     Debug.DrawLine(Cone_.CasterObject.transform.position, gameObject.transform.position, Color.magenta, 1f);
                 }
             } else {
-                if (gameObject.TryGetComponent(out iHealthInterface iHealth_)) {
+                if (gameObject.TryGetComponent(out iDamageInterface iHealth_)) {
                     iHealth_.TakeDamage(baseStrength, element, SpellTemplates.Cone);
                     Debug.DrawLine(Cone_.CasterObject.transform.position, gameObject.transform.position, Color.red, 1f);
                 }

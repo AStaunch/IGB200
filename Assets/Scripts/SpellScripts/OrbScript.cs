@@ -82,7 +82,7 @@ public class OrbScript : MonoBehaviour, iPhysicsInterface
         int layerMask = 1 << 5;
         layerMask = ~layerMask;
         foreach (Collider2D collider in Physics2D.OverlapCircleAll(transform.position, radius, layerMask)) {
-            if (collider.TryGetComponent(out iHealthInterface health_) && !collider2Ds.Contains(collider.gameObject)) {
+            if (collider.TryGetComponent(out iDamageInterface health_) && !collider2Ds.Contains(collider.gameObject)) {
                 collider2Ds.Add(collider.gameObject);
                 health_.TakeDamage(baseDamage, element, SpellTemplates.Orb);
             }

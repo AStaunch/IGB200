@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using static EnumsAndDictionaries;
 using static SoundManager;
-public class BlockScript : MonoBehaviour, iPhysicsInterface
+public class BlockScript : MonoBehaviour, iPhysicsInterface, iReloadInterface
 {
     private List<Rigidbody2D> collidedObjects = new List<Rigidbody2D>();
     public float Deceleration;
     public float VelocityOfOnePush;
     public float Deceleration_ { get => Deceleration; set => Deceleration = value; }
     public Rigidbody2D RB_ { get => GetComponent<Rigidbody2D>(); }
-    public Properties[] EntityProperties_ { get => new Properties[] { }; set => _ = value; }
-    public EntityTypes EntityType_ { get => EntityTypes.Object;}
+
+    public bool isException_ => false;
 
     private void Start() {
         GetComponent<SpriteRenderer>().sortingLayerName = "Objects";

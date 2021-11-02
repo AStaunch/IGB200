@@ -7,17 +7,14 @@ using static EnumsAndDictionaries;
 using static SpriteManager;
 using static SoundManager;
 
-public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
+public abstract class AbstractDoor : MonoBehaviour, iHealthInterface, iReloadInterface
 {
     public GameObject walkThroughSoundEffect;
     //public int triggerID;
     public bool isSolveTrigger;
+    public bool isException_ => isException;
     public bool isException;
     private bool firstEnter = true;
-    //public GameObject nextRoomContents;
-    //public int nextRoomId = 0;
-    //private bool nextExists;
-    //private GameObject spawnedContents;
 
     public AbstractDoor ExitDoor;
     [Range(-1, 10)]
@@ -35,7 +32,7 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
     private int Health;
     public int MaxHealth_ { get => MaxHealth; set => MaxHealth = value; }
     private int MaxHealth;
-    public Elements[] DamageImmunities_ { get => null; set => _ = value; }
+    public Elements[] ElementImmunities_ { get => null; set => _ = value; }
     private void Awake() {
         ValidateFunction();
     }
@@ -73,8 +70,8 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface
             }
         }
     }
-
     public Vector3 RespawnPoint {get => transform.position - (Vector3) VectorDict[CurrentDirection_]; }
+
     public void InitExitDoor() {
         if (!ExitDoor)
             return;

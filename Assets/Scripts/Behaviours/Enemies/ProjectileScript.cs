@@ -20,7 +20,7 @@ public class ProjectileScript : MonoBehaviour , iPhysicsInterface
     public EntityTypes EntityType_ => EntityTypes.Object;
     private void OnTriggerEnter2D(Collider2D collision) {
         if (!collision.isTrigger || collision.gameObject != Shooter) {
-            if (collision.transform.TryGetComponent(out iHealthInterface iHealth)) {
+            if (collision.transform.TryGetComponent(out iDamageInterface iHealth)) {
                 iHealth.TakeDamage(Damage, element);
                 Debug.Log("Projectile Hit " + collision.transform.name);
             }
