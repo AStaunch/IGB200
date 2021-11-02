@@ -152,7 +152,7 @@ public class PlayerEntity : AbstractCreature
     }
     //Very Hacky Kino Management
     private void OnCollisionEnter2D(Collision2D collision) {
-        bool b1 = collision.transform.TryGetComponent(out iPropertyInterface _) && !collision.transform.TryGetComponent(out EmptySpaceScript _); 
+        bool b1 = collision.transform.TryGetComponent(out iPhysicsInterface _) && !collision.transform.TryGetComponent(out EmptySpaceScript _); 
         bool b2 = collision.transform.TryGetComponent(out Rigidbody2D rb);
         if (b1 && b2) {
             collidedObjects.Add(rb);
