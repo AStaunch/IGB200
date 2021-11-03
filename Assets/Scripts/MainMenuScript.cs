@@ -7,6 +7,7 @@ public class MainMenuScript : MonoBehaviour
 {
     public GameObject TitleCard;
     public GameObject ControlsCard;
+    public GameObject[] ControlPGs;
     public GameObject ExitPopup;
     public static int introID = 0;
     public static int menuID = 1;
@@ -40,11 +41,17 @@ public class MainMenuScript : MonoBehaviour
     public void OpenControls() {
         ControlsCard.SetActive(true);
         TitleCard.SetActive(false);
+        FirstPage();
     }
     public void CloseExit() {
         ExitPopup.SetActive(false);
     }
-    public void nextControls() {
-
+    public void FirstPage() {
+        ControlPGs[0].SetActive(true);
+        ControlPGs[1].SetActive(false);
+    }
+    public void SecondPage() {
+        ControlPGs[0].SetActive(false);
+        ControlPGs[1].SetActive(true);
     }
 }

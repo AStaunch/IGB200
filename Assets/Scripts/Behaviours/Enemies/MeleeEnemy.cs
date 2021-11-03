@@ -8,7 +8,6 @@ public class MeleeEnemy : AbstractEnemy
     private Vector3 CurrentPosition = Vector3.zero;
     private Vector3 LastPosition = Vector3.zero;
 
-
     public override Vector3 CalculateFacing() {
         if (CurrentPosition == Vector3.zero) {
             LastPosition = Vector3.zero;

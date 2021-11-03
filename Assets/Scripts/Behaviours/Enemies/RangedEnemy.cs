@@ -13,10 +13,10 @@ public class RangedEnemy : AbstractEnemy
     }
 
     public GameObject Projectile;
-    public float ProjectileSpeed = 3f;
+    public float ProjectileSpeed = 3f;  
     public void Attack(Vector2 Direction) {
         AttackTime_ = AttackDelay;
-        UpdateAnimation(PlayerEntity.Instance.transform.position - transform.position);
+        UpdateAnimation(Direction);
         Anim_.SetTrigger("attack");
         Vector3 Dir3 = Direction.normalized;
         GameObject newProjectile = Instantiate(Projectile, transform.position + Dir3, transform.rotation);
@@ -29,11 +29,9 @@ public class RangedEnemy : AbstractEnemy
         projectile.StartProj();
         lastAttackDir = Direction;
     }
+
     public float Range = 20f;
-    public new void  Update() {
-
-        
-
+    public new void  Update() {     
 
         if (Vector3.Distance(transform.position, PlayerEntity.Instance.transform.position) < Range && AttackTime_ < Time.timeSinceLevelLoad && !isFrozen_) {
             RaycastHit2D[] hit2d_a = Physics2D.RaycastAll(transform.position, PlayerEntity.Instance.transform.position - transform.position, Range);
@@ -41,19 +39,17 @@ public class RangedEnemy : AbstractEnemy
             hit2d_a = Array.FindAll(hit2d_a, (h) => { return h.collider.gameObject.layer == LayerMask.NameToLayer("WALL") || h.collider.gameObject == PlayerEntity.Instance.gameObject; });
             Array.Sort<RaycastHit2D>(hit2d_a, (ray1, ray2) => { return ray1.distance.CompareTo(ray2.distance); });
 
-            bool WallFirst = false;
-            RaycastHit2D hit2d = new RaycastHit2D();
             for (int i = 0; i < hit2d_a.Length; i++) {
                 //Debug.Log($"{hit2d_a[i].collider.name}");
 
                 if (hit2d_a[i].collider.gameObject.layer == LayerMask.NameToLayer("WALL")) {
                     Debug.Log("Wall first");
-                    WallFirst = true;
                     break;
                 } else if (hit2d_a[i].collider.gameObject == PlayerEntity.Instance.gameObject) {
                     //Debug.Log("Player");
-                    Attack(PlayerEntity.Instance.transform.position - transform.position);
-                    hit2d = hit2d_a[i];
+                    if(AttackTime_ < Time.timeSinceLevelLoad) {
+                        Attack(PlayerEntity.Instance.transform.position - transform.position);
+                    }
                 } else if (hit2d_a[i].collider.gameObject == gameObject) {
                     //this is just to ignore self
                 }

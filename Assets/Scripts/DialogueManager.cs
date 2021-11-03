@@ -9,6 +9,8 @@ public class DialogueManager : MonoBehaviour
     public TMP_Text nameText;
     public TMP_Text dialogText;
     public Image portrait;
+    public AudioClip clip;
+    public AudioSource sound;
     #region Singleton Things
     private static DialogueManager _instance;
     public static DialogueManager Instance { get { return _instance; } }
@@ -73,22 +75,26 @@ public class DialogueManager : MonoBehaviour
         donePrinting = false;
         textSpeed = 0.075f;
         for(int i = 0; i < sentence.Length; i++) {
+            sound.Play();
             if (i - sentence.Length > 0 && sentence.Substring(i, waitCmd.Length).StartsWith("/w=")) {
                 string str = sentence.Substring(i, waitCmd.Length).Replace("/w=", "");
                 int waitTime = int.Parse(str);
                 i += waitCmd.Length;
                 dialogText.text += "\n";
+                
                 yield return new WaitForSecondsRealtime(waitTime);
 
             } else {
                 char Char = sentence.ToCharArray()[i];
                 dialogText.text += Char;
+                sound.Play();
                 if (Char == ' ') {
                     yield return null;
                 } else {
                     yield return new WaitForSecondsRealtime(textSpeed);
                 }
             }
+            sound.Stop();
 
         }
         if (PAK) {

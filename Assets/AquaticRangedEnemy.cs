@@ -9,4 +9,8 @@ public class AquaticRangedEnemy : AbstractAquaticCreature
             Anim_.SetTrigger("fall");
         }
     }
+
+    private void Attack() {
+
+    }
 }
