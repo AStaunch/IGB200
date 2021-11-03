@@ -10,12 +10,12 @@ GameObject:
   m_Component:
   - component: {fileID: 7530107859469830132}
   - component: {fileID: 7022341059925933522}
-  - component: {fileID: 8025751539796210941}
   - component: {fileID: 7530107859469830135}
   - component: {fileID: 1303280099948242629}
   - component: {fileID: 4862032320047774621}
   - component: {fileID: 7932228465127558503}
   - component: {fileID: 588158059113642338}
+  - component: {fileID: 4254016258049561245}
   m_Layer: 7
   m_Name: HeavyKnight
   m_TagString: Untagged
@@ -31,7 +31,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7530107859469830134}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -40.75, y: 12.96, z: 11.052466}
+  m_LocalPosition: {x: -40.75, y: 12.96, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6600401683629084018}
@@ -53,24 +53,9 @@ MonoBehaviour:
   MaxHealth: 1
   DamageImmunities: 000000000100000002000000060000000700000008000000
   EntityProperties: 0700000000000000
-  EntitySpeed: 0.5
+  EntitySpeed: 20
   EntityDamage: 2
   DamageType: 8
---- !u!114 &8025751539796210941
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7530107859469830134}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7718ebae0d35d824b8e5594b530d3202, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DetectionRange: 10
-  shuffle_delay: 0
-  shuffle_time: 100
 --- !u!212 &7530107859469830135
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -204,6 +189,21 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
+--- !u!114 &4254016258049561245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7530107859469830134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3712137c883acc4d9e44c62063b6433, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DetectionRange: 6
+  MoveDelay: 3
+  ForceMultiplier: 50
 --- !u!1001 &7878892443233374252
 PrefabInstance:
   m_ObjectHideFlags: 0

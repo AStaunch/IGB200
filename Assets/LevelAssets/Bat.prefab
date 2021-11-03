@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 8820126500696495901}
   - component: {fileID: 8820126500696495900}
   - component: {fileID: 4247143225670407978}
+  - component: {fileID: -2182435571304819879}
   m_Layer: 6
   m_Name: Bat
   m_TagString: Untagged
@@ -63,7 +64,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8820126500696495899}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d5b1083382a07f94984e238e7e99b620, type: 3}
   m_Name: 
@@ -310,3 +311,16 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &-2182435571304819879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8820126500696495899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65841066bca08344ea2e186c450ab4cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DetectionRange: 7

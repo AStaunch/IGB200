@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 737076332615218936}
   - component: {fileID: 2834761314103017474}
   - component: {fileID: 4713713022416892935}
+  - component: {fileID: -3494534654847129844}
   m_Layer: 7
   m_Name: HeavyArcher
   m_TagString: Untagged
@@ -44,7 +45,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2432971386065078931}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3247b5f4d8619a34f976520d9c9f6956, type: 3}
   m_Name: 
@@ -191,6 +192,28 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
+--- !u!114 &-3494534654847129844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2432971386065078931}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9883ea833d53d44f878ad799a5fdbc7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxHealth: 1
+  DamageImmunities: 
+  EntityProperties: 
+  EntitySpeed: 0.5
+  EntityDamage: 0
+  DamageType: 8
+  DetectionRange: 20
+  Projectile: {fileID: 8796769972016898954, guid: a56005c5e9d282048b61373a6eff513e, type: 3}
+  ProjectileSpeed: 5
+  ThrowDelay: 2
 --- !u!1001 &2398362744900718852
 PrefabInstance:
   m_ObjectHideFlags: 0

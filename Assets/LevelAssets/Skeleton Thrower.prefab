@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 3504521933368448444}
   - component: {fileID: 6241972870798778809}
   - component: {fileID: 945307652278585644}
+  - component: {fileID: 5510348092793207129}
   m_Layer: 7
   m_Name: Skeleton Thrower
   m_TagString: Untagged
@@ -95,7 +96,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3906361205744590637}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3247b5f4d8619a34f976520d9c9f6956, type: 3}
   m_Name: 
@@ -201,6 +202,28 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.73, y: 0.32}
   m_EdgeRadius: 0
+--- !u!114 &5510348092793207129
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3906361205744590637}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9883ea833d53d44f878ad799a5fdbc7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxHealth: 1
+  DamageImmunities: 
+  EntityProperties: 07000000
+  EntitySpeed: 0.5
+  EntityDamage: 1
+  DamageType: 8
+  DetectionRange: 20
+  Projectile: {fileID: 8796769972016898954, guid: a56005c5e9d282048b61373a6eff513e, type: 3}
+  ProjectileSpeed: 4
+  ThrowDelay: 2.25
 --- !u!1001 &139954340862339139
 PrefabInstance:
   m_ObjectHideFlags: 0
