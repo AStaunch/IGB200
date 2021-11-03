@@ -31,10 +31,13 @@ public class FSM_Struct
     {
         if (PreviousState != ActiveState)
         {
+            PreviousState = ActiveState;
+            //Debug.Log($"{(PreviousState == null ? "null" : PreviousState.Description)} - {ActiveState.Description}");
             if (ActiveState_co != null)
                 mono.StopCoroutine(ActiveState_co);
+            //Debug.Log(ActiveState.StateLogic);
             ActiveState_co = mono.StartCoroutine(ActiveState.StateLogic);
-            PreviousState = ActiveState;
+            
         }
     }
 }

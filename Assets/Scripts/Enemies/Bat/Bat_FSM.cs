@@ -22,7 +22,7 @@ public class Bat_FSM : MonoBehaviour
                 {
                     Description = "Chase condition",
                     StateLogic = Chase(),
-                    StatePredicate = (fsmd) => { return fsmd.Distance < DetectionRange || (fsmd.UsePos && Vector2.Distance(fsmd.Caller.transform.position, fsmd.TargetPos) > 0.5f); }
+                    StatePredicate = (fsmd) => { return fsmd.Distance < DetectionRange && fsmd.Distance > 0.5f; }
                 }
             },
             {
@@ -37,33 +37,39 @@ public class Bat_FSM : MonoBehaviour
     }
 
 
-
-
-
-
-
-
-
-
-
-
     Rigidbody2D rb2d { get => gameObject.GetComponent<Rigidbody2D>(); }
     private float MoveSpeed { get => GetComponent<iCreatureInterface>().EntitySpeed_; }
     private FSM_Datapass fsmdp = new FSM_Datapass();
 
 
+    bool InView { get => HitPlayerFirst(); }
+    bool wasInView = false;
+
     IEnumerator Idle() 
     { 
         while (true) 
         {
-            if (HitPlayerFirst())
+            if (InView)
             {
                 fsmdp = new FSM_Datapass()
                 {
                     Caller = this_gm_obj,
                     Target = PlayerRef,
-                    UsePos = true
+                    UsePos = false,
+                    TargetPos = fsmdp.TargetPos
                 };
+                wasInView = true;
+            }
+            else if (wasInView)
+            {
+                fsmdp = new FSM_Datapass()
+                {
+                    Caller = this_gm_obj,
+                    Target = null,
+                    UsePos = true,
+                    TargetPos = fsmdp.TargetPos
+                };
+                wasInView = false;
             }
             yield return new WaitForEndOfFrame(); 
         } 
@@ -98,21 +104,27 @@ public class Bat_FSM : MonoBehaviour
     {
         while (true)
         {
-            if(Vector2.Distance(PlayerRef.transform.position, this_gm_obj.transform.position) <= DetectionRange)
+            
+            if (Vector2.Distance(PlayerRef.transform.position, this_gm_obj.transform.position) <= DetectionRange && fsmdp.UsePos == false)
+            {
                 fsmdp.TargetPos = PlayerRef.transform.position;
+            }
+
 
             if (fsmdp.UsePos)
             {
-                if (Vector2.Distance(this_gm_obj.transform.position, fsmdp.TargetPos) < 0.1f)
+                
+                Vector2 norm_1 = (fsmdp.TargetPos - this_gm_obj.transform.position).normalized;
+                Vector2 tmp = norm_1 * Time.deltaTime * MoveSpeed * 1000;
+
+                if(Vector2.Distance(this_gm_obj.transform.position, fsmdp.TargetPos) < 0.5f)
                 {
                     rb2d.velocity = Vector2.zero;
                     this_gm_obj.transform.position = fsmdp.TargetPos;
                 }
                 else
-                {
-                    Vector2 norm_1 = (fsmdp.TargetPos - this_gm_obj.transform.position).normalized;
-                    rb2d.AddForce(norm_1 * Time.deltaTime * MoveSpeed * 1000);
-                }
+                    rb2d.AddForce(tmp);
+
             }
             else
             {
@@ -122,16 +134,9 @@ public class Bat_FSM : MonoBehaviour
                 }
                 else
                 {
-                    if (Vector2.Distance(this_gm_obj.transform.position, fsmdp.Target.transform.position) < 0.1f)
-                    {
-                        rb2d.velocity = Vector2.zero;
-                        this_gm_obj.transform.position = fsmdp.Target.transform.position;
-                    }
-                    else
-                    {
-                        Vector2 norm_1 = (fsmdp.Target.transform.position - this_gm_obj.transform.position).normalized;
-                        rb2d.AddForce(norm_1 * Time.deltaTime * MoveSpeed * 1000);
-                    }
+                    Vector2 norm_1 = (fsmdp.Target.transform.position - this_gm_obj.transform.position).normalized;
+                    Vector2 tmp = norm_1 * Time.deltaTime * MoveSpeed * 1000;
+                    rb2d.AddForce(tmp);
                 }
             }
             yield return new WaitForEndOfFrame();
