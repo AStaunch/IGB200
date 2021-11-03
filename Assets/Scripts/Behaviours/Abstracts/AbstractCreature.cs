@@ -136,7 +136,7 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
         
     }
     public void AlertObservers(AnimationEvents message) {
-        Debug.Log(transform.name + " recieved message " + message);
+        //Debug.Log(transform.name + " recieved message " + message);
         EdgeChecks = new bool[EdgeChecks.Length];
         if (message.Equals(AnimationEvents.Death)) {
             EntityDeath();
@@ -271,6 +271,7 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
     public IEnumerator MovePause(float Wait) {
         float SpeedStore = EntitySpeed_;
         float time = 0;
+        Anim_.speed = 0;
         isFrozen_ = true;
         while (time < Wait) {
             EntitySpeed_ = 0f;
@@ -279,6 +280,7 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
         }
         isFrozen_ = false;
         EntitySpeed_ = SpeedStore;
+        Anim_.speed = 1;
     }
     public IEnumerator TintSprite(float duration, Color color) {
         float time = 0;

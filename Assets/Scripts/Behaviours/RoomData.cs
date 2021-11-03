@@ -87,7 +87,9 @@ public class RoomData : MonoBehaviour
     }
     public void UnSortRoom() {
         for (int i = transform.childCount - 1; i >= 0; i--) {
-            transform.GetChild(i).parent = null;
+            if(transform.GetChild(i).gameObject != fill) {
+                transform.GetChild(i).parent = null;
+            }
         }
         fill.transform.parent = this.transform;
     }

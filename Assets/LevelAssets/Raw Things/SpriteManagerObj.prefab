@@ -79,6 +79,12 @@ MonoBehaviour:
     Sprites:
     - {fileID: 5801255725635399724, guid: 0ffa0633ee3fcb442a2d712505b73362, type: 3}
     - {fileID: -841097564060088913, guid: 0ffa0633ee3fcb442a2d712505b73362, type: 3}
+  - name: PlayerIcon
+    Sprites:
+    - {fileID: 21300000, guid: 7ad5102325176c84a9250fdd73b310c7, type: 3}
+  - name: ObjectIcon
+    Sprites:
+    - {fileID: 21300000, guid: dec4718bbaeef8d4e887f14c9a63fd2c, type: 3}
 --- !u!114 &5519067948932802383
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -9,7 +9,8 @@ public class MapManager : MonoBehaviour
     public GameObject mapScreen;
     // Start is called before the first frame update
     RoomData[] AllRooms;
-    private bool isLoaded;
+    public static bool isActive;
+    public static bool isOnlyMenu => !(HotbarHandler.isActive || PauseMenu.isActive || DialogueManager.isActive);
 
     void Start()
     {
@@ -20,37 +21,40 @@ public class MapManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q) && !DialogueManager.IsOpen) {
-            if (isLoaded) {
+        if (Input.GetKeyDown(KeyCode.Q) && isOnlyMenu) {
+            if (isActive) {
                 UnloadMenu();
             } else {
                 LoadMenu();
             }
         }
+        if(Input.GetKeyDown(KeyCode.Escape) && isOnlyMenu) {
+            UnloadMenu();
+        }
     }
 
     void UnloadMenu() {
         Time.timeScale = 1;
-        isLoaded = false;
-        mapCamera.enabled = isLoaded;
-        mapScreen.SetActive(isLoaded);
+        isActive = false;
+        mapCamera.enabled = isActive;
+        mapScreen.SetActive(isActive);
         foreach (RoomData Room in AllRooms) {
             Room.gameObject.layer = 2;
-            Room.fill.SetActive(isLoaded);
-            Room.spriteRenderer.enabled = isLoaded;
-            if (Room.Icon)  Room.Icon.SetActive(isLoaded);
+            Room.fill.SetActive(isActive);
+            Room.spriteRenderer.enabled = isActive;
+            if (Room.Icon)  Room.Icon.SetActive(isActive);
         }
 
     }
     void LoadMenu() {
         Time.timeScale = 0;
-        isLoaded = true;
-        mapCamera.enabled = isLoaded;
-        mapScreen.SetActive(isLoaded);
+        isActive = true;
+        mapCamera.enabled = isActive;
+        mapScreen.SetActive(isActive);
         foreach (RoomData Room in AllRooms) {
             Room.gameObject.layer = 5;
-            Room.spriteRenderer.enabled = isLoaded;
-            Room.fill.SetActive(isLoaded);
+            Room.spriteRenderer.enabled = isActive;
+            Room.fill.SetActive(isActive);
             if (Room.isLoaded_) {
                 Room.fill.GetComponent<SpriteRenderer>().color = Color.white;
             } else if (Room.hasVisited) {
@@ -60,14 +64,14 @@ public class MapManager : MonoBehaviour
             }
 
             if(Room.hasChest && Room.Icon) {
-                Room.Icon.SetActive(isLoaded);
+                Room.Icon.SetActive(isActive);
                 if (Room.hasVisited) {
                     Room.Icon.GetComponent<SpriteRenderer>().sprite = SpriteDict["ChestSprites"][1];
                 } else {
                     Room.Icon.GetComponent<SpriteRenderer>().sprite = SpriteDict["ChestSprites"][0];
                 }                
             } else if (Room.hasFire && Room.Icon) {
-                Room.Icon.SetActive(isLoaded);
+                Room.Icon.SetActive(isActive);
                 if (Room.bonfire.currentState_) {
                     Room.Icon.GetComponent<SpriteRenderer>().sprite = SpriteDict["BonfireSprites"][1];
                 } else {

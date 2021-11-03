@@ -7,8 +7,9 @@ using static SpellRenderer;
 public class HotbarHandler : MonoBehaviour
 {
     public GameObject Crafting_Menu;
-    public bool Crafting_Menu_Active { get { return Crafting_Menu.activeSelf; } set { Crafting_Menu.SetActive(value); } }
-
+    public bool Crafting_Menu_Active { get { return Crafting_Menu.activeSelf; } set { Crafting_Menu.SetActive(value); isActive = value; } }
+    public static bool isActive = false;
+    public bool isOnlyMenu => !(PauseMenu.isActive || MapManager.isActive || DialogueManager.isActive);
     public Sprite Active_slot;
     public Sprite Inactive_slot;
 
@@ -72,9 +73,10 @@ public class HotbarHandler : MonoBehaviour
             Slots[activeslot].gameObject.transform.parent.GetComponent<Image>().sprite = Active_slot;
         }
         
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E) && isOnlyMenu)
         {
             Crafting_Menu_Active = !Crafting_Menu_Active;
+            
             Time.timeScale = Crafting_Menu_Active ? 0 : 1;
             if (!Crafting_Menu_Active)
                 craftsyst.ResetUI();
@@ -95,20 +97,29 @@ public class HotbarHandler : MonoBehaviour
     {
         for(int i = 0; i < Slots.Length; i++)
         {
-            if(Hotbar[i] == null)
+            Image subIcon = Slots[i].transform.GetChild(0).GetComponent<Image>();
+            if (Hotbar[i] == null)
             {
                 Slots[i].color = new Color32(255,255,255,0);
+                subIcon.sprite = null;
+                subIcon.color = new Color32(255, 255, 255, 0);
             }
             else
             {
-                //if (Hotbar[i].template.Name.Contains("Right")) {
-                //    Slots[i].GetComponent<SpriteRenderer>().flipY = true;
-                //} else {
-                //    Slots[i].GetComponent<SpriteRenderer>().flipY = false;
-                //}
                 Slots[i].color = new Color32(255, 255, 255, 255);
                 Slots[i].sprite = Hotbar[i].template.icon;
                 Slots[i].material = CreateMaterial(Hotbar[i].effector.Colors, PalleteShader);
+                if (Hotbar[i].effector.Name.Contains("Pull") || Hotbar[i].effector.Name.Contains("Push")) {
+                    subIcon.color = new Color32(255, 255, 255, 255);
+                    if (Hotbar[i].effector.Name.Contains("Player")){
+                        subIcon.sprite = SpriteManager.SpriteDict["PlayerIcon"][0];
+                    } else {
+                        subIcon.sprite = SpriteManager.SpriteDict["ObjectIcon"][0];
+                    }
+                } else {
+                    subIcon.sprite = null;
+                    subIcon.color = new Color32(255, 255, 255, 0);
+                }
             }
         }
     }

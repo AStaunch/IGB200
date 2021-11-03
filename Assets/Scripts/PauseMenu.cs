@@ -8,8 +8,8 @@ public class PauseMenu : MonoBehaviour
     public GameObject Main;
     public GameObject Controls;
     public GameObject Confirm;
-    private bool isActive;
-    private bool isOnlyMenu => true;
+    public static bool isActive;
+    public static bool isOnlyMenu => !(HotbarHandler.isActive || MapManager.isActive || DialogueManager.isActive);
     private void Start() {
         CloseMenu();
     }

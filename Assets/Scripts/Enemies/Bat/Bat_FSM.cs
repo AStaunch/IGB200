@@ -6,7 +6,7 @@ using UnityEngine;
 public class Bat_FSM : MonoBehaviour
 {
     private GameObject this_gm_obj { get => gameObject; }
-    private GameObject PlayerRef { get => GameObject.FindGameObjectWithTag("Player"); }
+    private GameObject PlayerRef { get => PlayerEntity.Instance.gameObject; }
 
     public float DetectionRange = 5;
 
@@ -46,7 +46,8 @@ public class Bat_FSM : MonoBehaviour
     bool wasInView = false;
 
     IEnumerator Idle() 
-    { 
+    {
+        Debug.Log($"{transform.name} is Idle");
         while (true) 
         {
             if (InView)
@@ -77,6 +78,7 @@ public class Bat_FSM : MonoBehaviour
 
     bool HitPlayerFirst()
     {
+        
         RaycastHit2D[] hit2d_a = Physics2D.RaycastAll(gameObject.transform.position, PlayerRef.transform.position - gameObject.transform.position, DetectionRange);
         hit2d_a = Array.FindAll(hit2d_a, (h) => { return h.collider.gameObject.layer == LayerMask.NameToLayer("WALL") || h.collider.gameObject == PlayerRef; });
         Array.Sort<RaycastHit2D>(hit2d_a, (ray1, ray2) => { return ray1.distance.CompareTo(ray2.distance); });
@@ -88,11 +90,13 @@ public class Bat_FSM : MonoBehaviour
                 return false;
             else if (hit2d_a[i].collider.gameObject == PlayerRef)
             {
+                //Debug.Log($"{transform.name} sees Player");
                 hit2d = hit2d_a[i];
                 break;
             }
-            else if (hit2d_a[i].collider.gameObject == gameObject)
-                continue;
+            else if (hit2d_a[i].collider.gameObject == gameObject){
+
+            }
         }
 
         if (hit2d.collider != null)
@@ -102,6 +106,7 @@ public class Bat_FSM : MonoBehaviour
 
     IEnumerator Chase()
     {
+        Debug.Log($"{transform.name} is Chasing");
         while (true)
         {
             
@@ -121,9 +126,11 @@ public class Bat_FSM : MonoBehaviour
                 {
                     rb2d.velocity = Vector2.zero;
                     this_gm_obj.transform.position = fsmdp.TargetPos;
+                } else {
+                    rb2d.velocity = (tmp);
+                    Debug.Log($"{transform.name} sees Player : Velocity: {tmp.magnitude}");
                 }
-                else
-                    rb2d.AddForce(tmp);
+                    
 
             }
             else
@@ -136,17 +143,13 @@ public class Bat_FSM : MonoBehaviour
                 {
                     Vector2 norm_1 = (fsmdp.Target.transform.position - this_gm_obj.transform.position).normalized;
                     Vector2 tmp = norm_1 * Time.deltaTime * MoveSpeed * 1000;
-                    rb2d.AddForce(tmp);
+                    rb2d.velocity = (tmp);
+                    Debug.Log($"{transform.name} sees Player : Velocity: {tmp.magnitude}");
                 }
             }
             yield return new WaitForEndOfFrame();
         }
     }
-
-
-
-
-
 
     void Start()
     {
@@ -161,6 +164,7 @@ public class Bat_FSM : MonoBehaviour
 
     void Update()
     {
+        this_gm_obj.layer = 6;
         MyMachine.UpdateState(fsmdp);
         MyMachine.RunState(this);
     }

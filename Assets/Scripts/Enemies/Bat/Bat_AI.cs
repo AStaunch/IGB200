@@ -62,7 +62,7 @@ public class Bat_AI : MonoBehaviour
     void Start()
     {
         rb2d = GetComponent<Rigidbody2D>();
-        PlayerRef = GameObject.FindGameObjectWithTag("Player");
+        PlayerRef = PlayerEntity.Instance.gameObject;
         NextState = ValidStates.Idle;
     }
 

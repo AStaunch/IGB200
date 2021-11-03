@@ -9,41 +9,44 @@ public class FadingScript : MonoBehaviour
     public float Duration = 1;
     public bool ToggleButton;
 
+    #region Singleton Things
+    private static FadingScript _instance;
+    public static FadingScript Instance { get { return _instance; } }
+    private void Awake() {
+        if (_instance != null && _instance != this) {
+            Destroy(this.gameObject);
+        } else {
+            _instance = this;
+        }
+    }
+    #endregion
     // Start is called before the first frame update
     void Start()
     {
         FadeFromBlack(Duration);
     }
 
-    private void Update() {
-        if (Input.GetKeyDown(KeyCode.K)) {
-            ToggleFade();
-        }
-        if (Input.GetKeyDown(KeyCode.Escape)) {
-            Application.Quit();
-        }
-
-        if (ToggleButton) {
-            ToggleFade();
-            Debug.LogWarning("FadeToggled");
-            ToggleButton = false;
-        }
-    }
-
-    public void ToggleFade() {
-        FadeScreen();
-        isActive = !isActive;
-    }
     public void FadeScreen() {
         if (isActive) {
             StartCoroutine(FadeToBlack(Duration));
         } else {
             StartCoroutine(FadeFromBlack(Duration));
         }
+        isActive = !isActive;
     }
 
-    public IEnumerator FadeToBlack(float duration) {
-        
+    public void FadeScreen(bool isActive) {
+        if (isActive) {
+            StartCoroutine(FadeToBlack(Duration));
+        } else {
+            StartCoroutine(FadeFromBlack(Duration));
+        }
+        this.isActive = !isActive;
+    }
+    float timeStep = 0.01f;
+    private IEnumerator FadeToBlack(float duration) {
+        Debug.Log("StartFade");
+        Time.timeScale = 0f;
         Image sr = GetComponent<Image>();
         float t = 0;
         Color color = sr.color;
@@ -51,28 +54,35 @@ public class FadingScript : MonoBehaviour
         while (t < duration) {
             color.a = Mathf.Clamp01(t / duration );
             sr.color = color;
-            t += Time.deltaTime;
-            yield return null;
+            t += timeStep;
+            yield return new WaitForSecondsRealtime(timeStep);
         }
         color.a = 1;
         sr.color = color;
         sr.enabled = true;
+        Time.timeScale = 1f;
+        Debug.Log("EndFade");
     }
     
-    public IEnumerator FadeFromBlack (float duration) {
+    private IEnumerator FadeFromBlack (float duration) {
+        Debug.Log("StartFade");
+        Time.timeScale = 0f;
         Image sr = GetComponent<Image>();
+        sr.enabled = true;
         float t = 0;
         Color color = sr.color;
         sr.enabled = true;
-        while (t < Duration) {
-            color.a = 1 - Mathf.Clamp01(t / Duration);
+        while (t < duration) {
+            color.a = 1 - Mathf.Clamp01(t / duration);
             sr.color = color;
-            t += Time.deltaTime;
-            yield return null;
+            t += timeStep;
+            yield return new WaitForSecondsRealtime(timeStep);
         }
         color.a = 0;
         sr.color = color;
         sr.enabled = false;
+        Time.timeScale = 1f;
+        Debug.Log("EndFade");
     }
      
 }

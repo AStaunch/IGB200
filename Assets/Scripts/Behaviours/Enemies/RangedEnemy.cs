@@ -31,8 +31,8 @@ public class RangedEnemy : AbstractEnemy
     }
 
     public float Range = 20f;
-    public new void  Update() {     
-
+    public new void  Update() {
+        base.Update();
         if (Vector3.Distance(transform.position, PlayerEntity.Instance.transform.position) < Range && AttackTime_ < Time.timeSinceLevelLoad && !isFrozen_) {
             RaycastHit2D[] hit2d_a = Physics2D.RaycastAll(transform.position, PlayerEntity.Instance.transform.position - transform.position, Range);
             //Debug.DrawRay(gameObject.transform.position, PlayerRef.transform.position - gameObject.transform.position);

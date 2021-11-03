@@ -225,14 +225,14 @@ MonoBehaviour:
   DamageImmunities: 
   EntityProperties: 
   EntitySpeed: 0.5
-  DetectionRange: 4.5
+  DetectionRange: 8
   MaxShots_B4_Hide: 3
   Delay_Between_shots: 1.5
   breakTime: 4
-  Projectile: {fileID: 8796769972016898954, guid: a56005c5e9d282048b61373a6eff513e, type: 3}
+  Projectile: {fileID: 8209466525399328844, guid: 56791454e3fbbe846af2bd248dd15919, type: 3}
   ProjectileSpeed: 3
   Damage: 1
-  Proj_Dmg_type: 0
+  Proj_Dmg_type: 8
 --- !u!58 &3799179769802886388
 CircleCollider2D:
   m_ObjectHideFlags: 0

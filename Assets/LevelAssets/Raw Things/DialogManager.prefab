@@ -121,9 +121,9 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 7d717d5b81061a048a8b254353188caf, type: 3}
+  m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.6
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -197,7 +197,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 1
+      value: 0
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -273,7 +273,7 @@ MonoBehaviour:
   nameText: {fileID: 3634737058595683190}
   dialogText: {fileID: 3634737058354652119}
   portrait: {fileID: 6264340447092255300}
-  clip: {fileID: 8300000, guid: 7d717d5b81061a048a8b254353188caf, type: 3}
+  clip: {fileID: 8300000, guid: b06e484273d3a4b48adca9d9653c0e44, type: 3}
   sound: {fileID: 5334720995825457291}
 --- !u!95 &3710450228549806889
 Animator:

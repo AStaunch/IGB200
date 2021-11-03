@@ -204,13 +204,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9883ea833d53d44f878ad799a5fdbc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHealth: 1
-  DamageImmunities: 
-  EntityProperties: 
+  MaxHealth: 2
+  DamageImmunities: 0000000001000000020000000700000008000000
+  EntityProperties: 0000000007000000
   EntitySpeed: 0.5
-  EntityDamage: 0
+  EntityDamage: 1
   DamageType: 8
-  DetectionRange: 20
+  DetectionRange: 6
   Projectile: {fileID: 8796769972016898954, guid: a56005c5e9d282048b61373a6eff513e, type: 3}
   ProjectileSpeed: 5
   ThrowDelay: 2

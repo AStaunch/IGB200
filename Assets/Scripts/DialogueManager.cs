@@ -23,7 +23,7 @@ public class DialogueManager : MonoBehaviour
     }
     #endregion
     private Queue<string> sentences;
-    public static bool IsOpen;
+    public static bool isActive;
 
     private float textSpeed = 0.075f;
     private bool donePrinting = false;
@@ -36,10 +36,11 @@ public class DialogueManager : MonoBehaviour
     }
 
     private void Update() {
-        if(IsOpen && Input.GetKeyUp(KeyCode.Space) && donePrinting) {
+        if(isActive && Input.GetKeyUp(KeyCode.Space) && donePrinting) {
             DisplayNextSentence();
-        } else if (IsOpen && Input.GetKeyUp(KeyCode.Space) && !donePrinting) {
+        } else if (isActive && Input.GetKeyUp(KeyCode.Space) && !donePrinting) {
             textSpeed = 0f;
+            sound.clip = null;
         }
     }
 
@@ -60,7 +61,7 @@ public class DialogueManager : MonoBehaviour
 
     private void DisplayNextSentence() {
         //StopCoroutine("WriteSentence");
-        Debug.Log("Display Next Dialogue");
+        //Debug.Log("Display Next Dialogue");
         if (sentences.Count == 0) {
             EndDialogue();
             return;
@@ -74,7 +75,9 @@ public class DialogueManager : MonoBehaviour
     IEnumerator WriteSentence(string sentence) {
         donePrinting = false;
         textSpeed = 0.075f;
-        for(int i = 0; i < sentence.Length; i++) {
+        sound.clip = clip;
+
+        for (int i = 0; i < sentence.Length; i++) {
             sound.Play();
             if (i - sentence.Length > 0 && sentence.Substring(i, waitCmd.Length).StartsWith("/w=")) {
                 string str = sentence.Substring(i, waitCmd.Length).Replace("/w=", "");
@@ -95,7 +98,6 @@ public class DialogueManager : MonoBehaviour
                 }
             }
             sound.Stop();
-
         }
         if (PAK) {
             PrintPAK();
@@ -112,9 +114,9 @@ public class DialogueManager : MonoBehaviour
         for (int i = 0; i < transform.childCount; i++) {
             transform.GetChild(i).gameObject.SetActive(true);
         }
-        Debug.Log("Open Dialogue");
+        //Debug.Log("Open Dialogue");
         //GetComponent<Animator>().SetTrigger("Open");
-        IsOpen = true;
+        isActive = true;
     }
 
     private void EndDialogue() {
@@ -126,9 +128,9 @@ public class DialogueManager : MonoBehaviour
         for (int i = 0; i < transform.childCount; i++) {
             transform.GetChild(i).gameObject.SetActive(false);
         }
-        Debug.Log("End Dialogue"); 
+        //Debug.Log("End Dialogue"); 
         Time.timeScale = 1;
         //GetComponent<Animator>().SetTrigger("Close");
-        IsOpen = false;
+        isActive = false;
     }
 }

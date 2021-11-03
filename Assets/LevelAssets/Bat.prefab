@@ -11,13 +11,13 @@ GameObject:
   - component: {fileID: 8041835869632168912}
   - component: {fileID: 2756730811791438580}
   - component: {fileID: 8820126500696495898}
+  - component: {fileID: -2182435571304819879}
   - component: {fileID: 1961650295140229762}
   - component: {fileID: 2221749954650742243}
   - component: {fileID: 7630893933186507112}
   - component: {fileID: 8820126500696495901}
   - component: {fileID: 8820126500696495900}
   - component: {fileID: 4247143225670407978}
-  - component: {fileID: -2182435571304819879}
   m_Layer: 6
   m_Name: Bat
   m_TagString: Untagged
@@ -72,6 +72,19 @@ MonoBehaviour:
   DetectionRange: 7
   Min_distance_from_target: 1
   Min_distance_from_target_variation: 0.25
+--- !u!114 &-2182435571304819879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8820126500696495899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65841066bca08344ea2e186c450ab4cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DetectionRange: 7
 --- !u!212 &1961650295140229762
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -311,16 +324,3 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &-2182435571304819879
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8820126500696495899}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65841066bca08344ea2e186c450ab4cd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DetectionRange: 7

@@ -18,8 +18,10 @@ public class DoorEditorScript : Editor {
         }
         if (abstractDoor.TryGetComponent(out iRecieverObject iReciever)) {
             foreach(GameObject iSender in iReciever.switchGameObjects_) {
-                Handles.color = Color.blue;
-                Handles.DrawLine(abstractDoor.transform.position, iSender.transform.position);
+                if(iSender != null) {
+                    Handles.color = Color.blue;
+                    Handles.DrawLine(abstractDoor.transform.position, iSender.transform.position);
+                }
             }
         }
 

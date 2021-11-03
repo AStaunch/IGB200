@@ -6,7 +6,7 @@ using UnityEngine;
 public class AquaticRangedEnemy : AbstractAquaticCreature
 {
     private GameObject this_gm_obj { get => gameObject; }
-    private GameObject PlayerRef { get => GameObject.FindGameObjectWithTag("Player"); }
+    private GameObject PlayerRef { get => PlayerEntity.Instance.gameObject; }
 
     public float DetectionRange = 5;
     private int NumShotsFired = 0;

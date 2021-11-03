@@ -23,8 +23,9 @@ public abstract class AbstractEnemy : AbstractCreature, iEnemyInterface
         UpdateAnimation(change);
     }
     public abstract Vector3 CalculateFacing();
+    float magthreshold = 0.1f;
     public override void Decelerate() {
-        if (RB_.velocity != Vector2.zero && gameObject.layer != 6) {
+        if (RB_.velocity.magnitude < magthreshold && gameObject.layer != 6) {
             RB_.velocity *= 0.1f;
         }
     }

@@ -6,7 +6,7 @@ using UnityEngine;
 public class Thrower_FSM : AbstractEnemy
 {
     private GameObject this_gm_obj { get => gameObject; }
-    private GameObject PlayerRef { get => GameObject.FindGameObjectWithTag("Player"); }
+    private GameObject PlayerRef { get => PlayerEntity.Instance.gameObject; }
 
     public float DetectionRange = 5;
 
@@ -106,7 +106,7 @@ public class Thrower_FSM : AbstractEnemy
 
     IEnumerator ThrowAt()
     {
-        Debug.Log("Throwing");
+        //Debug.Log("Throwing");
         while (true)
         {
             if (fsmdp.Target != null)//dont need this bc the run condition requires the player, and the idle state only supplies the player if in view, but better safe than sorry
@@ -114,7 +114,7 @@ public class Thrower_FSM : AbstractEnemy
                 Vector3 dir = (fsmdp.Target.transform.position - transform.position);
 
                 UpdateAnimation(dir);
-
+                Anim_.SetTrigger("attack");
                 GameObject proj = Instantiate<GameObject>(Projectile,transform.position + dir.normalized, transform.rotation);
                 ProjectileScript projectile = proj.AddComponent<ProjectileScript>();
                 projectile.Shooter = this.gameObject;
@@ -133,8 +133,9 @@ public class Thrower_FSM : AbstractEnemy
     }
 
 
-    void Start()
+    new void Start()
     {
+        base.Start();
         Define_states();
         fsmdp = new FSM_Datapass()
         {
@@ -144,8 +145,9 @@ public class Thrower_FSM : AbstractEnemy
         };
     }
 
-    void Update()
+    new void Update()
     {
+        base.Update();
         MyMachine.UpdateState(fsmdp);
         MyMachine.RunState(this);
 

@@ -42,31 +42,33 @@ public abstract class AbstractDoor : MonoBehaviour, iHealthInterface, iReloadInt
         //Debug.Log(collision.transform.name + " entered");
         if (collision.gameObject.TryGetComponent(out iFacingInterface em) && !collision.isTrigger) {
             if (em.GetEntityDirectionEnum() == CurrentDirection_ && IsOpen) {
-                if (sceneIndex < 0 && DelayTimer_ < Time.timeSinceLevelLoad) {
-                    DelayTimer_ = 2 * Time.deltaTime;
-                    Vector3 offset = VectorDict[CurrentDirection_];
-                    collision.gameObject.transform.position = ExitDoor.transform.position + offset;
-                    Instantiate(walkThroughSoundEffect);
+                if (DelayTimer_ < Time.timeSinceLevelLoad) {
+                    DelayTimer_ = 0.5f;                    
+                    //if(sceneIndex < 0) {
+                        Vector3 offset = VectorDict[CurrentDirection_];
+                        collision.gameObject.transform.position = ExitDoor.transform.position + offset;
+                        Instantiate(walkThroughSoundEffect);
 
-                    //New Room Resets
-                    if (collision.TryGetComponent(out PlayerEntity playerEntity) && !isException && RoomData_) {
-                        playerEntity.LastDoor_ = this.ExitDoor;
-                        if (isSolveTrigger) {
-                            RoomData_.isSolved_ = true;
-                            if (firstEnter == true) { Instantiate(SoundDict["PuzzleSolveSound"]); firstEnter = false; }
-                        }
-                        if (ExitDoor.RoomData_) {
-                            if (!ExitDoor.RoomData_.isSolved_) {
-                                ExitDoor.RoomData_.Load();
+                        //New Room Resets
+                        if (collision.TryGetComponent(out PlayerEntity playerEntity) && !isException && RoomData_) {
+                            playerEntity.LastDoor_ = this.ExitDoor;
+                            if (isSolveTrigger) {
+                                RoomData_.isSolved_ = true;
+                                if (firstEnter == true) { Instantiate(SoundDict["PuzzleSolveSound"]); firstEnter = false; }
+                            }
+                            if (ExitDoor.RoomData_) {
+                                if (!ExitDoor.RoomData_.isSolved_) {
+                                    ExitDoor.RoomData_.Load();
+                                }
+                            }
+                            if (!RoomData_.isSolved_) {
+                                RoomData_.Unload();
                             }
                         }
-                        if (!RoomData_.isSolved_) {
-                            RoomData_.Unload();
-                        }
                     }
-                } else {
-                    UnityEngine.SceneManagement.SceneManager.LoadScene(sceneIndex);
-                }
+                //} else {
+                //    UnityEngine.SceneManagement.SceneManager.LoadScene(sceneIndex);
+                //}
             }
         }
     }

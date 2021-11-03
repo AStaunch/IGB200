@@ -74,7 +74,7 @@ SpriteRenderer:
   m_SortingLayerID: 1771340957
   m_SortingLayer: 1
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 6c7efbf0d7b857b46abd12e5dd722448, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7c55d250772746d49ba084bc8452d4ab, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -98,9 +98,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentState: 0
-  activeElement: 0
+  activeElement: 3
   inactiveElement: 8
-  shader: {fileID: -6465566751694194690, guid: 97840132b5feb054a8b527b4001e4547, type: 3}
 --- !u!61 &6698157219418741715
 BoxCollider2D:
   m_ObjectHideFlags: 0

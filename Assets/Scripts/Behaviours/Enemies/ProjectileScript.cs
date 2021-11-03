@@ -22,7 +22,7 @@ public class ProjectileScript : MonoBehaviour , iPhysicsInterface, iDamageInterf
         if (collision.gameObject.layer != 2 && collision.gameObject != Shooter) {
             if (collision.transform.TryGetComponent(out iDamageInterface iHealth)) {
                 iHealth.TakeDamage(Damage, element);
-                Debug.Log("Projectile Hit " + collision.transform.name);
+                //Debug.Log("Projectile Hit " + collision.transform.name);
             }
             if(collision.TryGetComponent(out ProjectileScript otherProj)) {
                 SpellRenderer.Instance.CreateBurstFX(transform.position, ColourDict[element]);
@@ -33,7 +33,7 @@ public class ProjectileScript : MonoBehaviour , iPhysicsInterface, iDamageInterf
     public void StartProj() {
         gameObject.layer = 6;
         CircleCollider2D circleCollider = gameObject.AddComponent<CircleCollider2D>();
-        circleCollider.radius = 0.5f * (GetComponent<SpriteRenderer>().bounds.size.x + GetComponent<SpriteRenderer>().bounds.size.y) / 2f;
+        circleCollider.radius = 0.2f * (GetComponent<SpriteRenderer>().bounds.size.x + GetComponent<SpriteRenderer>().bounds.size.y) / 2f;
         circleCollider.isTrigger = true;
         RB_.velocity = Velocity * Direction.normalized;
     }

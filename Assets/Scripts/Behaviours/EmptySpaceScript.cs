@@ -35,7 +35,8 @@ public class EmptySpaceScript : MonoBehaviour, iDamageInterface
             sr = gameObject.AddComponent<SpriteRenderer>();
         }
         sr.sprite = null;
-        sr.sortingLayerID = 0;
+        sr.sortingLayerName = "Background";
+        sr.sortingOrder = 10;
         sr.material = SpellRenderer.Instance.defaultUnlit;
 
         if (!TryGetComponent(out bc)) {

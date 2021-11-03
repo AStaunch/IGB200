@@ -118,6 +118,7 @@ public class PlayerEntity : AbstractCreature
     }
     public override void EntityDeath() {
         Health_ = MaxHealth_;
+        FadingScript.Instance.FadeScreen(true);
         transform.position = SavePosition_;
         EntitySpeed_ = 5;
         SaveRoomData_.Load();
@@ -125,16 +126,20 @@ public class PlayerEntity : AbstractCreature
             LastDoor.RoomData_.Unload();
         }
         RB_.velocity = Vector2.zero;
+        FadingScript.Instance.FadeScreen(false);
     }
     protected override void EntityFall() {
+        FadingScript.Instance.FadeScreen(true);
         EntitySpeed_ = 5;
         if (LastDoor != null) {            
             Health_ -= 1;
             if(Health_ <= 0) {
                 EntityDeath();
             } else {
+                FadingScript.Instance.FadeScreen(true);
                 transform.position = LastDoor_.RespawnPoint;
                 LastDoor.RoomData_.Load();
+                FadingScript.Instance.FadeScreen(false);
             }
         }
         RB_.velocity = Vector2.zero;

@@ -33,7 +33,7 @@ public abstract class AbstractAquaticCreature : MonoBehaviour, iHealthInterface,
     private bool isFrozen_;
     private IEnumerator SpriteRoutine;
     private bool hasFallen;
-    private bool[] EdgeChecks;
+    //private bool[] EdgeChecks;
     internal bool isInWater = true;
 
     public Vector2 GetEntityDirection() {
