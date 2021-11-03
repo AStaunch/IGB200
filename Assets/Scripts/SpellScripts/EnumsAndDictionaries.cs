@@ -125,7 +125,8 @@ public static class EnumsAndDictionaries
     [System.Serializable]
     public enum AnimationEvents
     {
-        Death, Fall, Explode, Finish, Start
+        Death, Fall, Explode, Finish, Start,
+        Attack
     }
     [System.Serializable]
     public enum Directions

@@ -9,6 +9,8 @@ public class DialogueManager : MonoBehaviour
     public TMP_Text nameText;
     public TMP_Text dialogText;
     public Image portrait;
+    public AudioClip clip;
+    public AudioSource sound;
     #region Singleton Things
     private static DialogueManager _instance;
     public static DialogueManager Instance { get { return _instance; } }
@@ -21,11 +23,11 @@ public class DialogueManager : MonoBehaviour
     }
     #endregion
     private Queue<string> sentences;
-    public bool IsOpen;
+    public static bool IsOpen;
 
     private float textSpeed = 0.075f;
     private bool donePrinting = false;
-
+    internal bool PAK = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -44,8 +46,12 @@ public class DialogueManager : MonoBehaviour
     internal void StartDialogue(Dialogue dialogue) {
         OpenDialogue();
         sentences.Clear();
-        nameText.text = dialogue.name;
-        portrait.sprite = dialogue.CharacterPortrait;
+        if (nameText) {
+            nameText.text = dialogue.name;
+        }
+        if (portrait) {
+            portrait.sprite = dialogue.CharacterPortrait;
+        }
         foreach (string sentence in dialogue.sentences) {
             sentences.Enqueue(sentence);
         }
@@ -64,22 +70,44 @@ public class DialogueManager : MonoBehaviour
         dialogText.text = "";
         StartCoroutine(WriteSentence(sentence));
     }
-
+    string waitCmd = "/w=N";
     IEnumerator WriteSentence(string sentence) {
         donePrinting = false;
         textSpeed = 0.075f;
-        foreach (char Char in sentence.ToCharArray()) {
-            dialogText.text += Char;
-            if(Char == ' ') {
-                yield return null;
+        for(int i = 0; i < sentence.Length; i++) {
+            sound.Play();
+            if (i - sentence.Length > 0 && sentence.Substring(i, waitCmd.Length).StartsWith("/w=")) {
+                string str = sentence.Substring(i, waitCmd.Length).Replace("/w=", "");
+                int waitTime = int.Parse(str);
+                i += waitCmd.Length;
+                dialogText.text += "\n";
+                
+                yield return new WaitForSecondsRealtime(waitTime);
+
             } else {
-                yield return new WaitForSecondsRealtime(textSpeed);
+                char Char = sentence.ToCharArray()[i];
+                dialogText.text += Char;
+                sound.Play();
+                if (Char == ' ') {
+                    yield return null;
+                } else {
+                    yield return new WaitForSecondsRealtime(textSpeed);
+                }
             }
+            sound.Stop();
+
+        }
+        if (PAK) {
+            PrintPAK();
         }
         donePrinting = true;
     }
 
-private void OpenDialogue() {
+    private void PrintPAK() {
+        dialogText.text += "<color=#f77622> PRESS SPACE </color>";
+    }
+
+    private void OpenDialogue() {
         Time.timeScale = 0;
         for (int i = 0; i < transform.childCount; i++) {
             transform.GetChild(i).gameObject.SetActive(true);
@@ -90,6 +118,10 @@ private void OpenDialogue() {
     }
 
     private void EndDialogue() {
+        if (PAK) {
+            MainMenuScript.MAINMENU();
+            return;
+        }
         Time.timeScale = 1;
         for (int i = 0; i < transform.childCount; i++) {
             transform.GetChild(i).gameObject.SetActive(false);
@@ -99,8 +131,4 @@ private void OpenDialogue() {
         //GetComponent<Animator>().SetTrigger("Close");
         IsOpen = false;
     }
-
-    //IEnumerator LerpToPosition(KeyCode keyCode) {
-        
-    //}
 }

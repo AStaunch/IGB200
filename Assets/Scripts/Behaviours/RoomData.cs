@@ -43,20 +43,21 @@ public class RoomData : MonoBehaviour
 
     public bool isLoaded_ { get { return isLoaded; } set { isLoaded = value; } }
     private bool isLoaded = false;
-    public bool hasVisited_ { get { return hasVisited; } set { hasVisited = value; } }
-    private bool hasVisited = false;
-    public bool hasChest_ { get { return hasChest; } set { hasChest = value; } }
-    private bool hasChest = false;
+    internal bool hasVisited = false;
+    internal bool hasChest = false;
 
     private int m_LayerMask = ~ (1 << 8);
     internal GameObject Icon;
-    public GameObject border;
-    private bool needsIcon { get => hasChest_ || isInterestPoint_; }
+    public GameObject fill;
+    internal bool hasFire = false;
+
+    internal Bonfire bonfire;
+    private bool needsIcon { get => hasChest || isInterestPoint_ || hasFire; }
     void Start() {
         //Use this to ensure that the Gizmos are being drawn when in Play Mode.
         spriteRenderer.enabled = false;
         CreateData();
-        border.SetActive(false);
+        fill.SetActive(false);
         if (needsIcon) {
             Icon = new GameObject(transform.name + " icon");
             Icon.transform.position = transform.position;
@@ -88,7 +89,7 @@ public class RoomData : MonoBehaviour
         for (int i = transform.childCount - 1; i >= 0; i--) {
             transform.GetChild(i).parent = null;
         }
-        border.transform.parent = this.transform;
+        fill.transform.parent = this.transform;
     }
     private void CreateData() {
         GetComponent<Collider2D>().enabled = true;
@@ -148,7 +149,12 @@ public class RoomData : MonoBehaviour
             hasChest = true;
             return;
         }
-        if(collider.TryGetComponent(out EmptySpaceScript _)) {
+        if (collider.transform.TryGetComponent(out Bonfire bon)) {
+            bonfire = bon;
+            hasFire = true;
+            return;
+        }
+        if (collider.TryGetComponent(out EmptySpaceScript _)) {
             if (!RoomVoid_.Contains(collider.gameObject)) {
                 RoomVoid_.Add(collider.gameObject);
                 collider.gameObject.SetActive(false);
@@ -158,7 +164,7 @@ public class RoomData : MonoBehaviour
         if(collider.transform.TryGetComponent(out PlayerEntity playerEntity)) {
             playerEntity.SaveRoomData_ = this;
             isLoaded_ = true;
-            hasVisited_ = true;
+            hasVisited = true;
             return;
         }
         if (collider.transform.TryGetComponent(out iReloadInterface iReload)) {
@@ -173,7 +179,7 @@ public class RoomData : MonoBehaviour
 
     public void Load() {
         Unload();
-        hasVisited_ = true;
+        hasVisited = true;
         ProjectileScript[] pss = FindObjectsOfType<ProjectileScript>();
         foreach (ProjectileScript ps in pss) {
             Destroy(ps.gameObject);
@@ -207,7 +213,7 @@ public class RoomData : MonoBehaviour
     }
 
     public void Unload() {
-        hasVisited_ = true;
+        hasVisited = true;
         foreach (GameObject gameObject in LoadedObjects.ToArray()) {
             //LoadedObjects.Remove(gameObject);
             Destroy(gameObject);

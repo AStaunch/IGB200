@@ -74,12 +74,18 @@ public class PlayerEntity : AbstractCreature
         }
         //Restart Room
         if (Input.GetKeyDown(KeyCode.R)) {
-            EntityDeath();
+            EntityFall();
+            Health_ += 1;
         }
         //Turns of Player Collision
         if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.P)) {
             NoClip = !NoClip;
             CollisionCollider.isTrigger = NoClip;
+        }
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.T)) {
+            Vector3 newpos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            newpos.z = 0;
+            GameObject.FindGameObjectWithTag("Player").transform.position = newpos;
         }
 
         if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.LeftBracket)) {

@@ -6,7 +6,7 @@ using static EnumsAndDictionaries;
 using static SpellFunctionLibrary;
 using static SoundManager;
 
-public class ProjectileScript : MonoBehaviour , iPhysicsInterface
+public class ProjectileScript : MonoBehaviour , iPhysicsInterface, iDamageInterface
 {
     public float Velocity;
     public Vector3 Direction;
@@ -19,7 +19,7 @@ public class ProjectileScript : MonoBehaviour , iPhysicsInterface
     public Properties[] EntityProperties_ { get => new Properties[] { Properties.Light }; set => _ = value; }
     public EntityTypes EntityType_ => EntityTypes.Object;
     private void OnTriggerEnter2D(Collider2D collision) {
-        if (!collision.isTrigger || collision.gameObject != Shooter) {
+        if (collision.gameObject.layer != 2 && collision.gameObject != Shooter) {
             if (collision.transform.TryGetComponent(out iDamageInterface iHealth)) {
                 iHealth.TakeDamage(Damage, element);
                 Debug.Log("Projectile Hit " + collision.transform.name);
@@ -53,5 +53,10 @@ public class ProjectileScript : MonoBehaviour , iPhysicsInterface
     }
     public void UpdateSorting() {
         throw new System.NotImplementedException();
+    }
+
+    public void TakeDamage(float damage, Elements damageType, SpellTemplates damageSource = SpellTemplates.NULL) {
+        SpellRenderer.Instance.CreateBurstFX(transform.position, ColourDict[damageType]);
+        Destroy(this.gameObject);
     }
 }

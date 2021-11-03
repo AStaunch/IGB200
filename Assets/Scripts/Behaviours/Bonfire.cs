@@ -6,10 +6,10 @@ using static EnumsAndDictionaries;
 
 public class Bonfire : MonoBehaviour, iDamageInterface, iSenderObject, iReloadInterface
 {
+    public static Bonfire ActiveBonfire;
     public List<iRecieverObject> targetObjects_ { get => targetObjects; set => targetObjects = value; }
     private List<iRecieverObject> targetObjects = new List<iRecieverObject>();
-    public bool currentState_ { get => currentState; set { currentState = value; UpdateReciever(); } }
-
+    public bool currentState_ { get => currentState; set { currentState = value; UpdateReciever();} }
     public bool isException_ => isException;
     public bool isException = true;
     private Animator Anim_ => GetComponent<Animator>();
@@ -25,35 +25,34 @@ public class Bonfire : MonoBehaviour, iDamageInterface, iSenderObject, iReloadIn
     }
 
     public void TakeDamage(float damage, Elements damageType, SpellTemplates damageSource = SpellTemplates.NULL) {
-        if(damageType == Elements.Fire) {
+        if(damageType == Elements.Fire && !currentState_) {
+            SpellRenderer.Instance.CreateBurstFX(transform.position, ColourDict[Elements.Fire]);
             currentState_ = true;
+            ActiveBonfire = this;
+            SetPlayerCheckpoint();
             return;
         }
         //if (damageType == Elements.Earth || damageType == Elements.Ice) {
         //    currentState_ = false;
         //    return;
         //}
-
     }
 
     public void UpdateReciever() {
         foreach (iRecieverObject target in targetObjects_) {
             target.CheckSenders(this);
-        }
-        if (currentState_) {
-            SetPlayerCheckpoint();
-        }        
+        }     
     }
 
     private void SetPlayerCheckpoint() {
         Bonfire[] bonfires = FindObjectsOfType<Bonfire>();
         foreach(Bonfire bonfire in bonfires) {
-            if (bonfire == this) {
-                Anim_.SetTrigger("light");
+            if (Bonfire.ActiveBonfire == bonfire) {
+                Anim_.SetBool("isLit", true);
                 PlayerEntity.Instance.SavePosition_ = this.spawnLocation;
             } else {
                 bonfire.currentState_ = false;
-                bonfire.Anim_.SetTrigger("dark");
+                bonfire.Anim_.SetBool("isLit", false);
             }
         }
 
