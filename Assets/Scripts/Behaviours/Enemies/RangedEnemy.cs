@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,25 +31,33 @@ public class RangedEnemy : AbstractEnemy
     }
     public float Range = 20f;
     public new void  Update() {
+
+        
+
+
         if (Vector3.Distance(transform.position, PlayerEntity.Instance.transform.position) < Range && AttackTime_ < Time.timeSinceLevelLoad && !isFrozen_) {
-            if (checkLOS()) {
-                Attack(PlayerEntity.Instance.transform.position - transform.position);
+            RaycastHit2D[] hit2d_a = Physics2D.RaycastAll(transform.position, PlayerEntity.Instance.transform.position - transform.position, Range);
+            //Debug.DrawRay(gameObject.transform.position, PlayerRef.transform.position - gameObject.transform.position);
+            hit2d_a = Array.FindAll(hit2d_a, (h) => { return h.collider.gameObject.layer == LayerMask.NameToLayer("WALL") || h.collider.gameObject == PlayerEntity.Instance.gameObject; });
+            Array.Sort<RaycastHit2D>(hit2d_a, (ray1, ray2) => { return ray1.distance.CompareTo(ray2.distance); });
+
+            bool WallFirst = false;
+            RaycastHit2D hit2d = new RaycastHit2D();
+            for (int i = 0; i < hit2d_a.Length; i++) {
+                //Debug.Log($"{hit2d_a[i].collider.name}");
+
+                if (hit2d_a[i].collider.gameObject.layer == LayerMask.NameToLayer("WALL")) {
+                    Debug.Log("Wall first");
+                    WallFirst = true;
+                    break;
+                } else if (hit2d_a[i].collider.gameObject == PlayerEntity.Instance.gameObject) {
+                    //Debug.Log("Player");
+                    Attack(PlayerEntity.Instance.transform.position - transform.position);
+                    hit2d = hit2d_a[i];
+                } else if (hit2d_a[i].collider.gameObject == gameObject) {
+                    //this is just to ignore self
+                }
             }
         }
-    }
-
-    private void LastSeenFSM() {
-
-    }
-
-    private bool checkLOS() {
-        foreach (RaycastHit2D hit in Physics2D.RaycastAll(transform.position, PlayerEntity.Instance.transform.position, Range)) {
-            if (hit.transform.gameObject.layer == 8) {
-                return false;
-            } else if (hit.transform.gameObject != PlayerEntity.Instance.gameObject) {
-                return true;
-            }
-        }
-        return false;
     }
 }

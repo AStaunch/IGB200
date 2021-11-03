@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine;
 using static EnumsAndDictionaries;
 
-public class ArcScript : MonoBehaviour
+public class ArcScript : MonoBehaviour, iDamageInterface
 {
     
     public Directions direction;
@@ -28,7 +28,7 @@ public class ArcScript : MonoBehaviour
         RB_.freezeRotation = true;
         CircleCollider2D cc = this.gameObject.AddComponent<CircleCollider2D>();
         cc.isTrigger = true;
-        cc.radius = 0.5f * (GetComponent<SpriteRenderer>().bounds.size.x + GetComponent<SpriteRenderer>().bounds.size.y) / 2f;
+        cc.radius = 0.1f * (GetComponent<SpriteRenderer>().bounds.size.x + GetComponent<SpriteRenderer>().bounds.size.y) / 2f;
 
         //initialise Variables
         duration = 2f;
@@ -179,22 +179,11 @@ public class ArcScript : MonoBehaviour
         Debug.Log(msg);
     }
 
-    //public Collision2D HitCollision = null;
+    public void TakeDamage(float damage, Elements damageType, SpellTemplates damageSource = SpellTemplates.NULL) {
+        SpellRenderer.Instance.CreateBurstFX(transform.position, ColourDict[damageType]);
+        Destroy(this.gameObject);
+    }
+
     public Collider2D HitCollider;
     public Vector3 CurrentPosition;
-    //private void OnCollisionEnter2D(Collision2D collision) {
-    //    string msg = ("Touched: " + collision.transform.name);
-    //    bool b1 = !collision.transform.CompareTag("Player");
-    //    bool b2 = LayerArray.Contains(collision.gameObject.layer);
-    //    bool b3 = !collision.collider.isTrigger;
-    //    msg += " " + b1 + " " + b2 + " ";//+ " " + b3;
-    //    if (b1 && b2) {
-    //        HitCollision = collision;
-    //        msg += 1.1f * collision.transform.position - transform.position;
-    //        Destroy(this.gameObject, 2 * Time.deltaTime);
-    //    } else {
-            
-    //    }
-    //    Debug.Log(msg);
-    //}
 }
