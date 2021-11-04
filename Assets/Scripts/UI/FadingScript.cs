@@ -35,11 +35,11 @@ public class FadingScript : MonoBehaviour
         isActive = !isActive;
     }
 
-    public void FadeScreen(bool isActive, float Duration = 2f) {
+    public void FadeScreen(bool isActive, float duration = 2f) {
         if (isActive) {
-            StartCoroutine(FadeToBlack(Duration));
+            StartCoroutine(FadeToBlack(duration));
         } else {
-            StartCoroutine(FadeFromBlack(Duration));
+            StartCoroutine(FadeFromBlack(duration));
         }
         this.isActive = !isActive;
     }
