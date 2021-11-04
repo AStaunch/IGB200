@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class RoomData : MonoBehaviour
 {
+    public static RoomData MostRecentlyLoaded;
     #region DebugArea
     //public bool LoadDataBool;
     //public bool DestroyDataBool;
@@ -211,6 +212,7 @@ public class RoomData : MonoBehaviour
             clone.AddComponent<LoadedObject>().roomDataParent = this;
             LoadedObjects.Add(clone);
         }
+        MostRecentlyLoaded = this;
         isLoaded_ = true;
     }
 

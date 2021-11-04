@@ -72,6 +72,7 @@ public class Heavy_FSM : MonoBehaviour
 
     IEnumerator Idle()
     {
+        Debug.Log($"{transform.name} is Idle");
         while (true)
         {
             if (InView)
@@ -95,6 +96,7 @@ public class Heavy_FSM : MonoBehaviour
     public float ForceMultiplier = 1000;
     IEnumerator Chase()
     {
+        Debug.Log($"{transform.name} is Idle");
         while (true)
         {
             if (Vector2.Distance(PlayerRef.transform.position, this_gm_obj.transform.position) <= DetectionRange && fsmdp.UsePos == false)
@@ -115,9 +117,12 @@ public class Heavy_FSM : MonoBehaviour
                 {
                     rb2d.velocity = Vector2.zero;
                     this_gm_obj.transform.position = fsmdp.TargetPos;
+                } else {
+                    rb2d.velocity = (tmp);
+                    Instantiate(SoundManager.SoundDict["HeavyKnightStepSound"], transform.position, transform.rotation);
                 }
-                else
-                    rb2d.AddForce(tmp);
+                    
+                //Debug.Log($"{transform.name} sees Player : Velocity: {tmp.magnitude}");
 
             }
             else
@@ -129,7 +134,9 @@ public class Heavy_FSM : MonoBehaviour
 
                     Vector2 norm_1 = (fsmdp.Target.transform.position - this_gm_obj.transform.position).normalized;
                     Vector2 tmp = norm_1 * MoveSpeed * ForceMultiplier;
-                    rb2d.AddForce(tmp);
+                    rb2d.velocity = (tmp);
+                    Instantiate(SoundManager.SoundDict["HeavyKnightStepSound"], transform.position, transform.rotation);
+                    //Debug.Log($"{transform.name} sees Player : Velocity: {tmp.magnitude}");
                 }
             }
 

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class FadingScript : MonoBehaviour
 {
     private bool isActive = false;
-    public float Duration = 1;
+    public float Duration = 2f;
     public bool ToggleButton;
 
     #region Singleton Things
@@ -23,7 +23,7 @@ public class FadingScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        FadeFromBlack(Duration);
+        StartCoroutine(FadeFromBlack(Duration));
     }
 
     public void FadeScreen() {
@@ -35,7 +35,7 @@ public class FadingScript : MonoBehaviour
         isActive = !isActive;
     }
 
-    public void FadeScreen(bool isActive) {
+    public void FadeScreen(bool isActive, float Duration = 2f) {
         if (isActive) {
             StartCoroutine(FadeToBlack(Duration));
         } else {
@@ -60,7 +60,6 @@ public class FadingScript : MonoBehaviour
         color.a = 1;
         sr.color = color;
         sr.enabled = true;
-        Time.timeScale = 1f;
         Debug.Log("EndFade");
     }
     

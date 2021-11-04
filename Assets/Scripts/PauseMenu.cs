@@ -7,6 +7,7 @@ public class PauseMenu : MonoBehaviour
     public GameObject Dimmer;
     public GameObject Main;
     public GameObject Controls;
+    public GameObject[] ControlPGs;
     public GameObject Confirm;
     public static bool isActive;
     public static bool isOnlyMenu => !(HotbarHandler.isActive || MapManager.isActive || DialogueManager.isActive);
@@ -19,8 +20,7 @@ public class PauseMenu : MonoBehaviour
                 CloseMenu();
             }else{
                 OpenMenu();
-            }
-            
+            }            
         }
     }
     private void OpenMenu() {
@@ -41,6 +41,7 @@ public class PauseMenu : MonoBehaviour
     }
     public void OpenControls() {
         Controls.SetActive(true);
+        FirstPage();
         Main.SetActive(false);
         Confirm.SetActive(false);
     }
@@ -54,7 +55,16 @@ public class PauseMenu : MonoBehaviour
             transform.GetChild(i).transform.gameObject.SetActive(state);
         }
     }
+
+    public void FirstPage() {
+        ControlPGs[0].SetActive(true);
+        ControlPGs[1].SetActive(false);
+    }
+    public void SecondPage() {
+        ControlPGs[0].SetActive(false);
+        ControlPGs[1].SetActive(true);
+    }
     public void MAINMENU() {
-        MainMenuScript.MAINMENU();
+        StartCoroutine(MainMenuScript.FadeMenu(2, MainMenuScript.menuID));
     }
 }

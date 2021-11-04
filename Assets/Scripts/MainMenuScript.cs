@@ -12,6 +12,7 @@ public class MainMenuScript : MonoBehaviour
     public static int introID = 0;
     public static int menuID = 1;
     public static int gameID = 2;
+    public static int endID = 3;
 
     // Start is called before the first frame update
     private void Start()
@@ -19,14 +20,17 @@ public class MainMenuScript : MonoBehaviour
         OpenMain();
         CloseExit();
     }
-    public static void INTROSCENE() {
-        SceneManager.LoadScene(introID);
+    public static void LOADSCENE(int ID) {
+        SceneManager.LoadScene(ID);
     }
-    public static void MAINMENU() {
-        SceneManager.LoadScene(menuID);
+    public void INTROSCENE() {
+        StartCoroutine(FadeMenu(2, MainMenuScript.introID));
     }
-    public static void LAUNCHGAME() {
-        SceneManager.LoadScene(gameID);
+    public void MAINMENU() {
+        StartCoroutine(FadeMenu(2, MainMenuScript.menuID));
+    }
+    public void LAUNCHGAME() {
+        StartCoroutine(FadeMenu(2, MainMenuScript.gameID));
     }  
     public static void QUITGAME() {
         Application.Quit();
@@ -53,5 +57,11 @@ public class MainMenuScript : MonoBehaviour
     public void SecondPage() {
         ControlPGs[0].SetActive(false);
         ControlPGs[1].SetActive(true);
+    }
+
+    public static IEnumerator FadeMenu(float duration, int ID) {
+        FadingScript.Instance.FadeScreen(true, duration);
+        yield return new WaitForSecondsRealtime(1.5f * duration);
+        LOADSCENE(ID);
     }
 }

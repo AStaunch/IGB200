@@ -74,17 +74,19 @@ public class EmptySpaceScript : MonoBehaviour, iDamageInterface
 
     private void ChainReactionIce() {
         int mask = 1 << 2;
-        foreach (Collider2D collider in Physics2D.OverlapCircleAll(transform.position, 1f, mask)) {
+        foreach (Collider2D collider in Physics2D.OverlapCircleAll(transform.position, 0.6f, mask)) {
             if(collider.TryGetComponent(out EmptySpaceScript ESS)) {
                 if (!ESS.isFrozen_) {
                     ESS.TakeDamage(1f, Elements.Ice, SpellTemplates.Orb);
                 }
+            }else if(collider.TryGetComponent(out AbstractAquaticCreature aac)) {
+                aac.TakeDamage(1f, Elements.Ice, SpellTemplates.Orb);
             }
         }
     }
 
     private void ChainReactionElecticity() {
-        foreach (Collider2D collider in Physics2D.OverlapCircleAll(transform.position, 1f, 1 << 2)) {
+        foreach (Collider2D collider in Physics2D.OverlapCircleAll(transform.position, 0.6f, 1 << 2)) {
             if (collider.TryGetComponent(out iDamageInterface _)) {
                 if (collider.TryGetComponent(out EmptySpaceScript ESS)) {
                     if (!ESS.isFrozen_ && !ESS.isElectric_) {

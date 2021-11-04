@@ -12,8 +12,11 @@ EditorBuildSettings:
     path: Assets/Scenes/Finals/MainMenu.unity
     guid: b88b2712c93744a4ba0d9c8e8c19032b
   - enabled: 1
-    path: Assets/Scenes/Overworld.unity
+    path: Assets/Scenes/Finals/Overworld.unity
     guid: ba68ed13e94f3b34eaa41905bed2fc6f
+  - enabled: 1
+    path: Assets/Scenes/Finals/EndScene.unity
+    guid: 2d7070ae0152e0149a5077b7db0fc51b
   - enabled: 0
     path: Assets/Scenes/DemoDungeon.unity
     guid: 09542e8abff6f1b4b93b21990d415637

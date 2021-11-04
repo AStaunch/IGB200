@@ -10,12 +10,12 @@ GameObject:
   m_Component:
   - component: {fileID: 6461833659243923374}
   - component: {fileID: 5789667271348616584}
+  - component: {fileID: 3740077974300889266}
   - component: {fileID: 6461833659243923373}
   - component: {fileID: 2538750432066807455}
   - component: {fileID: 8238265604039801799}
   - component: {fileID: 6861715113764556093}
   - component: {fileID: 4108642865275894072}
-  - component: {fileID: 3740077974300889266}
   m_Layer: 7
   m_Name: SkeletonMelee
   m_TagString: Untagged
@@ -50,12 +50,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da33fe4bc8f9ae547a62ca5f2f1b2203, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHealth: 3
+  MaxHealth: 2
   DamageImmunities: 
   EntityProperties: 07000000
-  EntitySpeed: 20
+  EntitySpeed: 3
   EntityDamage: 1
   DamageType: 8
+--- !u!114 &3740077974300889266
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6461833659243923372}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1901e1ac9c2b6c2449c38b79dab3721d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DetectionRange: 7
+  MoveDelay: 2.25
+  ForceMultiplier: 1
 --- !u!212 &6461833659243923373
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -189,21 +204,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!114 &3740077974300889266
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6461833659243923372}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1901e1ac9c2b6c2449c38b79dab3721d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DetectionRange: 7
-  MoveDelay: 2.25
-  ForceMultiplier: 50
 --- !u!1001 &7466405192236205947
 PrefabInstance:
   m_ObjectHideFlags: 0

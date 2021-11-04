@@ -130,8 +130,10 @@ public class Skele_fsm : MonoBehaviour
                     rb2d.velocity = Vector2.zero;
                     this_gm_obj.transform.position = fsmdp.TargetPos;
                 }
-                else
-                    rb2d.AddForce(tmp);
+                else {
+                    rb2d.velocity = (tmp);
+                    Instantiate(SoundManager.SoundDict["SkeletonJumpSound"], transform.position, transform.rotation);
+                }
 
             }
             else
@@ -140,7 +142,8 @@ public class Skele_fsm : MonoBehaviour
                 {
                     Vector2 norm_1 = (fsmdp.Target.transform.position - this_gm_obj.transform.position).normalized;
                     Vector2 tmp = norm_1 *  MoveSpeed * ForceMultiplier;
-                    rb2d.AddForce(tmp);
+                    rb2d.velocity = (tmp);
+                    Instantiate(SoundManager.SoundDict["SkeletonJumpSound"], transform.position, transform.rotation);
                 }
             }
 

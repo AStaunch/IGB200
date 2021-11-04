@@ -52,10 +52,11 @@ public class MapManager : MonoBehaviour
         mapCamera.enabled = isActive;
         mapScreen.SetActive(isActive);
         foreach (RoomData Room in AllRooms) {
+            
             Room.gameObject.layer = 5;
             Room.spriteRenderer.enabled = isActive;
             Room.fill.SetActive(isActive);
-            if (Room.isLoaded_) {
+            if (Room == RoomData.MostRecentlyLoaded) {
                 Room.fill.GetComponent<SpriteRenderer>().color = Color.white;
             } else if (Room.hasVisited) {
                 Room.fill.GetComponent<SpriteRenderer>().color = Color.red;

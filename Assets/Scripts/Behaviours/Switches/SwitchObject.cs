@@ -28,6 +28,7 @@ public class SwitchObject : MonoBehaviour, iSenderObject, iHealthInterface
 
     // Start is called before the first frame update
     private void Start() {
+        GetComponent<SpriteRenderer>().sortingOrder = -Mathf.RoundToInt(transform.position.y);
         Health_ = MaxHealth_;
         EntityProperties_ = new Properties[] { Properties.Immovable };
         currentState_ = false;
@@ -48,8 +49,10 @@ public class SwitchObject : MonoBehaviour, iSenderObject, iHealthInterface
     public void TakeDamage(float damage, Elements damageType, SpellTemplates damageSource = SpellTemplates.NULL) {
         if(damageType == activeElement && currentState_) {
             EntityDeath();
-        } else if (damageType != inactiveElement && !currentState_) {
+            SpellRenderer.Instance.CreateBurstFX(transform.position, ColourDict[damageType]);
+        } else if (damageType == inactiveElement && !currentState_) {
             EntityDeath();
+            SpellRenderer.Instance.CreateBurstFX(transform.position, ColourDict[damageType]);
         }
     }
     public void EntityDeath() {

@@ -115,6 +115,7 @@ public class Thrower_FSM : AbstractEnemy
 
                 UpdateAnimation(dir);
                 Anim_.SetTrigger("attack");
+                Instantiate(SoundManager.SoundDict["ThrowProjectileSound"], transform.position, transform.rotation);
                 GameObject proj = Instantiate<GameObject>(Projectile,transform.position + dir.normalized, transform.rotation);
                 ProjectileScript projectile = proj.AddComponent<ProjectileScript>();
                 projectile.Shooter = this.gameObject;

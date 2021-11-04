@@ -33,14 +33,32 @@ public class DialogueManager : MonoBehaviour
     {
         sentences = new Queue<string>();
         EndDialogue();
+        if (PAK) {
+            FadingScript.Instance.gameObject.SetActive(false);
+        }
     }
 
     private void Update() {
-        if(isActive && Input.GetKeyUp(KeyCode.Space) && donePrinting) {
-            DisplayNextSentence();
-        } else if (isActive && Input.GetKeyUp(KeyCode.Space) && !donePrinting) {
-            textSpeed = 0f;
-            sound.clip = null;
+        if (PAK) {
+            bool notMouse = !Input.GetMouseButton(0) || !Input.GetMouseButton(1) || !Input.GetMouseButton(2);
+            if (isActive && Input.anyKeyDown && donePrinting && notMouse) {
+                DisplayNextSentence();
+            } else if (isActive && Input.anyKeyDown && !donePrinting && notMouse) {
+                textSpeed = 0f;
+                sound.clip = null;
+            }
+        } else {
+            if (isActive && Input.GetKeyUp(KeyCode.Space) && donePrinting) {
+                DisplayNextSentence();
+            } else if (isActive && Input.GetKeyUp(KeyCode.Space) && !donePrinting) {
+                textSpeed = 0f;
+                sound.clip = null;
+            }
+        }
+        if(isActive && Input.GetKeyUp(KeyCode.Escape)) {
+            sentences.Clear();
+            StopAllCoroutines();
+            EndDialogue();
         }
     }
 
@@ -77,27 +95,33 @@ public class DialogueManager : MonoBehaviour
         textSpeed = 0.075f;
         sound.clip = clip;
 
-        for (int i = 0; i < sentence.Length; i++) {
+        //for (int i = 0; i < sentence.Length; i++) { }
+        int i = 0;
+        while(i < sentence.Length) {
             sound.Play();
-            if (i - sentence.Length > 0 && sentence.Substring(i, waitCmd.Length).StartsWith("/w=")) {
-                string str = sentence.Substring(i, waitCmd.Length).Replace("/w=", "");
-                int waitTime = int.Parse(str);
-                i += waitCmd.Length;
-                dialogText.text += "\n";
-                
-                yield return new WaitForSecondsRealtime(waitTime);
-
-            } else {
-                char Char = sentence.ToCharArray()[i];
-                dialogText.text += Char;
-                sound.Play();
-                if (Char == ' ') {
-                    yield return null;
-                } else {
-                    yield return new WaitForSecondsRealtime(textSpeed);
-                }
+            if (sentence.Length - i >= waitCmd.Length) {
+                if(sentence.Substring(i, waitCmd.Length).StartsWith("/w=")) {
+                    string str = sentence.Substring(i, waitCmd.Length).Replace("/w=", "");
+                    int waitTime = int.Parse(str);
+                    i += waitCmd.Length + 1;
+                    i = Mathf.Clamp(i, 0, sentence.Length);
+                    dialogText.text += "\n";
+                    yield return new WaitForSecondsRealtime(waitTime);
+                }                
+            }       
+            if(!(i < sentence.Length)) {
+                break;
             }
+            char Char = sentence.ToCharArray()[i];
+            dialogText.text += Char;
+            sound.Play();
+            if (Char == ' ') {
+                yield return null;
+            } else {
+                yield return new WaitForSecondsRealtime(textSpeed);
+            }                      
             sound.Stop();
+            i++;
         }
         if (PAK) {
             PrintPAK();
@@ -106,7 +130,7 @@ public class DialogueManager : MonoBehaviour
     }
 
     private void PrintPAK() {
-        dialogText.text += "<color=#f77622> PRESS SPACE </color>";
+        dialogText.text += "<color=#f77622> PRESS ANY KEY </color>";
     }
 
     private void OpenDialogue() {
@@ -121,7 +145,8 @@ public class DialogueManager : MonoBehaviour
 
     private void EndDialogue() {
         if (PAK) {
-            MainMenuScript.MAINMENU();
+            FadingScript.Instance.gameObject.SetActive(true);
+            StartCoroutine(MainMenuScript.FadeMenu(2, MainMenuScript.menuID));
             return;
         }
         Time.timeScale = 1;
@@ -133,4 +158,6 @@ public class DialogueManager : MonoBehaviour
         //GetComponent<Animator>().SetTrigger("Close");
         isActive = false;
     }
+
+
 }

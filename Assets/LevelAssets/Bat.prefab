@@ -64,13 +64,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8820126500696495899}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d5b1083382a07f94984e238e7e99b620, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   DetectionRange: 7
-  Min_distance_from_target: 1
+  Min_distance_from_target: 0.5
   Min_distance_from_target_variation: 0.25
 --- !u!114 &-2182435571304819879
 MonoBehaviour:
@@ -79,7 +79,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8820126500696495899}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 65841066bca08344ea2e186c450ab4cd, type: 3}
   m_Name: 
