@@ -172,7 +172,8 @@ public class ArcScript : MonoBehaviour, iDamageInterface
             HitCollider = collision;
             CurrentPosition = transform.position;
             msg += collision.transform.position - transform.position;
-            Destroy(this.gameObject, 2 * Time.deltaTime);
+            StopAllCoroutines();
+            GetComponent<Animator>().SetTrigger("death");
         } else {
 
         }

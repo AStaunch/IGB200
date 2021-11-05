@@ -16,6 +16,8 @@ public class PlayerEntity : AbstractCreature
         } else {
             _instance = this;
         }
+        Health_ = MaxHealth_;
+        HealthBarScript.Instance.UpdateHealthBar(this);
     }
     #endregion
     internal AbstractDoor LastDoor_ { get => LastDoor; set => LastDoor = value; }
@@ -23,7 +25,7 @@ public class PlayerEntity : AbstractCreature
 
     private AbstractDoor LastDoor;
     List<Rigidbody2D> collidedObjects = new List<Rigidbody2D>();
-    private Collider2D CollisionCollider;
+
     public RoomData SaveRoomData_ {get => StartRoomData; set => StartRoomData = value; }
 
     public override bool isException_ => true;
@@ -32,7 +34,7 @@ public class PlayerEntity : AbstractCreature
     internal Vector3 SavePosition_;
     private Vector3 change;
     // Update is called once per frame
-    bool NoClip;
+    
 
     private void Start() {
         SavePosition_ = transform.position;
@@ -44,14 +46,7 @@ public class PlayerEntity : AbstractCreature
         if (ElementImmunities_ == null) {
             ElementImmunities_ = new Elements[0];
         }
-        Collider2D[] AllColliders = GetComponents<Collider2D>();
-        foreach (Collider2D collider in AllColliders) {
-            if (!collider.isTrigger) {
-                CollisionCollider = collider;
-                NoClip = collider.isTrigger;
-                break;
-            }
-        }
+
         if (SaveRoomData_) {
             SaveRoomData_.Load();
         }        
@@ -76,28 +71,6 @@ public class PlayerEntity : AbstractCreature
         if (Input.GetKeyDown(KeyCode.R)) {
             EntityFall();
             Health_ += 1;
-        }
-        //Turns of Player Collision
-        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.P)) {
-            NoClip = !NoClip;
-            CollisionCollider.isTrigger = NoClip;
-        }
-        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.T)) {
-            Vector3 newpos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            newpos.z = 0;
-            GameObject.FindGameObjectWithTag("Player").transform.position = newpos;
-        }
-
-        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.LeftBracket)) {
-            string[] UnlockNames = UnlockManager.Instance.Registry.AllKeys();
-            foreach (string UnlockName in UnlockNames) {
-                if (Array.Exists(UnlockManager.Instance.Registry.AllKeys(), (e) => { return e == UnlockName; })) {
-                    UnlockManager.Instance.Registry.UnlockItem(UnlockName);
-                    DebugBox.Instance.inputs.Add("Spell.unlock(" + UnlockName + ");");
-                } else {
-                    throw new Exception($"Item by the name {UnlockName} does not exist within the unlock manager");
-                }
-            }
         }
     }
     public void CastSpell(SpellTemplate CallingSpell)

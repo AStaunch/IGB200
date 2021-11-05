@@ -8,7 +8,11 @@ using static SpellFunctionLibrary;
 public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreatureInterface, iPhysicsInterface, iPropertyInterface,iPropertyManager, iFacingInterface, iReloadInterface
 {
     public abstract bool IsEnemy { get; }
-    public int Health_ { get => Health; set { Health = value; } }
+    public int Health_ { get => Health; set {
+            value = Mathf.Clamp(value, 0, MaxHealth_);
+            Health = value; 
+            ValidateHealth(); } 
+    }
     private int Health;
     public int MaxHealth_ { get => MaxHealth; set => MaxHealth = value; }
     public int MaxHealth = 1;
@@ -86,6 +90,7 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
             //Debug.Log($"{transform.name} is frozen!");
             SpriteRoutine = TintSprite(2.5f, Color.cyan);
             StartCoroutine(SpriteRoutine);
+            Anim_.speed = 0;
             StartCoroutine(MovePause(2.5f));
         } else {
             if (damageInt > 0) {
@@ -103,7 +108,10 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
         ValidateHealth();
     }
     internal void ValidateHealth() {
-        Health = Mathf.Clamp(Health, 0, MaxHealth_);
+        if(this.gameObject == PlayerEntity.Instance.gameObject) {
+            HealthBarScript.Instance.UpdateHealthBar(this);
+        }
+       
         //Check if the entity should die
         if (0 >= Health_) {
             //Debug.Log($"{transform.name} dies!!!");
@@ -271,7 +279,6 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
     public IEnumerator MovePause(float Wait) {
         float SpeedStore = EntitySpeed_;
         float time = 0;
-        Anim_.speed = 0;
         isFrozen_ = true;
         while (time < Wait) {
             EntitySpeed_ = 0f;

@@ -53,7 +53,7 @@ MonoBehaviour:
   MaxHealth: 3
   DamageImmunities: 00000000020000000800000001000000
   EntityProperties: 0700000000000000
-  EntitySpeed: 3
+  EntitySpeed: 2.5
   EntityDamage: 1
   DamageType: 8
 --- !u!114 &4254016258049561245

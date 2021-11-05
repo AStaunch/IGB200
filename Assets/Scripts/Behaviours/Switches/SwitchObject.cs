@@ -47,10 +47,10 @@ public class SwitchObject : MonoBehaviour, iSenderObject, iHealthInterface
         }
     }
     public void TakeDamage(float damage, Elements damageType, SpellTemplates damageSource = SpellTemplates.NULL) {
-        if(damageType == activeElement && currentState_) {
+        if(damageType == activeElement && !currentState_) {
             EntityDeath();
             SpellRenderer.Instance.CreateBurstFX(transform.position, ColourDict[damageType]);
-        } else if (damageType == inactiveElement && !currentState_) {
+        } else if (damageType == inactiveElement && currentState_) {
             EntityDeath();
             SpellRenderer.Instance.CreateBurstFX(transform.position, ColourDict[damageType]);
         }

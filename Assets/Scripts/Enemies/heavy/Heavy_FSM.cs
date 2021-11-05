@@ -119,10 +119,10 @@ public class Heavy_FSM : MonoBehaviour
                     this_gm_obj.transform.position = fsmdp.TargetPos;
                 } else {
                     rb2d.velocity = (tmp);
-                    Instantiate(SoundManager.SoundDict["HeavyKnightStepSound"], transform.position, transform.rotation);
+                    if(MoveSpeed > 0) {
+                        Instantiate(SoundManager.SoundDict["HeavyKnightStepSound"], transform.position, transform.rotation);
+                    }                    
                 }
-                    
-                //Debug.Log($"{transform.name} sees Player : Velocity: {tmp.magnitude}");
 
             }
             else
@@ -135,8 +135,9 @@ public class Heavy_FSM : MonoBehaviour
                     Vector2 norm_1 = (fsmdp.Target.transform.position - this_gm_obj.transform.position).normalized;
                     Vector2 tmp = norm_1 * MoveSpeed * ForceMultiplier;
                     rb2d.velocity = (tmp);
-                    Instantiate(SoundManager.SoundDict["HeavyKnightStepSound"], transform.position, transform.rotation);
-                    //Debug.Log($"{transform.name} sees Player : Velocity: {tmp.magnitude}");
+                    if (MoveSpeed > 0) {
+                        Instantiate(SoundManager.SoundDict["HeavyKnightStepSound"], transform.position, transform.rotation);
+                    }
                 }
             }
 

@@ -77,7 +77,7 @@ public class SpellRenderer : MonoBehaviour
     public GameObject CreateArc(Transform Origin, Color[] colors) {
         spellMaster = new GameObject("Arc Master");
         spellMaster.transform.position = Origin.position;
-        Vector3 offset = Origin.GetComponent<SpriteRenderer>().bounds.size * Origin.GetComponent<iFacingInterface>().GetEntityDirection();
+        Vector3 offset = 0.5f * Origin.GetComponent<SpriteRenderer>().bounds.size * Origin.GetComponent<iFacingInterface>().GetEntityDirection();
         GameObject arcObject = Instantiate(ArcSprite);
         arcObject.transform.position = Origin.position + offset;
         arcObject.GetComponent<SpriteRenderer>().material = CreateMaterial(colors);
