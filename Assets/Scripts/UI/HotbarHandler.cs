@@ -59,10 +59,10 @@ public class HotbarHandler : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 //Debug.Log($"{activeslot} - {CastTime} : {Time.timeSinceLevelLoad}");
-                if (Hotbar[activeslot] != null && CastTime <= Time.timeSinceLevelLoad)
+                if (Hotbar[activeslot] != null && CastTime <= Time.timeSinceLevelLoad && Time.timeScale > 0)
                 {
                     Hotbar[activeslot].run();
-                    Player.CastSpell(Hotbar[activeslot].template);
+                    Player.CastSpell(Hotbar[activeslot]);
                     CastTime = Hotbar[activeslot].template.CastDelay;
                 }
             }

@@ -29,8 +29,7 @@ public class DialogueManager : MonoBehaviour
     private bool donePrinting = false;
     internal bool PAK = false;
     // Start is called before the first frame update
-    void Start()
-    {
+    void Start() {
         sentences = new Queue<string>();
         EndDialogue();
         if (PAK) {
@@ -39,15 +38,7 @@ public class DialogueManager : MonoBehaviour
     }
 
     private void Update() {
-        if (PAK) {
-            bool notMouse = !Input.GetMouseButton(0) || !Input.GetMouseButton(1) || !Input.GetMouseButton(2);
-            if (isActive && Input.anyKeyDown && donePrinting && notMouse) {
-                DisplayNextSentence();
-            } else if (isActive && Input.anyKeyDown && !donePrinting && notMouse) {
-                textSpeed = 0f;
-                sound.clip = null;
-            }
-        } else {
+        if (isActive && Input.GetKeyUp(KeyCode.Space)) {
             if (isActive && Input.GetKeyUp(KeyCode.Space) && donePrinting) {
                 DisplayNextSentence();
             } else if (isActive && Input.GetKeyUp(KeyCode.Space) && !donePrinting) {
@@ -55,7 +46,8 @@ public class DialogueManager : MonoBehaviour
                 sound.clip = null;
             }
         }
-        if(isActive && Input.GetKeyUp(KeyCode.Escape)) {
+
+        if (isActive && Input.GetKeyUp(KeyCode.Escape)) {
             sentences.Clear();
             StopAllCoroutines();
             EndDialogue();
@@ -91,46 +83,81 @@ public class DialogueManager : MonoBehaviour
     }
     string waitCmd = "/w=N";
     IEnumerator WriteSentence(string sentence) {
+        Time.timeScale = 0;
         donePrinting = false;
         textSpeed = 0.075f;
         sound.clip = clip;
 
         //for (int i = 0; i < sentence.Length; i++) { }
         int i = 0;
-        while(i < sentence.Length) {
-            sound.Play();
+        while (i < sentence.Length) {
+            if (!sound.isPlaying) {
+                sound.Play();
+            }
+
             if (sentence.Length - i >= waitCmd.Length) {
-                if(sentence.Substring(i, waitCmd.Length).StartsWith("/w=")) {
+                if (sentence.Substring(i, waitCmd.Length).StartsWith("/w=")) {
                     string str = sentence.Substring(i, waitCmd.Length).Replace("/w=", "");
                     int waitTime = int.Parse(str);
                     i += waitCmd.Length + 1;
                     i = Mathf.Clamp(i, 0, sentence.Length);
                     dialogText.text += "\n";
                     yield return new WaitForSecondsRealtime(waitTime);
-                }                
-            }       
-            if(!(i < sentence.Length)) {
+                }
+            }
+            if (!(i < sentence.Length)) {
                 break;
+            }
+            if (textSpeed < 0) {
+                for (; i < sentence.Length; i++) {
+                    char Char = sentence.ToCharArray()[i];
+                    dialogText.text += Char;
+                }
+                yield return null;
+            } else {
+                char Char = sentence.ToCharArray()[i];
+                dialogText.text += Char;
+
+                if (Char == ' ') {
+                    yield return null;
+                } else {
+                    yield return new WaitForSecondsRealtime(textSpeed);
+                }
+                i++;
+            }
+        }
+        if (PAK) {
+            StartCoroutine(PrintPAK());
+        } else {
+            donePrinting = true;
+        }
+    }
+
+    IEnumerator PrintPAK() {
+        if (dialogText.text.ToCharArray()[dialogText.text.Length - 1] != '\n') {
+            dialogText.text += '\n';
+        }
+        dialogText.text += "<color=#3A4466>[</color>";
+        dialogText.text += "<color=#F77A22>";
+
+        string sentence = "PRESS SPACE TO CONTINUE";
+        int i = 0;
+        while (i < sentence.Length) {
+            if (!sound.isPlaying) {
+                sound.Play();
             }
             char Char = sentence.ToCharArray()[i];
             dialogText.text += Char;
-            sound.Play();
             if (Char == ' ') {
                 yield return null;
             } else {
                 yield return new WaitForSecondsRealtime(textSpeed);
-            }                      
-            sound.Stop();
+            }
             i++;
         }
-        if (PAK) {
-            PrintPAK();
-        }
+        dialogText.text += "</color>";
+        dialogText.text += "<color=#3A4466>]</color>";
         donePrinting = true;
-    }
-
-    private void PrintPAK() {
-        dialogText.text += "<color=#f77622> PRESS ANY KEY </color>";
     }
 
     private void OpenDialogue() {

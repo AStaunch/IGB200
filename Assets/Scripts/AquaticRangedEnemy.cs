@@ -104,7 +104,7 @@ public class AquaticRangedEnemy : AbstractAquaticCreature
             {
 
                 Vector3 dir = (fsmdp.Target.transform.position - transform.position);
-
+                Anim_.SetTrigger("attack");
                 UpdateAnimation(dir);
 
                 GameObject proj = Instantiate<GameObject>(Projectile, transform.position + dir.normalized, transform.rotation);

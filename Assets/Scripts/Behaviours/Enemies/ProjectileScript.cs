@@ -11,7 +11,7 @@ public class ProjectileScript : MonoBehaviour , iPhysicsInterface, iDamageInterf
     public float Velocity;
     public Vector3 Direction;
     public float Damage;
-    public EnumsAndDictionaries.Elements element;
+    public Elements element;
     public GameObject Shooter;
 
     public Rigidbody2D RB_ => GetComponent<Rigidbody2D>();
@@ -24,9 +24,7 @@ public class ProjectileScript : MonoBehaviour , iPhysicsInterface, iDamageInterf
                 iHealth.TakeDamage(Damage, element);
                 //Debug.Log("Projectile Hit " + collision.transform.name);
             }
-            if(collision.TryGetComponent(out ProjectileScript otherProj)) {
-                SpellRenderer.Instance.CreateBurstFX(transform.position, ColourDict[element]);
-            }
+            SpellRenderer.Instance.CreateBurstFX(transform.position, ColourDict[element]);
             Destroy(this.gameObject);
         }
     }

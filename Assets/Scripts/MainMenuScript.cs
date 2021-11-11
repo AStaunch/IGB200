@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -59,9 +60,23 @@ public class MainMenuScript : MonoBehaviour
         ControlPGs[1].SetActive(true);
     }
 
+    public async Task WaitMenu(float duration, int ID) {
+        if (!isPlaying) {
+            isPlaying = true;
+            FadingScript.Instance.FadeScreen(true, duration);
+            await Task.Delay( (int)(1000 * 1.5f * duration));
+            LOADSCENE(ID);
+            isPlaying = false;
+        }
+    }
+    private static bool isPlaying = false;
     public static IEnumerator FadeMenu(float duration, int ID) {
-        FadingScript.Instance.FadeScreen(true, duration);
-        yield return new WaitForSecondsRealtime(1.5f * duration);
-        LOADSCENE(ID);
+        if (!isPlaying) {
+            isPlaying = true;
+            FadingScript.Instance.FadeScreen(true, duration);
+            yield return new WaitForSecondsRealtime(1.1f * duration);
+            LOADSCENE(ID);
+            isPlaying = false;
+        }
     }
 }

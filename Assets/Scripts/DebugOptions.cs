@@ -23,6 +23,7 @@ public class DebugOptions : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Loads main game
         if(Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Slash)) {
             MainMenuScript.LOADSCENE(MainMenuScript.gameID);
         }
@@ -31,12 +32,13 @@ public class DebugOptions : MonoBehaviour
             NoClip = !NoClip;
             CollisionCollider.isTrigger = NoClip;
         }
+        //Teleport player to cursor
         if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.T)) {
             Vector3 newpos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             newpos.z = 0;
-            GameObject.FindGameObjectWithTag("Player").transform.position = newpos;
+            PlayerEntity.Instance.transform.position = newpos;
         }
-
+        //Unlocks all spells
         if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.LeftBracket)) {
             string[] UnlockNames = UnlockManager.Instance.Registry.AllKeys();
             foreach (string UnlockName in UnlockNames) {
@@ -47,6 +49,11 @@ public class DebugOptions : MonoBehaviour
                     throw new Exception($"Item by the name {UnlockName} does not exist within the unlock manager");
                 }
             }
+        }
+        //Restart Room
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.R)) {
+            PlayerEntity.Instance.EntityFall();
+            PlayerEntity.Instance.Health_ += 1;
         }
     }
 }

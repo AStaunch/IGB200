@@ -81,8 +81,6 @@ public class SpellRenderer : MonoBehaviour
         GameObject arcObject = Instantiate(ArcSprite);
         arcObject.transform.position = Origin.position + offset;
         arcObject.GetComponent<SpriteRenderer>().material = CreateMaterial(colors);
-        arcObject.GetComponent<SpriteRenderer>().sortingLayerName = "VFX";
-        arcObject.GetComponent<SpriteRenderer>().sortingOrder = 6;
         TrailRenderer tr = arcObject.AddComponent<TrailRenderer>();
         tr.startColor = colors[0];
         tr.endColor = colors[2];
@@ -107,8 +105,6 @@ public class SpellRenderer : MonoBehaviour
         GameObject orbObject = Instantiate(OrbSprite);
         orbObject.transform.position = Origin.position + offset;
         orbObject.GetComponent<SpriteRenderer>().material = CreateMaterial(colors);
-        orbObject.GetComponent<SpriteRenderer>().sortingLayerName = "VFX";
-        orbObject.GetComponent<SpriteRenderer>().sortingOrder = 6;
         Destroy(spellMaster, 1f);
         return orbObject;
     }
@@ -120,7 +116,7 @@ public class SpellRenderer : MonoBehaviour
         spellMaster.transform.position = Origin.transform.position;
         GameObject coneObject = Instantiate(ConeSprite);
         coneObject.transform.parent = spellMaster.transform;
-        Vector2 offset = Origin.GetComponent<SpriteRenderer>().bounds.size * Origin.GetComponent<iFacingInterface>().GetEntityDirection();
+        Vector2 offset = PlayerEntity.castPoints[ Origin.GetComponent<iFacingInterface>().GetEntityDirectionEnum()];
         coneObject.transform.localPosition = Vector2.zero + offset;
         coneObject.GetComponent<Renderer>().material = CreateMaterial(colors);
         coneObject.transform.Rotate(Vector3.forward * RotationDict[Origin.GetComponent<iFacingInterface>().GetEntityDirectionEnum()]);
@@ -139,6 +135,7 @@ public class SpellRenderer : MonoBehaviour
 
     #region Effects and Particles
     public GameObject PulseFXObject;
+    public GameObject SparkFXObject;
     public void CreateBurstFX(Vector3 position, Color[] colors) {
         Material material = CreateMaterial(colors);
         GameObject PFXO =  Instantiate(PulseFXObject);
@@ -146,13 +143,20 @@ public class SpellRenderer : MonoBehaviour
         PFXO.transform.position = position;
         Destroy(PFXO, 0.5f);
     }
+    public void CreatSparkFX(Vector3 position, Color[] colors) {
+        Material material = CreateMaterial(colors);
+        GameObject PFXO = Instantiate(SparkFXObject);
+        PFXO.GetComponent<SpriteRenderer>().sortingLayerName = "VFX";
+        PFXO.GetComponent<Renderer>().material = material;
+        PFXO.transform.position = position;
+    }
     #endregion
     #region Recycled Code
     private GameObject CreateObject(Sprite sprite, Material material, Vector2 offset) {
         GameObject obj = new GameObject();
         obj.AddComponent<SpriteRenderer>().sprite = sprite;
-        obj.GetComponent<SpriteRenderer>().sortingLayerName = "Objects";
-        obj.GetComponent<SpriteRenderer>().sortingOrder = -1* (int) obj.transform.position.y;
+        obj.GetComponent<SpriteRenderer>().sortingLayerName = "VFX";
+        obj.GetComponent<SpriteRenderer>().sortingOrder = 6;
         obj.GetComponent<Renderer>().material = material;
         obj.transform.parent = spellMaster.transform;
         obj.transform.localPosition = Vector2.zero + offset;

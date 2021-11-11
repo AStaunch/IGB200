@@ -8,6 +8,10 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Image))]
 public class CustomEventHandle : MonoBehaviour
 {
+    //void Awake() {
+    //    DontDestroyOnLoad(this.gameObject);
+    //}
+
     #region crafting Evnt syst
     #region custom evnt handling
     public class EventData

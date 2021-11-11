@@ -76,7 +76,7 @@ public class SpellRegistry
     public void AddItemToregistry(SpellTemplate template)
     {
         template.CastingId = iDGenerator.GetId(template, out _);
-        if (!S_Registry.Values.Contains(template))
+        if (!S_Registry.ContainsKey(template.Name))
         {
             S_Registry.Add(template.Name, template);
             if (onAdd != null)

@@ -122,7 +122,7 @@ class Register : MonoBehaviour
                 Vector2 Offset = 0.5f * CasterObject.GetComponent<SpriteRenderer>().bounds.size * Direction;
                 Vector2 position = CasterObject.transform.position;
                 Vector2 Origin = position + Offset;
-                float maxDistance = 4f;
+                float maxDistance = 3.5f;
                 int LayerStore = CasterObject.layer;
                 CasterObject.layer = 2;
                 ////There is no point using a facing variable, when this debug function will be removed soon

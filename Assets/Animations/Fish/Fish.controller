@@ -118,7 +118,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 866ea4c438ef89d40a14dac6af0caf92, type: 2}
     m_Threshold: 0
-    m_Position: {x: 1, y: 1}
+    m_Position: {x: 1.05, y: 0.75}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: moveX
@@ -126,7 +126,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: e8413b3ac9bd86b4aaf7babf263c7bc9, type: 2}
     m_Threshold: 0.5
-    m_Position: {x: -1, y: 1}
+    m_Position: {x: 0, y: -1.3}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: moveX
@@ -134,7 +134,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 58968609f3ba5964bbf55e48ad9774e2, type: 2}
     m_Threshold: 1
-    m_Position: {x: 0, y: -2}
+    m_Position: {x: -1.05, y: 0.75}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: moveX
@@ -157,7 +157,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 4ed68d31ae2728443bf0843784a1c1d5, type: 2}
     m_Threshold: 0
-    m_Position: {x: 1, y: 1}
+    m_Position: {x: 1.05, y: 0.75}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: moveX
@@ -165,7 +165,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: fd017b996f865544e9dffe799f6782d6, type: 2}
     m_Threshold: 0.5
-    m_Position: {x: 0, y: -2}
+    m_Position: {x: 0, y: -1.3}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: moveX
@@ -173,7 +173,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 674880185684a0c48ad4e49ff8231934, type: 2}
     m_Threshold: 1
-    m_Position: {x: -1, y: 1}
+    m_Position: {x: -1.05, y: 0.75}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: moveX
@@ -247,6 +247,12 @@ AnimatorController:
     m_Controller: {fileID: 0}
   - m_Name: death
     m_Type: 9
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
+  - m_Name: moving
+    m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0

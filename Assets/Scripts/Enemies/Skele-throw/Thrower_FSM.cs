@@ -109,7 +109,7 @@ public class Thrower_FSM : AbstractEnemy
         //Debug.Log("Throwing");
         while (true)
         {
-            if (fsmdp.Target != null)//dont need this bc the run condition requires the player, and the idle state only supplies the player if in view, but better safe than sorry
+            if (fsmdp.Target != null && !isFrozen_)//dont need this bc the run condition requires the player, and the idle state only supplies the player if in view, but better safe than sorry
             {
                 Vector3 dir = (fsmdp.Target.transform.position - transform.position);
 

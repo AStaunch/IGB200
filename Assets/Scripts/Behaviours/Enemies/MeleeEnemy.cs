@@ -18,7 +18,7 @@ public class MeleeEnemy : AbstractEnemy
         return (CurrentPosition - LastPosition).normalized;
     }
     private void OnCollisionStay2D(Collision2D collision) {
-        if (collision.transform.TryGetComponent(out PlayerEntity playerEntity) && AttackTime_ < Time.timeSinceLevelLoad) {
+        if (collision.transform.TryGetComponent(out PlayerEntity playerEntity) && AttackTime_ < Time.timeSinceLevelLoad && !isFrozen_) {
             AttackTime_ = AttackDelay;
             playerEntity.TakeDamage(EntityDamage_, DamageType);
             Anim_.SetTrigger("attack");            

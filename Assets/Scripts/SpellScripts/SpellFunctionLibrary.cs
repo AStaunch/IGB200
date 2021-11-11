@@ -167,7 +167,7 @@ public static class SpellFunctionLibrary
         List<GameObject> hitPoints = new List<GameObject>();
         float startAngle = CalculateStartAngle(direction) - (angle / 2);
         int[] StopMask = new int[] { 8 };
-        Vector2 Offset = 0.5f * Origin.GetComponent<SpriteRenderer>().bounds.size * direction;
+        Vector2 Offset = 0.2f * Origin.GetComponent<SpriteRenderer>().bounds.size * direction;
         Vector2 position = Origin.transform.position;
         Vector2 CastOrigin = position + Offset;
         for (int i = 0; i < noRays; i++) {

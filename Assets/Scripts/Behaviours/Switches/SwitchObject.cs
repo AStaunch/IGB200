@@ -28,7 +28,8 @@ public class SwitchObject : MonoBehaviour, iSenderObject, iHealthInterface
 
     // Start is called before the first frame update
     private void Start() {
-        GetComponent<SpriteRenderer>().sortingOrder = -Mathf.RoundToInt(transform.position.y);
+        GetComponent<SpriteRenderer>().sortingLayerName = "Objects";
+        GetComponent<SpriteRenderer>().sortingOrder = -Mathf.RoundToInt(GetComponent<Collider2D>().bounds.min.y);
         Health_ = MaxHealth_;
         EntityProperties_ = new Properties[] { Properties.Immovable };
         currentState_ = false;

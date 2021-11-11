@@ -25,6 +25,12 @@ public class OrbScript : MonoBehaviour, iPhysicsInterface
     void Start() {
         Anim_.speed = 1f;
         gameObject.layer = 6;
+        GetComponent<SpriteRenderer>().sortingLayerName = "Objects";
+    }
+
+    void Update() {
+
+        GetComponent<SpriteRenderer>().sortingOrder = -Mathf.RoundToInt(GetComponent<Collider2D>().bounds.min.y);
     }
     public void AlertObservers(AnimationEvents message) {
         if (message == AnimationEvents.Start) {

@@ -13,7 +13,8 @@ public abstract class AbstractEnemy : AbstractCreature, iEnemyInterface
     public float AttackTime_ { get { return AttackTime; } set { AttackTime = Time.timeSinceLevelLoad + value; } }//Automatically update the cast time to the new time
     private float AttackTime = 0;
     public override bool IsEnemy => true;
-    public void Start() {
+    public new void Start() {
+        base.Start();
         AttackTime_ = AttackDelay;
         DefaultMat = GetComponent<SpriteRenderer>().material;
         Health_ = MaxHealth_;
@@ -34,12 +35,13 @@ public abstract class AbstractEnemy : AbstractCreature, iEnemyInterface
         Instantiate(SoundManager.SoundDict["EnemyDeathSound"]);
         Destroy(this.gameObject);
     }        
-    protected override void EntityFall() {
+    internal override void EntityFall() {
         Debug.Log(transform.name + " Fell");
         EntityDeath();
     }
     public override void UpdateAnimation(Vector3 change) {
         if (change != Vector3.zero) {
+            change = change.normalized;
             Anim_.SetFloat("moveX", change.x);
             Anim_.SetFloat("moveY", change.y);
             Anim_.SetBool("moving", true);

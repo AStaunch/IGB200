@@ -20,7 +20,7 @@ public class ChestScript : MonoBehaviour, iSenderObject
     }
     private void Awake() {
         GetComponent<SpriteRenderer>().sortingLayerName = "Objects";
-        GetComponent<Renderer>().sortingOrder = -Mathf.RoundToInt(transform.position.y);
+        GetComponent<Renderer>().sortingOrder = -Mathf.RoundToInt(GetComponent<Collider2D>().bounds.min.y);
     }
 
     private void UpdateSprite(bool value) {

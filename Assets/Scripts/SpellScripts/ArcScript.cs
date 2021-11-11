@@ -51,6 +51,7 @@ public class ArcScript : MonoBehaviour, iDamageInterface
         oldpos = startPoint;
         newPos = startPoint;
         //StartCoroutine(ArcMove(time, direction, arcDirection));
+        GetComponent<SpriteRenderer>().sortingLayerName = "VFX";
     }
 
     Vector2 startPoint;
@@ -58,6 +59,8 @@ public class ArcScript : MonoBehaviour, iDamageInterface
     Vector2 newPos;
     float duration;
     public void Update() {
+        
+        GetComponent<SpriteRenderer>().sortingOrder = -Mathf.RoundToInt(GetComponent<Collider2D>().bounds.min.y);
         if (time < duration * duraScale) {
             //Declare the Position Vectors
             Vector2 xPos;

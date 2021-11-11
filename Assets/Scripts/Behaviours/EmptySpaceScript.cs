@@ -73,7 +73,7 @@ public class EmptySpaceScript : MonoBehaviour, iDamageInterface
     }
 
     private void ChainReactionIce() {
-        int mask = 1 << 2;
+        int mask = 1 << 6 | 1 << 7 | 1 << 2;
         foreach (Collider2D collider in Physics2D.OverlapCircleAll(transform.position, 0.6f, mask)) {
             if(collider.TryGetComponent(out EmptySpaceScript ESS)) {
                 if (!ESS.isFrozen_) {
@@ -86,19 +86,17 @@ public class EmptySpaceScript : MonoBehaviour, iDamageInterface
     }
 
     private void ChainReactionElecticity() {
-        foreach (Collider2D collider in Physics2D.OverlapCircleAll(transform.position, 0.6f, 1 << 2)) {
-            if (collider.TryGetComponent(out iDamageInterface _)) {
+
+        int mask = 1 << 6 | 1 << 7 | 1 << 2;
+        foreach (Collider2D collider in Physics2D.OverlapCircleAll(transform.position, 1f, mask)) {
+            if (collider.TryGetComponent(out iDamageInterface iHealth)) {
                 if (collider.TryGetComponent(out EmptySpaceScript ESS)) {
                     if (!ESS.isFrozen_ && !ESS.isElectric_) {
                         ESS.TakeDamage(1f, Elements.Electricity, SpellTemplates.Orb);
                     }
+                } else {
+                    iHealth.TakeDamage(1f, Elements.Electricity);
                 }
-            }
-        }
-        int mask = 1 << 6 | 1 << 7;
-        foreach (Collider2D collider in Physics2D.OverlapCircleAll(transform.position, 1f, mask)) {
-            if (collider.TryGetComponent(out iDamageInterface iHealth)) {
-                iHealth.TakeDamage(1f, Elements.Electricity);
             }
         }
     }
@@ -119,7 +117,10 @@ public class EmptySpaceScript : MonoBehaviour, iDamageInterface
     public void TakeDamage(float damage, Elements damageType, SpellTemplates damageSource = SpellTemplates.NULL) {
         if(VoidType_ == VoidType.Water) {
             if (damageType == Elements.Ice) {
-                isFrozen_ = true;
+                if (!isFrozen_) {
+                    SpellRenderer.Instance.CreatSparkFX(transform.position, ColourDict[damageType]);
+                    isFrozen_ = true;
+                }
                 if (damageSource == SpellTemplates.Orb) {
                     ChainReactionIce();
                 }
@@ -127,7 +128,8 @@ public class EmptySpaceScript : MonoBehaviour, iDamageInterface
                 isFrozen_ = false;
             } else if (damageType == Elements.Electricity) {
                 if(!isFrozen_ && !isElectric_ && damageSource == SpellTemplates.Orb) {
-                    StartCoroutine(ElectricForTime(0.1f));
+                    SpellRenderer.Instance.CreatSparkFX(transform.position, ColourDict[damageType]);
+                    StartCoroutine(ElectricForTime(1f));
                     ChainReactionElecticity();
                 }
             }

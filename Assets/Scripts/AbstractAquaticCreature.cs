@@ -9,7 +9,13 @@ using static SpellFunctionLibrary;
 public abstract class AbstractAquaticCreature : MonoBehaviour, iHealthInterface, iCreatureInterface, iPhysicsInterface, iPropertyInterface, iFacingInterface, iReloadInterface
 {
     public bool isException_ => false;
-    public int Health_ { get => Health; set { Health = value; } }
+    public int Health_ {
+        get => Health; set {
+            value = Mathf.Clamp(value, 0, MaxHealth_);
+            Health = value;
+            ValidateHealth();
+        }
+    }
     private int Health;
     public int MaxHealth_ { get => MaxHealth; set => MaxHealth = value; }
     public int MaxHealth = 1;
@@ -150,14 +156,20 @@ public abstract class AbstractAquaticCreature : MonoBehaviour, iHealthInterface,
         ValidateHealth();
     }
 
+    internal bool isDead = false;
     internal void ValidateHealth() {
-        Health = Mathf.Clamp(Health, 0, MaxHealth_);
+        if (this.gameObject == PlayerEntity.Instance.gameObject) {
+            HealthBarScript.Instance.UpdateHealthBar(this);
+        }
+
         //Check if the entity should die
-        if (0 >= Health_) {
+        if (0 >= Health_ && !isDead) {
             //Debug.Log($"{transform.name} dies!!!");
             EntitySpeed_ = 0;
             Anim_.SetTrigger("death");
+            RB_.velocity = Vector2.zero;
             DebugBox.Instance.inputs.Add($"Object.Destroy({transform.name.Replace("(Clone)", "")});");
+            isDead = true;
         }
     }
 

@@ -6,6 +6,7 @@ using System;
 
 public class UnlockManager : MonoBehaviour
 {
+
     void Awake()
     {
         DontDestroyOnLoad(this);

@@ -48,6 +48,9 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
     public abstract bool isException_ { get; }
 
     protected Material DefaultMat;
+    public void Start() {
+        isDead = false;
+    }
     private void FixedUpdate() {
         Decelerate();
         UpdateSorting();
@@ -107,17 +110,20 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
         }
         ValidateHealth();
     }
+    internal bool isDead = false;
     internal void ValidateHealth() {
         if(this.gameObject == PlayerEntity.Instance.gameObject) {
             HealthBarScript.Instance.UpdateHealthBar(this);
         }
        
         //Check if the entity should die
-        if (0 >= Health_) {
+        if (0 >= Health_ && !isDead) {
             //Debug.Log($"{transform.name} dies!!!");
             EntitySpeed_ = 0;
             Anim_.SetTrigger("death");
+            RB_.velocity = Vector2.zero;
             DebugBox.Instance.inputs.Add($"Object.Destroy({transform.name.Replace("(Clone)","")});");
+            isDead = true;
         }
     }
     public abstract void UpdateAnimation(Vector3 change);
@@ -133,6 +139,7 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
             GetComponent<Renderer>().sortingOrder = -Mathf.RoundToInt(transform.position.y);
         }
     }
+
     public abstract void  UpdateVelocity(float magnitude, Vector3 direction);
     public void UpdateForce(float magnitude, Vector3 direction, Elements elementType) {
         magnitude = ComputeValue(elementType, EntityProperties_);
@@ -177,7 +184,7 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
 
             int i = 0;
             foreach (bool boo in EdgeChecks) { if (boo) { i++; } }
-            if (i > 2 && !hasFallen) { Anim_.SetTrigger("fall"); EntitySpeed_ = 0; hasFallen = true; }
+            if (i > 2 && !hasFallen) { Anim_.SetTrigger("fall"); EntitySpeed_ = 0f; RB_.velocity = Vector2.zero; ; hasFallen = true; }
 
             //string msg = "";
             //foreach (bool boo in EdgeChecks) msg += boo + " ";
@@ -207,7 +214,7 @@ public abstract class AbstractCreature : MonoBehaviour, iHealthInterface, iCreat
         bool YBounds = vector2.y > collider.bounds.min.y && vector2.y < collider.bounds.max.y;
         return XBounds && YBounds;
     }
-    protected abstract void EntityFall();
+    internal abstract void EntityFall();
     public abstract void Decelerate();
     public abstract void EntityDeath();
 

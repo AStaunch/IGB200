@@ -36,7 +36,8 @@ public class PlayerEntity : AbstractCreature
     // Update is called once per frame
     
 
-    private void Start() {
+    private new void Start() {
+        base.Start();
         SavePosition_ = transform.position;
         DefaultMat = GetComponent<SpriteRenderer>().material;
         Deceleration_ = 5;
@@ -53,7 +54,7 @@ public class PlayerEntity : AbstractCreature
     }
     void Update()
     {
-        if(this.gameObject.layer == 7) {
+        if(this.gameObject.layer == 7 && Time.timeScale > 0) {
             change = Vector3.zero;
             change.x = Input.GetAxisRaw("Horizontal");
             change.y = Input.GetAxisRaw("Vertical");
@@ -67,17 +68,22 @@ public class PlayerEntity : AbstractCreature
                 UpdateAnimation(RB_.velocity);
             }
         }
-        //Restart Room
-        if (Input.GetKeyDown(KeyCode.R)) {
-            EntityFall();
-            Health_ += 1;
-        }
     }
-    public void CastSpell(SpellTemplate CallingSpell)
+    Vector2 casthandLR = new Vector2(0.5f, -0.5f);
+    Vector2 casthandD = new Vector2(0.5f, -0.5f);
+
+    public static Dictionary<Directions, Vector2> castPoints = new Dictionary<Directions, Vector2>() {
+        { Directions.Left, new Vector2(-0.4f, -0.45f) },
+        { Directions.Right, new Vector2(0.4f, -0.45f) },
+        { Directions.Down, new Vector2(-0.4f, -0.55f) },
+        { Directions.Up, new Vector2(0.38f, -0.2f) }
+};
+    public void CastSpell(HotbarHandler.HotbarItem CallingSpell)
     {
+        SpellRenderer.Instance.CreatSparkFX((Vector2) transform.position + castPoints[GetEntityDirectionEnum()], CallingSpell.effector.Colors);
         Animator anim = GetComponent<Animator>();
         anim.SetTrigger("attack");
-        string CallingSpellName = CallingSpell.Name;
+        string CallingSpellName = CallingSpell.template.Name;
         if (CallingSpellName.Contains("Arc"))
         {
             CallingSpellName = "Arc";
@@ -100,8 +106,9 @@ public class PlayerEntity : AbstractCreature
         }
         RB_.velocity = Vector2.zero;
         FadingScript.Instance.FadeScreen(false, 1);
+        isDead = false;
     }
-    protected override void EntityFall() {
+    internal override void EntityFall() {
         EntitySpeed_ = 5;
         if (LastDoor != null) {            
             Health_ -= 1;

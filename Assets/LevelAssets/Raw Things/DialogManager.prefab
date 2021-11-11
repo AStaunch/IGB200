@@ -123,7 +123,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.6
+  m_Volume: 0.2
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -362,8 +362,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Dialogue goes Here
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: dece6a671cbf35e41965d1126d476786, type: 2}
-  m_sharedMaterial: {fileID: 4839251233989660625, guid: dece6a671cbf35e41965d1126d476786, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: b75756ca96353d146a1642e1c77b8932, type: 2}
+  m_sharedMaterial: {fileID: 1400391005585824271, guid: b75756ca96353d146a1642e1c77b8932, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -496,8 +496,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Name Goes Here
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: dece6a671cbf35e41965d1126d476786, type: 2}
-  m_sharedMaterial: {fileID: 4839251233989660625, guid: dece6a671cbf35e41965d1126d476786, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: b75756ca96353d146a1642e1c77b8932, type: 2}
+  m_sharedMaterial: {fileID: 1400391005585824271, guid: b75756ca96353d146a1642e1c77b8932, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
